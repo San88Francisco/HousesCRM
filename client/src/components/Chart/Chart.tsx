@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { Line, LineChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Legend, Tooltip } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DateYear } from "@/types"
 
 interface YearlyData {
   date: string
@@ -17,7 +18,7 @@ interface ChartProps {
     }
   }
   title: string
-  description: (range: string) => string
+  description: (range: "1y" | "5y" | "10y" | "all") => string
   yAxisLabel: string
 }
 
@@ -34,121 +35,47 @@ const chartColors = {
   thirdLine: "#1D3557",
 }
 
-const monthNames = [
-  "Січ", "Лют", "Бер", "Кві", "Тра", "Чер",
-  "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"
-]
+const monthNames = ["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"]
 
-const findBestDivisor = (length: number): number => {
-  const targetDivisor = 10;
-  let bestDivisor = 1;
-  let smallestDifference = Infinity;
-
-  for (let i = 1; i <= length; i++) {
-    if (length % i === 0) {
-      const difference = Math.abs(i - targetDivisor);
-      if (difference < smallestDifference) {
-        smallestDifference = difference;
-        bestDivisor = i;
-      }
-    }
-  }
-
-  return bestDivisor;
-}
-
-const calculateOptimalTickCount = (dataLength: number, selectedRange: string, isSmallScreen: boolean): number => {
-  if (selectedRange === "1y" && dataLength === 12) {
-    return isSmallScreen ? 6 : 12;
-  }
-  if (selectedRange === "10y" && !isSmallScreen) {
-    return dataLength;
-  }
-  if (selectedRange === "all") {
-    return isSmallScreen ? 5 : findBestDivisor(dataLength);
-  }
-  return isSmallScreen ? 6 : dataLength;
-}
-
-export const Chart: React.FC<ChartProps> = ({
-  data,
-  title,
-  description,
-  yAxisLabel,
-}) => {
-  const [selectedRange, setSelectedRange] = useState("5y")
-  const [isSmallScreen, setIsSmallScreen] = useState(false)
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth <= 550)
-    }
-
-    checkScreenSize()
-    window.addEventListener('resize', checkScreenSize)
-
-    return () => window.removeEventListener('resize', checkScreenSize)
-  }, [])
+export const Chart: React.FC<ChartProps> = ({ data, title, description, yAxisLabel }) => {
+  const [selectedRange, setSelectedRange] = useState<DateYear>("1y")
 
   const chartData = useMemo(() => {
-    const allDates = new Set<string>()
-    Object.values(data).forEach(lineData => {
-      lineData[selectedRange].forEach(point => allDates.add(point.date))
-    })
-
-    return Array.from(allDates).sort().map(date => {
-      const point: { [key: string]: any } = { date }
-      Object.entries(data).forEach(([lineName, lineData]) => {
-        const dataPoint = lineData[selectedRange].find(p => p.date === date)
-        if (dataPoint) {
-          point[lineName] = dataPoint.value
+    const mergedData: { [key: string]: number | string }[] = []
+    Object.keys(data).forEach((lineName) => {
+      data[lineName][selectedRange].forEach((item, index) => {
+        if (!mergedData[index]) {
+          mergedData[index] = { date: item.date }
         }
+        mergedData[index][lineName] = item.value
       })
-      return point
     })
+    return mergedData
   }, [data, selectedRange])
 
-  const getEvenlyDistributedTicks = (data: any[]): string[] => {
-    if (!data.length) return [];
-    if (data.length === 1) return [data[0].date];
-
-    let optimalTickCount: number;
-
-    if (selectedRange === "all" && !isSmallScreen) {
-      optimalTickCount = findBestDivisor(data.length);
+  const ticks = useMemo(() => {
+    const dataLength = chartData.length
+    if (selectedRange === "10y") {
+      return chartData.map((item) => item.date)
+    } else if (selectedRange === "5y") {
+      return chartData.map((item) => item.date)
+    } else if (selectedRange === "1y") {
+      const tickCount = Math.min(12, dataLength)
+      return chartData.filter((_, index) => index % Math.ceil(dataLength / tickCount) === 0).map((item) => item.date)
     } else {
-      optimalTickCount = calculateOptimalTickCount(data.length, selectedRange, isSmallScreen);
+      // "all"
+      const tickCount = Math.round(10 / (dataLength / 10))
+      return chartData.filter((_, index) => index % tickCount === 0).map((item) => item.date)
     }
-
-    const step = (data.length - 1) / (optimalTickCount - 1);
-    const ticks: string[] = [];
-
-    for (let i = 0; i < optimalTickCount; i++) {
-      const index = Math.round(i * step);
-      ticks.push(data[index].date);
-    }
-
-    // Ensure the last tick is always the last date in the data
-    if (ticks[ticks.length - 1] !== data[data.length - 1].date) {
-      ticks[ticks.length - 1] = data[data.length - 1].date;
-    }
-
-    return ticks;
-  }
+  }, [chartData, selectedRange])
 
   const formatXAxisTick = (tickItem: string) => {
     const date = new Date(tickItem)
     if (selectedRange === "1y") {
-      return monthNames[date.getMonth()]
+      return monthNames[date.getMonth()].slice(0, 3)
     }
     return date.getFullYear().toString()
   }
-
-  const ticks = useMemo(() => getEvenlyDistributedTicks(chartData), [
-    chartData,
-    selectedRange,
-    isSmallScreen
-  ]);
 
   return (
     <Card className="w-full">
@@ -158,7 +85,7 @@ export const Chart: React.FC<ChartProps> = ({
       </CardHeader>
       <CardContent className="p-2 sm:p-4 h-[240px] w-full sm:h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData} margin={{ top: 10, right: 15, left: 0, bottom: 0 }}>
+          <LineChart data={chartData} margin={{ top: 10, right: 15, left: 10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#A8DADC" opacity={0.3} />
             <XAxis
               dataKey="date"
@@ -167,11 +94,7 @@ export const Chart: React.FC<ChartProps> = ({
               tick={{ fill: "#1D3557", fontSize: 10 }}
               ticks={ticks}
             />
-            <YAxis
-              stroke="#1D3557"
-              tick={{ fill: "#1D3557", fontSize: 10 }}
-              width={30}
-            />
+            <YAxis stroke="#1D3557" tick={{ fill: "#1D3557", fontSize: 10 }} width={30} />
             <Tooltip />
             <Legend />
             {Object.keys(data).map((lineName) => (
@@ -190,7 +113,7 @@ export const Chart: React.FC<ChartProps> = ({
       </CardContent>
       <CardFooter className="px-4 sm:px-6 flex justify-between items-center">
         <span className="text-sm font-medium">{yAxisLabel}</span>
-        <Select value={selectedRange} onValueChange={setSelectedRange}>
+        <Select value={selectedRange} onValueChange={(value: DateYear) => setSelectedRange(value)}>
           <SelectTrigger className="w-[100px] sm:w-[120px]">
             <SelectValue placeholder="Select range" />
           </SelectTrigger>
@@ -202,6 +125,7 @@ export const Chart: React.FC<ChartProps> = ({
             ))}
           </SelectContent>
         </Select>
+
       </CardFooter>
     </Card>
   )

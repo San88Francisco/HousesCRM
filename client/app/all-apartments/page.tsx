@@ -1,15 +1,10 @@
 "use client"
 
 import React from 'react'
-import { Chart } from '@/components/Chart/Chart'
-
-interface YearlyData {
-  date: string;
-  value: number;
-}
+import { Chart, } from '@/components/Chart/Chart'
+import { DateYear } from '@/types';
 
 
-const today = "2026-01-19"; // Поточна дата
 
 const mockData = {
   firstLine: {
@@ -69,7 +64,8 @@ const mockData = {
       { date: "2022-01-01", value: 4500 },
       { date: "2023-01-01", value: 5000 },
       { date: "2024-01-01", value: 5500 },
-      { date: "2026-01-19", value: 6000 },
+      { date: "2025-01-01", value: 6000 },
+      { date: "2026-01-01", value: 6000 },
     ],
   },
   secondLine: {
@@ -130,7 +126,7 @@ const mockData = {
       { date: "2023-01-01", value: 5200 },
       { date: "2024-01-01", value: 5700 },
       { date: "2025-01-01", value: 5900 },
-      { date: "2026-01-19", value: 6200 },
+      { date: "2026-01-01", value: 6200 },
     ],
   },
   thirdLine: {
@@ -191,38 +187,31 @@ const mockData = {
       { date: "2023-01-01", value: 5000 },
       { date: "2024-01-01", value: 5500 },
       { date: "2025-01-01", value: 5800 },
-      { date: "2026-01-19", value: 6000 },
+      { date: "2026-01-01", value: 6000 },
     ],
   },
 }
 
 
-
 const Page = () => {
-  const getDescription = (range: string) => {
-    switch (range) {
-      case "1y":
-        return "Historical price data for the last year"
-      case "5y":
-        return "Historical price data for the last 5 years"
-      case "10y":
-        return "Historical price data for the last 10 years"
-      case "all":
-        return "Historical price data for all time"
-      default:
-        return "Historical price data"
-    }
-  }
+  const descriptions: {
+    "1y": string;
+    "5y": string;
+    "10y": string;
+    all: string;
+  } = {
+    "1y": "Історичні дані про ціни за останній рік",
+    "5y": "Історичні дані про ціни за останні 5 років",
+    "10y": "Історичні дані про ціни за останні 10 років",
+    "all": "Історичні дані про ціни за весь час",
+  };
+
+  const getDescription = (range: DateYear) => descriptions[range];
 
   return (
     <div className=" p-4">
       <h1 className="text-2xl font-bold">Apartment Price Comparison</h1>
-      <Chart
-        data={mockData}
-        title="Apartment Price Comparison Over Time"
-        description={getDescription}
-        yAxisLabel="Price (USD)"
-      />
+      <Chart data={mockData} title='таблиця' description={getDescription} yAxisLabel='курс' />
     </div>
   )
 }
