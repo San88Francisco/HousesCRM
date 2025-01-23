@@ -28,6 +28,7 @@ export default {
   		colors: {
   			background: '#F5F5F5',
   			foreground: '#1A1A1A',
+        text: '#4b5563',
   			muted: '#E5E7EB',
   			'muted-foreground': '#6B7280',
   			primary: '#457B9D',
@@ -63,12 +64,7 @@ export default {
   			sm: '14px',
   			base: '16px',
   			lg: '18px',
-  			xl: '20px',
-  			'2xl': '24px',
-  			'3xl': '28px',
-  			'4xl': '32px',
-  			'5xl': '48px',
-  			'6xl': '64px'
+        xl: '24px',
   		},
   		spacing: {
   			'18': '4.5rem',
@@ -80,6 +76,6 @@ export default {
   	}
   },
   plugins: [
-    require("tailwindcss-animate"), // Анімації
+    require("tailwindcss-animate"),
   ],
 } satisfies Config;

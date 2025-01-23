@@ -3,8 +3,9 @@
 import { useState, useMemo } from "react"
 import { Line, LineChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Legend, Tooltip } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DateYear } from "@/types"
+import { DropdownSelect, type DropdownSelectOption } from "../DropdownSelect/DropdownSelect"
+
+type DateRange = "1y" | "5y" | "10y" | "all"
 
 interface YearlyData {
   date: string
@@ -14,19 +15,18 @@ interface YearlyData {
 interface ChartProps {
   data: {
     [key: string]: {
-      [key: string]: YearlyData[]
+      [key in DateRange]: YearlyData[]
     }
   }
   title: string
-  description: (range: "1y" | "5y" | "10y" | "all") => string
-  yAxisLabel: string
+  description: (range: DateRange) => string
 }
 
-const dateRanges = [
-  { label: "1Y", value: "1y" },
-  { label: "5Y", value: "5y" },
-  { label: "10Y", value: "10y" },
-  { label: "All", value: "all" },
+const dateRanges: DropdownSelectOption<DateRange>[] = [
+  { label: "1 рік", value: "1y" },
+  { label: "5 років", value: "5y" },
+  { label: "10 років", value: "10y" },
+  { label: "Весь час", value: "all" },
 ]
 
 const chartColors = {
@@ -37,8 +37,8 @@ const chartColors = {
 
 const monthNames = ["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"]
 
-export const Chart: React.FC<ChartProps> = ({ data, title, description, yAxisLabel }) => {
-  const [selectedRange, setSelectedRange] = useState<DateYear>("1y")
+export const Chart: React.FC<ChartProps> = ({ data, title, description }) => {
+  const [selectedRange, setSelectedRange] = useState<DateRange>("1y")
 
   const chartData = useMemo(() => {
     const mergedData: { [key: string]: number | string }[] = []
@@ -63,7 +63,6 @@ export const Chart: React.FC<ChartProps> = ({ data, title, description, yAxisLab
       const tickCount = Math.min(12, dataLength)
       return chartData.filter((_, index) => index % Math.ceil(dataLength / tickCount) === 0).map((item) => item.date)
     } else {
-      // "all"
       const tickCount = Math.round(10 / (dataLength / 10))
       return chartData.filter((_, index) => index % tickCount === 0).map((item) => item.date)
     }
@@ -80,8 +79,12 @@ export const Chart: React.FC<ChartProps> = ({ data, title, description, yAxisLab
   return (
     <Card className="w-full">
       <CardHeader className="px-4 sm:px-6">
-        <CardTitle className="text-lg sm:text-xl font-semibold">{title}</CardTitle>
-        <CardDescription className="text-sm">{description(selectedRange)}</CardDescription>
+        <CardTitle>
+          <h2>{title}</h2>
+        </CardTitle>
+        <CardDescription>
+          <h5>{description(selectedRange)}</h5>
+        </CardDescription>
       </CardHeader>
       <CardContent className="p-2 sm:p-4 h-[240px] w-full sm:h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -111,21 +114,13 @@ export const Chart: React.FC<ChartProps> = ({ data, title, description, yAxisLab
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
-      <CardFooter className="px-4 sm:px-6 flex justify-between items-center">
-        <span className="text-sm font-medium">{yAxisLabel}</span>
-        <Select value={selectedRange} onValueChange={(value: DateYear) => setSelectedRange(value)}>
-          <SelectTrigger className="w-[100px] sm:w-[120px]">
-            <SelectValue placeholder="Select range" />
-          </SelectTrigger>
-          <SelectContent>
-            {dateRanges.map((range) => (
-              <SelectItem key={range.value} value={range.value}>
-                {range.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
+      <CardFooter className="px-4 sm:px-6 flex justify-end items-center">
+        <DropdownSelect<DateRange>
+          options={dateRanges}
+          value={selectedRange}
+          onChange={setSelectedRange}
+          className="w-[150px]"
+        />
       </CardFooter>
     </Card>
   )

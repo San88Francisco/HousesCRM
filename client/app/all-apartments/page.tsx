@@ -3,6 +3,7 @@
 import React from 'react'
 import { Chart, } from '@/components/Chart/Chart'
 import { DateYear } from '@/types';
+import { InfoCardsMini } from '@/components/InfoCardsMini/InfoCardsMini';
 
 
 
@@ -10,17 +11,17 @@ const mockData = {
   firstLine: {
     "1y": [
       { date: "2024-02-01", value: 5000 },
-      { date: "2024-03-01", value: 5100 },
-      { date: "2024-04-01", value: 5200 },
-      { date: "2024-05-01", value: 5300 },
-      { date: "2024-06-01", value: 5400 },
+      { date: "2024-03-01", value: 5000 },
+      { date: "2024-04-01", value: 5000 },
+      { date: "2024-05-01", value: 5000 },
+      { date: "2024-06-01", value: 5000 },
       { date: "2024-07-01", value: 5500 },
-      { date: "2024-08-01", value: 5600 },
-      { date: "2024-09-01", value: 5700 },
-      { date: "2024-10-01", value: 5800 },
-      { date: "2024-11-01", value: 5900 },
+      { date: "2024-08-01", value: 5500 },
+      { date: "2024-09-01", value: 5500 },
+      { date: "2024-10-01", value: 5500 },
+      { date: "2024-11-01", value: 5500 },
       { date: "2024-12-01", value: 6000 },
-      { date: "2025-01-19", value: 6100 },
+      { date: "2025-01-19", value: 6000 },
     ],
     "5y": [
       { date: "2020-01-01", value: 4000 },
@@ -70,18 +71,18 @@ const mockData = {
   },
   secondLine: {
     "1y": [
-      { date: "2024-02-01", value: 5200 },
-      { date: "2024-03-01", value: 5300 },
+      { date: "2024-02-01", value: 5400 },
+      { date: "2024-03-01", value: 5400 },
       { date: "2024-04-01", value: 5400 },
-      { date: "2024-05-01", value: 5500 },
-      { date: "2024-06-01", value: 5600 },
-      { date: "2024-07-01", value: 5700 },
-      { date: "2024-08-01", value: 5800 },
+      { date: "2024-05-01", value: 5400 },
+      { date: "2024-06-01", value: 5400 },
+      { date: "2024-07-01", value: 5400 },
+      { date: "2024-08-01", value: 5400 },
       { date: "2024-09-01", value: 5900 },
-      { date: "2024-10-01", value: 6000 },
-      { date: "2024-11-01", value: 6100 },
-      { date: "2024-12-01", value: 6200 },
-      { date: "2025-01-19", value: 6300 },
+      { date: "2024-10-01", value: 5900 },
+      { date: "2024-11-01", value: 5900 },
+      { date: "2024-12-01", value: 5900 },
+      { date: "2025-01-19", value: 5900 },
     ],
     "5y": [
       { date: "2020-01-01", value: 4200 },
@@ -131,18 +132,18 @@ const mockData = {
   },
   thirdLine: {
     "1y": [
-      { date: "2024-02-01", value: 4800 },
-      { date: "2024-03-01", value: 4900 },
+      { date: "2024-02-01", value: 5000 },
+      { date: "2024-03-01", value: 5000 },
       { date: "2024-04-01", value: 5000 },
-      { date: "2024-05-01", value: 5100 },
-      { date: "2024-06-01", value: 5200 },
-      { date: "2024-07-01", value: 5300 },
+      { date: "2024-05-01", value: 5000 },
+      { date: "2024-06-01", value: 5000 },
+      { date: "2024-07-01", value: 5000 },
       { date: "2024-08-01", value: 5400 },
-      { date: "2024-09-01", value: 5500 },
-      { date: "2024-10-01", value: 5600 },
-      { date: "2024-11-01", value: 5700 },
-      { date: "2024-12-01", value: 5800 },
-      { date: "2025-01-19", value: 5900 },
+      { date: "2024-09-01", value: 5400 },
+      { date: "2024-10-01", value: 5400 },
+      { date: "2024-11-01", value: 5400 },
+      { date: "2024-12-01", value: 5400 },
+      { date: "2025-01-19", value: 8400 },
     ],
     "5y": [
       { date: "2020-01-01", value: 3800 },
@@ -200,19 +201,19 @@ const Page = () => {
     "10y": string;
     all: string;
   } = {
-    "1y": "Історичні дані про ціни за останній рік",
-    "5y": "Історичні дані про ціни за останні 5 років",
-    "10y": "Історичні дані про ціни за останні 10 років",
-    "all": "Історичні дані про ціни за весь час",
+    "1y": "По місячна оплата за останній рік",
+    "5y": "Середнє місячне значення оплати за останні 5 років",
+    "10y": "Середнє місячне значення оплати за останні 10 років",
+    "all": "Середнє місячне значення оплати за весь час",
   };
 
   const getDescription = (range: DateYear) => descriptions[range];
 
   return (
-    <div className=" p-4">
-      <h1 className="text-2xl font-bold">Apartment Price Comparison</h1>
-      <Chart data={mockData} title='таблиця' description={getDescription} yAxisLabel='курс' />
-    </div>
+    <>
+      <InfoCardsMini />
+      <Chart data={mockData} title='Статистика оренди по квартирам' description={getDescription} />
+    </>
   )
 }
 

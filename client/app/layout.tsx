@@ -18,10 +18,10 @@ export default function RootLayout({
   const shouldHideSidebar = noSidebarRoutes.includes(pathname);
 
   const mainContent = (
-    <main className="flex-1 overflow-x-hidden p-5">
+    <main className="flex-1 overflow-x-hidden px-2 sm:px-8 py-5">
       {!shouldHideSidebar && (
-        <div className="flex h-16 items-center px-4 absolute">
-          <SidebarTrigger className="-ml-2" />
+        <div className="flex h-16 items-center  absolute">
+          <SidebarTrigger className="-ml-8" />
         </div>
       )}
       {children}
