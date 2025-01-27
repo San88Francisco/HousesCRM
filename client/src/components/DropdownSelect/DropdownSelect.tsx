@@ -1,10 +1,7 @@
 import type React from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DropdownSelectOption } from "@/types"
 
-export interface DropdownSelectOption<T> {
-  value: T
-  label: string
-}
 
 export interface DropdownSelectProps<T> {
   options: DropdownSelectOption<T>[]

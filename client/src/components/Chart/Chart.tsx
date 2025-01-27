@@ -1,18 +1,19 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, type FC } from "react"
 import { Line, LineChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Legend, Tooltip } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { DropdownSelect, type DropdownSelectOption } from "../DropdownSelect/DropdownSelect"
+import { DropdownSelect } from "../DropdownSelect/DropdownSelect"
+import { monthNames } from "@/constants/chart/monthNames"
+import { chartColors } from "@/constants/chart/chartColors"
+import { dateRanges } from "@/constants/chart/dateRanges"
+import type { DateRange, YearlyData } from "@/types"
+import { useCurrency } from "@/context/CurrencyContext"
+import { nameTranslations } from "@/constants/nameTranslations"
+import { getCurrencySymbol } from "@/utils/getCurrencySymbol"
+import { formatNumber } from "@/utils/formatNumber"
 
-type DateRange = "1y" | "5y" | "10y" | "all"
-
-interface YearlyData {
-  date: string
-  value: number
-}
-
-interface ChartProps {
+type Props = {
   data: {
     [key: string]: {
       [key in DateRange]: YearlyData[]
@@ -22,23 +23,14 @@ interface ChartProps {
   description: (range: DateRange) => string
 }
 
-const dateRanges: DropdownSelectOption<DateRange>[] = [
-  { label: "1 рік", value: "1y" },
-  { label: "5 років", value: "5y" },
-  { label: "10 років", value: "10y" },
-  { label: "Весь час", value: "all" },
-]
-
-const chartColors = {
-  firstLine: "#457B9D",
-  secondLine: "#E63946",
-  thirdLine: "#1D3557",
-}
-
-const monthNames = ["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"]
-
-export const Chart: React.FC<ChartProps> = ({ data, title, description }) => {
+export const Chart: FC<Props> = ({ data, title, description }) => {
+  const { selectedCurrency, currencyRate } = useCurrency()
   const [selectedRange, setSelectedRange] = useState<DateRange>("1y")
+
+  const convertCurrency = (value: number) => {
+    if (selectedCurrency === "UAH" || !currencyRate) return value
+    return value / currencyRate
+  }
 
   const chartData = useMemo(() => {
     const mergedData: { [key: string]: number | string }[] = []
@@ -47,11 +39,11 @@ export const Chart: React.FC<ChartProps> = ({ data, title, description }) => {
         if (!mergedData[index]) {
           mergedData[index] = { date: item.date }
         }
-        mergedData[index][lineName] = item.value
+        mergedData[index][lineName] = convertCurrency(item.value)
       })
     })
     return mergedData
-  }, [data, selectedRange])
+  }, [data, selectedRange, selectedCurrency, currencyRate])
 
   const ticks = useMemo(() => {
     const dataLength = chartData.length
@@ -76,16 +68,53 @@ export const Chart: React.FC<ChartProps> = ({ data, title, description }) => {
     return date.getFullYear().toString()
   }
 
+  const formatYAxis = (value: number) => {
+    return `${getCurrencySymbol(selectedCurrency)}${formatNumber(value)}`
+  }
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-2 border border-gray-300 rounded shadow">
+          <p className="font-bold">{label}</p>
+          {payload.map((pld: any, index: number) => (
+            <p key={index} style={{ color: pld.color }}>
+              {nameTranslations[pld.name] || pld.name}: {getCurrencySymbol(selectedCurrency)}
+              {formatNumber(pld.value)}
+            </p>
+          ))}
+        </div>
+      )
+    }
+    return null
+  }
+
+  const getLineColor = (index: number) => {
+    const colorKeys = Object.keys(chartColors)
+    return chartColors[colorKeys[index % colorKeys.length] as keyof typeof chartColors]
+  }
+
   return (
     <Card className="w-full">
       <CardHeader className="px-4 sm:px-6">
-        <CardTitle>
-          <h2>{title}</h2>
-        </CardTitle>
-        <CardDescription>
-          <h5>{description(selectedRange)}</h5>
-        </CardDescription>
+        <div className="flex justify-between items-center">
+          <div className="flex flex-col gap-2">
+            <CardTitle>
+              <h2>{title}</h2>
+            </CardTitle>
+            <CardDescription>
+              <h5>{description(selectedRange)}</h5>
+            </CardDescription>
+          </div>
+          <DropdownSelect<DateRange>
+            options={dateRanges}
+            value={selectedRange}
+            onChange={setSelectedRange}
+            className="w-[150px]"
+          />
+        </div>
       </CardHeader>
+
       <CardContent className="p-2 sm:p-4 h-[240px] w-full sm:h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 10, right: 15, left: 10, bottom: 0 }}>
@@ -97,30 +126,26 @@ export const Chart: React.FC<ChartProps> = ({ data, title, description }) => {
               tick={{ fill: "#1D3557", fontSize: 10 }}
               ticks={ticks}
             />
-            <YAxis stroke="#1D3557" tick={{ fill: "#1D3557", fontSize: 10 }} width={30} />
-            <Tooltip />
+            <YAxis stroke="#1D3557" tick={{ fill: "#1D3557", fontSize: 10 }} width={50} tickFormatter={formatYAxis} />
+            <Tooltip content={<CustomTooltip />} />
             <Legend />
-            {Object.keys(data).map((lineName) => (
+            {Object.keys(data).map((lineName, index) => (
               <Line
                 key={lineName}
                 type="monotone"
                 dataKey={lineName}
-                stroke={chartColors[lineName as keyof typeof chartColors]}
+                stroke={getLineColor(index)}
                 strokeWidth={2}
-                dot={false}
-                name={lineName}
+                dot={{ fill: getLineColor(index), r: 1 }}
+                activeDot={{ r: 4, fill: getLineColor(index), stroke: "#fff" }}
+                name={nameTranslations[lineName] || lineName}
               />
             ))}
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
       <CardFooter className="px-4 sm:px-6 flex justify-end items-center">
-        <DropdownSelect<DateRange>
-          options={dateRanges}
-          value={selectedRange}
-          onChange={setSelectedRange}
-          className="w-[150px]"
-        />
+
       </CardFooter>
     </Card>
   )

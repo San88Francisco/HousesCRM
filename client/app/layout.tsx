@@ -7,6 +7,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/Sidebar/Sidebar";
 import { usePathname } from "next/navigation";
 import { noSidebarRoutes } from "@/constants/noSidebarRoutes";
+import { CurrencyProvider } from "@/context/CurrencyContext";
 
 export default function RootLayout({
   children,
@@ -31,15 +32,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {shouldHideSidebar ? (
-          mainContent
-        ) : (
-          <SidebarProvider open={open} onOpenChange={setOpen}>
-            <AppSidebar />
-            {mainContent}
-          </SidebarProvider>
-        )}
-        <Toaster />
+        <CurrencyProvider>
+          {shouldHideSidebar ? (
+            mainContent
+          ) : (
+            <SidebarProvider open={open} onOpenChange={setOpen}>
+              <AppSidebar />
+              {mainContent}
+            </SidebarProvider>
+          )}
+          <Toaster />
+
+        </CurrencyProvider>
       </body>
     </html>
   );
