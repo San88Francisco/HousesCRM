@@ -6,7 +6,6 @@ const routes = require('./src/routes/routes');
 
 const app = express();
 
-// Конфігурація Swagger
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -29,15 +28,19 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
-// Підключення Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(bodyParser.json());
 
-// Підключення маршрутизації
 app.use('/api', routes);
 
 app.listen(5000, () => {
   console.log('Server is running on http://localhost:5000');
   console.log('Swagger UI is available at http://localhost:5000/api-docs');
 });
+
+// user
+// {
+//   "username": "admin",
+//   "password": "#123456789"
+// }
