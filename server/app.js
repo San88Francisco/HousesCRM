@@ -1,11 +1,43 @@
-const express = require('express')
-const bodyParser = require('body-parser')
+const express = require('express');
+const bodyParser = require('body-parser');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+const routes = require('./src/routes/routes');
 
+const app = express();
 
-const allApartments = require('./routes/all-apartments')
+// Конфігурація Swagger
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: 'API для керування квартирами',
+      version: '1.0.0',
+      description: 'Документація API для управління квартирами',
+    },
+    basePath: '/',
+    securityDefinitions: {
+      bearerAuth: {
+        type: 'apiKey',
+        in: 'header',
+        name: 'Authorization',
+        description: 'JWT токен для аутентифікації',
+      },
+    },
+  },
+  apis: ['./src/routes/**/*.js'],
+};
 
-const app = express()
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
-app.use(allApartments)
+// Підключення Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.listen(5000)
+app.use(bodyParser.json());
+
+// Підключення маршрутизації
+app.use('/api', routes);
+
+app.listen(5000, () => {
+  console.log('Server is running on http://localhost:5000');
+  console.log('Swagger UI is available at http://localhost:5000/api-docs');
+});
