@@ -31,27 +31,29 @@ const registerUser = async (req, res) => {
 
 // ЛОГІН КОРИСТУВАЧА
 const loginUser = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body;  // Або req.query, в залежності від того, як ви передаєте дані
 
   try {
     const db = getDB();
-
-    // Пошук користувача в базі даних
     const user = await db.collection('users').findOne({ username });
+
     if (!user) {
-      return res.status(400).json({ message: 'Невірне ім\'я користувача або пароль' });
+      return res.status(400).json({ message: "Невірне ім'я користувача або пароль" });
     }
+
+    // Логування отриманих даних
+    console.log("User found: ", user);
+    console.log("Password received: ", password);
+    console.log("Stored password hash: ", user.password);
 
     // Перевірка пароля
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Невірне ім\'я користувача або пароль' });
+      return res.status(400).json({ message: "Невірне ім'я користувача або пароль" });
     }
 
-    // Генерація Access токена
+    // Генерація токенів
     const accessToken = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_ACCESS_SECRET, { expiresIn: '15m' });
-
-    // Генерація Refresh токена
     const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
 
     // Збереження Refresh токена
@@ -59,7 +61,7 @@ const loginUser = async (req, res) => {
 
     res.json({ accessToken, refreshToken });
   } catch (error) {
-    console.error(error);
+    console.error("Помилка при логіні: ", error);
     res.status(500).json({ message: 'Помилка при логіні' });
   }
 };
@@ -85,7 +87,7 @@ const refreshAccessToken = async (req, res) => {
 
     res.json({ accessToken: newAccessToken });
   } catch (error) {
-    console.error(error);
+    console.error("Помилка при оновленні Access токена: ", error);
     res.status(500).json({ message: 'Не вдалося оновити Access токен' });
   }
 };
