@@ -9,9 +9,9 @@
  *           type: string
  *           description: Унікальний ідентифікатор договору
  *           example: "507f1f77bcf86cd799439011"
- *         tenant_id:
+ *         renter_id:
  *           type: string
- *           description: ID жильця
+ *           description: ID орендаря
  *           example: "507f1f77bcf86cd799439011"
  *         originalStartDate:
  *           type: string
@@ -61,7 +61,7 @@
  *           format: date-time
  *           description: Дата останнього оновлення
  *           example: "2025-05-24T15:30:12.123Z"
- *         tenant:
+ *         renter:
  *           type: object
  *           properties:
  *             _id:
@@ -91,18 +91,18 @@
  *             roomsCount:
  *               type: integer
  *               example: 3
- *     
+
  *     ContractInput:
  *       type: object
  *       required:
- *         - tenant_id
+ *         - renter_id
  *         - startDate
  *         - endDate
  *         - monthlyPayment
  *       properties:
- *         tenant_id:
+ *         renter_id:
  *           type: string
- *           description: ID жильця
+ *           description: ID орендаря
  *           example: "507f1f77bcf86cd799439011"
  *         startDate:
  *           type: string
@@ -119,13 +119,13 @@
  *           minimum: 0
  *           description: Місячна оплата
  *           example: 12000
- *     
+
  *     ContractUpdate:
  *       type: object
  *       properties:
- *         tenant_id:
+ *         renter_id:
  *           type: string
- *           description: ID жильця
+ *           description: ID орендаря
  *           example: "507f1f77bcf86cd799439011"
  *         startDate:
  *           type: string
@@ -147,7 +147,7 @@
  *           enum: [active, completed, cancelled]
  *           description: Статус договору
  *           example: "active"
- *     
+
  *     PeriodInfo:
  *       type: object
  *       properties:
@@ -170,7 +170,7 @@
  *           type: string
  *           description: Опис періоду українською
  *           example: "За останній рік"
- *     
+
  *     ContractStatistics:
  *       type: object
  *       properties:
@@ -195,7 +195,7 @@
  *           type: number
  *           description: Середня місячна оплата (totalRevenue / totalContracts)
  *           example: 12000
- *     
+
  *     ContractsResponse:
  *       type: object
  *       properties:
@@ -207,11 +207,11 @@
  *           $ref: '#/components/schemas/PeriodInfo'
  *         statistics:
  *           $ref: '#/components/schemas/ContractStatistics'
- *     
- *     TenantContractsResponse:
+
+ *     RenterContractsResponse:
  *       type: object
  *       properties:
- *         tenant:
+ *         renter:
  *           type: object
  *           properties:
  *             _id:
@@ -227,7 +227,7 @@
  *         totalContracts:
  *           type: integer
  *           example: 3
- *     
+
  *     Error:
  *       type: object
  *       properties:
@@ -240,15 +240,15 @@
  *           items:
  *             type: string
  *           description: Список обов'язкових полів (для помилок валідації)
- *           example: ["tenant_id", "startDate", "endDate", "monthlyPayment"]
+ *           example: ["renter_id", "startDate", "endDate", "monthlyPayment"]
  */
 
 /**
  * @swagger
- * /contracts/contract:
+ * /contracts/deals:
  *   post:
  *     summary: Створення нового договору
- *     description: Створює новий договір оренди для жильця з валідацією всіх полів
+ *     description: Створює новий договір оренди для орендаря з валідацією всіх полів
  *     tags: [Contracts]
  *     security:
  *       - bearerAuth: []
@@ -262,14 +262,14 @@
  *             basic:
  *               summary: Базовий приклад
  *               value:
- *                 tenant_id: "507f1f77bcf86cd799439011"
+ *                 renter_id: "507f1f77bcf86cd799439011"
  *                 startDate: "2024-01-15"
  *                 endDate: "2024-12-31"
  *                 monthlyPayment: 12000
  *             longTerm:
  *               summary: Довгостроковий договір
  *               value:
- *                 tenant_id: "507f1f77bcf86cd799439011"
+ *                 renter_id: "507f1f77bcf86cd799439011"
  *                 startDate: "2024-01-01"
  *                 endDate: "2026-12-31"
  *                 monthlyPayment: 15000
@@ -296,8 +296,8 @@
  *               missingFields:
  *                 summary: Відсутні обов'язкові поля
  *                 value:
- *                   message: "Обов'язкові поля: tenant_id, startDate, endDate, monthlyPayment"
- *                   requiredFields: ["tenant_id", "startDate", "endDate", "monthlyPayment"]
+ *                   message: "Обов'язкові поля: renter_id, startDate, endDate, monthlyPayment"
+ *                   requiredFields: ["renter_id", "startDate", "endDate", "monthlyPayment"]
  *               invalidDates:
  *                 summary: Невірні дати
  *                 value:
@@ -307,13 +307,13 @@
  *                 value:
  *                   message: "Місячна оплата має бути більше нуля"
  *       404:
- *         description: Жильця не знайдено
+ *         description: Орендаря не знайдено
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               message: "Жильця з таким ID не знайдено"
+ *               message: "Орендаря з таким ID не знайдено"
  *       401:
  *         description: Необхідна авторизація
  *         content:
@@ -330,7 +330,7 @@
 
 /**
  * @swagger
- * /contracts/contracts:
+ * /contracts/deals:
  *   get:
  *     summary: Отримати всі договори з фільтрацією по періодах
  *     description: |
@@ -365,10 +365,10 @@
  *         description: Період для фільтрації договорів
  *         example: "6months"
  *       - in: query
- *         name: tenant_id
+ *         name: renter_id
  *         schema:
  *           type: string
- *         description: Фільтр по ID жильця (опціонально)
+ *         description: Фільтр по ID орендаря (опціонально)
  *         example: "507f1f77bcf86cd799439011"
  *     responses:
  *       200:
@@ -383,13 +383,13 @@
  *                 value:
  *                   contracts:
  *                     - _id: "507f1f77bcf86cd799439011"
- *                       tenant_id: "507f1f77bcf86cd799439012"
+ *                       renter_id: "507f1f77bcf86cd799439012"
  *                       originalStartDate: "2020-01-15T00:00:00.000Z"
  *                       originalEndDate: "2024-12-31T00:00:00.000Z"
  *                       adjustedStartDate: "2024-11-24T18:02:49.168Z"
  *                       monthlyPayment: 12000
  *                       houseName: "Квартира на Хрещатику"
- *                       tenant:
+ *                       renter:
  *                         _id: "507f1f77bcf86cd799439012"
  *                         name: "Іван Петренко"
  *                         house_id: "507f1f77bcf86cd799439013"
@@ -407,39 +407,6 @@
  *                     totalContracts: 1
  *                     totalRevenue: 72000
  *                     averageMonthlyPayment: 72000
- *               yearPeriod:
- *                 summary: За останній рік
- *                 value:
- *                   contracts:
- *                     - _id: "507f1f77bcf86cd799439011"
- *                       monthlyPayment: 12000
- *                       houseName: "Квартира на Хрещатику"
- *                   period:
- *                     selected: "1year"
- *                     description: "За останній рік"
- *                   statistics:
- *                     totalContracts: 1
- *                     totalRevenue: 144000
- *                     averageMonthlyPayment: 144000
- *               allTime:
- *                 summary: За весь час (пропорційний розрахунок)
- *                 value:
- *                   contracts:
- *                     - _id: "507f1f77bcf86cd799439011"
- *                       originalStartDate: "2023-01-01T00:00:00.000Z"
- *                       originalEndDate: "2025-12-31T00:00:00.000Z"
- *                       adjustedStartDate: "2023-01-01T00:00:00.000Z"
- *                       monthlyPayment: 12000
- *                       houseName: "Квартира на Хрещатику"
- *                   period:
- *                     selected: "all"
- *                     startDate: null
- *                     endDate: "2025-01-01T00:00:00.000Z"
- *                     description: "За весь час"
- *                   statistics:
- *                     totalContracts: 1
- *                     totalRevenue: 432000
- *                     averageMonthlyPayment: 432000
  *       400:
  *         description: Помилка валідації параметрів
  *         content:
@@ -451,10 +418,10 @@
  *                 summary: Невірний період
  *                 value:
  *                   message: "Невірний період. Доступні: 1month, 6months, 1year, 5years, 10years, 15years, all"
- *               invalidTenantId:
- *                 summary: Невірний ID жильця
+ *               invalidRenterId:
+ *                 summary: Невірний ID орендаря
  *                 value:
- *                   message: "Невірний формат tenant_id"
+ *                   message: "Невірний формат renter_id"
  *       401:
  *         description: Необхідна авторизація
  *         content:
@@ -471,10 +438,10 @@
 
 /**
  * @swagger
- * /contracts/contract/{id}:
+ * /contracts/deals/{id}:
  *   get:
  *     summary: Отримати договір за ID
- *     description: Повертає детальну інформацію про конкретний договір з даними про жильця та квартиру
+ *     description: Повертає детальну інформацію про конкретний договір з даними про орендаря та квартиру
  *     tags: [Contracts]
  *     security:
  *       - bearerAuth: []
@@ -499,13 +466,13 @@
  *             example:
  *               contract:
  *                 _id: "507f1f77bcf86cd799439011"
- *                 tenant_id: "507f1f77bcf86cd799439012"
+ *                 renter_id: "507f1f77bcf86cd799439012"
  *                 startDate: "2024-01-15T00:00:00.000Z"
  *                 endDate: "2024-12-31T00:00:00.000Z"
  *                 monthlyPayment: 12000
  *                 status: "active"
  *                 createdAt: "2025-05-24T13:15:42.702Z"
- *                 tenant:
+ *                 renter:
  *                   _id: "507f1f77bcf86cd799439012"
  *                   name: "Іван Петренко"
  *                   house_id: "507f1f77bcf86cd799439013"
@@ -547,7 +514,7 @@
 
 /**
  * @swagger
- * /contracts/contract/{id}:
+ * /contracts/deals/{id}:
  *   patch:
  *     summary: Оновлення договору за ID
  *     description: |
@@ -557,7 +524,7 @@
  *       - Дата початку має бути раніше дати закінчення
  *       - Місячна оплата має бути більше нуля
  *       - Статус має бути одним з: active, completed, cancelled
- *       - tenant_id має існувати в базі даних
+ *       - renter_id має існувати в базі даних
  *     tags: [Contracts]
  *     security:
  *       - bearerAuth: []
@@ -591,7 +558,7 @@
  *             fullUpdate:
  *               summary: Повне оновлення
  *               value:
- *                 tenant_id: "507f1f77bcf86cd799439012"
+ *                 renter_id: "507f1f77bcf86cd799439012"
  *                 startDate: "2024-02-01"
  *                 endDate: "2024-12-31"
  *                 monthlyPayment: 15000
@@ -629,7 +596,7 @@
  *                 value:
  *                   message: "Статус має бути: active, completed або cancelled"
  *       404:
- *         description: Договір або жилець не знайдено
+ *         description: Договір або орендар не знайдено
  *         content:
  *           application/json:
  *             schema:
@@ -639,10 +606,10 @@
  *                 summary: Договір не знайдено
  *                 value:
  *                   message: "Договір не знайдено"
- *               tenantNotFound:
- *                 summary: Жилець не знайдено
+ *               renterNotFound:
+ *                 summary: Орендар не знайдено
  *                 value:
- *                   message: "Жильця з таким tenant_id не знайдено"
+ *                   message: "Орендаря з таким renter_id не знайдено"
  *       401:
  *         description: Необхідна авторизація
  *         content:
@@ -659,7 +626,7 @@
 
 /**
  * @swagger
- * /contracts/contract/{id}:
+ * /contracts/deals/{id}:
  *   delete:
  *     summary: Видалення договору за ID
  *     description: Повністю видаляє договір з бази даних. Операція незворотна.
@@ -717,37 +684,37 @@
 
 /**
  * @swagger
- * /contracts/tenant/{tenantId}:
+ * /contracts/renter/{renterId}:
  *   get:
- *     summary: Отримати всі договори конкретного жильця
+ *     summary: Отримати всі договори конкретного орендаря
  *     description: |
- *       Повертає всі договори для конкретного жильця, відсортовані за датою початку (найновіші спочатку).
- *       Включає інформацію про жильця та квартири.
+ *       Повертає всі договори для конкретного орендаря, відсортовані за датою початку (найновіші спочатку).
+ *       Включає інформацію про орендаря та квартири.
  *     tags: [Contracts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: tenantId
+ *         name: renterId
  *         required: true
  *         schema:
  *           type: string
- *         description: ID жильця
+ *         description: ID орендаря
  *         example: "507f1f77bcf86cd799439011"
  *     responses:
  *       200:
- *         description: Список договорів жильця
+ *         description: Список договорів орендаря
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/TenantContractsResponse'
+ *               $ref: '#/components/schemas/RenterContractsResponse'
  *             example:
- *               tenant:
+ *               renter:
  *                 _id: "507f1f77bcf86cd799439011"
  *                 name: "Іван Петренко"
  *               contracts:
  *                 - _id: "507f1f77bcf86cd799439012"
- *                   tenant_id: "507f1f77bcf86cd799439011"
+ *                   renter_id: "507f1f77bcf86cd799439011"
  *                   startDate: "2024-01-01T00:00:00.000Z"
  *                   endDate: "2024-12-31T00:00:00.000Z"
  *                   monthlyPayment: 12000
@@ -757,7 +724,7 @@
  *                     street: "вул. Хрещатик, 25"
  *                     floor: 5
  *                 - _id: "507f1f77bcf86cd799439013"
- *                   tenant_id: "507f1f77bcf86cd799439011"
+ *                   renter_id: "507f1f77bcf86cd799439011"
  *                   startDate: "2023-01-01T00:00:00.000Z"
  *                   endDate: "2023-12-31T00:00:00.000Z"
  *                   monthlyPayment: 10000
@@ -774,15 +741,15 @@
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               message: "Невірний формат ID жильця"
+ *               message: "Невірний формат ID орендаря"
  *       404:
- *         description: Жильця не знайдено
+ *         description: Орендаря не знайдено
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               message: "Жильця не знайдено"
+ *               message: "Орендаря не знайдено"
  *       401:
  *         description: Необхідна авторизація
  *         content:
@@ -796,4 +763,3 @@
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-

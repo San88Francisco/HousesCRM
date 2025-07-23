@@ -7,13 +7,13 @@ import { Label } from "@/components/ui/label"
 import { AlertCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-interface RFHInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface RHFInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   label?: string
   required?: boolean
 }
 
-const RFHInput = forwardRef<HTMLInputElement, RFHInputProps>(
+const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
   ({ name, label, required = false, className, ...props }, ref) => {
     const {
       control,
@@ -62,7 +62,7 @@ const RFHInput = forwardRef<HTMLInputElement, RFHInputProps>(
   },
 )
 
-RFHInput.displayName = "RFHInput"
+RHFInput.displayName = "RHFInput"
 
-export { RFHInput }
+export { RHFInput }
 

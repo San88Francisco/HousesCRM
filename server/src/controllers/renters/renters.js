@@ -1,8 +1,8 @@
 const { getDB } = require('../../config/db');
 const { ObjectId } = require('mongodb');
 
-// 👤 Створення жильця
-const createTenant = async (req, res) => {
+// 👤 Створення орендаря
+const createRenter = async (req, res) => {
   const {
     house_id,
     name,
@@ -40,7 +40,7 @@ const createTenant = async (req, res) => {
       return res.status(404).json({ message: 'Квартиру з таким ID не знайдено' });
     }
 
-    const newTenant = {
+    const newRenter = {
       house_id: new ObjectId(house_id),
       name: name.trim(),
       start: new Date(start),
@@ -49,12 +49,12 @@ const createTenant = async (req, res) => {
       createdAt: new Date()
     };
 
-    const result = await db.collection('tenants').insertOne(newTenant);
-    console.log('Вставлений жилець:', result.insertedId);
+    const result = await db.collection('renters').insertOne(newRenter);
+    console.log('Вставлений орендар:', result.insertedId);
 
-    // Повертаємо створеного жильця з ID та інформацією про квартиру
-    const createdTenant = {
-      ...newTenant,
+    // Повертаємо створеного орендаря з ID та інформацією про квартиру
+    const createdRenter = {
+      ...newRenter,
       _id: result.insertedId,
       house: {
         _id: house._id,
@@ -64,17 +64,17 @@ const createTenant = async (req, res) => {
     };
 
     res.status(201).json({
-      message: 'Жильця успішно створено',
-      tenant: createdTenant
+      message: 'Орендаря успішно створено',
+      renter: createdRenter
     });
   } catch (error) {
-    console.error('Помилка при створенні жильця:', error);
+    console.error('Помилка при створенні орендаря:', error);
     res.status(500).json({ message: 'Не вдалося зберегти дані.' });
   }
 };
 
-// 📋 Отримати всіх жильців з пагінацією
-const getTenants = async (req, res) => {
+// 📋 Отримати всіх орендарів з пагінацією
+const getRenters = async (req, res) => {
   try {
     const db = getDB();
 
@@ -102,11 +102,11 @@ const getTenants = async (req, res) => {
       filter.house_id = new ObjectId(house_id);
     }
 
-    // Отримання загальної кількості жильців
-    const totalCount = await db.collection('tenants').countDocuments(filter);
+    // Отримання загальної кількості орендарів
+    const totalCount = await db.collection('renters').countDocuments(filter);
 
-    // Отримання жильців з пагінацією та інформацією про квартири
-    const tenants = await db.collection('tenants').aggregate([
+    // Отримання орендарів з пагінацією та інформацією про квартири
+    const renters = await db.collection('renters').aggregate([
       { $match: filter },
       {
         $lookup: {
@@ -143,7 +143,7 @@ const getTenants = async (req, res) => {
     const hasPrevPage = page > 1;
 
     res.json({
-      tenants,
+      renters,
       pagination: {
         currentPage: page,
         totalPages,
@@ -156,25 +156,25 @@ const getTenants = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Помилка при отриманні жильців:', error);
+    console.error('Помилка при отриманні орендарів:', error);
     res.status(500).json({ message: 'Не вдалося отримати дані.' });
   }
 };
 
-// 👁️ Отримати жильця за ID
-const getTenantById = async (req, res) => {
-  const tenantId = req.params.id;
+// 👁️ Отримати орендаря за ID
+const getRenterById = async (req, res) => {
+  const renterId = req.params.id;
 
   // Валідація ObjectId
-  if (!ObjectId.isValid(tenantId)) {
-    return res.status(400).json({ message: 'Невірний формат ID жильця' });
+  if (!ObjectId.isValid(renterId)) {
+    return res.status(400).json({ message: 'Невірний формат ID орендаря' });
   }
 
   try {
     const db = getDB();
 
-    const tenant = await db.collection('tenants').aggregate([
-      { $match: { _id: new ObjectId(tenantId) } },
+    const renter = await db.collection('renters').aggregate([
+      { $match: { _id: new ObjectId(renterId) } },
       {
         $lookup: {
           from: 'houses',
@@ -202,25 +202,25 @@ const getTenantById = async (req, res) => {
       }
     ]).toArray();
 
-    if (tenant.length === 0) {
-      return res.status(404).json({ message: 'Жильця не знайдено' });
+    if (renter.length === 0) {
+      return res.status(404).json({ message: 'Орендаря не знайдено' });
     }
 
-    res.json({ tenant: tenant[0] });
+    res.json({ renter: renter[0] });
   } catch (error) {
-    console.error('Помилка при отриманні жильця:', error);
+    console.error('Помилка при отриманні орендаря:', error);
     res.status(500).json({ message: 'Не вдалося отримати дані.' });
   }
 };
 
-// 🔄 Оновлення жильця за ID (PATCH)
-const updateTenant = async (req, res) => {
-  const tenantId = req.params.id;
+// 🔄 Оновлення орендаря за ID (PATCH)
+const updateRenter = async (req, res) => {
+  const renterId = req.params.id;
   const updateFields = req.body;
 
   // Валідація ObjectId
-  if (!ObjectId.isValid(tenantId)) {
-    return res.status(400).json({ message: 'Невірний формат ID жильця' });
+  if (!ObjectId.isValid(renterId)) {
+    return res.status(400).json({ message: 'Невірний формат ID орендаря' });
   }
 
   // Валідація house_id, якщо він передається
@@ -238,10 +238,10 @@ const updateTenant = async (req, res) => {
   try {
     const db = getDB();
 
-    // Перевірка чи існує жилець
-    const existingTenant = await db.collection('tenants').findOne({ _id: new ObjectId(tenantId) });
-    if (!existingTenant) {
-      return res.status(404).json({ message: 'Жильця не знайдено' });
+    // Перевірка чи існує орендар
+    const existingRenter = await db.collection('renters').findOne({ _id: new ObjectId(renterId) });
+    if (!existingRenter) {
+      return res.status(404).json({ message: 'Орендаря не знайдено' });
     }
 
     // Якщо оновлюється house_id, перевіряємо чи існує така квартира
@@ -265,18 +265,18 @@ const updateTenant = async (req, res) => {
     // Додаємо час оновлення
     fieldsToUpdate.updatedAt = new Date();
 
-    const result = await db.collection('tenants').updateOne(
-      { _id: new ObjectId(tenantId) },
+    const result = await db.collection('renters').updateOne(
+      { _id: new ObjectId(renterId) },
       { $set: fieldsToUpdate }
     );
 
     if (result.matchedCount === 0) {
-      return res.status(404).json({ message: 'Жильця не знайдено' });
+      return res.status(404).json({ message: 'Орендаря не знайдено' });
     }
 
-    // Отримуємо оновленого жильця з інформацією про квартиру
-    const updatedTenant = await db.collection('tenants').aggregate([
-      { $match: { _id: new ObjectId(tenantId) } },
+    // Отримуємо оновленого орендаря з інформацією про квартиру
+    const updatedRenter = await db.collection('renters').aggregate([
+      { $match: { _id: new ObjectId(renterId) } },
       {
         $lookup: {
           from: 'houses',
@@ -289,43 +289,43 @@ const updateTenant = async (req, res) => {
     ]).toArray();
 
     res.json({
-      message: 'Жильця успішно оновлено',
-      tenant: updatedTenant[0]
+      message: 'Орендаря успішно оновлено',
+      renter: updatedRenter[0]
     });
   } catch (error) {
-    console.error('Помилка при оновленні жильця:', error);
-    res.status(500).json({ message: 'Не вдалося оновити жильця.' });
+    console.error('Помилка при оновленні орендаря:', error);
+    res.status(500).json({ message: 'Не вдалося оновити орендаря.' });
   }
 };
 
-// ❌ Видалення жильця за ID
-const deleteTenant = async (req, res) => {
-  const tenantId = req.params.id;
+// ❌ Видалення орендаря за ID
+const deleteRenter = async (req, res) => {
+  const renterId = req.params.id;
 
   // Валідація ObjectId
-  if (!ObjectId.isValid(tenantId)) {
-    return res.status(400).json({ message: 'Невірний формат ID жильця' });
+  if (!ObjectId.isValid(renterId)) {
+    return res.status(400).json({ message: 'Невірний формат ID орендаря' });
   }
 
   try {
     const db = getDB();
-    const result = await db.collection('tenants').deleteOne({ _id: new ObjectId(tenantId) });
+    const result = await db.collection('renters').deleteOne({ _id: new ObjectId(renterId) });
 
     if (result.deletedCount === 0) {
-      return res.status(404).json({ message: 'Жильця не знайдено' });
+      return res.status(404).json({ message: 'Орендаря не знайдено' });
     }
 
-    res.json({ message: 'Жильця успішно видалено' });
+    res.json({ message: 'Орендаря успішно видалено' });
   } catch (error) {
-    console.error('Помилка при видаленні жильця:', error);
-    res.status(500).json({ message: 'Не вдалося видалити жильця.' });
+    console.error('Помилка при видаленні орендаря:', error);
+    res.status(500).json({ message: 'Не вдалося видалити орендаря.' });
   }
 };
 
 module.exports = {
-  createTenant,
-  getTenants,
-  getTenantById,
-  updateTenant,
-  deleteTenant
+  createRenter,
+  getRenters,
+  getRenterById,
+  updateRenter,
+  deleteRenter
 };

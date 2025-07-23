@@ -5,14 +5,14 @@ import * as yup from "yup"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { RFHForm } from "@/components/RFH/RFHForm"
-import { RFHInput } from "@/components/RFH/RFHInput"
 import { useEffect } from "react"
 import cookies from "js-cookie"
 import { useRouter } from "next/navigation"
 import { useLoginMutation } from "@/store/auth"
 import { ROUTES } from "@/routes"
 import { useErrorToast } from "@/hooks/use-error-toast"
+import { RHFInput } from "@/components/RHF/RHFInput"
+import { RHFForm } from "@/components/RHF/RHForm"
 
 type Login = {
   username: string
@@ -86,8 +86,8 @@ export default function Page() {
           <CardTitle className="text-2xl font-bold">Увійти</CardTitle>
         </CardHeader>
         <CardContent>
-          <RFHForm form={form} onSubmit={onSubmit}>
-            <RFHInput
+          <RHFForm form={form} onSubmit={onSubmit}>
+            <RHFInput
               name="username"
               label="Електронна пошта"
               type="username"
@@ -95,12 +95,12 @@ export default function Page() {
               required
             />
 
-            <RFHInput name="password" label="Пароль" type="password" placeholder="Введіть ваш пароль" required />
+            <RHFInput name="password" label="Пароль" type="password" placeholder="Введіть ваш пароль" required />
 
             <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
               {isLoading ? "Авторизація..." : "Увійти"}
             </Button>
-          </RFHForm>
+          </RHFForm>
         </CardContent>
       </Card>
     </div>

@@ -3,17 +3,17 @@ const { ObjectId } = require("mongodb")
 
 // Створення договору
 const createContract = async (req, res) => {
-  const { tenant_id, startDate, endDate, monthlyPayment } = req.body
+  const { renter_id, startDate, endDate, monthlyPayment } = req.body
 
-  if (!tenant_id || !startDate || !endDate || !monthlyPayment) {
+  if (!renter_id || !startDate || !endDate || !monthlyPayment) {
     return res.status(400).json({
-      message: "Обов'язкові поля: tenant_id, startDate, endDate, monthlyPayment",
-      requiredFields: ["tenant_id", "startDate", "endDate", "monthlyPayment"],
+      message: "Обов'язкові поля: renter_id, startDate, endDate, monthlyPayment",
+      requiredFields: ["renter_id", "startDate", "endDate", "monthlyPayment"],
     })
   }
 
-  if (!ObjectId.isValid(tenant_id)) {
-    return res.status(400).json({ message: "Невірний формат tenant_id" })
+  if (!ObjectId.isValid(renter_id)) {
+    return res.status(400).json({ message: "Невірний формат renter_id" })
   }
 
   if (monthlyPayment <= 0) {
@@ -27,7 +27,6 @@ const createContract = async (req, res) => {
   let end
   if (endDate === "now") {
     end = "now"
-
   } else {
     end = new Date(endDate)
     if (start >= end) {
@@ -40,13 +39,13 @@ const createContract = async (req, res) => {
   try {
     const db = getDB()
 
-    const tenant = await db.collection("tenants").findOne({ _id: new ObjectId(tenant_id) })
-    if (!tenant) {
-      return res.status(404).json({ message: "Жильця з таким ID не знайдено" })
+    const renter = await db.collection("renters").findOne({ _id: new ObjectId(renter_id) })
+    if (!renter) {
+      return res.status(404).json({ message: "Орендаря з таким ID не знайдено" })
     }
 
     const newContract = {
-      tenant_id: new ObjectId(tenant_id),
+      renter_id: new ObjectId(renter_id),
       startDate: start,
       endDate: end,
       monthlyPayment: Number.parseFloat(monthlyPayment),
@@ -59,10 +58,10 @@ const createContract = async (req, res) => {
     const createdContract = {
       ...newContract,
       _id: result.insertedId,
-      tenant: {
-        _id: tenant._id,
-        name: tenant.name,
-        house_id: tenant.house_id,
+      renter: {
+        _id: renter._id,
+        name: renter.name,
+        house_id: renter.house_id,
       },
     }
 
@@ -131,12 +130,8 @@ const calculateMonthsBetween = (startDate, endDate) => {
   const start = normalizeDate(startDate)
   const end = normalizeDate(endDate)
 
-
-
   let months = (end.getFullYear() - start.getFullYear()) * 12
   months += end.getMonth() - start.getMonth()
-
-
 
   if (end.getDate() < start.getDate()) {
     months -= 1;
@@ -151,16 +146,12 @@ const calculateRevenueForContract = (contract, selectedPeriod, now) => {
     const effectiveEndDate = getEffectiveDate(contract.originalEndDate, now)
     const months = calculateMonthsBetween(contract.originalStartDate, effectiveEndDate)
     const revenue = months * contract.monthlyPayment
-
     return revenue
-  }
-  else {
+  } else {
     const adjustedStart = normalizeDate(contract.adjustedStartDate)
     const adjustedEnd = normalizeDate(contract.adjustedEndDate)
-
     const months = calculateMonthsBetween(adjustedStart, adjustedEnd)
     const revenue = months * contract.monthlyPayment
-
     return revenue
   }
 }
@@ -169,7 +160,7 @@ const calculateRevenueForContract = (contract, selectedPeriod, now) => {
 const getContracts = async (req, res) => {
   try {
     const db = getDB()
-    const tenant_id = req.query.tenant_id
+    const renter_id = req.query.renter_id
     const period = req.query.period || "all"
 
     const validPeriods = ["1month", "6months", "1year", "5years", "10years", "15years", "all"]
@@ -180,114 +171,44 @@ const getContracts = async (req, res) => {
     }
 
     const filter = {}
-    if (tenant_id) {
-      if (!ObjectId.isValid(tenant_id)) {
-        return res.status(400).json({ message: "Невірний формат tenant_id" })
+    if (renter_id) {
+      if (!ObjectId.isValid(renter_id)) {
+        return res.status(400).json({ message: "Невірний формат renter_id" })
       }
-      filter.tenant_id = new ObjectId(tenant_id)
+      filter.renter_id = new ObjectId(renter_id)
     }
 
     const now = new Date()
     const periodStart = calculatePeriodStart(period)
+    const periodEnd = now
 
-
-
-
-
+    // Спочатку отримуємо всі контракти без фільтрації по датах
     const pipeline = []
 
     if (Object.keys(filter).length > 0) {
       pipeline.push({ $match: filter })
     }
 
-    if (periodStart) {
-      const periodFilter = {
-        $or: [
-          {
-            startDate: { $gte: periodStart },
-            startDate: { $lte: now },
-          },
-          {
-            $and: [
-              { endDate: { $ne: "now" } },
-              { endDate: { $gte: periodStart } },
-              { endDate: { $lte: now } },
-            ],
-          },
-          {
-            startDate: { $lte: periodStart },
-            $or: [
-              { endDate: { $gte: now } },
-              { endDate: "now" },
-            ],
-          },
-
-          {
-            $and: [
-              { startDate: { $lte: now } },
-              {
-                $or: [
-                  { endDate: { $gte: periodStart } },
-                  { endDate: "now" },
-                ],
-              },
-            ],
-          },
-        ],
-      }
-
-      pipeline.push({ $match: periodFilter })
-    }
-
-    // Обрізання дат для відображення
-    pipeline.push({
-      $addFields: {
-        originalStartDate: "$startDate",
-        originalEndDate: "$endDate",
-        adjustedStartDate: {
-          $cond: {
-            if: periodStart ? { $lt: ["$startDate", periodStart] } : false,
-            then: periodStart,
-            else: "$startDate",
-          },
-        },
-        adjustedEndDate: {
-          $cond: {
-
-            if: { $eq: ["$endDate", "now"] },
-            then: now,
-            else: {
-              $cond: {
-                if: { $gt: ["$endDate", now] },
-                then: now,
-                else: "$endDate",
-              },
-            },
-          },
-        },
-      },
-    })
-
-
+    // Додаємо lookup для renter та house
     pipeline.push(
       {
         $lookup: {
-          from: "tenants",
-          localField: "tenant_id",
+          from: "renters",
+          localField: "renter_id",
           foreignField: "_id",
-          as: "tenant",
+          as: "renter",
         },
       },
       {
         $unwind: {
-          path: "$tenant",
+          path: "$renter",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $lookup: {
           from: "houses",
-          localField: "tenant.house_id",
+          localField: "renter.house_id",
           foreignField: "_id",
           as: "house",
         },
@@ -297,22 +218,20 @@ const getContracts = async (req, res) => {
           path: "$house",
           preserveNullAndEmptyArrays: true,
         },
-      },
+      }
     )
 
     pipeline.push({
       $project: {
         _id: 1,
-        tenant_id: 1,
-        originalStartDate: 1,
-        originalEndDate: 1,
-        adjustedStartDate: 1,
-        adjustedEndDate: 1,
+        renter_id: 1,
+        startDate: 1,
+        endDate: 1,
         monthlyPayment: 1,
         status: 1,
-        "tenant._id": 1,
-        "tenant.name": 1,
-        "tenant.house_id": 1,
+        "renter._id": 1,
+        "renter.name": 1,
+        "renter.house_id": 1,
         "house._id": 1,
         "house.apartmentName": 1,
         "house.street": 1,
@@ -320,32 +239,67 @@ const getContracts = async (req, res) => {
       },
     })
 
-    pipeline.push({ $sort: { adjustedStartDate: -1 } })
+    const allContracts = await db.collection("contracts").aggregate(pipeline).toArray()
 
-    const contracts = await db.collection("contracts").aggregate(pipeline).toArray()
+    // Фільтруємо та обробляємо контракти в JavaScript
+    const filteredContracts = []
+
+    for (const contract of allContracts) {
+      const contractStart = new Date(contract.startDate)
+      const contractEnd = getEffectiveDate(contract.endDate, now)
+
+      // Якщо period === "all", включаємо всі контракти
+      if (period === "all") {
+        filteredContracts.push({
+          ...contract,
+          originalStartDate: contractStart,
+          originalEndDate: contract.endDate,
+          adjustedStartDate: contractStart,
+          adjustedEndDate: contractEnd,
+        })
+        continue
+      }
+
+      // Перевіряємо чи контракт перетинається з періодом
+      const contractOverlaps = contractStart <= periodEnd && contractEnd >= periodStart
+
+      if (!contractOverlaps) {
+        // Контракт повністю поза періодом - пропускаємо
+        continue
+      }
+
+      // Контракт перетинається з періодом - обрізаємо дати
+      const adjustedStart = contractStart < periodStart ? periodStart : contractStart
+      const adjustedEnd = contractEnd > periodEnd ? periodEnd : contractEnd
+
+      filteredContracts.push({
+        ...contract,
+        originalStartDate: contractStart,
+        originalEndDate: contract.endDate,
+        adjustedStartDate: adjustedStart,
+        adjustedEndDate: adjustedEnd,
+      })
+    }
+
+    // Сортуємо за adjustedStartDate
+    filteredContracts.sort((a, b) => new Date(b.adjustedStartDate) - new Date(a.adjustedStartDate))
 
     // Розрахунок статистики
-    const totalContracts = contracts.length
+    const totalContracts = filteredContracts.length
     let totalRevenue = 0
 
-
-
-    contracts.forEach((contract, index) => {
-
-
+    filteredContracts.forEach((contract) => {
       const revenue = calculateRevenueForContract(contract, period, now)
       totalRevenue += revenue
     })
 
-
-
     const averageMonthlyPayment =
       totalContracts > 0
-        ? Math.round(contracts.reduce((sum, contract) => sum + contract.monthlyPayment, 0) / totalContracts)
+        ? Math.round(filteredContracts.reduce((sum, contract) => sum + contract.monthlyPayment, 0) / totalContracts)
         : 0
 
     res.json({
-      contracts,
+      contracts: filteredContracts,
       period: {
         selected: period,
         startDate: periodStart,
@@ -400,22 +354,22 @@ const getContractById = async (req, res) => {
         { $match: { _id: new ObjectId(contractId) } },
         {
           $lookup: {
-            from: "tenants",
-            localField: "tenant_id",
+            from: "renters",
+            localField: "renter_id",
             foreignField: "_id",
-            as: "tenant",
+            as: "renter",
           },
         },
         {
           $unwind: {
-            path: "$tenant",
+            path: "$renter",
             preserveNullAndEmptyArrays: true,
           },
         },
         {
           $lookup: {
             from: "houses",
-            localField: "tenant.house_id",
+            localField: "renter.house_id",
             foreignField: "_id",
             as: "house",
           },
@@ -429,15 +383,15 @@ const getContractById = async (req, res) => {
         {
           $project: {
             _id: 1,
-            tenant_id: 1,
+            renter_id: 1,
             startDate: 1,
             endDate: 1,
             monthlyPayment: 1,
             status: 1,
             createdAt: 1,
-            "tenant._id": 1,
-            "tenant.name": 1,
-            "tenant.house_id": 1,
+            "renter._id": 1,
+            "renter.name": 1,
+            "renter.house_id": 1,
             "house._id": 1,
             "house.apartmentName": 1,
             "house.street": 1,
@@ -468,8 +422,8 @@ const updateContract = async (req, res) => {
     return res.status(400).json({ message: "Невірний формат ID договору" })
   }
 
-  if (updateFields.tenant_id && !ObjectId.isValid(updateFields.tenant_id)) {
-    return res.status(400).json({ message: "Невірний формат tenant_id" })
+  if (updateFields.renter_id && !ObjectId.isValid(updateFields.renter_id)) {
+    return res.status(400).json({ message: "Невірний формат renter_id" })
   }
 
   if (updateFields.monthlyPayment !== undefined && updateFields.monthlyPayment <= 0) {
@@ -477,8 +431,6 @@ const updateContract = async (req, res) => {
       message: "Місячна оплата має бути більше нуля",
     })
   }
-
-
 
   if (updateFields.startDate && updateFields.endDate && updateFields.endDate !== "now") {
     const start = new Date(updateFields.startDate)
@@ -505,12 +457,12 @@ const updateContract = async (req, res) => {
       return res.status(404).json({ message: "Договір не знайдено" })
     }
 
-    if (updateFields.tenant_id) {
-      const tenant = await db.collection("tenants").findOne({ _id: new ObjectId(updateFields.tenant_id) })
-      if (!tenant) {
-        return res.status(404).json({ message: "Жильця з таким tenant_id не знайдено" })
+    if (updateFields.renter_id) {
+      const renter = await db.collection("renters").findOne({ _id: new ObjectId(updateFields.renter_id) })
+      if (!renter) {
+        return res.status(404).json({ message: "Орендаря з таким renter_id не знайдено" })
       }
-      updateFields.tenant_id = new ObjectId(updateFields.tenant_id)
+      updateFields.renter_id = new ObjectId(updateFields.renter_id)
     }
 
     const fieldsToUpdate = { ...updateFields }
@@ -565,44 +517,44 @@ const deleteContract = async (req, res) => {
   }
 }
 
-// Отримати договори по жильцю
-const getContractsByTenant = async (req, res) => {
-  const tenantId = req.params.tenantId
+// Отримати договори по орендарю
+const getContractsByRenter = async (req, res) => {
+  const renterId = req.params.renterId
 
-  if (!ObjectId.isValid(tenantId)) {
-    return res.status(400).json({ message: "Невірний формат ID жильця" })
+  if (!ObjectId.isValid(renterId)) {
+    return res.status(400).json({ message: "Невірний формат ID орендаря" })
   }
 
   try {
     const db = getDB()
 
-    const tenant = await db.collection("tenants").findOne({ _id: new ObjectId(tenantId) })
-    if (!tenant) {
-      return res.status(404).json({ message: "Жильця не знайдено" })
+    const renter = await db.collection("renters").findOne({ _id: new ObjectId(renterId) })
+    if (!renter) {
+      return res.status(404).json({ message: "Орендаря не знайдено" })
     }
 
     const contracts = await db
       .collection("contracts")
       .aggregate([
-        { $match: { tenant_id: new ObjectId(tenantId) } },
+        { $match: { renter_id: new ObjectId(renterId) } },
         {
           $lookup: {
-            from: "tenants",
-            localField: "tenant_id",
+            from: "renters",
+            localField: "renter_id",
             foreignField: "_id",
-            as: "tenant",
+            as: "renter",
           },
         },
         {
           $unwind: {
-            path: "$tenant",
+            path: "$renter",
             preserveNullAndEmptyArrays: true,
           },
         },
         {
           $lookup: {
             from: "houses",
-            localField: "tenant.house_id",
+            localField: "renter.house_id",
             foreignField: "_id",
             as: "house",
           },
@@ -618,15 +570,15 @@ const getContractsByTenant = async (req, res) => {
       .toArray()
 
     res.json({
-      tenant: {
-        _id: tenant._id,
-        name: tenant.name,
+      renter: {
+        _id: renter._id,
+        name: renter.name,
       },
       contracts,
       totalContracts: contracts.length,
     })
   } catch (error) {
-    console.error("Помилка при отриманні договорів жильця:", error)
+    console.error("Помилка при отриманні договорів орендаря:", error)
     res.status(500).json({ message: "Не вдалося отримати дані." })
   }
 }
@@ -637,5 +589,5 @@ module.exports = {
   getContractById,
   updateContract,
   deleteContract,
-  getContractsByTenant,
+  getContractsByRenter,
 }

@@ -10,7 +10,7 @@ import { noSidebarRoutes } from "@/constants/noSidebarRoutes";
 import { CurrencyProvider } from "@/context/CurrencyContext";
 import { Provider } from "react-redux";
 import store from "@/store/store";
-import cookies from "js-cookie"; // Для роботи з cookies
+import cookies from "js-cookie"; 
 
 export default function RootLayout({
   children,
@@ -22,12 +22,12 @@ export default function RootLayout({
   const [open, setOpen] = useState(false);
   const shouldHideSidebar = noSidebarRoutes.includes(pathname);
 
-  // Перевірка токена при завантаженні сторінки
+
   useEffect(() => {
-    const token = cookies.get("accessToken"); // Отримуємо токен з cookies
+    const token = cookies.get("accessToken"); 
 
     if (!token) {
-      // Якщо токен відсутній, редіректимо на сторінку логіну
+
       router.push("/login");
     }
   }, [router]);

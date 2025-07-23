@@ -2,7 +2,7 @@
  * @swagger
  * /renters/tenant:
  *   post:
- *     summary: Створення нового жильця
+ *     summary: Створення нового орендаря
  *     tags: [Renters]
  *     security:
  *       - bearerAuth: []
@@ -11,10 +11,10 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/TenantInput'
+ *             $ref: '#/components/schemas/RenterInput'
  *     responses:
  *       201:
- *         description: Жильця успішно створено
+ *         description: Орендаря успішно створено
  *         content:
  *           application/json:
  *             schema:
@@ -22,9 +22,9 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Жильця успішно створено"
- *                 tenant:
- *                   $ref: '#/components/schemas/Tenant'
+ *                   example: "Орендаря успішно створено"
+ *                 renter:
+ *                   $ref: '#/components/schemas/Renter'
  *       400:
  *         description: Помилка валідації даних
  *         content:
@@ -55,7 +55,7 @@
  * @swagger
  * /renters/tenants:
  *   get:
- *     summary: Отримати всіх жильців з пагінацією
+ *     summary: Отримати всіх орендарів з пагінацією
  *     tags: [Renters]
  *     security:
  *       - bearerAuth: []
@@ -85,11 +85,11 @@
  *         example: "507f1f77bcf86cd799439011"
  *     responses:
  *       200:
- *         description: Список жильців з інформацією про пагінацію
+ *         description: Список орендарів з інформацією про пагінацію
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/TenantsResponse'
+ *               $ref: '#/components/schemas/RentersResponse'
  *       400:
  *         description: Помилка валідації параметрів
  *         content:
@@ -114,7 +114,7 @@
  * @swagger
  * /renters/tenant/{id}:
  *   get:
- *     summary: Отримати жильця за ID
+ *     summary: Отримати орендаря за ID
  *     tags: [Renters]
  *     security:
  *       - bearerAuth: []
@@ -124,18 +124,18 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID жильця
+ *         description: ID орендаря
  *         example: "507f1f77bcf86cd799439011"
  *     responses:
  *       200:
- *         description: Інформація про жильця
+ *         description: Інформація про орендаря
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 tenant:
- *                   $ref: '#/components/schemas/Tenant'
+ *                 renter:
+ *                   $ref: '#/components/schemas/Renter'
  *       400:
  *         description: Невірний формат ID
  *         content:
@@ -143,7 +143,7 @@
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       404:
- *         description: Жильця не знайдено
+ *         description: Орендаря не знайдено
  *         content:
  *           application/json:
  *             schema:
@@ -166,7 +166,7 @@
  * @swagger
  * /renters/tenant/{id}:
  *   patch:
- *     summary: Оновлення жильця за ID
+ *     summary: Оновлення орендаря за ID
  *     tags: [Renters]
  *     security:
  *       - bearerAuth: []
@@ -176,7 +176,7 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID жильця
+ *         description: ID орендаря
  *         example: "507f1f77bcf86cd799439011"
  *     requestBody:
  *       required: true
@@ -205,7 +205,7 @@
  *             description: "Поля для оновлення (всі опціональні)"
  *     responses:
  *       200:
- *         description: Жильця успішно оновлено
+ *         description: Орендаря успішно оновлено
  *         content:
  *           application/json:
  *             schema:
@@ -213,9 +213,9 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Жильця успішно оновлено"
- *                 tenant:
- *                   $ref: '#/components/schemas/Tenant'
+ *                   example: "Орендаря успішно оновлено"
+ *                 renter:
+ *                   $ref: '#/components/schemas/Renter'
  *       400:
  *         description: Помилка валідації даних
  *         content:
@@ -223,7 +223,7 @@
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       404:
- *         description: Жильця не знайдено
+ *         description: Орендаря не знайдено
  *         content:
  *           application/json:
  *             schema:
@@ -235,7 +235,7 @@
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Не вдалося оновити жильця
+ *         description: Не вдалося оновити орендаря
  *         content:
  *           application/json:
  *             schema:
@@ -246,7 +246,7 @@
  * @swagger
  * /renters/tenant/{id}:
  *   delete:
- *     summary: Видалення жильця за ID
+ *     summary: Видалення орендаря за ID
  *     tags: [Renters]
  *     security:
  *       - bearerAuth: []
@@ -256,11 +256,11 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: ID жильця
+ *         description: ID орендаря
  *         example: "507f1f77bcf86cd799439011"
  *     responses:
  *       200:
- *         description: Жильця успішно видалено
+ *         description: Орендаря успішно видалено
  *         content:
  *           application/json:
  *             schema:
@@ -268,7 +268,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Жильця успішно видалено"
+ *                   example: "Орендаря успішно видалено"
  *       400:
  *         description: Невірний формат ID
  *         content:
@@ -276,7 +276,7 @@
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       404:
- *         description: Жильця не знайдено
+ *         description: Орендаря не знайдено
  *         content:
  *           application/json:
  *             schema:
@@ -288,7 +288,7 @@
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Не вдалося видалити жильця
+ *         description: Не вдалося видалити орендаря
  *         content:
  *           application/json:
  *             schema:
