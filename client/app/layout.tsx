@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import store from '@/store/store';
 import cookies from 'js-cookie';
 
+const awd = 'wd '
 export default function RootLayout({
   children,
 }: Readonly<{
