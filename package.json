@@ -1,11 +1,31 @@
 {
+  "type": "module",
   "name": "houses-crm",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently --names \"FRONT,SERVER\" -c \"cyan,green\" \"npm run dev --prefix client\" \"npm start --prefix server\""
+    "dev": "concurrently --names \"FRONT,SERVER\" -c \"cyan,green\" \"npm run dev --prefix client\" \"npm start --prefix server\"",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "client/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "server/**/*.{js,ts,json}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "devDependencies": {
-    "concurrently": "^8.0.0"
+    "@eslint/eslintrc": "^3.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "concurrently": "^8.0.0",
+    "eslint": "^9.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2"
   }
 }

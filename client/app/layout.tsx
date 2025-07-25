@@ -1,34 +1,32 @@
-'use client'
+'use client';
 
-import { Toaster } from "@/components/ui/toaster";
-import "./globals.css";
-import { ReactNode, useState, useEffect } from "react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/Sidebar/Sidebar";
-import { usePathname, useRouter } from "next/navigation";
-import { noSidebarRoutes } from "@/constants/noSidebarRoutes";
-import { CurrencyProvider } from "@/context/CurrencyContext";
-import { Provider } from "react-redux";
-import store from "@/store/store";
-import cookies from "js-cookie"; 
+import { Toaster } from '@/components/ui/toaster';
+import './globals.css';
+import { ReactNode, useState, useEffect } from 'react';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/Sidebar/Sidebar';
+import { usePathname, useRouter } from 'next/navigation';
+import { noSidebarRoutes } from '@/constants/noSidebarRoutes';
+import { CurrencyProvider } from '@/context/CurrencyContext';
+import { Provider } from 'react-redux';
+import store from '@/store/store';
+import cookies from 'js-cookie';
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: ReactNode;
+  children: any;
 }>) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const shouldHideSidebar = noSidebarRoutes.includes(pathname);
 
-
   useEffect(() => {
-    const token = cookies.get("accessToken"); 
+    const token = cookies.get('accessToken');
 
     if (!token) {
-
-      router.push("/login");
+      router.push('/login');
     }
   }, [router]);
 
