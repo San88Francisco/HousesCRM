@@ -1,11 +1,14 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+
+const HTTP_FORBIDDEN = 403;
+const HTTP_UNAUTHORIZED = 401;
 
 // Middleware для перевірки токена
 const authenticate = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ message: 'Необхідна авторизація' });
+    return res.status(HTTP_UNAUTHORIZED).json({ message: 'Необхідна авторизація' });
   }
 
   try {
@@ -14,8 +17,8 @@ const authenticate = (req, res, next) => {
     next();
   } catch (error) {
     console.error(error);
-    res.status(403).json({ message: 'Невірний або застарілий токен' });
+    res.status(HTTP_FORBIDDEN).json({ message: 'Невірний або застарілий токен' });
   }
 };
 
-module.exports = { authenticate };
+export { authenticate };

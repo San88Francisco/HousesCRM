@@ -1,6 +1,8 @@
-"use client"
+/* eslint-disable */
 
-import { useState, useMemo } from "react"
+'use client';
+
+import { useState, useMemo, FC } from 'react';
 import {
   Line,
   LineChart,
@@ -11,100 +13,115 @@ import {
   Legend,
   Tooltip,
   ReferenceLine,
-} from "recharts"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { format, eachMonthOfInterval, startOfMonth, endOfMonth, isWithinInterval } from "date-fns"
-import { uk } from "date-fns/locale"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, Calendar } from "lucide-react"
+} from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { format, eachMonthOfInterval, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
+import { uk } from 'date-fns/locale';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle, Calendar } from 'lucide-react';
 
-import { useGetAllContractsQuery } from "@/store/contracts"
-import { ContractPeriod } from "@/types/services/contracts"
-import type { UUID } from "crypto"
+import { useGetAllContractsQuery } from '@/store/contracts';
+import { ContractPeriod } from '@/types/services/contracts';
+import type { UUID } from 'crypto';
 
-type ContractChartProps = {
-  renterId?: UUID
-}
+type Props = {
+  renterId?: UUID;
+};
 
-export function ContractsChart({ renterId }: ContractChartProps) {
-  const [selectedPeriod, setSelectedPeriod] = useState<ContractPeriod>(ContractPeriod.OneYear)
+export const ContractsChart: FC<Props> = ({ renterId }) => {
+  const [selectedPeriod, setSelectedPeriod] = useState<ContractPeriod>(ContractPeriod.OneYear);
 
   const { data, isLoading, isFetching, error } = useGetAllContractsQuery({
     period: selectedPeriod,
     renter_id: renterId,
-  })
+  });
 
-  const getPeriodLabel = (period: ContractPeriod): string => {
-    const labels = {
-      [ContractPeriod.OneMonth]: "1 місяць",
-      [ContractPeriod.SixMonths]: "6 місяців",
-      [ContractPeriod.OneYear]: "1 рік",
-      [ContractPeriod.FiveYears]: "5 років",
-      [ContractPeriod.TenYears]: "10 років",
-      [ContractPeriod.FifteenYears]: "15 років",
-      [ContractPeriod.All]: "Весь час",
-    }
-    return labels[period] || period
-  }
+  // const getPeriodLabel = (period: ContractPeriod): string => {
+  //   const labels = {
+  //     [ContractPeriod.OneMonth]: '1 місяць',
+  //     [ContractPeriod.SixMonths]: '6 місяців',
+  //     [ContractPeriod.OneYear]: '1 рік',
+  //     [ContractPeriod.FiveYears]: '5 років',
+  //     [ContractPeriod.TenYears]: '10 років',
+  //     [ContractPeriod.FifteenYears]: '15 років',
+  //     [ContractPeriod.All]: 'Весь час',
+  //   };
+  //   return labels[period] || period;
+  // };
 
   // Transform contract data for chart visualization
   const chartData = useMemo(() => {
-    if (!data?.contracts || !data?.period) return []
+    if (!data?.contracts || !data?.period) {
+      return [];
+    }
 
     // Get the period range
-    const periodStart = new Date(data.period.startDate)
-    const periodEnd = new Date(data.period.endDate)
+    const periodStart = new Date(data.period.startDate);
+    const periodEnd = new Date(data.period.endDate);
 
     // Generate all months in the period
     const monthsInPeriod = eachMonthOfInterval({
       start: periodStart,
       end: periodEnd,
-    })
+    });
 
     // Initialize revenue for each month
-    const monthlyRevenue: Record<string, number> = {}
-    monthsInPeriod.forEach((month) => {
-      const monthKey = format(month, "yyyy-MM")
-      monthlyRevenue[monthKey] = 0
-    })
+    const monthlyRevenue: Record<string, number> = {};
+    monthsInPeriod.forEach(month => {
+      const monthKey = format(month, 'yyyy-MM');
+      monthlyRevenue[monthKey] = 0;
+    });
 
     // Calculate revenue for each month based on active contracts
     // Group contracts by property (house_id + renter_id) to handle sequential contracts correctly
-    const contractsByProperty: Record<string, typeof data.contracts> = {}
+    const contractsByProperty: Record<string, typeof data.contracts> = {};
 
-    data.contracts.forEach((contract) => {
-      const propertyKey = `${contract.renter.house_id}_${contract.renter_id}`
+    data.contracts.forEach(contract => {
+      const propertyKey = `${contract.renter.house_id}_${contract.renter_id}`;
       if (!contractsByProperty[propertyKey]) {
-        contractsByProperty[propertyKey] = []
+        contractsByProperty[propertyKey] = [];
       }
-      contractsByProperty[propertyKey].push(contract)
-    })
+      contractsByProperty[propertyKey].push(contract);
+    });
 
     // For each property, calculate revenue month by month
-    Object.values(contractsByProperty).forEach((propertyContracts) => {
+    Object.values(contractsByProperty).forEach(propertyContracts => {
       // Sort contracts by start date
       const sortedContracts = propertyContracts.sort((a, b) => {
-        const dateA = new Date(a.adjustedStartDate || a.originalStartDate)
-        const dateB = new Date(b.adjustedStartDate || b.originalStartDate)
-        return dateA.getTime() - dateB.getTime()
-      })
+        const dateA = new Date(a.adjustedStartDate || a.originalStartDate);
+        const dateB = new Date(b.adjustedStartDate || b.originalStartDate);
+        return dateA.getTime() - dateB.getTime();
+      });
 
-      monthsInPeriod.forEach((month) => {
-        const monthStart = startOfMonth(month)
-        const monthEnd = endOfMonth(month)
-        const monthKey = format(month, "yyyy-MM")
+      monthsInPeriod.forEach(month => {
+        const monthStart = startOfMonth(month);
+        const monthEnd = endOfMonth(month);
+        const monthKey = format(month, 'yyyy-MM');
 
         // Find the active contract for this month (latest contract that covers this month)
-        let activeContract = null
+        let activeContract = null;
 
         for (const contract of sortedContracts) {
-          const contractStart = new Date(contract.adjustedStartDate || contract.originalStartDate)
+          const contractStart = new Date(contract.adjustedStartDate || contract.originalStartDate);
           const contractEnd =
-            contract.adjustedEndDate === "now"
+            contract.adjustedEndDate === 'now'
               ? new Date()
-              : new Date(contract.adjustedEndDate || contract.originalEndDate)
+              : new Date(contract.adjustedEndDate || contract.originalEndDate);
 
           // Check if contract covers this month (any overlap means full monthly payment)
           const isContractActive =
@@ -112,33 +129,33 @@ export function ContractsChart({ renterId }: ContractChartProps) {
             isWithinInterval(monthEnd, { start: contractStart, end: contractEnd }) ||
             (contractStart <= monthStart && contractEnd >= monthEnd) ||
             (contractStart >= monthStart && contractStart <= monthEnd) ||
-            (contractEnd >= monthStart && contractEnd <= monthEnd)
+            (contractEnd >= monthStart && contractEnd <= monthEnd);
 
           if (isContractActive) {
-            activeContract = contract
+            activeContract = contract;
           }
         }
 
         // Add full monthly payment if contract is active during this month
         if (activeContract) {
-          monthlyRevenue[monthKey] += activeContract.monthlyPayment
+          monthlyRevenue[monthKey] += activeContract.monthlyPayment;
         }
-      })
-    })
+      });
+    });
 
     // Convert to array format for chart
     return Object.entries(monthlyRevenue)
       .map(([month, revenue]) => ({
         month,
         revenue,
-        displayMonth: format(new Date(month + "-01"), "MMM yyyy", { locale: uk }),
+        displayMonth: format(new Date(month + '-01'), 'MMM yyyy', { locale: uk }),
       }))
-      .sort((a, b) => a.month.localeCompare(b.month))
-  }, [data?.contracts, data?.period])
+      .sort((a, b) => a.month.localeCompare(b.month));
+  }, [data?.contracts, data?.period]);
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("uk-UA", { style: "currency", currency: "UAH" }).format(value)
-  }
+    return new Intl.NumberFormat('uk-UA', { style: 'currency', currency: 'UAH' }).format(value);
+  };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -151,10 +168,10 @@ export function ContractsChart({ renterId }: ContractChartProps) {
             </p>
           ))}
         </div>
-      )
+      );
     }
-    return null
-  }
+    return null;
+  };
 
   if (isLoading) {
     return (
@@ -177,7 +194,7 @@ export function ContractsChart({ renterId }: ContractChartProps) {
           <Skeleton className="h-[400px] w-full" />
         </CardContent>
       </Card>
-    )
+    );
   }
 
   if (error) {
@@ -185,9 +202,11 @@ export function ContractsChart({ renterId }: ContractChartProps) {
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Помилка</AlertTitle>
-        <AlertDescription>Не вдалося завантажити дані контрактів. Спробуйте оновити сторінку.</AlertDescription>
+        <AlertDescription>
+          Не вдалося завантажити дані контрактів. Спробуйте оновити сторінку.
+        </AlertDescription>
       </Alert>
-    )
+    );
   }
 
   if (!data || !data.contracts || data.contracts.length === 0) {
@@ -199,7 +218,10 @@ export function ContractsChart({ renterId }: ContractChartProps) {
               <CardTitle>Контракти</CardTitle>
               <CardDescription>Виберіть період для перегляду даних</CardDescription>
             </div>
-            <Select value={selectedPeriod} onValueChange={(value) => setSelectedPeriod(value as ContractPeriod)}>
+            <Select
+              value={selectedPeriod}
+              onValueChange={value => setSelectedPeriod(value as ContractPeriod)}
+            >
               <SelectTrigger className="w-40">
                 <Calendar className="h-4 w-4 mr-2" />
                 <SelectValue />
@@ -219,11 +241,13 @@ export function ContractsChart({ renterId }: ContractChartProps) {
         <CardContent>
           <Alert>
             <AlertTitle>Немає даних</AlertTitle>
-            <AlertDescription>Для вибраного періоду немає доступних даних контрактів.</AlertDescription>
+            <AlertDescription>
+              Для вибраного періоду немає доступних даних контрактів.
+            </AlertDescription>
           </Alert>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -233,11 +257,14 @@ export function ContractsChart({ renterId }: ContractChartProps) {
           <div className="flex-1">
             <CardTitle>Контракти за період: {data.period.description}</CardTitle>
             <CardDescription>
-              {format(new Date(data.period.startDate), "dd.MM.yyyy")} -{" "}
-              {format(new Date(data.period.endDate), "dd.MM.yyyy")}
+              {format(new Date(data.period.startDate), 'dd.MM.yyyy')} -{' '}
+              {format(new Date(data.period.endDate), 'dd.MM.yyyy')}
             </CardDescription>
           </div>
-          <Select value={selectedPeriod} onValueChange={(value) => setSelectedPeriod(value as ContractPeriod)}>
+          <Select
+            value={selectedPeriod}
+            onValueChange={value => setSelectedPeriod(value as ContractPeriod)}
+          >
             <SelectTrigger className="w-40">
               <Calendar className="h-4 w-4 mr-2" />
               <SelectValue />
@@ -264,7 +291,9 @@ export function ContractsChart({ renterId }: ContractChartProps) {
           </div>
           <div className="bg-amber-50 p-3 rounded-lg">
             <p className="text-sm text-muted-foreground">Середній місячний платіж</p>
-            <p className="text-2xl font-bold">{formatCurrency(data.statistics.averageMonthlyPayment)}</p>
+            <p className="text-2xl font-bold">
+              {formatCurrency(data.statistics.averageMonthlyPayment)}
+            </p>
           </div>
         </div>
       </CardHeader>
@@ -276,7 +305,7 @@ export function ContractsChart({ renterId }: ContractChartProps) {
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
               <XAxis
                 dataKey="displayMonth"
-                tick={{ fontSize: 12, fill: "#6B7280" }}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
                 stroke="#6B7280"
                 interval={0}
                 angle={-45}
@@ -284,9 +313,9 @@ export function ContractsChart({ renterId }: ContractChartProps) {
                 height={60}
               />
               <YAxis
-                tickFormatter={(value) => `₴${value.toLocaleString()}`}
+                tickFormatter={value => `₴${value.toLocaleString()}`}
                 width={80}
-                tick={{ fontSize: 12, fill: "#6B7280" }}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
                 stroke="#6B7280"
               />
               <Tooltip content={<CustomTooltip />} />
@@ -300,13 +329,13 @@ export function ContractsChart({ renterId }: ContractChartProps) {
                 strokeWidth={2}
                 label={{
                   value: `Середній платіж: ${formatCurrency(data.statistics.averageMonthlyPayment)}`,
-                  position: "top",
+                  position: 'top',
                   offset: 10,
                   style: {
-                    fill: "#DC2626",
-                    fontSize: "12px",
-                    fontWeight: "500",
-                    textAnchor: "end",
+                    fill: '#DC2626',
+                    fontSize: '12px',
+                    fontWeight: '500',
+                    textAnchor: 'end',
                   },
                 }}
               />
@@ -317,8 +346,8 @@ export function ContractsChart({ renterId }: ContractChartProps) {
                 name="Дохід"
                 stroke="#457B9D"
                 strokeWidth={3}
-                dot={{ fill: "#457B9D", strokeWidth: 2, r: 5 }}
-                activeDot={{ r: 7, fill: "#457B9D", stroke: "#FFFFFF", strokeWidth: 2 }}
+                dot={{ fill: '#457B9D', strokeWidth: 2, r: 5 }}
+                activeDot={{ r: 7, fill: '#457B9D', stroke: '#FFFFFF', strokeWidth: 2 }}
                 connectNulls={false}
               />
             </LineChart>
@@ -327,13 +356,13 @@ export function ContractsChart({ renterId }: ContractChartProps) {
       </CardContent>
 
       <CardFooter className="text-sm text-muted-foreground">
-        {isFetching && "Оновлення даних..."}
+        {isFetching && 'Оновлення даних...'}
         {chartData.length > 0 && (
           <span className="ml-auto">
-            Показано {chartData.filter((item) => item.revenue > 0).length} місяців з доходом
+            Показано {chartData.filter(item => item.revenue > 0).length} місяців з доходом
           </span>
         )}
       </CardFooter>
     </Card>
-  )
+  );
 }

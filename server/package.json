@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "server",
   "version": "1.0.0",
   "description": "",
@@ -6,8 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:all": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .ts,.js --fix --color && prettier --write \"src/**/*.{ts,js,json}\" && echo \"\\n✅ Server formatting complete!\\n\" && eslint . --ext .ts,.js --color"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +23,7 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "prettier": "^3.6.2"
   }
 }

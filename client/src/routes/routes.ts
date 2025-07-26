@@ -1,4 +1,4 @@
 export const ROUTES = {
   LOGIN: '/login',
-  ALL_APARTMENTS: '/all-apartments'
-}
+  ALL_APARTMENTS: '/all-apartments',
+};

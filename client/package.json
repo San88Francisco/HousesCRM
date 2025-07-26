@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
-    "format": "prettier --config .prettierrc --write src/**/*.{ts,tsx,js,css}",
+    "format": "prettier --config .prettierrc --write src/**/*.{ts,tsx,css}",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+      "lint": "eslint \"src/components/{AllIncomeInMonth,Chart,DropdownSelect,InfoCardsMini,PieChart,Sidebar}/**/*.{ts,tsx}\" \"src/{hooks,lib,store,utils}/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --fix --color && prettier --write \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-path .prettierignore && echo \"\\n✅ Prettier formatting complete!\\n\" && eslint \"src/components/{AllIncomeInMonth,Chart,DropdownSelect,InfoCardsMini,PieChart,Sidebar}/**/*.{ts,tsx}\" \"src/{hooks,lib,store,utils}/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --color"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

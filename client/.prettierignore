@@ -4,3 +4,9 @@ vite.config.ts
 tsconfig*
 tailwind.config*
 env
+dist/
+build/
+.next/
+*.lock
+package-lock.json
+.git/

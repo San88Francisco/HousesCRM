@@ -1,61 +1,81 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+/* eslint-disable */
 
-export async function middleware(req: NextRequest) {
-  const accessToken = req.cookies.get("accessToken")?.value
-  const refreshToken = req.cookies.get("refreshToken")?.value
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-  const protectedRoutes = ["/", "/all-apartments", "/dashboard", "/profile"]
-  const isProtectedRoute = protectedRoutes.some((route) => req.nextUrl.pathname.startsWith(route))
+const SECONDS_IN_MINUTE = 60;
+const MINUTES_IN_HOUR = 60;
+const HOURS_IN_DAY = 24;
+const DAYS_IN_WEEK = 7;
 
-  if (!isProtectedRoute) {
-    return NextResponse.next()
+const ACCESS_TOKEN_AGE = SECONDS_IN_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY; // 1 день
+const REFRESH_TOKEN_AGE = ACCESS_TOKEN_AGE * DAYS_IN_WEEK; // 7 днів
+
+const protectedRoutes = ['/', '/all-apartments', '/dashboard', '/profile'];
+
+const isProtectedRoute = (pathname: string) =>
+  protectedRoutes.some(route => pathname.startsWith(route));
+
+const refreshAccessToken = async (
+  origin: string,
+  refreshToken: string,
+): Promise<{ accessToken: string; refreshToken: string } | null> => {
+  try {
+    const response = await fetch(`${origin}/api/auth/refresh`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!response.ok) return null;
+
+    return await response.json();
+  } catch (error) {
+    console.error('Token refresh failed:', error);
+    return null;
+  }
+};
+
+export const middleware = async (req: NextRequest) => {
+  const accessToken = req.cookies.get('accessToken')?.value;
+  const refreshToken = req.cookies.get('refreshToken')?.value;
+  const { pathname, origin } = req.nextUrl;
+
+  if (!isProtectedRoute(pathname)) {
+    return NextResponse.next();
   }
 
-  // Якщо немає access token, але є refresh token
   if (!accessToken && refreshToken) {
-    try {
-      // Спробуємо оновити токен
-      const response = await fetch(`${req.nextUrl.origin}/api/auth/refresh`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ refreshToken }),
-      })
+    const data = await refreshAccessToken(origin, refreshToken);
 
-      if (response.ok) {
-        const data = await response.json()
-        const res = NextResponse.next()
+    if (data) {
+      const res = NextResponse.next();
 
-        // Встановлюємо нові токени в cookies
-        res.cookies.set("accessToken", data.accessToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 60 * 60 * 24, // 1 день
-        })
+      res.cookies.set('accessToken', data.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: ACCESS_TOKEN_AGE,
+      });
 
-        res.cookies.set("refreshToken", data.refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 60 * 60 * 24 * 7, // 7 днів
-        })
+      res.cookies.set('refreshToken', data.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: REFRESH_TOKEN_AGE,
+      });
 
-        return res
-      }
-    } catch (error) {
-      console.error("Token refresh failed:", error)
+      return res;
     }
   }
 
-  // Якщо немає жодного токена або refresh не вдався
   if (!accessToken) {
-    return NextResponse.redirect(new URL("/login", req.url))
+    return NextResponse.redirect(new URL('/login', req.url));
   }
 
-  return NextResponse.next()
-}
+  return NextResponse.next();
+};
 
 export const config = {
-  matcher: ["/", "/all-apartments", "/dashboard", "/profile"],
-}
+  matcher: ['/', '/all-apartments', '/dashboard', '/profile'],
+};

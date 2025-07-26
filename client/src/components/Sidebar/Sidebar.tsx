@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Sidebar,
@@ -9,14 +9,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { itemsNav } from "@/constants/sidebarNavItems"
-import Link from "next/link"
+} from '@/components/ui/sidebar';
+import { itemsNav } from '@/constants/sidebarNavItems';
+import Link from 'next/link';
 
 export function AppSidebar() {
-
-
-
   return (
     <Sidebar>
       <SidebarContent>
@@ -24,7 +21,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {itemsNav.map((item) => (
+              {itemsNav.map(item => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>
@@ -39,6 +36,5 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
-

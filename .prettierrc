@@ -1,6 +1,7 @@
 {
   "prettier.requireConfig": true,
   "files.exclude": {
-    "**/client/**": true
+    "**/client/**": true,
+    "**/server/**": true
   }
 }

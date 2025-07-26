@@ -1,83 +1,72 @@
-"use client"
+'use client';
 
-import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useEffect } from "react"
-import cookies from "js-cookie"
-import { useRouter } from "next/navigation"
-import { useLoginMutation } from "@/store/auth"
-import { ROUTES } from "@/routes"
-import { useErrorToast } from "@/hooks/use-error-toast"
-import { RHFInput } from "@/components/RHF/RHFInput"
-import { RHFForm } from "@/components/RHF/RHForm"
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import { useLoginMutation } from '@/store/auth';
+import { ROUTES } from '@/routes';
+import { useErrorToast } from '@/hooks/use-error-toast';
+import { RHFInput } from '@/components/RHF/RHFInput';
+import { RHFForm } from '@/components/RHF/RHForm';
 
 type Login = {
-  username: string
-  password: string
-}
+  username: string;
+  password: string;
+};
 
 const FormSchema = yup.object({
   username: yup.string().required("Електронна пошта є обов'язковою."),
   password: yup.string().required("Пароль є обов'язковим."),
-})
+});
 
 const defaultValues = {
-  username: "",
-  password: "",
-}
+  username: '',
+  password: '',
+};
 
-export default function Page() {
-  const { errorToast, successToast } = useErrorToast()
-  const router = useRouter()
-  const [login, { isLoading }] = useLoginMutation()
+const Page = () => {
+  const { errorToast, successToast } = useErrorToast();
+  const router = useRouter();
+  const [login, { isLoading }] = useLoginMutation();
 
   const form = useForm<Login>({
     resolver: yupResolver(FormSchema),
     defaultValues,
-  })
+  });
 
-  const { isSubmitting } = form.formState
+  const { isSubmitting } = form.formState;
 
-  useEffect(() => {
-    const subscription = form.watch((value, { name, type }) => {
-      console.log("Field changed:", name, value, type)
-    })
-    return () => subscription.unsubscribe()
-  }, [form])
-
-  async function onSubmit(data: Login) {
+  const onSubmit = async (data: Login) => {
     try {
       const result = await login({
         username: data.username,
         password: data.password,
-      }).unwrap()
-
-      console.log("Login result:", result)
+      }).unwrap();
 
       if (result.accessToken) {
-        cookies.set("accessToken", result.accessToken, {
+        cookies.set('accessToken', result.accessToken, {
           expires: 7,
-          path: "/",
-        })
+          path: '/',
+        });
 
         if (result.refreshToken) {
-          cookies.set("refreshToken", result.refreshToken, {
+          cookies.set('refreshToken', result.refreshToken, {
             expires: 30,
-            path: "/",
-          })
+            path: '/',
+          });
         }
 
-        successToast("Увійшли успішно", "Ласкаво просимо!")
-
-        router.push(ROUTES.ALL_APARTMENTS)
+        successToast('Увійшли успішно', 'Ласкаво просимо!');
+        router.push(ROUTES.ALL_APARTMENTS);
       }
     } catch (error) {
-      errorToast(error)
+      errorToast(error);
     }
-  }
+  };
 
   return (
     <div className="h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -94,15 +83,21 @@ export default function Page() {
               placeholder="Введіть вашу електронну пошту"
               required
             />
-
-            <RHFInput name="password" label="Пароль" type="password" placeholder="Введіть ваш пароль" required />
-
+            <RHFInput
+              name="password"
+              label="Пароль"
+              type="password"
+              placeholder="Введіть ваш пароль"
+              required
+            />
             <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
-              {isLoading ? "Авторизація..." : "Увійти"}
+              {isLoading ? 'Авторизація...' : 'Увійти'}
             </Button>
           </RHFForm>
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
+
+export default Page;

@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
-
-export async function POST(request: NextRequest) {
+export const POST = async (request: NextRequest) => {
   try {
     const { refreshToken } = await request.json();
 
@@ -31,4 +30,4 @@ export async function POST(request: NextRequest) {
     console.error('Refresh token error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+};
