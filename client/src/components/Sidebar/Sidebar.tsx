@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Sidebar,
@@ -9,14 +9,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { itemsNav } from "@/constants/sidebarNavItems"
-import Link from "next/link"
+} from '@/components/ui/sidebar';
+import { itemsNav } from '@/constants/sidebarNavItems';
+import Link from 'next/link';
+import { ThemeDropdown } from '../ThemeDropDown/ThemeDropDown';
 
 export function AppSidebar() {
-
-
-
   return (
     <Sidebar>
       <SidebarContent>
@@ -24,7 +22,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {itemsNav.map((item) => (
+              {itemsNav.map(item => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>
@@ -38,7 +36,10 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-    </Sidebar>
-  )
-}
 
+      <div className="p-4 border-t w-full text-center">
+        <ThemeDropdown />
+      </div>
+    </Sidebar>
+  );
+}

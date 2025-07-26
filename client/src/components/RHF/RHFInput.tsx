@@ -1,16 +1,16 @@
-"use client"
+'use client';
 
-import { forwardRef, type InputHTMLAttributes } from "react"
-import { useFormContext, Controller } from "react-hook-form"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { AlertCircle } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { forwardRef, type InputHTMLAttributes } from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface RHFInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  name: string
-  label?: string
-  required?: boolean
+  name: string;
+  label?: string;
+  required?: boolean;
 }
 
 const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
@@ -18,15 +18,15 @@ const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
     const {
       control,
       formState: { errors },
-    } = useFormContext()
+    } = useFormContext();
 
-    const error = errors[name]
-    const errorMessage = error?.message as string | undefined
+    const error = errors[name];
+    const errorMessage = error?.message as string | undefined;
 
     return (
       <div className="space-y-2">
         {label && (
-          <Label htmlFor={name} className="flex items-center gap-1">
+          <Label htmlFor={name} className="flex items-center gap-1 dark:text-card-dark-foreground">
             {label}
             {required && <span className="text-destructive">*</span>}
           </Label>
@@ -39,11 +39,14 @@ const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
             <Input
               id={name}
               {...field}
-              value={field.value || ""}
-              onChange={(e) => {
-                field.onChange(e.target.value)
+              value={field.value || ''}
+              onChange={e => {
+                field.onChange(e.target.value);
               }}
-              className={cn(errorMessage && "border-destructive focus-visible:ring-destructive", className)}
+              className={cn(
+                errorMessage && 'border-destructive focus-visible:ring-destructive',
+                className,
+              )}
               aria-invalid={!!errorMessage}
               {...props}
               ref={ref}
@@ -58,11 +61,10 @@ const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
           </div>
         )}
       </div>
-    )
+    );
   },
-)
+);
 
-RHFInput.displayName = "RHFInput"
+RHFInput.displayName = 'RHFInput';
 
-export { RHFInput }
-
+export { RHFInput };
