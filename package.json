@@ -7,15 +7,7 @@
     "dev": "concurrently --names \"FRONT,SERVER\" -c \"cyan,green\" \"npm run dev --prefix client\" \"npm start --prefix server\"",
     "prepare": "husky install",
     "lint:client": "npm run lint --prefix client",
-    "lint:server": "npm run lint --prefix server",
-    "lint:all": "npm run lint:client && npm run lint:server"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "npm run lint:client --prefix client --",
-      "npm run lint:server --prefix server --",
-      "git add"
-    ]
+    "lint:server": "npm run lint --prefix server"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -28,4 +20,13 @@
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2"
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,scss}": [
+      "prettier --write"
+    ]
+  }
 }
