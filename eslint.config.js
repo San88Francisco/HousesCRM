@@ -23,7 +23,7 @@ export default [
       "**/package.json",
     ],
 
-    files: ["**/*.{ts,tsx}"],
+    files: ["**/*.{js,ts,tsx}"],
 
     languageOptions: {
       ecmaVersion: 2020,

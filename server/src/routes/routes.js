@@ -1,38 +1,32 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   createHouse,
   getHouses,
   deleteHouse,
-} = require("../controllers/houses/houses");
-const { authenticate } = require("../middleware/authenticate");
-const {
+} from "../controllers/houses/houses";
+import { authenticate } from "../middleware/authenticate";
+import {
   loginUser,
   refreshAccessToken,
   registerUser,
-} = require("../controllers/auth/auth");
-const {
+} from "../controllers/auth/auth";
+import {
   createRenter,
   getRenters,
   getRenterById,
   updateRenter,
   deleteRenter,
-} = require("../controllers/renters/renters");
-const {
+} from "../controllers/renters/renters";
+import {
   createContract,
   getContracts,
   getContractById,
   updateContract,
   deleteContract,
   getContractsByRenter,
-} = require("../controllers/contracts/contracts");
+} from "../controllers/contracts/contracts";
 
 const router = express.Router();
-function badFunction(data) {
-  return data.someProperty;
-}
-
-// 2. Використання var замість let/const (заборонено правилом no-var)
-var oldStyleVariable = "bad practice";
 
 // ========== AUTH ROUTES ==========
 router.post("/auth/register", registerUser);
@@ -59,4 +53,4 @@ router.patch("/contracts/deals/:id", authenticate, updateContract);
 router.delete("/contracts/deals/:id", authenticate, deleteContract);
 router.get("/contracts/renter/:renterId", authenticate, getContractsByRenter);
 
-module.exports = router;
+export default router;
