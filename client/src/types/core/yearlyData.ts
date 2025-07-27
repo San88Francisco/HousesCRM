@@ -1,4 +1,4 @@
 export type YearlyData = {
-  date: string
-  value: number
-}
+  date: string;
+  value: number;
+};

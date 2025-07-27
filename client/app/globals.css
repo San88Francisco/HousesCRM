@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Inter:300,regular,500,600,700,800,900");
+@import url('https://fonts.googleapis.com/css?family=Inter:300,regular,500,600,700,800,900');
 
 @tailwind base;
 @tailwind components;
@@ -12,8 +12,7 @@
   --primary-light: #a8dadc; /* Світлий синій */
   --primary-dark: #1d3557; /* Темний синій */
   --border: #e0e0e0; /* Світло-сірий для рамок */
-  --text: #374151
-  --radius: 0.5rem;
+  --text: #374151 --radius: 0.5rem;
 }
 
 html,
@@ -25,29 +24,31 @@ main {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: "Inter";
+  font-family: 'Inter';
 }
 
 @layer base {
   h1 {
-    @apply text-2xl font-bold text-gray-800; 
+    @apply text-2xl font-bold text-gray-800;
   }
   h2 {
-    @apply text-xl font-semibold text-gray-700; 
+    @apply text-xl font-semibold text-gray-700;
   }
   h3 {
-    @apply text-lg font-medium text-gray-700; 
+    @apply text-lg font-medium text-gray-700;
   }
-  h4, h5, h6 {
-    @apply text-base font-normal text-gray-600; 
+  h4,
+  h5,
+  h6 {
+    @apply text-base font-normal text-gray-600;
   }
   p {
-    @apply text-sm text-gray-700 leading-relaxed; 
+    @apply text-sm text-gray-700 leading-relaxed;
   }
   span {
-    @apply text-xs text-gray-600; 
+    @apply text-xs text-gray-600;
   }
-  
+
   :root {
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;

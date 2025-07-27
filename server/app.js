@@ -1,12 +1,18 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
-const cors = require('cors');
-const routes = require('./src/routes/routes');
-require('dotenv').config();
+import express from 'express';
+import bodyParser from 'body-parser';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+import cors from 'cors';
+import routes from './src/routes/routes.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
+
+const HTTP_NOT_FOUND = 404;
+const HTTP_INTERNAL_ERROR = 500;
+const DEFAULT_PORT = 5000;
 
 const swaggerOptions = {
   definition: {
@@ -14,41 +20,45 @@ const swaggerOptions = {
     info: {
       title: 'Swagger',
       version: '1.0.0',
-      description: 'Документація API для управління квартирами та аутентифікації користувачів',
+      description:
+        'Документація API для управління квартирами та аутентифікації користувачів',
       contact: {
         name: 'API Support',
-        email: 'support@example.com'
-      }
+        email: 'support@example.com',
+      },
     },
     servers: [
       {
         url: 'http://localhost:5000',
-        description: 'Development server'
-      }
-    ]
+        description: 'Development server',
+      },
+    ],
   },
-  apis: [
-    './src/routes/**/*.js',
-    './src/swagger/**/*.js'  // Додаємо шлях до swagger файлів
-  ],
+  apis: ['./src/routes/**/*.js', './src/swagger/**/*.js'],
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
 // CORS middleware
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 // Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, {
-  explorer: true,
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: "API Documentation"
-}));
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocs, {
+    explorer: true,
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'API Documentation',
+  })
+);
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -64,19 +74,19 @@ app.get('/health', (req, res) => {
 
 // 404 handler
 app.use('*', (req, res) => {
-  res.status(404).json({ message: 'Endpoint not found' });
+  res.status(HTTP_NOT_FOUND).json({ message: 'Endpoint not found' });
 });
 
 // Error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+  res.status(HTTP_INTERNAL_ERROR).json({ message: 'Something went wrong!' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || DEFAULT_PORT;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log(`Swagger UI is available at http://localhost:${PORT}/api-docs`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
+  console.warn(`Server is running on http://localhost:${PORT}`);
+  console.warn(`Swagger UI is available at http://localhost:${PORT}/api-docs`);
+  console.warn(`Health check: http://localhost:${PORT}/health`);
 });

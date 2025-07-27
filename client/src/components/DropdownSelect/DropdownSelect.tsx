@@ -1,32 +1,37 @@
-import type React from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DropdownSelectOption } from "@/types"
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { DropdownSelectOption } from '@/types';
+import { Key } from 'react';
 
 export interface DropdownSelectProps<T> {
-  options: DropdownSelectOption<T>[]
-  value: T
-  onChange: (value: T) => void
-  placeholder?: string
-  className?: string
-  disabled?: boolean
+  options: DropdownSelectOption<T>[];
+  value: T;
+  onChange: (value: T) => void;
+  placeholder?: string;
+  className?: string;
+  disabled?: boolean;
 }
 
-export function DropdownSelect<T extends React.Key>({
+export const DropdownSelect = <T extends Key>({
   options,
   value,
   onChange,
-  placeholder = "Select an option",
-  className = "w-[100px] sm:w-[120px]",
+  placeholder = 'Select an option',
+  className = 'w-[100px] sm:w-[120px]',
   disabled = false,
-}: DropdownSelectProps<T>) {
+}: DropdownSelectProps<T>) => {
   return (
     <Select
       value={String(value)}
       onValueChange={(val: string) => {
-        const selectedOption = options.find((option) => String(option.value) === val)
+        const selectedOption = options.find(option => String(option.value) === val);
         if (selectedOption) {
-          onChange(selectedOption.value)
+          onChange(selectedOption.value);
         }
       }}
       disabled={disabled}
@@ -35,13 +40,12 @@ export function DropdownSelect<T extends React.Key>({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {options.map((option) => (
+        {options.map(option => (
           <SelectItem key={String(option.value)} value={String(option.value)}>
             {option.label}
           </SelectItem>
         ))}
       </SelectContent>
     </Select>
-  )
-}
-
+  );
+};

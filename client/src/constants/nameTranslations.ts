@@ -1,4 +1,4 @@
 export const nameTranslations: { [key: string]: string } = {
-  Khasevich: "Хасевича",
-  Boss: "Бос",
-}
+  Khasevich: 'Хасевича',
+  Boss: 'Бос',
+};

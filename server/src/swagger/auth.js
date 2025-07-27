@@ -1,3 +1,4 @@
+const test = 'Auth API Documentation';
 /**
  * @swagger
  * /auth/register:

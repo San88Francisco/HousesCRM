@@ -1,19 +1,25 @@
-"use client"
+'use client';
 
-import type { FormHTMLAttributes, ReactNode } from "react"
-import { type FieldValues, type UseFormReturn, type SubmitHandler, FormProvider } from "react-hook-form"
+import type { FormHTMLAttributes, ReactNode } from 'react';
+import {
+  type FieldValues,
+  type UseFormReturn,
+  type SubmitHandler,
+  FormProvider,
+} from 'react-hook-form';
 
-interface RHFFormProps<T extends FieldValues> extends Omit<FormHTMLAttributes<HTMLFormElement>, "onSubmit"> {
-  form: UseFormReturn<T>
-  onSubmit: SubmitHandler<T>
-  children: ReactNode
+interface RHFFormProps<T extends FieldValues>
+  extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
+  form: UseFormReturn<T>;
+  onSubmit: SubmitHandler<T>;
+  children: ReactNode;
 }
 
 export function RHFForm<T extends FieldValues>({
   form,
   onSubmit,
   children,
-  className = "space-y-4",
+  className = 'space-y-4',
   ...props
 }: RHFFormProps<T>) {
   return (
@@ -22,6 +28,5 @@ export function RHFForm<T extends FieldValues>({
         {children}
       </form>
     </FormProvider>
-  )
+  );
 }
-
