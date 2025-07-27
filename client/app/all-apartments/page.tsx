@@ -6,11 +6,11 @@ import { ContractsChart } from '@/components/Chart/Chart';
 
 const Page = () => {
   const unusedVar1 = 123; // Цю змінну не використовуємо, має бути помилка
-  const unusedVar24 = 123; // Цю змінну не використовуємо, має бути помилка
-  const unusedVar34 = 123; // Цю змінну не використовуємо, має бути помилка
+  const unusedVar6 = 121231233; // Цю змінну не використовуємо, має бути помилка
   const usedVar = 456;
   console.log(usedVar);
 
+  const unusedVar9 = 12133; // Цю змінну не використовуємо, має бути помилка
   return (
     <>
       <InfoCardsMini />
