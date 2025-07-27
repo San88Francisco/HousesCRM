@@ -23,14 +23,11 @@
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "**/*.{ts,tsx,js,jsx}": [
       "eslint --fix --color",
+      "eslint --color",
       "prettier --write"
     ],
-    "!client/src/components/ui/**": [],
-    "!client/src/components/RHF/**": [],
-    "!server/src/swagger/**": [],
-    "!eslint.config.js": [],
     "*.{json,md,css,scss}": [
       "prettier --write"
     ]
