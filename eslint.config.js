@@ -9,7 +9,6 @@ import prettier from "eslint-plugin-prettier";
 import unusedImports from "eslint-plugin-unused-imports";
 
 export default [
-
   {
     // АГРЕСИВНІ ІГНОРУВАННЯ - все що не src та config файли
     ignores: [
@@ -18,6 +17,7 @@ export default [
       "**/.next/**",
       "**/.next/**/*",
       "client/.next",
+      "client/.next/**",
       "client/.next/**/*",
 
       // === ІНШІ BUILD ПАПКИ ===
@@ -62,7 +62,6 @@ export default [
       // === UI КОМПОНЕНТИ (shadcn/ui) ===
       "**/components/ui/**",
       "client/src/components/ui/**",
-
 
       // === СИСТЕМНІ ФАЙЛИ ===
       "**/.git",
@@ -122,10 +121,14 @@ export default [
           argsIgnorePattern: "^_", // Аргументи починаючи з _ — ігноруємо
         },
       ],
-      'quotes': ['error', 'single', {
-        'avoidEscape': true,           // Дозволити подвійні лапки якщо всередині є одинарні
-        'allowTemplateLiterals': true  // Дозволити template literals (``)
-      }],
+      quotes: [
+        "error",
+        "single",
+        {
+          avoidEscape: true, // Дозволити подвійні лапки якщо всередині є одинарні
+          allowTemplateLiterals: true, // Дозволити template literals (``)
+        },
+      ],
       // React Refresh: строго перевіряємо експорт компонентів
       "react-refresh/only-export-components": [
         "error",
