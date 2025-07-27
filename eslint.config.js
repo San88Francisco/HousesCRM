@@ -63,7 +63,7 @@ export default [
       // === UI КОМПОНЕНТИ (shadcn/ui) ===
       "**/components/ui/**",
       "client/src/components/ui/**",
-      "client/src/components/ui/**/*",
+
 
       // === СИСТЕМНІ ФАЙЛИ ===
       "**/.git",

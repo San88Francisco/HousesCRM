@@ -6,35 +6,23 @@
   "scripts": {
     "dev": "concurrently --names \"FRONT,SERVER\" -c \"cyan,green\" \"npm run dev --prefix client\" \"npm start --prefix server\"",
     "prepare": "husky install",
-    "lint": "eslint '**/*.{ts,tsx,js,jsx}'"
+    "lint": "prettier --write . && eslint . --config eslint.config.js --fix"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.32.0",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "concurrently": "^8.0.0",
     "eslint": "^9.32.0",
-    "eslint-config-next": "^15.4.4",
-    "eslint-plugin-prettier": "^5.5.3",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-unused-imports": "^4.1.4",
-    "globals": "^16.3.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --fix"
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "git add"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }

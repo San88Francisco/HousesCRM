@@ -18,6 +18,7 @@ const Page = () => {
   const usedVar = 456;
   console.log(usedVar);
 
+  const unusedVar90 = 12133; // Цю змінну не використовуємо, має бути помилка
   const unusedVar9 = 12133; // Цю змінну не використовуємо, має бути помилка
   return (
     <>
