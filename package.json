@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently --names \"FRONT,SERVER\" -c \"cyan,green\" \"npm run dev --prefix client\" \"npm start --prefix server\"",
     "prepare": "husky install",
-    "lint": "prettier --write . && eslint . --config eslint.config.js --fix"
+    "lint": "eslint '**/*.{ts,tsx,js,jsx}'"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
