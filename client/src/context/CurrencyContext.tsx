@@ -16,6 +16,7 @@ type CurrencyContextType = {
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
 const MILLISECONDS_IN_WEEK = 7 * 24 * 60 * 60 * 1000;
+const MILLISECONDS_IN_WEEK = 7 * 24 * 60 * 60 * 1000;
 
 const fetchCurrencyRates = async (): Promise<CurrencyRate[] | null> => {
   try {

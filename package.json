@@ -15,8 +15,14 @@
     "concurrently": "^8.0.0",
     "eslint": "^9.32.0",
     "eslint-plugin-react": "^7.37.5",
-    "husky": "^9.1.7",
+    "husky": "^8.0.0",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --ignore-pattern 'client/.next/**' --config eslint.config.js --fix",
+      "git add"
+    ]
   }
 }
