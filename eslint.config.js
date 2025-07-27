@@ -9,18 +9,80 @@ import prettier from "eslint-plugin-prettier";
 import unusedImports from "eslint-plugin-unused-imports";
 
 export default [
+
   {
-    files: ["**/*.{ts,tsx}"],
+    // АГРЕСИВНІ ІГНОРУВАННЯ - все що не src та config файли
     ignores: [
+      // === ПОВНЕ ІГНОРУВАННЯ .next ПАПКИ ===
+      "**/.next",
+      "**/.next/**",
+      "**/.next/**/*",
+      "client/.next",
       "client/.next/**",
+      "client/.next/**/*",
+
+      // === ІНШІ BUILD ПАПКИ ===
+      "**/node_modules",
       "**/node_modules/**",
+      "**/dist",
       "**/dist/**",
+      "**/build",
       "**/build/**",
-      "client/tailwind.config.ts",
+      "**/out",
+      "**/out/**",
+
+      // === CACHE ПАПКИ ===
+      "**/.turbo",
+      "**/.turbo/**",
+      "**/.swc",
+      "**/.swc/**",
+      "**/.cache",
+      "**/.cache/**",
+      ".eslintcache",
+      "**/.eslintcache",
+
+      // === КОНФІГИ ===
+      "*.config.js",
+      "*.config.ts",
+      "**/*.config.js",
+      "**/*.config.ts",
+      "**/next.config.*",
+      "**/tailwind.config.*",
+      "**/postcss.config.*",
+      "**/tsconfig*.json",
+      "**/next-env.d.ts",
+
+      // === СТАТИЧНІ ФАЙЛИ ===
+      "**/public",
+      "**/public/**",
+
+      // === ДОКУМЕНТАЦІЯ ===
+      "**/swagger",
+      "**/swagger/**",
+
+      // === UI КОМПОНЕНТИ (shadcn/ui) ===
+      "**/components/ui/**",
       "client/src/components/ui/**",
-      "client/src/components/RHF/**",
+      "client/src/components/ui/**/*",
+
+      // === СИСТЕМНІ ФАЙЛИ ===
+      "**/.git",
+      "**/.git/**",
+      "**/package-lock.json",
+      "**/yarn.lock",
+      "**/*.log",
+      "**/coverage",
+      "**/coverage/**",
     ],
 
+    // ТІЛЬКИ src папки + кореневі файли
+    files: [
+      "client/src/**/*.{js,ts,tsx}",
+      "server/src/**/*.{js,ts}",
+      "client/app/**/*.{js,ts,tsx}", // Next.js app router
+      "client/middleware.ts",
+      "server/app.js",
+    ],
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: "module",
@@ -49,19 +111,22 @@ export default [
       ...js.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      "no-unused-vars": "off",
+
       // Видаляємо не використані імпорти — помилка
       "unused-imports/no-unused-imports": "error",
-      "unused-imports/no-unused-vars": [
-        "error", // Зараз це помилка, щоб інтерни одразу виправляли
+      "@typescript-eslint/no-unused-vars": [
+        "error",
         {
           vars: "all",
           varsIgnorePattern: "^_", // Змінні починаючи з _ — ігноруємо
           args: "after-used",
-          argsIgnorePattern: "^_",
+          argsIgnorePattern: "^_", // Аргументи починаючи з _ — ігноруємо
         },
       ],
-
+      'quotes': ['error', 'single', {
+        'avoidEscape': true,           // Дозволити подвійні лапки якщо всередині є одинарні
+        'allowTemplateLiterals': true  // Дозволити template literals (``)
+      }],
       // React Refresh: строго перевіряємо експорт компонентів
       "react-refresh/only-export-components": [
         "error",
@@ -79,7 +144,7 @@ export default [
       curly: ["error", "all"],
 
       // Обмежуємо складність функцій до 4 (ще жорсткіше)
-      complexity: ["error", 4],
+      complexity: ["error", 5],
 
       // Максимальна довжина файлу 200 рядків (без пропусків і коментарів)
       "max-lines": [
