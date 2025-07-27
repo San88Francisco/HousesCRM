@@ -20,9 +20,8 @@
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --fix"
+    "*.{ts,tsx}": [
+      "eslint --fix --config eslint.config.js"
     ],
     "*.{css,scss,md}": "prettier --write --ignore-unknown"
   },
