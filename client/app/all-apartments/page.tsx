@@ -1,4 +1,8 @@
 'use client';
+import React from "react"; // Якщо React не використовується, це буде помилка
+
+const a = 5;
+console.log(a);
 
 import { InfoCardsMini } from '@/components/InfoCardsMini/InfoCardsMini';
 import { AllIncomeInMonth } from '@/components/AllIncomeInMonth/AllIncomeInMonth';
