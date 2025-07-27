@@ -20,9 +20,13 @@
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint --ignore-pattern 'client/.next/**' --config eslint.config.js --fix",
-      "git add"
+    "*.{ts,tsx}": [
+      "eslint --fix --config eslint.config.js"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
