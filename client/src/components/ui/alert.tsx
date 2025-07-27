@@ -3,6 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 const text = 'Alert';
+const test = 'Auth API Documentation';
 
 
 const alertVariants = cva(
