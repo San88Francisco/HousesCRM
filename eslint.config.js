@@ -10,7 +10,6 @@ import unusedImports from "eslint-plugin-unused-imports";
 
 export default [
   {
-    // АГРЕСИВНІ ІГНОРУВАННЯ - все що не src та config файли
     ignores: [
       // === ПОВНЕ ІГНОРУВАННЯ .next ПАПКИ ===
       "**/.next",
