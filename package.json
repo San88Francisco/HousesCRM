@@ -27,10 +27,10 @@
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "prettier --write . && eslint . --config eslint.config.js --fix"
-    ],
-    "*.{css,scss,md}": "prettier --write --ignore-unknown"
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "husky": {
     "hooks": {
