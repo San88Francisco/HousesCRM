@@ -366,4 +366,4 @@ export const ContractsChart: FC<Props> = ({ renterId }) => {
       </CardFooter>
     </Card>
   );
-}
+};

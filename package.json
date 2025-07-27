@@ -6,10 +6,7 @@
   "scripts": {
     "dev": "concurrently --names \"FRONT,SERVER\" -c \"cyan,green\" \"npm run dev --prefix client\" \"npm start --prefix server\"",
     "prepare": "husky install",
-    "lint-staged": "lint-staged -c lint-staged.config.js",
-    "lint:client": "echo \"\\n🔍 Linting CLIENT...\\n\" && npm run lint --prefix client",
-    "lint:server": "echo \"\\n🔍 Linting SERVER...\\n\" && npm run lint --prefix server",
-    "lint:all": "echo \"\\n🚀 Starting lint for entire project...\\n\" && npm run lint:client && npm run lint:server && echo \"\\n✅ All linting completed successfully!\\n\""
+    "lint": "prettier --write . && eslint . --config eslint.config.js --fix"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -21,18 +18,5 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2"
-  },
-  "lint-staged": {
-    "**/*.{ts,tsx,js,jsx}": [
-      "eslint --fix --color",
-      "eslint --color",
-      "prettier --write"
-    ],
-    "*.{json,md,css,scss}": [
-      "prettier --write"
-    ]
-  },
-  "engines": {
-    "node": ">=16.0.0"
   }
 }
