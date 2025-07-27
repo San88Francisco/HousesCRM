@@ -13,7 +13,11 @@ export default {
     if (filtered.length === 0) return [];
 
     return [
+      // Спершу автофіксування:
       `eslint --fix --color ${filtered.join(' ')}`,
+      // Потім перевірка без --fix, щоб зловити помилки, які не виправити
+      `eslint --color ${filtered.join(' ')}`,
+      // І форматування prettier
       `prettier --write ${filtered.join(' ')}`
     ];
   },
