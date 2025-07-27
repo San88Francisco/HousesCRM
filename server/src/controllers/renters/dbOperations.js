@@ -91,7 +91,9 @@ export const findRenterById = async (renterId) => {
 
 export const checkRenterExists = async (renterId) => {
   const db = getDB();
-  return await db.collection('renters').findOne({ _id: new ObjectId(renterId) });
+  return await db
+    .collection('renters')
+    .findOne({ _id: new ObjectId(renterId) });
 };
 
 export const updateRenterById = async (renterId, updateFields) => {
@@ -122,5 +124,7 @@ export const getUpdatedRenterWithHouse = async (renterId) => {
 
 export const deleteRenterById = async (renterId) => {
   const db = getDB();
-  return await db.collection('renters').deleteOne({ _id: new ObjectId(renterId) });
+  return await db
+    .collection('renters')
+    .deleteOne({ _id: new ObjectId(renterId) });
 };

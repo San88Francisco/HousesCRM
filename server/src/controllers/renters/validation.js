@@ -8,14 +8,19 @@ export const validateObjectId = (id, fieldName = 'ID') => {
       isValid: false,
       error: {
         status: HTTP_STATUS.BAD_REQUEST,
-        message: `Невірний формат ${fieldName}`
-      }
+        message: `Невірний формат ${fieldName}`,
+      },
     };
   }
   return { isValid: true };
 };
 
-export const validateCreateRenterData = ({ house_id, name, start, pricePerMonth }) => {
+export const validateCreateRenterData = ({
+  house_id,
+  name,
+  start,
+  pricePerMonth,
+}) => {
   // Перевірка обов'язкових полів
   if (!house_id || !name || !start || !pricePerMonth) {
     return {
@@ -23,8 +28,8 @@ export const validateCreateRenterData = ({ house_id, name, start, pricePerMonth 
       error: {
         status: HTTP_STATUS.BAD_REQUEST,
         message: "Обов'язкові поля: house_id, name, start, pricePerMonth",
-        requiredFields: ['house_id', 'name', 'start', 'pricePerMonth']
-      }
+        requiredFields: ['house_id', 'name', 'start', 'pricePerMonth'],
+      },
     };
   }
 
@@ -40,8 +45,8 @@ export const validateCreateRenterData = ({ house_id, name, start, pricePerMonth 
       isValid: false,
       error: {
         status: HTTP_STATUS.BAD_REQUEST,
-        message: 'Ціна за місяць має бути більше нуля'
-      }
+        message: 'Ціна за місяць має бути більше нуля',
+      },
     };
   }
 
@@ -54,8 +59,8 @@ export const validatePaginationParams = (page, limit) => {
       isValid: false,
       error: {
         status: HTTP_STATUS.BAD_REQUEST,
-        message: 'Номер сторінки має бути більше 0'
-      }
+        message: 'Номер сторінки має бути більше 0',
+      },
     };
   }
 
@@ -64,8 +69,8 @@ export const validatePaginationParams = (page, limit) => {
       isValid: false,
       error: {
         status: HTTP_STATUS.BAD_REQUEST,
-        message: 'Ліміт має бути від 1 до 100'
-      }
+        message: 'Ліміт має бути від 1 до 100',
+      },
     };
   }
 
@@ -75,20 +80,26 @@ export const validatePaginationParams = (page, limit) => {
 export const validateUpdateData = (updateFields) => {
   // Валідація house_id, якщо він передається
   if (updateFields.house_id) {
-    const houseIdValidation = validateObjectId(updateFields.house_id, 'house_id');
+    const houseIdValidation = validateObjectId(
+      updateFields.house_id,
+      'house_id'
+    );
     if (!houseIdValidation.isValid) {
       return houseIdValidation;
     }
   }
 
   // Валідація ціни, якщо вона передається
-  if (updateFields.pricePerMonth !== undefined && updateFields.pricePerMonth <= VALIDATION.MIN_VALUE) {
+  if (
+    updateFields.pricePerMonth !== undefined &&
+    updateFields.pricePerMonth <= VALIDATION.MIN_VALUE
+  ) {
     return {
       isValid: false,
       error: {
         status: HTTP_STATUS.BAD_REQUEST,
-        message: 'Ціна за місяць має бути більше нуля'
-      }
+        message: 'Ціна за місяць має бути більше нуля',
+      },
     };
   }
 

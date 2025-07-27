@@ -19,7 +19,13 @@ import {
   deleteContract,
   getContractsByRenter,
 } from '../controllers/contracts/contracts.js';
-import { createRenter, deleteRenter, getRenterById, getRenters, updateRenter } from '../controllers/renters/renterController.js';
+import {
+  createRenter,
+  deleteRenter,
+  getRenterById,
+  getRenters,
+  updateRenter,
+} from '../controllers/renters/renterController.js';
 
 const router = express.Router();
 

@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
-    "lint": "eslint . --ext .ts,.js --fix --color && prettier --write \"src/**/*.{ts,js,json}\" && echo \"\\n✅ Server formatting complete!\\n\" && eslint . --ext .ts,.js --color"
+    "lint": "eslint app.js src --ext .ts,.js --fix --color --ignore-pattern src/swagger/** && prettier --write \"src/**/*.{ts,js,json}\" && echo \"\\n✅ Server formatting complete!\\n\" && eslint app.js src --ext .ts,.js --color --ignore-pattern src/swagger/**"
   },
   "author": "",
   "license": "ISC",

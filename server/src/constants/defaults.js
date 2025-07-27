@@ -1,4 +1,4 @@
 export const DEFAULTS = {
   PAGE: 1,
-  LIMIT: 10
+  LIMIT: 10,
 };

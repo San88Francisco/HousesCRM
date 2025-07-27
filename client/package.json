@@ -8,7 +8,7 @@
     "format": "prettier --config .prettierrc --write src/**/*.{ts,tsx,css}",
     "build": "next build",
     "start": "next start",
-      "lint": "eslint \"src/components/{AllIncomeInMonth,Chart,DropdownSelect,InfoCardsMini,PieChart,Sidebar}/**/*.{ts,tsx}\" \"src/{hooks,lib,store,utils}/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --fix --color && prettier --write \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-path .prettierignore && echo \"\\n✅ Prettier formatting complete!\\n\" && eslint \"src/components/{AllIncomeInMonth,Chart,DropdownSelect,InfoCardsMini,PieChart,Sidebar}/**/*.{ts,tsx}\" \"src/{hooks,lib,store,utils}/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --color"
+    "lint": "eslint . --ext .ts,.tsx --fix --color --ignore-pattern src/components/ui/** --ignore-pattern src/components/RHF/** --ignore-pattern .next/** && prettier --write . --ignore-path .prettierignore"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

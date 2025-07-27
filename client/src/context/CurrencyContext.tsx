@@ -24,7 +24,7 @@ const fetchCurrencyRates = async (): Promise<CurrencyRate[] | null> => {
     );
     const data = await response.json();
     const rates = data.filter((rate: CurrencyRate) =>
-      ['USD', 'EUR', 'PLN', 'UAH'].includes(rate.cc)
+      ['USD', 'EUR', 'PLN', 'UAH'].includes(rate.cc),
     );
     return rates;
   } catch (error) {

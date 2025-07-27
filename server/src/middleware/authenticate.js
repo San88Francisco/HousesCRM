@@ -8,7 +8,9 @@ const authenticate = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
-    return res.status(HTTP_UNAUTHORIZED).json({ message: 'Необхідна авторизація' });
+    return res
+      .status(HTTP_UNAUTHORIZED)
+      .json({ message: 'Необхідна авторизація' });
   }
 
   try {
@@ -17,7 +19,9 @@ const authenticate = (req, res, next) => {
     next();
   } catch (error) {
     console.error(error);
-    res.status(HTTP_FORBIDDEN).json({ message: 'Невірний або застарілий токен' });
+    res
+      .status(HTTP_FORBIDDEN)
+      .json({ message: 'Невірний або застарілий токен' });
   }
 };
 

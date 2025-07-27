@@ -2,14 +2,14 @@ import {
   validateObjectId,
   validateCreateRenterData,
   validatePaginationParams,
-  validateUpdateData
+  validateUpdateData,
 } from './validation.js';
 import {
   createRenterObject,
   prepareUpdateFields,
   buildFilter,
   calculatePaginationMeta,
-  createRenterResponse
+  createRenterResponse,
 } from '../../utils/renters/utils.js';
 import {
   findHouseById,
@@ -20,7 +20,7 @@ import {
   checkRenterExists,
   updateRenterById,
   getUpdatedRenterWithHouse,
-  deleteRenterById
+  deleteRenterById,
 } from './dbOperations.js';
 import { HTTP_STATUS } from '../../constants/httpStatus.js';
 import { VALIDATION } from '../../constants/validation.js';
@@ -31,7 +31,12 @@ const createRenter = async (req, res) => {
   const { house_id, name, start, finish, pricePerMonth } = req.body;
 
   // Валідація даних
-  const validation = validateCreateRenterData({ house_id, name, start, pricePerMonth });
+  const validation = validateCreateRenterData({
+    house_id,
+    name,
+    start,
+    pricePerMonth,
+  });
   if (!validation.isValid) {
     return res.status(validation.error.status).json(validation.error);
   }
@@ -46,13 +51,23 @@ const createRenter = async (req, res) => {
     }
 
     // Створення нового орендаря
-    const newRenter = createRenterObject({ house_id, name, start, finish, pricePerMonth });
+    const newRenter = createRenterObject({
+      house_id,
+      name,
+      start,
+      finish,
+      pricePerMonth,
+    });
     const result = await insertRenter(newRenter);
 
     console.warn('Вставлений орендар:', result.insertedId);
 
     // Формування відповіді
-    const createdRenter = createRenterResponse(newRenter, result.insertedId, house);
+    const createdRenter = createRenterResponse(
+      newRenter,
+      result.insertedId,
+      house
+    );
 
     res.status(HTTP_STATUS.CREATED).json({
       message: 'Орендаря успішно створено',
@@ -78,14 +93,18 @@ const getRenters = async (req, res) => {
     // Валідація параметрів пагінації
     const paginationValidation = validatePaginationParams(page, limit);
     if (!paginationValidation.isValid) {
-      return res.status(paginationValidation.error.status).json(paginationValidation.error);
+      return res
+        .status(paginationValidation.error.status)
+        .json(paginationValidation.error);
     }
 
     // Валідація house_id, якщо передано
     if (house_id) {
       const houseIdValidation = validateObjectId(house_id, 'house_id');
       if (!houseIdValidation.isValid) {
-        return res.status(houseIdValidation.error.status).json(houseIdValidation.error);
+        return res
+          .status(houseIdValidation.error.status)
+          .json(houseIdValidation.error);
       }
     }
 

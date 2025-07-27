@@ -14,6 +14,7 @@ const app = express();
 const HTTP_NOT_FOUND = 404;
 const HTTP_INTERNAL_ERROR = 500;
 const DEFAULT_PORT = 5000;
+const DEFAULT_PORT1 = 5000;
 
 const swaggerOptions = {
   definition: {
