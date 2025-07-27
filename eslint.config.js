@@ -18,7 +18,6 @@ export default [
       "**/.next/**",
       "**/.next/**/*",
       "client/.next",
-      "client/.next/**",
       "client/.next/**/*",
 
       // === ІНШІ BUILD ПАПКИ ===

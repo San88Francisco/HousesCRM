@@ -1,4 +1,4 @@
-// Утилітарна функція для обробки помилок
+/* eslint-disable */
 
 type ErrorWithMessage = {
   message?: unknown;

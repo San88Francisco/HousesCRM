@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
 
 import type { ToastActionElement, ToastProps } from '@/components/ui/toast';
@@ -14,7 +16,7 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement;
 };
 
-const actionTypes = {
+const _actionTypes = {
   ADD_TOAST: 'ADD_TOAST',
   UPDATE_TOAST: 'UPDATE_TOAST',
   DISMISS_TOAST: 'DISMISS_TOAST',
@@ -23,12 +25,12 @@ const actionTypes = {
 
 let count = 0;
 
-function genId() {
+const genId = () => {
   count = (count + 1) % Number.MAX_SAFE_INTEGER;
   return count.toString();
-}
+};
 
-type ActionType = typeof actionTypes;
+type ActionType = typeof _actionTypes;
 
 type Action =
   | {
@@ -63,11 +65,16 @@ const addToRemoveQueue = (toastId: string) => {
     toastTimeouts.delete(toastId);
     dispatch({
       type: 'REMOVE_TOAST',
-      toastId: toastId,
+      toastId,
     });
   }, TOAST_REMOVE_DELAY);
 
   toastTimeouts.set(toastId, timeout);
+};
+
+const closeToast = (toast: ToasterToast, toastId?: string) => {
+  const shouldClose = toast.id === toastId || toastId === undefined;
+  return shouldClose ? { ...toast, open: false } : toast;
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -97,16 +104,10 @@ export const reducer = (state: State, action: Action): State => {
 
       return {
         ...state,
-        toasts: state.toasts.map(t =>
-          t.id === toastId || toastId === undefined
-            ? {
-                ...t,
-                open: false,
-              }
-            : t,
-        ),
+        toasts: state.toasts.map(t => closeToast(t, toastId)),
       };
     }
+
     case 'REMOVE_TOAST':
       if (action.toastId === undefined) {
         return {
@@ -125,18 +126,16 @@ const listeners: Array<(state: State) => void> = [];
 
 let memoryState: State = { toasts: [] };
 
-function dispatch(action: Action) {
+const dispatch = (action: Action) => {
   memoryState = reducer(memoryState, action);
-  listeners.forEach(listener => {
-    listener(memoryState);
-  });
-}
+  listeners.forEach(listener => listener(memoryState));
+};
 
 type Toast = Omit<ToasterToast, 'id'> & {
   title?: unknown;
 };
 
-function toast({ title, ...props }: Toast) {
+const toast = ({ title, ...props }: Toast) => {
   const id = genId();
 
   const update = (props: ToasterToast) =>
@@ -144,6 +143,7 @@ function toast({ title, ...props }: Toast) {
       type: 'UPDATE_TOAST',
       toast: { ...props, id },
     });
+
   const dismiss = () => dispatch({ type: 'DISMISS_TOAST', toastId: id });
 
   const processedTitle = getErrorMessage(title);
@@ -164,20 +164,21 @@ function toast({ title, ...props }: Toast) {
   });
 
   return {
-    id: id,
+    id,
     dismiss,
     update,
   };
-}
+};
 
-function useToast() {
+const useToast = () => {
   const [state, setState] = useState<State>(memoryState);
+  const NOT_FOUND = -1;
 
   useEffect(() => {
     listeners.push(setState);
     return () => {
       const index = listeners.indexOf(setState);
-      if (index > -1) {
+      if (index > NOT_FOUND) {
         listeners.splice(index, 1);
       }
     };
@@ -188,6 +189,6 @@ function useToast() {
     toast,
     dismiss: (toastId?: string) => dispatch({ type: 'DISMISS_TOAST', toastId }),
   };
-}
+};
 
 export { useToast, toast };

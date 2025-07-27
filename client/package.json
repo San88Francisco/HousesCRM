@@ -8,7 +8,7 @@
     "format": "prettier --config .prettierrc --write src/**/*.{ts,tsx,css}",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint \"src/components/{AllIncomeInMonth,Chart,DropdownSelect,InfoCardsMini,PieChart,Sidebar}/**/*.{ts,tsx}\" \"src/{hooks,lib,store,utils}/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --fix --color && prettier --write \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-path .prettierignore && echo \"\\n✅ Prettier formatting complete!\\n\" && eslint \"src/components/{AllIncomeInMonth,Chart,DropdownSelect,InfoCardsMini,PieChart,Sidebar}/**/*.{ts,tsx}\" \"src/{hooks,lib,store,utils}/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --color"
+    "lint": "eslint \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-pattern \"src/components/RHF/**/*\" --fix --color && prettier --write \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-path .prettierignore && echo \"\\n✅ Prettier formatting complete!\\n\" && eslint \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-pattern \"src/components/RHF/**/*\" --color"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

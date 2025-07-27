@@ -13,7 +13,7 @@ import {
 import { itemsNav } from '@/constants/sidebarNavItems';
 import Link from 'next/link';
 
-export function AppSidebar() {
+export const AppSidebar = () => {
   return (
     <Sidebar>
       <SidebarContent>
@@ -37,4 +37,4 @@ export function AppSidebar() {
       </SidebarContent>
     </Sidebar>
   );
-}
+};

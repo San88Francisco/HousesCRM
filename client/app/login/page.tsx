@@ -29,8 +29,6 @@ const defaultValues = {
 };
 
 const Page = () => {
-  const test = 'test';
-  const test1 = 'test';
   const { errorToast, successToast } = useErrorToast();
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();

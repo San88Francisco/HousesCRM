@@ -10,12 +10,9 @@ dotenv.config();
 
 const app = express();
 
-// Constants to avoid magic numbers
 const HTTP_NOT_FOUND = 404;
 const HTTP_INTERNAL_ERROR = 500;
 const DEFAULT_PORT = 5000;
-const DEFAULT_PORT1 = 6000;
-const DEFAULT_PORT2 = 6000;
 
 const swaggerOptions = {
   definition: {
@@ -39,7 +36,7 @@ const swaggerOptions = {
   },
   apis: [
     './src/routes/**/*.js',
-    './src/swagger/**/*.js', // Додаємо шлях до swagger файлів
+    './src/swagger/**/*.js',
   ],
 };
 
