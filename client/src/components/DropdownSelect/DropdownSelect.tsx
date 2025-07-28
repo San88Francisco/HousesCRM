@@ -21,7 +21,7 @@ export function DropdownSelect<T extends React.Key>({
   options,
   value,
   onChange,
-  placeholder = 'Select an option',
+  placeholder = 'Виберіть опцію',
   className = 'w-[100px] sm:w-[120px]',
   disabled = false,
 }: DropdownSelectProps<T>) {
@@ -36,7 +36,7 @@ export function DropdownSelect<T extends React.Key>({
       }}
       disabled={disabled}
     >
-      <SelectTrigger className={`${className} dark:bg-[#0e1217]`}>
+      <SelectTrigger className={className}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

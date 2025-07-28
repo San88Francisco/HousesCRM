@@ -31,11 +31,7 @@ export function ThemeDropdown({ className }: ThemeDropdownProps) {
 
       <DropdownMenuContent>
         {themeOptions.map(opt => (
-          <DropdownMenuItem
-            key={opt.value}
-            onClick={() => changeTheme(opt.value)}
-            className="dark:hover:bg-[#f1f5f9]"
-          >
+          <DropdownMenuItem key={opt.value} onClick={() => changeTheme(opt.value)}>
             <div className="flex items-center gap-2 w-full text-[#6b7280]">
               {opt.icon}
               {opt.label}

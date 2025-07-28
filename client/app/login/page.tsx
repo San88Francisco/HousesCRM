@@ -1,7 +1,6 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,33 +14,16 @@ import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFForm } from '@/components/RHF/RHForm';
 import { ThemeDropdown } from '@/components/ThemeDropDown/ThemeDropDown';
 import { motion } from 'framer-motion';
-
-type Login = {
-  username: string;
-  password: string;
-};
-
-const FormSchema = yup.object({
-  username: yup.string().required("Електронна пошта є обов'язковою."),
-  password: yup.string().required("Пароль є обов'язковим."),
-});
-
-const defaultValues = {
-  username: '',
-  password: '',
-};
-
-const inputDarkStyles =
-  'dark:bg-card-dark dark:text-card-dark-foreground dark:border-card-dark-border';
+import { loginSchema, loginDefaultValues, type LoginFormData } from '@/validation/login/login';
 
 export default function Page() {
   const { errorToast, successToast } = useErrorToast();
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
 
-  const form = useForm<Login>({
-    resolver: yupResolver(FormSchema),
-    defaultValues,
+  const form = useForm<LoginFormData>({
+    resolver: yupResolver(loginSchema),
+    defaultValues: loginDefaultValues,
   });
 
   const { isSubmitting } = form.formState;
@@ -53,7 +35,7 @@ export default function Page() {
     return () => subscription.unsubscribe();
   }, [form]);
 
-  async function onSubmit(data: Login) {
+  async function onSubmit(data: LoginFormData) {
     try {
       const result = await login({
         username: data.username,
@@ -65,13 +47,13 @@ export default function Page() {
       if (result.accessToken) {
         cookies.set('accessToken', result.accessToken, {
           expires: 7,
-          path: '/',
+          path: ROUTES.Home,
         });
 
         if (result.refreshToken) {
           cookies.set('refreshToken', result.refreshToken, {
             expires: 30,
-            path: '/',
+            path: ROUTES.Home,
           });
         }
 
@@ -98,7 +80,6 @@ export default function Page() {
               type="username"
               placeholder="Введіть вашу електронну пошту"
               required
-              className={inputDarkStyles}
             />
 
             <RHFInput
@@ -107,7 +88,6 @@ export default function Page() {
               type="password"
               placeholder="Введіть ваш пароль"
               required
-              className={inputDarkStyles}
             />
 
             <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>

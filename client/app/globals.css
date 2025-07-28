@@ -117,26 +117,6 @@ body {
 }
 
 @layer components {
-  /* Радікс select */
-  [data-radix-select-trigger],
-  [data-radix-select-content],
-  [data-radix-select-item],
-  [data-radix-popper-content-wrapper],
-  [role='menu'],
-  [role='listbox'],
-  .dropdown-content {
-    background-color: var(--card);
-    color: var(--card-foreground);
-    border-color: var(--border);
-  }
-
-  [data-radix-select-item]:hover,
-  [data-radix-select-item][data-highlighted] {
-    background-color: var(--muted);
-    color: var(--foreground);
-  }
-
-  /* Фони компонентів */
   .bg-card,
   [class*='bg-card'] {
     background-color: var(--card);

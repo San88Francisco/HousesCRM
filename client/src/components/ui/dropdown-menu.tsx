@@ -1,5 +1,3 @@
-// src/components/ui/dropdown-menu.tsx
-
 'use client';
 
 import * as React from 'react';
@@ -60,7 +58,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95',
+        'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-[#f5f5f5] dark:bg-background  p-1 text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 ',
         className,
       )}
       {...props}
@@ -78,7 +76,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm font-medium outline-none focus:bg-accent focus:text-accent-foreground',
+      'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm font-medium  -text outline-none focus:bg-accent focus:text-accent-foreground dark:hover:bg-[#f1f5f9]',
       inset && 'pl-8',
       className,
     )}
