@@ -14,14 +14,15 @@ import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFForm } from '@/components/RHF/RHForm';
 import { ThemeDropdown } from '@/components/ThemeDropDown/ThemeDropDown';
 import { motion } from 'framer-motion';
-import { loginSchema, loginDefaultValues, type LoginFormData } from '@/validation/login/login';
+import { loginSchema, loginDefaultValues } from '@/validation/login/login';
+import { LoginRequest } from '@/types/services/login';
 
 export default function Page() {
   const { errorToast, successToast } = useErrorToast();
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
 
-  const form = useForm<LoginFormData>({
+  const form = useForm<LoginRequest>({
     resolver: yupResolver(loginSchema),
     defaultValues: loginDefaultValues,
   });
@@ -35,7 +36,7 @@ export default function Page() {
     return () => subscription.unsubscribe();
   }, [form]);
 
-  async function onSubmit(data: LoginFormData) {
+  async function onSubmit(data: LoginRequest) {
     try {
       const result = await login({
         username: data.username,
