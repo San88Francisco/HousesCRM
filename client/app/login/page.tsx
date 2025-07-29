@@ -67,11 +67,7 @@ export default function Page() {
   return (
     <div className="h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
       <div className="w-full max-w-[400px] mx-auto">
-        {/* <Card className="w-full max-w-[600px] mx-auto shadow-none border-none"> */}
-        {/* <CardHeader className="space-y-1"> */}
         <CardTitle className="text-2xl font-bold mb-4">Увійти</CardTitle>
-        {/* </CardHeader> */}
-        {/* <CardContent> */}
         <RHFForm form={form} onSubmit={onSubmit}>
           <RHFInput
             name="username"
@@ -91,8 +87,6 @@ export default function Page() {
             {isLoading ? 'Авторизація...' : 'Увійти'}
           </Button>
         </RHFForm>
-        {/* </CardContent> */}
-        {/* </Card> */}
       </div>
       <motion.div
         className="absolute left-0 bottom-0"
