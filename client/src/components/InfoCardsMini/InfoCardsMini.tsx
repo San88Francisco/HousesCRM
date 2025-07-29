@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from '../ui/card';
 import { DropdownSelect } from '../DropdownSelect/DropdownSelect';
-import type { DropdownSelectOption } from '@/types';
-import { useCurrency } from '@/context/CurrencyContext';
+import { DropdownSelectOption } from '@/types/core/dropdownSelectOption';
+
+import { useCurrency } from '@/hooks/useCurrency';
 import { getCurrencySymbol } from '@/utils/getCurrencySymbol';
 
 type Currencies = 'UAH' | 'USD' | 'EUR' | 'PLN';

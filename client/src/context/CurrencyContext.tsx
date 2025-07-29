@@ -1,8 +1,8 @@
 /* eslint-disable */
 
+import { Currencies } from '@/types/core/currencies';
 import type React from 'react';
 import { createContext, useState, useEffect, useCallback } from 'react';
-import type { Currencies } from '@/types';
 
 type CurrencyRate = {
   cc: string;

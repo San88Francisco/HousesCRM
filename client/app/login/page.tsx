@@ -46,13 +46,13 @@ export default function Page() {
       if (result.accessToken) {
         cookies.set('accessToken', result.accessToken, {
           expires: 7,
-          path: ROUTES.Home,
+          path: ROUTES.HOME,
         });
 
         if (result.refreshToken) {
           cookies.set('refreshToken', result.refreshToken, {
             expires: 30,
-            path: ROUTES.Home,
+            path: ROUTES.HOME,
           });
         }
 
