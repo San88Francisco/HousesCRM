@@ -12,8 +12,9 @@ import {
 } from '@/components/ui/sidebar';
 import { itemsNav } from '@/constants/sidebarNavItems';
 import Link from 'next/link';
+import { ThemeDropdown } from '../ThemeDropDown/ThemeDropDown';
 
-export const AppSidebar = () => {
+export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
@@ -35,6 +36,10 @@ export const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <div className="p-4 border-t w-full text-center">
+        <ThemeDropdown />
+      </div>
     </Sidebar>
   );
-};
+}

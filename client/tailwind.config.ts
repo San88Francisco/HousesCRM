@@ -26,37 +26,62 @@ export default {
         xxl: '1536px',
       },
       colors: {
-        background: '#F5F5F5',
-        foreground: '#1A1A1A',
-        text: '#4b5563',
-        muted: '#E5E7EB',
-        'muted-foreground': '#6B7280',
-        primary: '#457B9D',
-        'primary-foreground': '#FFFFFF',
-        secondary: '#A8DADC',
-        'secondary-foreground': '#1D3557',
-        border: '#D1D5DB',
-        destructive: '#DC2626',
-        'destructive-foreground': '#FFFFFF',
-        card: {
-          DEFAULT: '#FFFFFF',
-          foreground: '#1A1A1A',
+        foreground: {
+          DEFAULT: '#1A1A1A',
+          dark: '#F1F5F9',
         },
+
+        text: {
+          DEFAULT: '#4b5563',
+          dark: '#94A3B8',
+        },
+
+        muted: {
+          DEFAULT: '#E5E7EB',
+          dark: '#1E293B',
+        },
+
+        'muted-foreground': {
+          DEFAULT: '#6B7280',
+          dark: '#64748B',
+        },
+
+        primary: {
+          DEFAULT: '#457B9D',
+          dark: '#60A5FA',
+        },
+        'primary-foreground': '#FFFFFF',
+
+        secondary: {
+          DEFAULT: '#A8DADC',
+          dark: '#334155',
+        },
+
+        'secondary-foreground': {
+          DEFAULT: '#1D3557',
+          dark: '#F1F5F9',
+        },
+
+        border: {
+          DEFAULT: '#D1D5DB',
+          dark: '#374151',
+        },
+
+        destructive: {
+          DEFAULT: '#DC2626',
+          dark: '#EF4444',
+        },
+        'destructive-foreground': '#FFFFFF',
+
         blue: {
           light: '#A8DADC',
           DEFAULT: '#457B9D',
           dark: '#1D3557',
         },
-        ring: '#457B9D',
-        sidebar: {
-          DEFAULT: 'hsl(var(--sidebar-background))',
-          foreground: 'hsl(var(--sidebar-foreground))',
-          primary: 'hsl(var(--sidebar-primary))',
-          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-          accent: 'hsl(var(--sidebar-accent))',
-          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-          border: 'hsl(var(--sidebar-border))',
-          ring: 'hsl(var(--sidebar-ring))',
+
+        ring: {
+          DEFAULT: '#457B9D',
+          dark: '#60A5FA',
         },
       },
       fontSize: {

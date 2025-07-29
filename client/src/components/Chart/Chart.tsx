@@ -282,15 +282,15 @@ export const ContractsChart: FC<Props> = ({ renterId }) => {
           </Select>
         </div>
         <div className="flex flex-wrap gap-4 mt-4">
-          <div className="bg-blue-50 p-3 rounded-lg">
+          <div className="bg-blue-50 p-3 rounded-lg dark:bg-[#272b34]">
             <p className="text-sm text-muted-foreground">Всього контрактів</p>
             <p className="text-2xl font-bold">{data.statistics.totalContracts}</p>
           </div>
-          <div className="bg-green-50 p-3 rounded-lg">
+          <div className="bg-green-50 p-3 rounded-lg dark:bg-[#272b34]">
             <p className="text-sm text-muted-foreground">Загальний дохід</p>
             <p className="text-2xl font-bold">{formatCurrency(data.statistics.totalRevenue)}</p>
           </div>
-          <div className="bg-amber-50 p-3 rounded-lg">
+          <div className="bg-amber-50 p-3 rounded-lg dark:bg-[#272b34]">
             <p className="text-sm text-muted-foreground">Середній місячний платіж</p>
             <p className="text-2xl font-bold">
               {formatCurrency(data.statistics.averageMonthlyPayment)}

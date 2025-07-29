@@ -26,7 +26,7 @@ const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <Label htmlFor={name} className="flex items-center gap-1">
+          <Label htmlFor={name} className="flex items-center gap-1 ">
             {label}
             {required && <span className="text-destructive">*</span>}
           </Label>

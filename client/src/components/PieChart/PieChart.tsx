@@ -151,7 +151,7 @@ export const PieChart: FC<Props> = ({ data, title, description }) => {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="fill-foreground dark:fill-foreground-dark text-3xl font-bold"
                         >
                           {formatCurrency(totalEarned)}
                         </tspan>
@@ -172,7 +172,7 @@ export const PieChart: FC<Props> = ({ data, title, description }) => {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
+        <div className="flex items-center gap-2 font-medium leading-none dark:text-foreground-dark ">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
