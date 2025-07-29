@@ -1,1 +1,1 @@
-export type Currencies = "UAH" | "USD" | "EUR" | "PLN";
+export type Currencies = 'UAH' | 'USD' | 'EUR' | 'PLN';

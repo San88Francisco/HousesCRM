@@ -1,11 +1,13 @@
 {
+  "type": "module",
   "name": "server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "lint": "eslint app.js src --ext .ts,.js --fix --color --ignore-pattern src/swagger/** && prettier --write \"src/**/*.{ts,js,json}\" && echo \"\\n✅ Server formatting complete!\\n\" && eslint app.js src --ext .ts,.js --color --ignore-pattern src/swagger/**"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +23,7 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "prettier": "^3.6.2"
   }
 }

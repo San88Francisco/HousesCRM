@@ -1,12 +1,12 @@
-import { Currencies } from "@/types";
+import { Currencies } from '@/types';
 
 const currencySymbols: { [key in Currencies]: string } = {
-  UAH: "₴",
-  USD: "$",
-  EUR: "€",
-  PLN: "zł",
+  UAH: '₴',
+  USD: '$',
+  EUR: '€',
+  PLN: 'zł',
 };
 
 export const getCurrencySymbol = (currency: Currencies) => {
-  return currencySymbols[currency] || "";
+  return currencySymbols[currency] || '';
 };

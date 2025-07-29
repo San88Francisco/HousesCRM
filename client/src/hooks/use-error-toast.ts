@@ -1,31 +1,30 @@
-"use client"
+'use client';
 
-import { getErrorMessage } from "@/utils/toast/error-toast"
-import { useToast } from "./use-toast"
+import { getErrorMessage } from '@/utils/toast/error-toast';
+import { useToast } from './use-toast';
 
-
-export function useErrorToast() {
-  const { toast } = useToast()
+export const useErrorToast = () => {
+  const { toast } = useToast();
 
   const errorToast = (error: unknown, description?: string) => {
     toast({
       title: getErrorMessage(error),
       description,
-      variant: "negative",
-    })
-  }
+      variant: 'negative',
+    });
+  };
 
   const successToast = (title: string, description?: string) => {
     toast({
       title,
       description,
-      variant: "positive",
-    })
-  }
+      variant: 'positive',
+    });
+  };
 
   return {
     errorToast,
     successToast,
     toast,
-  }
-}
+  };
+};

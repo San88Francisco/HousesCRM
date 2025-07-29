@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
 
 import { TrendingUp } from 'lucide-react';
@@ -16,6 +18,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+
 import { type FC, useMemo, useState } from 'react';
 import { DropdownSelect } from '../DropdownSelect/DropdownSelect';
 import { dateRanges } from '@/constants/pieChart/dateRanges';

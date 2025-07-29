@@ -1,9 +1,31 @@
-const express = require('express');
-const { createHouse, getHouses, deleteHouse } = require('../controllers/houses/houses');
-const { authenticate } = require('../middleware/authenticate');
-const { loginUser, refreshAccessToken, registerUser } = require('../controllers/auth/auth');
-const { createRenter, getRenters, getRenterById, updateRenter, deleteRenter } = require('../controllers/renters/renters');
-const { createContract, getContracts, getContractById, updateContract, deleteContract, getContractsByRenter } = require('../controllers/contracts/contracts');
+import express from 'express';
+import {
+  createHouse,
+  getHouses,
+  deleteHouse,
+} from '../controllers/houses/houses.js';
+import { authenticate } from '../middleware/authenticate.js';
+import {
+  loginUser,
+  refreshAccessToken,
+  registerUser,
+} from '../controllers/auth/auth.js';
+
+import {
+  createContract,
+  getContracts,
+  getContractById,
+  updateContract,
+  deleteContract,
+  getContractsByRenter,
+} from '../controllers/contracts/contracts.js';
+import {
+  createRenter,
+  deleteRenter,
+  getRenterById,
+  getRenters,
+  updateRenter,
+} from '../controllers/renters/renterController.js';
 
 const router = express.Router();
 
@@ -32,4 +54,4 @@ router.patch('/contracts/deals/:id', authenticate, updateContract);
 router.delete('/contracts/deals/:id', authenticate, deleteContract);
 router.get('/contracts/renter/:renterId', authenticate, getContractsByRenter);
 
-module.exports = router;
+export default router;

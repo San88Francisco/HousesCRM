@@ -6,7 +6,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { DropdownSelectOption } from '@/types';
+
+import { DropdownSelectOption } from '@/types/core/dropdownSelectOption';
+import { Key } from 'react';
 
 export interface DropdownSelectProps<T> {
   options: DropdownSelectOption<T>[];
@@ -17,14 +19,14 @@ export interface DropdownSelectProps<T> {
   disabled?: boolean;
 }
 
-export function DropdownSelect<T extends React.Key>({
+export const DropdownSelect = <T extends Key>({
   options,
   value,
   onChange,
   placeholder = 'Виберіть опцію',
   className = 'w-[100px] sm:w-[120px]',
   disabled = false,
-}: DropdownSelectProps<T>) {
+}: DropdownSelectProps<T>) => {
   return (
     <Select
       value={String(value)}
@@ -48,4 +50,4 @@ export function DropdownSelect<T extends React.Key>({
       </SelectContent>
     </Select>
   );
-}
+};

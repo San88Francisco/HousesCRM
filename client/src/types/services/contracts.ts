@@ -1,25 +1,25 @@
-import { UUID } from "crypto"
+import { UUID } from 'crypto';
 
 export enum ContractPeriod {
-  OneMonth = "1month",
-  SixMonths = "6months",
-  OneYear = "1year",
-  FiveYears = "5years",
-  TenYears = "10years",
-  FifteenYears = "15years",
-  All = "all"
+  OneMonth = '1month',
+  SixMonths = '6months',
+  OneYear = '1year',
+  FiveYears = '5years',
+  TenYears = '10years',
+  FifteenYears = '15years',
+  All = 'all',
 }
 
 export enum ContractStatus {
-  Active = "active",
-  Inactive = "inactive",
-  Terminated = "terminated"
+  Active = 'active',
+  Inactive = 'inactive',
+  Terminated = 'terminated',
 }
 
 export type ContractsForPeriodRequest = {
-  period: ContractPeriod
-  renter_id?: UUID
-}
+  period: ContractPeriod;
+  renter_id?: UUID;
+};
 
 export type Contract = {
   _id: string;

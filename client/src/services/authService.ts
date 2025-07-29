@@ -1,6 +1,6 @@
 // authService.ts
-import cookies from "js-cookie";
+import cookies from 'js-cookie';
 
 export const getToken = () => {
-  return cookies.get("accessToken");
+  return cookies.get('accessToken');
 };

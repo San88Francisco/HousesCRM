@@ -1,6 +1,8 @@
+/* eslint-disable */
+
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, FC } from 'react';
 import {
   Line,
   LineChart,
@@ -37,11 +39,11 @@ import { useGetAllContractsQuery } from '@/store/contracts';
 import { ContractPeriod } from '@/types/services/contracts';
 import type { UUID } from 'crypto';
 
-type ContractChartProps = {
+type Props = {
   renterId?: UUID;
 };
 
-export function ContractsChart({ renterId }: ContractChartProps) {
+export const ContractsChart: FC<Props> = ({ renterId }) => {
   const [selectedPeriod, setSelectedPeriod] = useState<ContractPeriod>(ContractPeriod.OneYear);
 
   const { data, isLoading, isFetching, error } = useGetAllContractsQuery({
@@ -49,22 +51,25 @@ export function ContractsChart({ renterId }: ContractChartProps) {
     renter_id: renterId,
   });
 
-  const getPeriodLabel = (period: ContractPeriod): string => {
-    const labels = {
-      [ContractPeriod.OneMonth]: '1 місяць',
-      [ContractPeriod.SixMonths]: '6 місяців',
-      [ContractPeriod.OneYear]: '1 рік',
-      [ContractPeriod.FiveYears]: '5 років',
-      [ContractPeriod.TenYears]: '10 років',
-      [ContractPeriod.FifteenYears]: '15 років',
-      [ContractPeriod.All]: 'Весь час',
-    };
-    return labels[period] || period;
-  };
+  // const getPeriodLabel = (period: ContractPeriod): string => {
+  //   const labels = {
+  //     [ContractPeriod.OneMonth]: '1 місяць',
+  //     [ContractPeriod.SixMonths]: '6 місяців',
+  //     [ContractPeriod.OneYear]: '1 рік',
+  //     [ContractPeriod.FiveYears]: '5 років',
+  //     [ContractPeriod.TenYears]: '10 років',
+  //     [ContractPeriod.FifteenYears]: '15 років',
+  //     [ContractPeriod.All]: 'Весь час',
+  //   };
+  //   return labels[period] || period;
+  // };
+  const test = 'Auth API Documentation';
 
   // Transform contract data for chart visualization
   const chartData = useMemo(() => {
-    if (!data?.contracts || !data?.period) return [];
+    if (!data?.contracts || !data?.period) {
+      return [];
+    }
 
     // Get the period range
     const periodStart = new Date(data.period.startDate);
@@ -261,7 +266,7 @@ export function ContractsChart({ renterId }: ContractChartProps) {
             value={selectedPeriod}
             onValueChange={value => setSelectedPeriod(value as ContractPeriod)}
           >
-            <SelectTrigger className="w-40 dark:bg-[#0e1217]">
+            <SelectTrigger className="w-40">
               <Calendar className="h-4 w-4 mr-2" />
               <SelectValue />
             </SelectTrigger>
@@ -361,4 +366,4 @@ export function ContractsChart({ renterId }: ContractChartProps) {
       </CardFooter>
     </Card>
   );
-}
+};

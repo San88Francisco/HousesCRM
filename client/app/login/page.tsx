@@ -43,8 +43,6 @@ export default function Page() {
         password: data.password,
       }).unwrap();
 
-      console.log('Login result:', result);
-
       if (result.accessToken) {
         cookies.set('accessToken', result.accessToken, {
           expires: 7,
@@ -59,7 +57,6 @@ export default function Page() {
         }
 
         successToast('Увійшли успішно', 'Ласкаво просимо!');
-
         router.push(ROUTES.ALL_APARTMENTS);
       }
     } catch (error) {
@@ -82,7 +79,6 @@ export default function Page() {
               placeholder="Введіть вашу електронну пошту"
               required
             />
-
             <RHFInput
               name="password"
               label="Пароль"
@@ -90,7 +86,6 @@ export default function Page() {
               placeholder="Введіть ваш пароль"
               required
             />
-
             <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
               {isLoading ? 'Авторизація...' : 'Увійти'}
             </Button>
