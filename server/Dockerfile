@@ -1,11 +1,18 @@
+# Встановлюємо Node.js
 FROM node:18-alpine
 
+# Встановлюємо робочу директорію
 WORKDIR /app
+
+# Копіюємо файли package.json і встановлюємо залежності
 COPY package*.json ./
 RUN npm install
-COPY . .
-RUN npm run build
 
+# Копіюємо весь код
+COPY . .
+
+# Відкриваємо порт, на якому буде працювати сервер
 EXPOSE 5000
 
-CMD ["node", "dist/main"]
+# Запускаємо сервер
+CMD ["npm", "start"]
