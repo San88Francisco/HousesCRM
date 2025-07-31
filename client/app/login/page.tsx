@@ -4,7 +4,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { CardTitle } from '@/components/ui/card';
-import { useEffect } from 'react';
 import cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/store/auth';
@@ -28,13 +27,6 @@ export default function Page() {
   });
 
   const { isSubmitting } = form.formState;
-
-  useEffect(() => {
-    const subscription = form.watch((value, { name, type }) => {
-      console.warn('Field changed:', name, value, type);
-    });
-    return () => subscription.unsubscribe();
-  }, [form]);
 
   const onSubmit = async (data: LoginRequest) => {
     try {
