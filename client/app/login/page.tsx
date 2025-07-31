@@ -3,8 +3,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useEffect } from 'react';
+import { CardTitle } from '@/components/ui/card';
 import cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/store/auth';
@@ -29,14 +28,7 @@ export default function Page() {
 
   const { isSubmitting } = form.formState;
 
-  useEffect(() => {
-    const subscription = form.watch((value, { name, type }) => {
-      console.log('Field changed:', name, value, type);
-    });
-    return () => subscription.unsubscribe();
-  }, [form]);
-
-  async function onSubmit(data: LoginRequest) {
+  const onSubmit = async (data: LoginRequest) => {
     try {
       const result = await login({
         username: data.username,
@@ -62,36 +54,32 @@ export default function Page() {
     } catch (error) {
       errorToast(error);
     }
-  }
+  };
 
   return (
     <div className="h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
-      <Card className="w-full max-w-[600px] mx-auto">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Увійти</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RHFForm form={form} onSubmit={onSubmit}>
-            <RHFInput
-              name="username"
-              label="Електронна пошта"
-              type="username"
-              placeholder="Введіть вашу електронну пошту"
-              required
-            />
-            <RHFInput
-              name="password"
-              label="Пароль"
-              type="password"
-              placeholder="Введіть ваш пароль"
-              required
-            />
-            <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
-              {isLoading ? 'Авторизація...' : 'Увійти'}
-            </Button>
-          </RHFForm>
-        </CardContent>
-      </Card>
+      <div className="w-full max-w-[400px] mx-auto">
+        <CardTitle className="text-2xl font-bold mb-4">Увійти</CardTitle>
+        <RHFForm form={form} onSubmit={onSubmit}>
+          <RHFInput
+            name="username"
+            label="Електронна пошта"
+            type="username"
+            placeholder="Введіть вашу електронну пошту"
+            required
+          />
+          <RHFInput
+            name="password"
+            label="Пароль"
+            type="password"
+            placeholder="Введіть ваш пароль"
+            required
+          />
+          <Button type="submit" className="w-full " disabled={isSubmitting || isLoading}>
+            {isLoading ? 'Авторизація...' : 'Увійти'}
+          </Button>
+        </RHFForm>
+      </div>
       <motion.div
         className="absolute left-0 bottom-0"
         initial={{ opacity: 0 }}
