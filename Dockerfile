@@ -1,13 +1,23 @@
+# ──────────────────────────────────────────
+# server.Dockerfile (має лежати в корені)
+# ──────────────────────────────────────────
+
 FROM node:18-alpine
 
+# де будемо працювати
 WORKDIR /app
 
-COPY package*.json ./
+# копіюємо package.json і lock тільки з server
+COPY server/package*.json ./
 
-RUN npm install
+# встановлюємо залежності (тепер package.json в /app)
+RUN npm install --production
 
-COPY . .
+# копіюємо весь бекенд-код
+COPY server/ ./
 
+# виставляємо порт
 EXPOSE 5000
 
-CMD ["node", "app.js"] 
+# запускаємо сервер
+CMD ["node", "app.js"]
