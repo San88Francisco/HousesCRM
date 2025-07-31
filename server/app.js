@@ -3,24 +3,26 @@ import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import routes from './src/routes/routes.js';
 import { connectDB } from './src/config/db.js';
 
-dotenv.config();
+// Динамічно визначити шлях до .env в корені проєкту
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, './.env') }); // якщо .env лежить в server/
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Перевірка змінної
 if (!process.env.MONGO_URL) {
   throw new Error('❌ MONGO_URL is not defined in environment variables');
 }
 
-// Підключення до БД
 connectDB();
 
-// Swagger
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',

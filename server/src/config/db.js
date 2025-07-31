@@ -1,7 +1,12 @@
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+// Завантажити .env вручну з правильного шляху
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../.env') }); // для server/.env
 
 const mongoUrl = process.env.MONGO_URL;
 
