@@ -1,11 +1,13 @@
 FROM node:18-alpine
 
 WORKDIR /app
-COPY server/package*.json ./
+
+COPY package*.json ./
+
 RUN npm install
-COPY server/ .
-RUN npm run build
+
+COPY . .
 
 EXPOSE 5000
 
-CMD ["node", "dist/main"]
+CMD ["node", "app.js"] 
