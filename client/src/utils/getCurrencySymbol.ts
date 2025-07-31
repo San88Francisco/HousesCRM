@@ -1,4 +1,4 @@
-import { Currencies } from '@/types';
+import { Currencies } from "@/types/core/currencies";
 
 const currencySymbols: { [key in Currencies]: string } = {
   UAH: '₴',
