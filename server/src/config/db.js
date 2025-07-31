@@ -3,12 +3,18 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const client = new MongoClient(process.env.MONGO_URL);
+const mongoUrl = process.env.MONGO_URL;
+
+if (!mongoUrl) {
+  throw new Error('❌ MONGO_URL is not defined in environment variables');
+}
+
+const client = new MongoClient(mongoUrl);
 
 const connectDB = async () => {
   try {
     await client.connect();
-    console.warn('✅ MongoDB Connected');
+    console.log('✅ MongoDB Connected');
   } catch (error) {
     console.error('❌ MongoDB Connection Error:', error);
     process.exit(1);
