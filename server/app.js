@@ -9,10 +9,9 @@ import dotenv from 'dotenv';
 import routes from './src/routes/routes.js';
 import { connectDB } from './src/config/db.js';
 
-// Динамічно визначити шлях до .env в корені проєкту
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, './.env') }); // якщо .env лежить в server/
+dotenv.config({ path: path.resolve(__dirname, './.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,7 +30,7 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'Документація API',
     },
-    servers: [{ url: `http://localhost:${PORT}` }],
+    servers: [{ url: process.env.SERVER_URL || `http://localhost:${PORT}` }]
   },
   apis: ['./src/routes/**/*.js', './src/swagger/**/*.js'],
 };
@@ -40,7 +39,10 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: [
+      'http://localhost:3000',
+      'https://troubled-paula-step-029fdb19.koyeb.app'
+    ],
     credentials: true,
   })
 );
@@ -51,11 +53,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(routes);
 
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-  console.log(`📄 Swagger: http://localhost:${PORT}/api-docs`);
+  const url = process.env.SERVER_URL || `http://localhost:${PORT}`;
+  console.log(`✅ Server running on ${url}`);
+  console.log(`📄 Swagger: ${url}/api-docs`);
 });
