@@ -23,7 +23,7 @@ export function ThemeDropdown({ className }: ThemeDropdownProps) {
         <Button
           variant="outline"
           size="lg"
-          className={` dark:bg-[#0e1217] text-[#6b7280] px-16 ${className}`}
+          className={` dark:bg-[#0e1217] text-[#6b7280] px-12 ${className}`}
         >
           {current?.icon}
         </Button>

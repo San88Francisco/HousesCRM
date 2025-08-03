@@ -4,7 +4,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { CardTitle } from '@/components/ui/card';
-import cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/store/auth';
 import { ROUTES } from '@/routes';
@@ -15,6 +14,7 @@ import { ThemeDropdown } from '@/components/ThemeDropDown/ThemeDropDown';
 import { motion } from 'framer-motion';
 import { loginSchema, loginDefaultValues } from '@/validation/login/login';
 import { LoginRequest } from '@/types/services/login';
+import { setTokens } from '@/utils/auth/refreshToken';
 
 export default function Page() {
   const { errorToast, successToast } = useErrorToast();
@@ -36,17 +36,8 @@ export default function Page() {
       }).unwrap();
 
       if (result.accessToken) {
-        cookies.set('accessToken', result.accessToken, {
-          expires: 7,
-          path: ROUTES.HOME,
-        });
-
-        if (result.refreshToken) {
-          cookies.set('refreshToken', result.refreshToken, {
-            expires: 30,
-            path: ROUTES.HOME,
-          });
-        }
+        // Використовуємо централізовану функцію для встановлення токенів
+        setTokens(result.accessToken, result.refreshToken || '');
 
         successToast('Увійшли успішно', 'Ласкаво просимо!');
         router.push(ROUTES.ALL_APARTMENTS);
