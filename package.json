@@ -27,9 +27,13 @@
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "!(server)/**/*.{js,jsx,ts,tsx}": [
       "eslint --fix --color",
       "prettier --write"
+    ],
+    "server/**/*.{js,ts}": [
+      "echo \"\\n🔍 Linting SERVER...\\n\"",
+      "npm run lint --prefix server"
     ],
     "*.{json,md,css,scss}": [
       "prettier --write"
