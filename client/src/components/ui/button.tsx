@@ -34,28 +34,28 @@ import { cn } from '@/lib/utils';
 const buttonVariants = cva(
   //change ring color varible
   // svg icon size in different variants
-  'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-600 active:border-blue-200 mr-[2rem]     border-2 border-solid border-current rounded-[0.75rem] font-semibold leading-[150%] transition-all duration-200 ease-in-out inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  ' mr-[2rem] border-transparent border-2 border-solid rounded-[0.75rem] font-semibold leading-[150%] transition-all duration-200 ease-in-out inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none  [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        dark: '',
-        gray: '',
-        white: '',
-        red: '',
-        icon: '',
+        dark: 'bg-gray-700 text-white hover:bg-gray-800 active:bg-gray-700 active:border-gray-400 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-800 dark:active:bg-gray-700 dark:active:border-gray-400',
+        gray: 'bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-200 active:border-gray-100  dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 dark:active:bg-gray-800 dark:active:border-gray-600', // dark mode g-200 = g-700, g-300 = g-600, g-100 = g-900
+        white:
+          'bg-white border-gray-200 text-black hover:bg-gray-100 active:bg-white active:border-sky-100 dark:bg-gray-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:active:bg-gray-900 dark:active:border-sky-500',
         danger: '',
+        icon: '',
       },
       size: {
-        xs: 'px-[11px] py-[7px] text-xs',
-        sm: 'px-[13px] py-[9px] text-sm',
-        md: 'px-[17px] py-[9px] text-sm',
-        lg: 'px-[17px] py-[9px] text-base',
-        xl: 'px-[25px] py-[13px] text-base',
+        xs: 'px-[11px] py-[7px] text-xs [&_svg]:size-3',
+        sm: 'px-[13px] py-[9px] text-sm [&_svg]:size-4',
+        md: 'px-[17px] py-[9px] text-sm [&_svg]:size-4',
+        lg: 'px-[17px] py-[9px] text-base [&_svg]:size-5',
+        xl: 'px-[25px] py-[13px] text-base [&_svg]:size-5',
         // icon: 'h-10 w-10',
       },
     },
     defaultVariants: {
-      variant: 'dark',
+      variant: 'dark', //dark
       size: 'md',
     },
   },
