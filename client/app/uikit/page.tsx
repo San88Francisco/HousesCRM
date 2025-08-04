@@ -56,6 +56,23 @@ export default function Page() {
         </Button>
       </div>
       <div className="flex items-start">
+        <Button size="xs" variant="danger">
+          Button text
+        </Button>
+        <Button size="sm" variant="danger">
+          Button text
+        </Button>
+        <Button size="md" variant="danger">
+          Button text
+        </Button>
+        <Button size="lg" variant="danger">
+          Button text
+        </Button>
+        <Button size="xl" variant="danger">
+          Button text
+        </Button>
+      </div>
+      <div className="flex items-start">
         <Button size="xs">
           <User />
         </Button>
@@ -69,6 +86,23 @@ export default function Page() {
           <User />
         </Button>
         <Button size="xl">
+          <User />
+        </Button>
+      </div>
+      <div className="flex items-start">
+        <Button size="xs" variant="dark">
+          <User />
+        </Button>
+        <Button size="sm" variant="gray">
+          <User />
+        </Button>
+        <Button size="md" variant="white">
+          <User />
+        </Button>
+        <Button size="lg" variant="danger">
+          <User />
+        </Button>
+        <Button size="lg" variant="icon" className="">
           <User />
         </Button>
       </div>

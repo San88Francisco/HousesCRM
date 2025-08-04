@@ -80,8 +80,8 @@ export default {
         },
 
         ring: {
-          DEFAULT: '#457B9D',
-          dark: '#60A5FA',
+          DEFAULT: '#0ea5e9',
+          dark: '#0ea5e9',
         },
       },
       fontSize: {
