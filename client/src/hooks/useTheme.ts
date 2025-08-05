@@ -47,7 +47,9 @@ export function useTheme() {
   }, [updateTheme]);
 
   useEffect(() => {
-    if (theme !== 'авто') return;
+    if (theme !== 'авто') {
+      return;
+    }
     const interval = setInterval(updateTheme, 60000);
     return () => clearInterval(interval);
   }, [theme, updateTheme]);
