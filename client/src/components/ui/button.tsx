@@ -5,28 +5,29 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  ' mr-[2rem] border-transparent border-2 border-solid rounded-[0.75rem] font-semibold leading-[150%] transition-all duration-200 ease-in-out inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default:
-          'bg-black border border-solid border-black text-white hover:bg-white hover:text-black dark:border-white dark:bg-white dark:text-black dark:hover:bg-background dark:hover:text-white',
-        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+        dark: 'bg-gray-700 text-white hover:bg-gray-800 active:bg-gray-700 active:border-gray-400 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-800 dark:active:bg-gray-700 dark:active:border-gray-400',
+        gray: 'bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-200 active:border-gray-100  dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 dark:active:bg-gray-800 dark:active:border-gray-600',
+        white:
+          'bg-white border-gray-200 text-black hover:bg-gray-100 active:bg-white active:border-sky-100 dark:bg-gray-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:active:bg-gray-900 dark:active:border-sky-500',
+        danger:
+          'bg-red-100 border-red-500 text-red-500 hover:bg-red-500 hover:text-white active:bg-red-500 active:border-red-200 dark:bg-red-950 dark:border-red-700 dark:text-red-200 dark:hover:bg-red-700 dark:hover:text-white dark:active:bg-red-700 dark:active:border-red-500',
+        icon: 'text-inherit hover:opacity-70',
       },
       size: {
-        default: 'h-10 px-4 py-5',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
-        icon: 'h-10 w-10',
+        xs: 'px-[11px] py-[7px] text-xs [&_svg]:size-3',
+        sm: 'px-[13px] py-[9px] text-sm [&_svg]:size-4',
+        md: 'px-[17px] py-[9px] text-sm [&_svg]:size-4',
+        lg: 'px-[17px] py-[9px] text-base [&_svg]:size-5',
+        xl: 'px-[25px] py-[13px] text-base [&_svg]:size-5',
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: 'dark',
+      size: 'md',
     },
   },
 );
