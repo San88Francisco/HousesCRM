@@ -166,15 +166,9 @@ export default [
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
 
-      "no-restricted-syntax": [
-        "error",
-        {
-          selector:
-            "FunctionDeclaration:not(ExportDefaultDeclaration > FunctionDeclaration)",
-          message:
-            "Використовуйте стрілкові функції, крім export default function",
-        },
-      ],
+      "no-restricted-syntax": "error",
+
+
 
       // Додаткові корисні правила ESLint для чистоти коду:
       eqeqeq: ["error", "always"], // Використовувати ===, а не ==
