@@ -1,15 +1,25 @@
 import * as React from 'react';
-
 import { cn } from '@/lib/utils';
+import {
+  CardProps,
+  CardTitleProps,
+  CardDescriptionProps,
+  CardContentProps,
+  CardFooterProps,
+} from '../../types/core/card';
 
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        'rounded-lg bg-card text-card-foreground shadow-sm dark:bg-[var(--card)]',
-        'border',
-        'xs:bg-blue-50 xs:border-none',
+        'rounded-xl shadow-sm text-zinc-900',
+
+        {
+          'bg-gray-100 dark:bg-white/5': variant === 'default',
+          'bg-sky-100 dark:bg-sky-100': variant === 'sky',
+          'bg-blue-100 dark:bg-blue-100': variant === 'purple',
+        },
         className,
       )}
       {...props}
@@ -25,12 +35,17 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 );
 CardHeader.displayName = 'CardHeader';
 
-const CardTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
+const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
+  ({ className, variant = 'default', as: Component = 'h3', ...props }, ref) => (
+    <Component
       ref={ref}
       className={cn(
-        'text-2xl font-semibold leading-none tracking-tight dark:text-foreground-dark',
+        'text-2xl font-semibold leading-none tracking-tight',
+
+        {
+          'text-zinc-900 dark:text-white': variant === 'default',
+          'text-zinc-900': variant === 'sky' || variant === 'purple',
+        },
         className,
       )}
       {...props}
@@ -39,23 +54,59 @@ const CardTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
 );
 CardTitle.displayName = 'CardTitle';
 
-const CardDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />
+const CardDescription = React.forwardRef<HTMLParagraphElement, CardDescriptionProps>(
+  ({ className, variant = 'default', ...props }, ref) => (
+    <p
+      ref={ref}
+      className={cn(
+        'text-sm leading-relaxed',
+
+        {
+          'text-zinc-600 dark:text-zinc-400': variant === 'default',
+          'text-zinc-700 dark:text-zinc-700': variant === 'sky' || variant === 'purple',
+        },
+        className,
+      )}
+      {...props}
+    />
   ),
 );
 CardDescription.displayName = 'CardDescription';
 
-const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
+const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
+  ({ className, variant = 'default', ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'p-6 pt-0',
+
+        {
+          'text-zinc-900 dark:text-white': variant === 'default',
+          'text-zinc-900': variant === 'sky' || variant === 'purple',
+        },
+        className,
+      )}
+      {...props}
+    />
   ),
 );
 CardContent.displayName = 'CardContent';
 
-const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('flex items-center p-6 pt-0', className)} {...props} />
+const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
+  ({ className, variant = 'default', ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'flex items-center p-6 pt-0',
+
+        {
+          'text-zinc-900 dark:text-white': variant === 'default',
+          'text-zinc-900': variant === 'sky' || variant === 'purple',
+        },
+        className,
+      )}
+      {...props}
+    />
   ),
 );
 CardFooter.displayName = 'CardFooter';

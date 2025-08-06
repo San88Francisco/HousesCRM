@@ -1,3 +1,4 @@
+import { CardTestComponent } from '@/components/CardTestComponent/CardTestComponent';
 import { Button } from '@/components/ui/button';
 import { User } from 'lucide-react';
 
@@ -106,6 +107,7 @@ export default function Page() {
           <User />
         </Button>
       </div>
+      <CardTestComponent />
     </div>
   );
 }
