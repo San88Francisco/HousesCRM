@@ -44,10 +44,6 @@ jobs:
           sleep 10
           docker compose ps
 
-    # Якщо впаде — надішлемо повідомлення
-    continue-on-error: false
-    # Повідомлення про фейл
-    post:
       - name: Notify failure (tests)
         if: failure()
         run: |
