@@ -63,7 +63,6 @@ export const ContractsChart: FC<Props> = ({ renterId }) => {
   //   };
   //   return labels[period] || period;
   // };
-  const test = 'Auth API Documentation';
 
   // Transform contract data for chart visualization
   const chartData = useMemo(() => {
