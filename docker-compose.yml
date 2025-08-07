@@ -7,11 +7,8 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"  
-    working_dir: /app
-    volumes:
-      - ./server:/app
-    command: npm run start:prod  
-    restart: unless-stopped
+      - "8000:8000"
     environment:
       - NODE_ENV=production
+      - PORT=8000
+    restart: unless-stopped
