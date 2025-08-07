@@ -15,11 +15,6 @@ const checkboxVariants = cva(
           'data-[state=checked]:bg-gray-900 data-[state=checked]:border-gray-900 data-[state=checked]:text-white ' +
           'dark:border-gray-500 ' +
           'dark:data-[state=checked]:bg-indigo-200 dark:data-[state=checked]:border-indigo-200 dark:data-[state=checked]:text-gray-900',
-
-        subtle:
-          'border-gray-300 text-gray-900 ' +
-          'data-[state=checked]:bg-gray-300 data-[state=checked]:border-gray-300 data-[state=checked]:text-white ' +
-          'dark:border-gray-600 dark:data-[state=checked]:bg-gray-400 dark:data-[state=checked]:border-gray-400 dark:data-[state=checked]:text-gray-900',
       },
       size: {
         sm: 'h-3 w-3',

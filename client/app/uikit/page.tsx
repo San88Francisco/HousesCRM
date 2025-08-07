@@ -1,128 +1,13 @@
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Switch } from '@/components/ui/switch';
-import { User } from 'lucide-react';
+import { ButtonComponent } from '@/components/Examples/ButtonComponent/ButtonComponent';
+import { CardComponent } from '@/components/Examples/CardComponent/CardComponent';
+import { ControlButtons } from '@/components/Examples/ControlButtons/ControlButtons';
 
 export default function Page() {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-start">
-        <Button size="xs" variant="dark">
-          Button text
-        </Button>
-        <Button size="sm" variant="dark">
-          Button text
-        </Button>
-        <Button size="md" variant="dark">
-          Button text
-        </Button>
-        <Button size="lg" variant="dark">
-          Button text
-        </Button>
-        <Button size="xl" variant="dark">
-          Button text
-        </Button>
-      </div>
-      <div className="flex items-start">
-        <Button size="xs" variant="gray">
-          Button text
-        </Button>
-        <Button size="sm" variant="gray">
-          Button text
-        </Button>
-        <Button size="md" variant="gray">
-          Button text
-        </Button>
-        <Button size="lg" variant="gray">
-          Button text
-        </Button>
-        <Button size="xl" variant="gray">
-          Button text
-        </Button>
-      </div>
-      <div className="flex items-start">
-        <Button size="xs" variant="white">
-          Button text
-        </Button>
-        <Button size="sm" variant="white">
-          Button text
-        </Button>
-        <Button size="md" variant="white">
-          Button text
-        </Button>
-        <Button size="lg" variant="white">
-          Button text
-        </Button>
-        <Button size="xl" variant="white">
-          Button text
-        </Button>
-      </div>
-      <div className="flex items-start">
-        <Button size="xs" variant="danger">
-          Button text
-        </Button>
-        <Button size="sm" variant="danger">
-          Button text
-        </Button>
-        <Button size="md" variant="danger">
-          Button text
-        </Button>
-        <Button size="lg" variant="danger">
-          Button text
-        </Button>
-        <Button size="xl" variant="danger">
-          Button text
-        </Button>
-      </div>
-      <div className="flex items-start">
-        <Button size="xs">
-          <User />
-        </Button>
-        <Button size="sm">
-          <User />
-        </Button>
-        <Button size="md">
-          <User />
-        </Button>
-        <Button size="lg">
-          <User />
-        </Button>
-        <Button size="xl">
-          <User />
-        </Button>
-      </div>
-      <div className="flex items-start">
-        <Button size="xs" variant="dark">
-          <User />
-        </Button>
-        <Button size="sm" variant="gray">
-          <User />
-        </Button>
-        <Button size="md" variant="white">
-          <User />
-        </Button>
-        <Button size="lg" variant="danger">
-          <User />
-        </Button>
-        <Button size="lg" variant="icon" className="">
-          <User />
-        </Button>
-      </div>
-      <div className="flex items-start gap-5">
-        <Checkbox variant="subtle" size="sm" label="test" />
-        <Checkbox size="md" label="test" />
-        <Checkbox variant="subtle" size="lg" label="test" />
-      </div>
-      <div className="flex items-start gap-5">
-        <Switch />
-      </div>
-
-      <RadioGroup defaultValue="comfortable">
-        <div className="flex items-center gap-3">
-          <RadioGroupItem value="default" id="r1" />
-        </div>
-      </RadioGroup>
+    <div className="flex flex-col gap-2">
+      <ButtonComponent />
+      <CardComponent />
+      <ControlButtons />
     </div>
   );
 }
