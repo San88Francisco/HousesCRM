@@ -1,5 +1,7 @@
+import { LabelWithElement } from '@/components/LabelWithElement/LabelWithElement';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
 import { User } from 'lucide-react';
@@ -110,44 +112,17 @@ export default function Page() {
         </Button>
       </div>
       <div className="flex items-start gap-5">
-        <Checkbox size="sm" />
-        <Checkbox size="sm" variant="blueCustom" />
-        <Checkbox size="sm" variant="sky100" />
         <Checkbox />
-        <Checkbox variant="blueCustom" />
-        <Checkbox variant="sky100" />
-        <Checkbox size="lg" />
-        <Checkbox size="lg" variant="blueCustom" />
-        <Checkbox size="lg" variant="sky100" />
-      </div>
-      <div className="flex items-start gap-5">
         <Switch />
-        <Switch variant="blueCustom" />
-        <Switch variant="sky100" />
-        <Switch size="sm" />
-        <Switch size="sm" variant="blueCustom" />
-        <Switch size="sm" variant="sky100" />
-        <Switch size="lg" />
-        <Switch size="lg" variant="blueCustom" />
-        <Switch size="lg" variant="sky100" />
-      </div>
-      <div className="flex items-start gap-5">
-        <RadioGroup className="flex items-start gap-5">
-          <RadioGroupItem value="1" size="sm" />
-          <RadioGroupItem value="2" variant="blueCustom" size="sm" />
-          <RadioGroupItem value="3" variant="sky100" size="sm" />
-        </RadioGroup>
-        <RadioGroup className="flex items-start gap-5">
-          <RadioGroupItem value="1" />
-          <RadioGroupItem value="2" variant="blueCustom" />
-          <RadioGroupItem value="3" variant="sky100" />
-        </RadioGroup>
-        <RadioGroup className="flex items-start gap-5">
-          <RadioGroupItem value="1" size="lg" />
-          <RadioGroupItem value="2" variant="blueCustom" size="lg" />
-          <RadioGroupItem value="3" variant="sky100" size="lg" />
+        <RadioGroup defaultValue="comfortable">
+          <div className="flex items-center gap-3">
+            <RadioGroupItem value="default" id="r1" />
+          </div>
         </RadioGroup>
       </div>
+      <LabelWithElement text="label title">
+        <Checkbox />
+      </LabelWithElement>
     </div>
   );
 }
