@@ -19,16 +19,6 @@ jobs:
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
             -d text="📥 Новий Pull Request: ${{ github.event.pull_request.title }}\n👤 Автор: ${{ github.actor }}\n🔗 https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
 
-  notify-on-commit:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify about commit
-        run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="📝 Новий коміт у *${{ github.ref_name }}* від *${{ github.actor }}*\n🔗 https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
-
   test:
     runs-on: ubuntu-latest
     steps:
