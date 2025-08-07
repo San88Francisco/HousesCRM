@@ -8,20 +8,35 @@ import {
   CardFooterProps,
 } from '../../types/core/card';
 
+const cardVariants = {
+  default: {
+    base: 'bg-gray-100 dark:bg-white/5 text-zinc-900 dark:text-white',
+    title: 'text-zinc-900 dark:text-white',
+    description: 'text-zinc-600 dark:text-zinc-400',
+    content: 'text-zinc-900 dark:text-white',
+    footer: 'text-zinc-900 dark:text-white',
+  },
+  sky: {
+    base: 'bg-sky-100 dark:bg-sky-100 text-zinc-900',
+    title: 'text-zinc-900',
+    description: 'text-zinc-700 dark:text-zinc-700',
+    content: 'text-zinc-900',
+    footer: 'text-zinc-900',
+  },
+  purple: {
+    base: 'bg-blue-100 dark:bg-blue-100 text-zinc-900',
+    title: 'text-zinc-900',
+    description: 'text-zinc-700 dark:text-zinc-700',
+    content: 'text-zinc-900',
+    footer: 'text-zinc-900',
+  },
+};
+
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(
-        'rounded-xl shadow-sm text-zinc-900',
-
-        {
-          'bg-gray-100 dark:bg-white/5': variant === 'default',
-          'bg-sky-100 dark:bg-sky-100': variant === 'sky',
-          'bg-blue-100 dark:bg-blue-100': variant === 'purple',
-        },
-        className,
-      )}
+      className={cn('rounded-xl shadow-sm', cardVariants[variant].base, className)}
       {...props}
     />
   ),
@@ -41,11 +56,7 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
       ref={ref}
       className={cn(
         'text-2xl font-semibold leading-none tracking-tight',
-
-        {
-          'text-zinc-900 dark:text-white': variant === 'default',
-          'text-zinc-900': variant === 'sky' || variant === 'purple',
-        },
+        cardVariants[variant].title,
         className,
       )}
       {...props}
@@ -58,15 +69,7 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, CardDescriptionPr
   ({ className, variant = 'default', ...props }, ref) => (
     <p
       ref={ref}
-      className={cn(
-        'text-sm leading-relaxed',
-
-        {
-          'text-zinc-600 dark:text-zinc-400': variant === 'default',
-          'text-zinc-700 dark:text-zinc-700': variant === 'sky' || variant === 'purple',
-        },
-        className,
-      )}
+      className={cn('text-sm leading-relaxed', cardVariants[variant].description, className)}
       {...props}
     />
   ),
@@ -77,15 +80,7 @@ const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(
-        'p-6 pt-0',
-
-        {
-          'text-zinc-900 dark:text-white': variant === 'default',
-          'text-zinc-900': variant === 'sky' || variant === 'purple',
-        },
-        className,
-      )}
+      className={cn('p-6 pt-0', cardVariants[variant].content, className)}
       {...props}
     />
   ),
@@ -96,15 +91,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
   ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(
-        'flex items-center p-6 pt-0',
-
-        {
-          'text-zinc-900 dark:text-white': variant === 'default',
-          'text-zinc-900': variant === 'sky' || variant === 'purple',
-        },
-        className,
-      )}
+      className={cn('flex items-center p-6 pt-0', cardVariants[variant].footer, className)}
       {...props}
     />
   ),

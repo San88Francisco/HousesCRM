@@ -1,7 +1,14 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../../ui/card';
 
-export const CardTestComponent = () => {
+export const CardComponent = () => {
   return (
     <div className="flex items-start gap-5">
       <Card className="w-1/3">
