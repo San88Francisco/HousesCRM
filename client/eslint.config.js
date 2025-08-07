@@ -8,6 +8,13 @@ import react from 'eslint-plugin-react';
 import prettier from 'eslint-plugin-prettier';
 import unusedImports from 'eslint-plugin-unused-imports';
 
+// Функція для очищення пробілів з ключів об'єкта globals
+function cleanGlobals(obj) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key.trim(), value])
+  );
+}
+
 export default [
   {
     ignores: [
@@ -79,8 +86,8 @@ export default [
       sourceType: 'module',
       parser: tsParser,
       globals: {
-        ...globals.browser,
-        ...globals.node,
+        ...cleanGlobals(globals.browser),
+        ...cleanGlobals(globals.node),
         JSX: true,
       },
     },

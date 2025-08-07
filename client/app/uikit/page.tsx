@@ -1,9 +1,12 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Switch } from '@/components/ui/switch';
 import { User } from 'lucide-react';
 
 export default function Page() {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-4">
       <div className="flex items-start">
         <Button size="xs" variant="dark">
           Button text
@@ -106,6 +109,20 @@ export default function Page() {
           <User />
         </Button>
       </div>
+      <div className="flex items-start gap-5">
+        <Checkbox variant="subtle" size="sm" label="test" />
+        <Checkbox size="md" label="test" />
+        <Checkbox variant="subtle" size="lg" label="test" />
+      </div>
+      <div className="flex items-start gap-5">
+        <Switch />
+      </div>
+
+      <RadioGroup defaultValue="comfortable">
+        <div className="flex items-center gap-3">
+          <RadioGroupItem value="default" id="r1" />
+        </div>
+      </RadioGroup>
     </div>
   );
 }
