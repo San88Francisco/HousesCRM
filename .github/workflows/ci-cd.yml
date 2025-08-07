@@ -1,76 +1,69 @@
-deploy:
-  if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
-  needs: test
-  runs-on: ubuntu-latest
+name: CI/CD Pipeline
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
 
-    - name: Trigger deploy on Koyeb and wait for completion
-      env:
-        KOYEB_DEPLOY_HOOK: ${{ secrets.KOYEB_DEPLOY_HOOK }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      run: |
-        echo "Triggering deploy..."
-        # Запускаємо деплой і зберігаємо відповідь
-        DEPLOY_RESPONSE=$(curl -s -X POST "https://app.koyeb.com/hook/deploy/$KOYEB_DEPLOY_HOOK")
+jobs:
+  notify-on-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify about pull request
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="📥 Новий Pull Request: ${{ github.event.pull_request.title }}\n👤 Автор: ${{ github.actor }}\n🔗 https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
 
-        # Тут потрібно отримати deploy_id або інший унікальний ідентифікатор, якщо API його повертає
-        # Припустимо, у відповіді є поле "deploy_id"
-        DEPLOY_ID=$(echo "$DEPLOY_RESPONSE" | jq -r '.deploy_id')
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-        if [ "$DEPLOY_ID" = "null" ] || [ -z "$DEPLOY_ID" ]; then
-          echo "Failed to get deploy ID from Koyeb response"
-          exit 1
-        fi
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-        echo "Deploy ID: $DEPLOY_ID"
+      - name: Run docker compose (tests/healthchecks)
+        run: |
+          docker compose -f docker-compose.yml up -d
+          sleep 10
+          docker compose ps
 
-        # Функція для перевірки статусу деплою
-        check_status() {
-          STATUS_RESPONSE=$(curl -s "https://app.koyeb.com/api/v1/deployments/$DEPLOY_ID")
-          STATUS=$(echo "$STATUS_RESPONSE" | jq -r '.status')
-          echo "$STATUS"
-        }
+      - name: Notify failure (tests)
+        if: failure()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="❌ Тести не пройшли у *${{ github.ref_name }}*\n🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-        # Чекаємо, доки деплой завершиться (максимум 10 хвилин)
-        TIMEOUT=600
-        INTERVAL=15
-        ELAPSED=0
+  deploy:
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
 
-        while true; do
-          STATUS=$(check_status)
-          echo "Deploy status: $STATUS"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-          if [ "$STATUS" = "succeeded" ]; then
-            echo "Deploy succeeded"
-            exit 0
-          elif [ "$STATUS" = "failed" ]; then
-            echo "Deploy failed"
-            exit 1
-          fi
+      - name: Deploy to Koyeb
+        run: |
+          curl -X POST https://app.koyeb.com/hook/deploy/${{ secrets.KOYEB_DEPLOY_HOOK }}
 
-          if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
-            echo "Deploy timed out"
-            exit 1
-          fi
+      - name: Notify success (deploy)
+        if: success()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="✅ *Деплой успішний* у *${{ github.ref_name }}*\n🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-          sleep $INTERVAL
-          ELAPSED=$((ELAPSED + INTERVAL))
-        done
-
-    - name: Notify success (deploy)
-      if: success()
-      run: |
-        curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d text="✅ *Деплой успішний* у *${{ github.ref_name }}*\n🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
-    - name: Notify failure (deploy)
-      if: failure()
-      run: |
-        curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d text="🚨 *Деплой провалено* у *${{ github.ref_name }}*\n🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Notify failure (deploy)
+        if: failure()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="🚨 *Деплой провалено* у *${{ github.ref_name }}*\n🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
