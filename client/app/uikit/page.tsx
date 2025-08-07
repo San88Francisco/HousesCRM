@@ -1,7 +1,5 @@
-import { LabelWithElement } from '@/components/LabelWithElement/LabelWithElement';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
 import { User } from 'lucide-react';
@@ -112,17 +110,19 @@ export default function Page() {
         </Button>
       </div>
       <div className="flex items-start gap-5">
-        <Checkbox />
-        <Switch />
-        <RadioGroup defaultValue="comfortable">
-          <div className="flex items-center gap-3">
-            <RadioGroupItem value="default" id="r1" />
-          </div>
-        </RadioGroup>
+        <Checkbox variant="subtle" size="sm" label="test" />
+        <Checkbox size="md" label="test" />
+        <Checkbox variant="subtle" size="lg" label="test" />
       </div>
-      <LabelWithElement text="label title">
-        <Checkbox />
-      </LabelWithElement>
+      <div className="flex items-start gap-5">
+        <Switch />
+      </div>
+
+      <RadioGroup defaultValue="comfortable">
+        <div className="flex items-center gap-3">
+          <RadioGroupItem value="default" id="r1" />
+        </div>
+      </RadioGroup>
     </div>
   );
 }
