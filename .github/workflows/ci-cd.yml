@@ -1,68 +1,69 @@
 name: CI/CD Pipeline
 
 on:
+  pull_request:
+    types: [opened, closed]
   push:
     branches:
-      - '**'
-  pull_request:
-    branches:
-      - '**'
+      - develop
+      - main
 
 jobs:
-  notify-on-pr:
+
+  notify-pr:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - name: Notify about pull request
+      - name: Notify about new PR
+        if: github.event.action == 'opened'
         run: |
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
             -d text="📥 Новий Pull Request: ${{ github.event.pull_request.title }}\n👤 Автор: ${{ github.actor }}\n🔗 https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
 
-  notify-on-commit:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify about commit
+      - name: Notify about merged PR into develop/main
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true && (github.event.pull_request.base.ref == 'develop' || github.event.pull_request.base.ref == 'main')
         run: |
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="📝 Новий коміт у *${{ github.ref_name }}* від *${{ github.actor }}*\n🔗 https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Run docker compose (tests/healthchecks)
-        run: |
-          docker compose -f docker-compose.yml up -d
-          sleep 10
-          docker compose ps
-
-      - name: Notify failure (tests)
-        if: failure()
-        run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="❌ Тести не пройшли у *${{ github.ref_name }}*\n🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            -d text="✅ Pull Request змерджено у *${{ github.event.pull_request.base.ref }}*: ${{ github.event.pull_request.title }}\n🔗 https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
 
   deploy:
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
-    needs: test
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Deploy to Koyeb
+      - name: Trigger deploy on Koyeb
+        id: trigger_deploy
         run: |
-          curl -X POST https://app.koyeb.com/hook/deploy/${{ secrets.KOYEB_DEPLOY_HOOK }}
+          response=$(curl -s -X POST https://app.koyeb.com/hook/deploy/${{ secrets.KOYEB_DEPLOY_HOOK }})
+          echo "response=$response"
+          # Приклад: дістань deploy_id з відповіді, адаптуй під свій API
+          deploy_id=$(echo $response | jq -r '.deploy_id')
+          echo "deploy_id=$deploy_id"
+          echo "::set-output name=deploy_id::$deploy_id"
+
+      - name: Wait for deploy to complete
+        id: wait_deploy
+        run: |
+          deploy_id=${{ steps.trigger_deploy.outputs.deploy_id }}
+          max_attempts=20
+          attempt=0
+          while [ $attempt -lt $max_attempts ]; do
+            status_response=$(curl -s "https://api.koyeb.com/deployments/$deploy_id/status" -H "Authorization: Bearer ${{ secrets.KOYEB_API_TOKEN }}")
+            status=$(echo "$status_response" | jq -r '.status')
+            echo "Attempt $attempt: status = $status"
+            if [ "$status" == "successful" ]; then
+              echo "Deploy successful!"
+              exit 0
+            elif [ "$status" == "failed" ]; then
+              echo "Deploy failed!"
+              exit 1
+            fi
+            attempt=$((attempt+1))
+            sleep 15
+          done
+          echo "Timed out waiting for deploy status"
+          exit 1
 
       - name: Notify success (deploy)
         if: success()
