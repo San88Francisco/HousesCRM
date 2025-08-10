@@ -1,9 +1,32 @@
+'use client';
+
 import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-
 import { cn } from '@/lib/utils';
+import { TABS_SIZE_CONFIG, TabsSize } from '@/lib/design-tokens/tabs';
 
-const Tabs = TabsPrimitive.Root;
+type LocalTabsSize = 'default' | 'sm';
+
+const getSizeVars = (size: TabsSize) => TABS_SIZE_CONFIG[size] as React.CSSProperties;
+
+export interface TabsProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
+  size?: LocalTabsSize;
+}
+
+const Tabs = React.forwardRef<React.ElementRef<typeof TabsPrimitive.Root>, TabsProps>(
+  ({ size = 'default', className, style, ...props }, ref) => {
+    const vars = getSizeVars(size);
+    return (
+      <TabsPrimitive.Root
+        ref={ref}
+        className={cn(className)}
+        style={{ ...vars, ...style }}
+        {...props}
+      />
+    );
+  },
+);
+Tabs.displayName = 'Tabs';
 
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
@@ -12,7 +35,9 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      'inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground',
+      'relative inline-flex items-center justify-center ',
+
+      'min-h-[var(--tabs-list-min-h)] px-[var(--tabs-list-p)] py-[calc(var(--tabs-list-p)*0.5)]',
       className,
     )}
     {...props}
@@ -27,7 +52,13 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm',
+      'relative inline-flex items-center justify-center whitespace-nowrap rounded-sm font-medium transition-all duration-300 text-zinc-400 dark:text-white/40',
+
+      'after:absolute after:bottom-0 after:left-2 after:right-2 after:h-[var(--tabs-after-h)] after:rounded-full after:bg-zinc-900 dark:after:bg-white after:transition-transform after:duration-300 after:scale-x-0 after:origin-center',
+
+      'data-[state=active]:text-zinc-900 dark:data-[state=active]:text-white data-[state=active]:after:scale-x-100',
+
+      'px-[var(--tabs-trigger-px)] py-[var(--tabs-trigger-py)] text-[length:var(--tabs-trigger-fs)]',
       className,
     )}
     {...props}
@@ -41,10 +72,7 @@ const TabsContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Content
     ref={ref}
-    className={cn(
-      'mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-      className,
-    )}
+    className={cn('mt-[var(--tabs-content-mt)]', className)}
     {...props}
   />
 ));
