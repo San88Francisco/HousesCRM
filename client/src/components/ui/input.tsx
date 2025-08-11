@@ -21,10 +21,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <div>
         <div
           className={cn(
-            'flex items-center h-10 px-2 w-full text-black text-sm transition-all duration-200 ease-in-out bg-gray-50 rounded-lg border border-solid border-border [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4  ',
+            'flex items-center h-10 px-2 w-full text-black text-sm transition-all duration-200 ease-in-out bg-gray-50 rounded-lg border border-solid border-gray-300 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4 dark:bg-gray-600 dark:border-gray-500 dark:text-white',
             disabled && 'cursor-not-allowed opacity-50',
-            isFocused && 'border-sky-600',
-            error && 'border-destructive text-destructive',
+            isFocused && 'border-sky-600 dark:border-sky-400',
+            error && 'border-red-600 text-red-600 dark:border-red-600',
             className,
           )}
         >
@@ -32,8 +32,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <span
               className={cn(
                 'transition-all duration-200 ease-in-out',
-                isFocused && 'text-sky-600',
-                error && 'text-destructive',
+                isFocused && 'text-sky-600 dark:text-sky-400',
+                error && 'text-red-600 dark:text-red-600',
               )}
             >
               {icon}
@@ -41,8 +41,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           <input
             className={cn(
-              'flex w-full px-2 bg-inherit text-black text-sm ring-offset-none placeholder:text-muted-foreground focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50',
-              error && 'text-destructive',
+              'flex w-full px-2 bg-inherit text-black text-sm ring-offset-none placeholder:text-gray-500 focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50 dark:text-white',
+              error && 'text-red-600 dark:text-red-600',
             )}
             type={type}
             ref={ref}
@@ -51,10 +51,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
-          {error && iconWithError && <CircleAlert className="text-destructive" />}
+          {error && iconWithError && <CircleAlert className="text-red-600" />}
         </div>
         {helperText && (
-          <p className={`mt-1 text-sm ${error ? 'text-destructive' : 'text-muted-foreground'}`}>
+          <p className={`mt-1 text-sm ${error ? 'text-red-600' : 'text-gray-500 '}`}>
             {helperText}
           </p>
         )}
