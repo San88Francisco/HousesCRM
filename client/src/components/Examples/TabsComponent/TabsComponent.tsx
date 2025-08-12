@@ -1,6 +1,6 @@
 'use client';
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../ui/tabs';
 
 const tabData = [
   { value: 'account', label: 'Account', content: 'Account Management' },
