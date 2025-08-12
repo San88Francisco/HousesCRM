@@ -3,76 +3,66 @@ import { User } from 'lucide-react';
 
 export const ButtonComponent = () => {
   return (
-    <>
-      <div className="flex items-start">
-        <Button size="xs" variant="dark">
+    <div className="flex flex-col gap-2">
+      <div className="flex items-start gap-2">
+        <Button size="xs">Button text</Button>
+        <Button size="sm">Button text</Button>
+        <Button size="md">Button text</Button>
+        <Button size="lg">Button text</Button>
+        <Button size="xl">Button text</Button>
+      </div>
+      <div className="flex items-start gap-2">
+        <Button size="xs" variant="secondary">
           Button text
         </Button>
-        <Button size="sm" variant="dark">
+        <Button size="sm" variant="secondary">
           Button text
         </Button>
-        <Button size="md" variant="dark">
+        <Button size="md" variant="secondary">
           Button text
         </Button>
-        <Button size="lg" variant="dark">
+        <Button size="lg" variant="secondary">
           Button text
         </Button>
-        <Button size="xl" variant="dark">
+        <Button size="xl" variant="secondary">
           Button text
         </Button>
       </div>
-      <div className="flex items-start">
-        <Button size="xs" variant="gray">
+      <div className="flex items-start gap-2">
+        <Button size="xs" variant="outline">
           Button text
         </Button>
-        <Button size="sm" variant="gray">
+        <Button size="sm" variant="outline">
           Button text
         </Button>
-        <Button size="md" variant="gray">
+        <Button size="md" variant="outline">
           Button text
         </Button>
-        <Button size="lg" variant="gray">
+        <Button size="lg" variant="outline">
           Button text
         </Button>
-        <Button size="xl" variant="gray">
-          Button text
-        </Button>
-      </div>
-      <div className="flex items-start">
-        <Button size="xs" variant="white">
-          Button text
-        </Button>
-        <Button size="sm" variant="white">
-          Button text
-        </Button>
-        <Button size="md" variant="white">
-          Button text
-        </Button>
-        <Button size="lg" variant="white">
-          Button text
-        </Button>
-        <Button size="xl" variant="white">
+        <Button size="xl" variant="outline">
           Button text
         </Button>
       </div>
-      <div className="flex items-start">
-        <Button size="xs" variant="danger">
+      <div className="flex items-start gap-2">
+        <Button size="xs" variant="destructive">
           Button text
         </Button>
-        <Button size="sm" variant="danger">
+        <Button size="sm" variant="destructive">
           Button text
         </Button>
-        <Button size="md" variant="danger">
+        <Button size="md" variant="destructive">
           Button text
         </Button>
-        <Button size="lg" variant="danger">
+        <Button size="lg" variant="destructive">
           Button text
         </Button>
-        <Button size="xl" variant="danger">
+        <Button size="xl" variant="destructive">
           Button text
         </Button>
       </div>
-      <div className="flex items-start">
+      <div className="flex items-start gap-2">
         <Button size="xs">
           <User />
         </Button>
@@ -89,23 +79,23 @@ export const ButtonComponent = () => {
           <User />
         </Button>
       </div>
-      <div className="flex items-start">
-        <Button size="xs" variant="dark">
+      <div className="flex items-start gap-2">
+        <Button size="xs">
           <User />
         </Button>
-        <Button size="sm" variant="gray">
+        <Button size="sm" variant="secondary">
           <User />
         </Button>
-        <Button size="md" variant="white">
+        <Button size="md" variant="outline">
           <User />
         </Button>
-        <Button size="lg" variant="danger">
+        <Button size="lg" variant="destructive">
           <User />
         </Button>
-        <Button size="lg" variant="icon" className="">
+        <Button size="lg" variant="icon">
           <User />
         </Button>
       </div>
-    </>
+    </div>
   );
 };

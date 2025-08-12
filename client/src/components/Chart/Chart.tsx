@@ -160,7 +160,7 @@ export const ContractsChart: FC<Props> = ({ renterId }) => {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-3 border border-gray-300 rounded shadow-lg">
+        <div className="bg-outline p-3 border border-gray-300 rounded shadow-lg">
           <p className="font-semibold text-gray-800">{label}</p>
           {payload.map((pld: any, index: number) => (
             <p key={index} style={{ color: pld.color }} className="text-sm">

@@ -46,10 +46,6 @@ export default {
           dark: '#64748B',
         },
 
-        primary: {
-          DEFAULT: '#457B9D',
-          dark: '#60A5FA',
-        },
         'primary-foreground': '#FFFFFF',
 
         secondary: {
