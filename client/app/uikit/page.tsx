@@ -1,6 +1,6 @@
-import { ButtonComponent } from '@/components/Examples/ButtonComponent/ButtonComponent';
-import { CardComponent } from '@/components/Examples/CardComponent/CardComponent';
-import { ControlButtons } from '@/components/Examples/ControlButtons/ControlButtons';
+import { ButtonComponent } from '@/components/Examples/ButtonComponent';
+import { CardComponent } from '@/components/Examples/CardComponent';
+import { ControlButtons } from '@/components/Examples/ControlButtons';
 
 export default function Page() {
   return (
