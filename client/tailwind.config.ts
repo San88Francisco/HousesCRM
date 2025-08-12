@@ -46,7 +46,6 @@ export default {
           dark: '#64748B',
         },
 
-        primary: 'var(--primary)',
         'primary-foreground': '#FFFFFF',
 
         secondary: {
