@@ -11,7 +11,7 @@ import { ROUTES } from '@/routes';
 import { useErrorToast } from '@/hooks/use-error-toast';
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { ThemeDropdown } from '@/components/ThemeDropDown/ThemeDropDown';
+import { ThemeDropDown } from '@/components/ThemeDropDown';
 import { motion } from 'framer-motion';
 import { loginSchema, loginDefaultValues } from '@/validation/login/login';
 import { LoginRequest } from '@/types/services/login';
@@ -86,7 +86,7 @@ export default function Page() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1, ease: 'easeInOut' }}
       >
-        <ThemeDropdown className="border-secondary-dark text-secondary-dark" />
+        <ThemeDropDown className="border-secondary-dark text-secondary-dark" />
       </motion.div>
     </div>
   );

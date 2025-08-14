@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import { itemsNav } from '@/constants/sidebarNavItems';
 import Link from 'next/link';
-import { ThemeDropdown } from '../ThemeDropDown/ThemeDropDown';
+import { ThemeDropDown } from '../ThemeDropDown';
 
 export function AppSidebar() {
   return (
@@ -38,7 +38,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <div className="p-4 border-t w-full text-center">
-        <ThemeDropdown />
+        <ThemeDropDown />
       </div>
     </Sidebar>
   );
