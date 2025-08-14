@@ -8,6 +8,8 @@ export default function Page() {
       <ButtonComponent />
       <CardComponent />
       <ControlButtons />
+
+      <div className="text-center">Test text</div>
     </div>
   );
 }

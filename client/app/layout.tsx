@@ -11,6 +11,7 @@ import { CurrencyProvider } from '@/context/CurrencyContext';
 import { Provider } from 'react-redux';
 import store from '@/store/store';
 import cookies from 'js-cookie';
+import { ROUTES } from '@/routes';
 
 export default function RootLayout({
   children,
@@ -26,7 +27,7 @@ export default function RootLayout({
     const token = cookies.get('accessToken');
 
     if (!token) {
-      router.push('/login');
+      router.push(ROUTES.UIKIT);
     }
   }, [router]);
 
