@@ -7,12 +7,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/hooks/useTheme';
 import { themeOptions } from '@/constants/themeOptions/themeOptions';
+import { FC } from 'react';
 
-type ThemeDropdownProps = {
+type Props = {
   className?: string;
 };
 
-export function ThemeDropdown({ className }: ThemeDropdownProps) {
+export const ThemeDropDown: FC<Props> = ({ className }) => {
   const { theme, changeTheme } = useTheme();
 
   const current = themeOptions.find(opt => opt.value === theme);
@@ -41,4 +42,4 @@ export function ThemeDropdown({ className }: ThemeDropdownProps) {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};

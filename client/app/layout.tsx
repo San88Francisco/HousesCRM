@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { ReactNode, useState, useEffect } from 'react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/Sidebar/Sidebar';
+import { AppSidebar } from '@/components/Sidebar';
 import { usePathname, useRouter } from 'next/navigation';
 import { noSidebarRoutes } from '@/constants/noSidebarRoutes';
 import { CurrencyProvider } from '@/context/CurrencyContext';
