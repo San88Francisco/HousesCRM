@@ -11,10 +11,7 @@ const checkboxVariants = cva(
     variants: {
       variant: {
         default:
-          'border-gray-200 text-gray-900 ' +
-          'data-[state=checked]:bg-gray-900 data-[state=checked]:border-gray-900 data-[state=checked]:text-white ' +
-          'dark:border-gray-500 ' +
-          'dark:data-[state=checked]:bg-indigo-200 dark:data-[state=checked]:border-indigo-200 dark:data-[state=checked]:text-gray-900',
+          'border-border data-[state=checked]:bg-active-bg data-[state=checked]:border-active-bg data-[state=checked]:text-background',
       },
       size: {
         sm: 'h-3 w-3',
@@ -53,14 +50,14 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
             'absolute inset-0 flex items-center justify-center',
             'transition-all duration-300 ease-in-out',
             'opacity-0 scale-90 data-[state=checked]:opacity-100 data-[state=checked]:scale-100',
-            'text-white dark:text-gray-900',
+            'text-active-text',
           )}
         >
           <Check className="w-2.5 h-2.5 stroke-[3.5]" />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
 
-      {label && <span className="text-black/60 dark:text-white/60">{label}</span>}
+      {label && <span className="text-muted">{label}</span>}
     </label>
   ),
 );

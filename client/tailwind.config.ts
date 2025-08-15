@@ -26,14 +26,23 @@ export default {
         xxl: '1536px',
       },
       colors: {
+        background: 'var(--background)',
         foreground: 'var(--foreground)',
         muted: 'var(--muted-text)',
         'muted-foreground': 'var(--muted-foreground)',
         border: 'var(--border)',
-        red: '--red',
+        text: 'var(--text)',
+        'active-bg': 'var(--active-bg)',
+        'muted-text': 'var(--muted-text)',
+        'bg-button': 'var(--bg-button)',
+        'bg-input': 'var(--bg-input)',
+        'active-border': 'var(--active-border)',
+
+        red: 'var(--red)',
         blue: 'var(--blue)',
-        'blue-medium': 'var( --blue-medium)',
+        'blue-medium': 'var(--blue-medium)',
         'blue-light': 'var(--blue-light)',
+
         purple: 'var(--purple)',
         'purple-medium': 'var(--purple-medium)',
         'purple-light': 'var(--purple-light)',
@@ -43,6 +52,19 @@ export default {
         'green-light': 'var(--green-light)',
 
         yellow: 'var(--yellow)',
+
+        dark: 'var(--dark)',
+        'dark-medium': 'var(--dark-medium)',
+        'dark-light': 'var(--dark-light)',
+        'dark-lightest': 'var(--dark-lightest)',
+
+        white: 'var(--white)',
+        'white-medium': 'var(--white-medium)',
+        'white-light': 'var(--white-light)',
+        'white-lightest': 'var(--white-lightest)',
+
+        gray: 'var(--gray)',
+        'gray-medium': 'var(--gray-medium)',
       },
       fontSize: {
         xs: '12px',

@@ -12,7 +12,6 @@ export default function Page() {
       <ControlButtons />
       <TabsComponent />
       <InputComponent />
-      <div className="text-center">Test text</div>
     </div>
   );
 }
