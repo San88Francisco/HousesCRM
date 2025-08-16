@@ -54,7 +54,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {error && iconWithError && <CircleAlert className="text-red" />}
         </div>
         {helperText && (
-          <p className={`mt-1 text-sm ${error ? 'text-red' : 'text-muted '}`}>{helperText}</p>
+          <p className={cn('mt-1 text-sm', error ? 'text-red' : 'text-muted')}>{helperText}</p>
         )}
       </div>
     );
