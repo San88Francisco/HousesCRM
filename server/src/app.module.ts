@@ -20,7 +20,7 @@ import { TestModule } from './test-module/test.module'
       useFactory: (configService: AppConfigService) => ({
         ...createDatabaseConfig(configService),
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
       }),
     }),
   ],

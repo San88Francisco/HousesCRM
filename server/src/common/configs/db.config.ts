@@ -9,7 +9,7 @@ export default registerAs('database', (): DbConfig => {
     port: Number(process.env.POSTGRES_PORT) || 5432,
     username: process.env.POSTGRES_USER || 'dev_user',
     password: String(process.env.POSTGRES_PASSWORD),
-    database: process.env.POSTGRES_DB || 'dev_db',
+    database: process.env.DB || 'dev_db',
   })
 
   const errors = validateSync(config, { skipMissingProperties: false })

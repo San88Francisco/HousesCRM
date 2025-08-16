@@ -1,10 +1,10 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: Houses-CRM
+    container_name: 'postgres-DEV'
     restart: always
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "5432:5432"
     env_file:
       - .env
     volumes:
