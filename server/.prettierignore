@@ -1,5 +1,7 @@
 node_modules
 dist/
+src/db/migrations/*
+dist/db/migrations/*
 build/
 *.lock
 package-lock.json

@@ -1,18 +1,20 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger'
+import { SwaggerModule, OpenAPIObject } from '@nestjs/swagger'
+import { AppConfigService } from './common/services/app-config.service'
+import { AppConfig } from './common/schemas/app-config.schema'
+import { swaggerConfig } from './common/configs/swagger.config'
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule)
-  const port = Number(process.env.PORT) || 8000
+  const appConfig = app.get(AppConfigService).get<AppConfig>('app')
 
-  const config: Omit<OpenAPIObject, 'paths'> = new DocumentBuilder()
-    .setTitle('Houses CRM API Documentation')
-    .setDescription('API for managing real estate data and related information.')
-    .setVersion('1.0')
-    .build()
+  if (!appConfig) {
+    throw new Error('App configuration not found')
+  }
+  const { port } = appConfig
 
-  const document: OpenAPIObject = SwaggerModule.createDocument(app, config)
+  const document: OpenAPIObject = SwaggerModule.createDocument(app, swaggerConfig)
   SwaggerModule.setup('api', app, document)
 
   await app.listen(port)
