@@ -10,15 +10,11 @@ const radioGroupItem = cva([
   'relative aspect-square h-4 w-4 rounded-full border ring-offset-background',
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
   'disabled:cursor-not-allowed disabled:opacity-50',
-  'border-gray-200 bg-gray-900/5',
-  'dark:border-gray-500 dark:bg-gray-700',
-  'data-[state=checked]:bg-gray-900 data-[state=checked]:border-gray-900 data-[state=checked]:text-primary-foreground',
-  'dark:data-[state=checked]:bg-indigo-200 dark:data-[state=checked]:border-indigo-200',
+  'border-border',
+  'data-[state=checked]:bg-active-bg data-[state=checked]:border-active-bg data-[state=checked]:text-background',
 ]);
 
-const radioGroupIndicator = cva([
-  'absolute inset-0 flex items-center justify-center text-current dark:text-gray-900',
-]);
+const radioGroupIndicator = cva(['absolute inset-0 flex items-center justify-center text-current']);
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,

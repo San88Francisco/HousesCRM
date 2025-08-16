@@ -9,14 +9,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          'bg-gray-700 text-white hover:bg-gray-800 active:bg-gray-700 active:border-gray-400 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-800 dark:active:bg-gray-700 dark:active:border-gray-400',
+        default: 'bg-gray text-white hover:bg-gray-medium active:bg-gray active:border-dark-light',
         secondary:
-          'bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-200 active:border-gray-100  dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 dark:active:bg-gray-800 dark:active:border-gray-600',
+          'bg-muted-foreground text-text hover:bg-bg-button active:bg-muted-foreground active:border-bg-button',
         outline:
-          'bg-white border-gray-200 text-black hover:bg-gray-100 active:bg-white active:border-sky-100 dark:bg-gray-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:active:bg-gray-900 dark:active:border-sky-500',
+          'bg-background border-border text-text hover:bg-foreground active:bg-background active:border-blue-light',
         destructive:
-          'bg-red-100 border-red-500 text-red-500 hover:bg-red-500 hover:text-white active:bg-red-500 active:border-red-200 dark:bg-red-950 dark:border-red-700 dark:text-red-200 dark:hover:bg-red-700 dark:hover:text-white dark:active:bg-red-700 dark:active:border-red-500',
+          'bg-background border-red text-red hover:bg-red hover:text-white active:bg-red active:border-red',
         icon: 'text-inherit hover:opacity-70',
       },
       size: {

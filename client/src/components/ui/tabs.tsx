@@ -52,11 +52,11 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'relative inline-flex items-center justify-center whitespace-nowrap rounded-sm font-medium transition-all duration-300 text-zinc-400 dark:text-white/40',
+      'relative inline-flex items-center justify-center whitespace-nowrap rounded-sm font-medium transition-all duration-300 text-muted',
 
-      'after:absolute after:bottom-0 after:left-2 after:right-2 after:h-[var(--tabs-after-h)] after:rounded-full after:bg-zinc-900 dark:after:bg-white after:transition-transform after:duration-300 after:scale-x-0 after:origin-center',
+      'after:absolute after:bottom-0 after:left-2 after:right-2 after:h-[var(--tabs-after-h)] after:rounded-full after:bg-text after:transition-transform after:duration-300 after:scale-x-0 after:origin-center',
 
-      'data-[state=active]:text-zinc-900 dark:data-[state=active]:text-white data-[state=active]:after:scale-x-100',
+      'data-[state=active]:text-text data-[state=active]:after:scale-x-100',
 
       'px-[var(--tabs-trigger-px)] py-[var(--tabs-trigger-py)] text-[length:var(--tabs-trigger-fs)]',
       className,
