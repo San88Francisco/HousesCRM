@@ -1,4 +1,5 @@
 import { ButtonComponent } from '@/components/Examples/ButtonComponent';
+import { CalendarComponent } from '@/components/Examples/CalendarComponent';
 import { CardComponent } from '@/components/Examples/CardComponent';
 import { ControlButtons } from '@/components/Examples/ControlButtons';
 import { InputComponent } from '@/components/Examples/InputComponent';
@@ -12,6 +13,7 @@ export default function Page() {
       <ControlButtons />
       <TabsComponent />
       <InputComponent />
+      <CalendarComponent />
     </div>
   );
 }
