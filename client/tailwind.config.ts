@@ -26,63 +26,45 @@ export default {
         xxl: '1536px',
       },
       colors: {
-        foreground: {
-          DEFAULT: '#1A1A1A',
-          dark: '#F1F5F9',
-        },
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        muted: 'var(--muted-text)',
+        'muted-foreground': 'var(--muted-foreground)',
+        border: 'var(--border)',
+        text: 'var(--text)',
+        'active-bg': 'var(--active-bg)',
+        'muted-text': 'var(--muted-text)',
+        'bg-button': 'var(--bg-button)',
+        'bg-input': 'var(--bg-input)',
+        'active-border': 'var(--active-border)',
 
-        text: {
-          DEFAULT: '#4b5563',
-          dark: '#94A3B8',
-        },
+        red: 'var(--red)',
+        blue: 'var(--blue)',
+        'blue-medium': 'var(--blue-medium)',
+        'blue-light': 'var(--blue-light)',
 
-        muted: {
-          DEFAULT: '#E5E7EB',
-          dark: '#1E293B',
-        },
+        purple: 'var(--purple)',
+        'purple-medium': 'var(--purple-medium)',
+        'purple-light': 'var(--purple-light)',
+        'purple-lightest': 'var(--purple-lightest)',
 
-        'muted-foreground': {
-          DEFAULT: '#6B7280',
-          dark: '#64748B',
-        },
+        green: 'var(--green)',
+        'green-light': 'var(--green-light)',
 
-        primary: {
-          DEFAULT: '#457B9D',
-          dark: '#60A5FA',
-        },
-        'primary-foreground': '#FFFFFF',
+        yellow: 'var(--yellow)',
 
-        secondary: {
-          DEFAULT: '#A8DADC',
-          dark: '#334155',
-        },
+        dark: 'var(--dark)',
+        'dark-medium': 'var(--dark-medium)',
+        'dark-light': 'var(--dark-light)',
+        'dark-lightest': 'var(--dark-lightest)',
 
-        'secondary-foreground': {
-          DEFAULT: '#1D3557',
-          dark: '#F1F5F9',
-        },
+        white: 'var(--white)',
+        'white-medium': 'var(--white-medium)',
+        'white-light': 'var(--white-light)',
+        'white-lightest': 'var(--white-lightest)',
 
-        border: {
-          DEFAULT: '#D1D5DB',
-          dark: '#374151',
-        },
-
-        destructive: {
-          DEFAULT: '#DC2626',
-          dark: '#EF4444',
-        },
-        'destructive-foreground': '#FFFFFF',
-
-        blue: {
-          light: '#A8DADC',
-          DEFAULT: '#457B9D',
-          dark: '#1D3557',
-        },
-
-        ring: {
-          DEFAULT: '#0ea5e9',
-          dark: '#0ea5e9',
-        },
+        gray: 'var(--gray)',
+        'gray-medium': 'var(--gray-medium)',
       },
       fontSize: {
         xs: '12px',

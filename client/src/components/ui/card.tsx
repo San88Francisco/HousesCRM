@@ -10,25 +10,25 @@ import {
 
 const cardVariants = {
   default: {
-    base: 'bg-gray-100 dark:bg-white/5 text-zinc-900 dark:text-white',
-    title: 'text-zinc-900 dark:text-white',
-    description: 'text-zinc-600 dark:text-zinc-400',
-    content: 'text-zinc-900 dark:text-white',
-    footer: 'text-zinc-900 dark:text-white',
+    base: 'bg-foreground ',
+    title: 'text-text',
+    description: 'text-muted',
+    content: 'text-text',
+    footer: 'text-text',
   },
   sky: {
-    base: 'bg-sky-100 dark:bg-sky-100 text-zinc-900',
-    title: 'text-zinc-900',
-    description: 'text-zinc-700 dark:text-zinc-700',
-    content: 'text-zinc-900',
-    footer: 'text-zinc-900',
+    base: 'bg-blue-light',
+    title: 'text-dark',
+    description: 'text-muted',
+    content: 'text-dark',
+    footer: 'text-dark',
   },
   purple: {
-    base: 'bg-blue-100 dark:bg-blue-100 text-zinc-900',
-    title: 'text-zinc-900',
-    description: 'text-zinc-700 dark:text-zinc-700',
-    content: 'text-zinc-900',
-    footer: 'text-zinc-900',
+    base: 'bg-purple-lightest',
+    title: 'text-dark',
+    description: 'text-muted',
+    content: 'text-dark',
+    footer: 'text-dark',
   },
 };
 
