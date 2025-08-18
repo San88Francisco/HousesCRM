@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/** === <COLOR NAME> === */
+/* --<color>-darkest: <#hex>;   найтемніший */
+/* --<color>-dark: <#hex>;      темний */
+/* --<color>: <#hex>;           базовий */
+/* --<color>-medium: <#hex>;    середній */
+/* --<color>-light: <#hex>;     світлий */
+/* --<color>-lightest: <#hex>;  найлегший */
+
 :root {
   --background: #ffffff;
   --foreground: #f7f9fb;
