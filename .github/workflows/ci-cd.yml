@@ -21,45 +21,105 @@ jobs:
 👤 Автор: ${{ github.actor }}
 🔗 https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
 
-  test:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test -- --ci
+
+  e2e:
+    name: E2E (docker-compose)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Run docker compose (tests/healthchecks)
+      - name: Start stack
         run: |
-          docker compose -f docker-compose.yml up -d
-          sleep 10
+          docker compose -f docker-compose.yml up -d --build
           docker compose ps
 
-      - name: Notify failure (tests)
+      - name: Wait for services to be running
+        run: |
+          set -euo pipefail
+          end=$((SECONDS + 300)) # 5 хв
+          while [ $SECONDS -lt $end ]; do
+            # Вважаємо успіхом, коли всі сервіси у стані "running"
+            STATES=$(docker compose ps --format '{{.Service}} {{.State}}' | awk '{print $2}' | sort | uniq)
+            echo "States: ${STATES}"
+            if echo "$STATES" | grep -q '^running$' && [ "$(echo "$STATES" | wc -l)" -eq 1 ]; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "⏰ Не дочекались стану running у всіх сервісів."
+          exit 1
+
+      - name: Run E2E tests (if present)
+        run: |
+          # якщо немає скрипта e2e — крок пройде як no-op
+          if npm run | grep -q "^  e2e"; then
+            npm ci
+            npm run e2e
+          else
+            echo "No e2e script found. Skipping."
+          fi
+
+      - name: Dump docker logs on failure
         if: failure()
         run: |
-          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            --data-urlencode chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-            --data-urlencode "text=❌ Тести не пройшли у ${GITHUB_REF_NAME}
-🔗 https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          mkdir -p logs
+          docker compose logs --no-color > logs/compose.log || true
+
+      - name: Upload logs artifact (failure only)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-docker-logs
+          path: logs/compose.log
 
   deploy:
+    name: Deploy to Koyeb
     if: github.ref == 'refs/heads/develop'
-    needs: test
+    needs: [lint, unit, e2e]
     runs-on: ubuntu-latest
 
+    env:
+      TIMEOUT: "900"   # 15 хв.
+      SLEEP: "5"
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Validate required secrets
         run: |
           missing=0
           for v in KOYEB_API_KEY KOYEB_SERVICE_ID TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID; do
             if [ -z "${{ secrets[format('{0}', v)] }}" ]; then
-              echo "::error::Missing secret: $v"
-              missing=1
+              echo "::error::Missing secret: $v"; missing=1
             fi
           done
           [ $missing -eq 0 ] || exit 1
@@ -69,6 +129,7 @@ jobs:
           KOYEB_API_KEY: ${{ secrets.KOYEB_API_KEY }}
           KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
         run: |
+          set -euo pipefail
           curl -fsS -X POST "https://app.koyeb.com/v1/services/${KOYEB_SERVICE_ID}/deployments" \
             -H "Authorization: Bearer ${KOYEB_API_KEY}" \
             -H "Content-Type: application/json" \
@@ -80,33 +141,34 @@ jobs:
           sudo apt-get install -y jq
 
       - name: Wait for Koyeb deployment to be healthy
+        id: wait_koyeb
         env:
           KOYEB_API_KEY: ${{ secrets.KOYEB_API_KEY }}
           KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
-          TIMEOUT: "900"
-          SLEEP: "5"
         run: |
           set -euo pipefail
-          echo "⏳ Очікуємо на HEALTHY деплой сервісу ${KOYEB_SERVICE_ID}..."
-          end=$((SECONDS + TIMEOUT))
+          echo "⏳ Очікуємо HEALTHY деплой сервісу ${KOYEB_SERVICE_ID}..."
+          end=$((SECONDS + $TIMEOUT))
+          DEPLOY_ID=""
           STATUS="UNKNOWN"
           while [ $SECONDS -lt $end ]; do
-            RESP=$(curl -fsS \
-              -H "Authorization: Bearer ${KOYEB_API_KEY}" \
+            RESP=$(curl -fsS -H "Authorization: Bearer ${KOYEB_API_KEY}" \
               "https://app.koyeb.com/v1/deployments?service_id=${KOYEB_SERVICE_ID}&limit=1")
-
             STATUS=$(echo "$RESP" | jq -r '.deployments[0].status // .deployments[0].state // "UNKNOWN"' | tr '[:lower:]' '[:upper:]')
             DEPLOY_ID=$(echo "$RESP" | jq -r '.deployments[0].id // ""')
             echo "• Deployment ${DEPLOY_ID:-N/A} статус: ${STATUS}"
-
             case "$STATUS" in
-              HEALTHY) exit 0 ;;
-              ERROR|UNHEALTHY|STOPPED) exit 1 ;;
+              HEALTHY) break ;;
+              ERROR|UNHEALTHY|STOPPED) echo "status=${STATUS}" >> $GITHUB_OUTPUT; exit 1 ;;
               *) sleep "$SLEEP" ;;
             esac
           done
-          echo "⏰ Таймаут очікування деплою."
-          exit 1
+          if [ "$STATUS" != "HEALTHY" ]; then
+            echo "status=TIMEOUT" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "deploy_id=${DEPLOY_ID}" >> $GITHUB_OUTPUT
+          echo "status=${STATUS}" >> $GITHUB_OUTPUT
 
       - name: Notify success (deploy)
         if: success()
@@ -126,7 +188,9 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          MSG="🚨 Деплой провалено у ${GITHUB_REF_NAME} (STATUS: ${STATUS})"
+          REASON="${{ steps.wait_koyeb.outputs.status }}"
+          [ -z "$REASON" ] && REASON="UNKNOWN"
+          MSG="🚨 Деплой провалено у ${GITHUB_REF_NAME} (STATUS: ${REASON})"
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode chat_id="${TELEGRAM_CHAT_ID}" \
             --data-urlencode "text=${MSG}
