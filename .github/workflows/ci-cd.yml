@@ -1,43 +1,3 @@
-name: CI/CD Pipeline
-
-on:
-  push:
-    branches:
-      - '**'
-  pull_request:
-    branches:
-      - '**'
-
-jobs:
-  notify-on-pr:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify about pull request
-        run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="📥 Новий Pull Request: ${{ github.event.pull_request.title }} 👤 Автор: ${{ github.actor }} 🔗 https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Run docker compose (tests/healthchecks)
-        run: |
-          docker compose -f docker-compose.yml up -d
-          sleep 10
-          docker compose ps
-      - name: Notify failure (tests)
-        if: failure()
-        run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="❌ Тести не пройшли у *${{ github.ref_name }}* 🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
   deploy:
     if: github.ref == 'refs/heads/develop'
     needs: test
@@ -46,42 +6,46 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # ⬇️ НОВЕ: деплой без вебхука — через Koyeb CLI + очікування HEALTHY
-      - name: Install Koyeb CLI + jq
+      - name: Install jq
         run: |
-          curl -fsSL https://get.koyeb.com | sh
-          sudo mv koyeb /usr/local/bin/
-          sudo apt-get update && sudo apt-get install -y jq
+          sudo apt-get update
+          sudo apt-get install -y jq curl ca-certificates
 
-      - name: Redeploy service on Koyeb and wait for HEALTHY
+      # 1) Тригеримо redeploy через REST
+      - name: Trigger redeploy (Koyeb REST)
         env:
-          KOYEB_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}   # ← твій API токен з Koyeb
-          KOYEB_APP: troubled-paula
-          KOYEB_SERVICE_NAME: housescrm
+          KOYEB_API_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
+          KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
+        run: |
+          set -euo pipefail
+          curl -sS -X POST \
+            -H "Authorization: Bearer $KOYEB_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://app.koyeb.com/v1/services/$KOYEB_SERVICE_ID/redeploy" \
+            -o /tmp/redeploy.json
+          echo "Redeploy triggered."
+
+      # 2) Опитуємо останній деплой сервісу, чекаємо HEALTHY
+      - name: Wait for deployment to be HEALTHY (Koyeb REST)
+        env:
+          KOYEB_API_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
+          KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
           TIMEOUT_SECONDS: "900"   # 15 хв
           SLEEP_SECONDS: "10"
         shell: bash
         run: |
           set -euo pipefail
-          export KOYEB_TOKEN
 
-          # Знайти ID сервісу за ім'ям та app
-          SERVICE_ID="$(koyeb services list --app "$KOYEB_APP" -o json | jq -r --arg n "$KOYEB_SERVICE_NAME" '.services[] | select(.name==$n) .id')"
-          if [[ -z "${SERVICE_ID}" || "${SERVICE_ID}" == "null" ]]; then
-            echo "Не знайдено сервіс $KOYEB_APP/$KOYEB_SERVICE_NAME"
-            exit 1
-          fi
-          echo "Service ID: ${SERVICE_ID}"
-
-          # Тригеримо redeploy
-          echo "▶️ Запускаю redeploy…"
-          koyeb services redeploy "${SERVICE_ID}"
-
-          # Чекаємо поки останній деплой стане HEALTHY
-          echo "⏳ Очікуємо статус HEALTHY…"
           start_ts=$(date +%s)
+          echo "⏳ Очікуємо HEALTHY…"
+
           while true; do
-            STATUS="$(koyeb deployments list --service "${SERVICE_ID}" -o json | jq -r '.deployments[0].status')"
+            # Беремо найсвіжіший деплой цього сервісу та читаємо його статус
+            DEPLOY_JSON="$(curl -sS \
+              -H "Authorization: Bearer $KOYEB_API_TOKEN" \
+              "https://app.koyeb.com/v1/deployments?service_id=$KOYEB_SERVICE_ID&page_size=1")"
+
+            STATUS="$(echo "$DEPLOY_JSON" | jq -r '.deployments[0].status')"
             echo "Поточний статус: ${STATUS}"
 
             if [[ "${STATUS}" == "HEALTHY" ]]; then
@@ -89,7 +53,7 @@ jobs:
               break
             fi
 
-            if [[ "${STATUS}" == "UNHEALTHY" || "${STATUS}" == "FAILED" ]]; then
+            if [[ "${STATUS}" == "UNHEALTHY" || "${STATUS}" == "FAILED" || "${STATUS}" == "ERROR" ]]; then
               echo "❌ Deployment status: ${STATUS}"
               exit 1
             fi
