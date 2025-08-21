@@ -1,79 +1,133 @@
-deploy:
-  if: github.ref == 'refs/heads/develop'
-  needs: test
-  runs-on: ubuntu-latest
+name: CI/CD Pipeline
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
 
-    
-    - name: Validate required secrets
-      run: |
-        missing=0
-        for v in KOYEB_API_KEY KOYEB_SERVICE_ID TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID; do
-          if [ -z "${{ secrets[format('{0}', v)] }}" ]; then
-            echo "::error::Missing secret: $v"
-            missing=1
-          fi
-        done
-        [ $missing -eq 0 ] || exit 1
+jobs:
+  notify-on-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify about pull request
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            --data-urlencode chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            --data-urlencode "text=📥 Новий Pull Request: ${{ github.event.pull_request.title }}
+👤 Автор: ${{ github.actor }}
+🔗 https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
 
-    
-    - name: Trigger deploy on Koyeb (via API)
-      env:
-        KOYEB_API_KEY: ${{ secrets.KOYEB_API_KEY }}
-        KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
-      run: |
-        curl -fsS -X POST "https://app.koyeb.com/v1/services/${KOYEB_SERVICE_ID}/deployments" \
-          -H "Authorization: Bearer ${KOYEB_API_KEY}" \
-          -H "Content-Type: application/json" \
-          -d '{}'
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Install jq
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y jq
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Wait for Koyeb deployment to be healthy
-      env:
-        KOYEB_API_KEY: ${{ secrets.KOYEB_API_KEY }}
-        KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
-        TIMEOUT: "600"   
-        SLEEP: "5"       
-      run: |
-        set -euo pipefail
-        echo "⏳ Очікуємо на деплой сервісу ${KOYEB_SERVICE_ID}..."
-        end=$((SECONDS + TIMEOUT))
-        while [ $SECONDS -lt $end ]; do
-          RESP=$(curl -fsS -H "Authorization: Bearer ${KOYEB_API_KEY}" \
-            "https://app.koyeb.com/v1/deployments?service_id=${KOYEB_SERVICE_ID}&limit=1")
-          STATUS=$(echo "$RESP" | jq -r '.deployments[0].status // .deployments[0].state // "UNKNOWN"' | tr '[:lower:]' '[:upper:]')
-          DEPLOY_ID=$(echo "$RESP" | jq -r '.deployments[0].id // ""')
-          echo "• Deployment ${DEPLOY_ID:-N/A} статус: ${STATUS}"
-          case "$STATUS" in
-            HEALTHY) exit 0 ;;
-            ERROR|UNHEALTHY|STOPPED) exit 1 ;;
-            *) sleep "$SLEEP" ;;
-          esac
-        done
-        echo "⏰ Таймаут очікування деплою."
-        exit 1
+      - name: Run docker compose (tests/healthchecks)
+        run: |
+          docker compose -f docker-compose.yml up -d
+          sleep 10
+          docker compose ps
 
-    - name: Notify success (deploy)
-      if: success()
-      run: |
-        curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d parse_mode=Markdown \
-          -d text="✅ *Деплой успішний* у *${{ github.ref_name }}*
-          🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Notify failure (tests)
+        if: failure()
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            --data-urlencode chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            --data-urlencode "text=❌ Тести не пройшли у ${GITHUB_REF_NAME}
+🔗 https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
-    - name: Notify failure (deploy)
-      if: failure()
-      run: |
-        curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d parse_mode=Markdown \
-          -d text="🚨 *Деплой провалено* у *${{ github.ref_name }}*
-          🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+  deploy:
+    if: github.ref == 'refs/heads/develop'
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Validate required secrets
+        run: |
+          missing=0
+          for v in KOYEB_API_KEY KOYEB_SERVICE_ID TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID; do
+            if [ -z "${{ secrets[format('{0}', v)] }}" ]; then
+              echo "::error::Missing secret: $v"
+              missing=1
+            fi
+          done
+          [ $missing -eq 0 ] || exit 1
+
+      - name: Trigger deploy on Koyeb (API)
+        env:
+          KOYEB_API_KEY: ${{ secrets.KOYEB_API_KEY }}
+          KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
+        run: |
+          curl -fsS -X POST "https://app.koyeb.com/v1/services/${KOYEB_SERVICE_ID}/deployments" \
+            -H "Authorization: Bearer ${KOYEB_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d '{}'
+
+      - name: Install jq
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+      - name: Wait for Koyeb deployment to be healthy
+        env:
+          KOYEB_API_KEY: ${{ secrets.KOYEB_API_KEY }}
+          KOYEB_SERVICE_ID: ${{ secrets.KOYEB_SERVICE_ID }}
+          TIMEOUT: "900"
+          SLEEP: "5"
+        run: |
+          set -euo pipefail
+          echo "⏳ Очікуємо на HEALTHY деплой сервісу ${KOYEB_SERVICE_ID}..."
+          end=$((SECONDS + TIMEOUT))
+          STATUS="UNKNOWN"
+          while [ $SECONDS -lt $end ]; do
+            RESP=$(curl -fsS \
+              -H "Authorization: Bearer ${KOYEB_API_KEY}" \
+              "https://app.koyeb.com/v1/deployments?service_id=${KOYEB_SERVICE_ID}&limit=1")
+
+            STATUS=$(echo "$RESP" | jq -r '.deployments[0].status // .deployments[0].state // "UNKNOWN"' | tr '[:lower:]' '[:upper:]')
+            DEPLOY_ID=$(echo "$RESP" | jq -r '.deployments[0].id // ""')
+            echo "• Deployment ${DEPLOY_ID:-N/A} статус: ${STATUS}"
+
+            case "$STATUS" in
+              HEALTHY) exit 0 ;;
+              ERROR|UNHEALTHY|STOPPED) exit 1 ;;
+              *) sleep "$SLEEP" ;;
+            esac
+          done
+          echo "⏰ Таймаут очікування деплою."
+          exit 1
+
+      - name: Notify success (deploy)
+        if: success()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          MSG="Koyeb - troubled-paula/housescrm - Deployment is healthy."
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode chat_id="${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=${MSG}
+🔗 https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+      - name: Notify failure (deploy)
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          MSG="🚨 Деплой провалено у ${GITHUB_REF_NAME} (STATUS: ${STATUS})"
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode chat_id="${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=${MSG}
+🔗 https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
