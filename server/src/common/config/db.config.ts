@@ -9,6 +9,7 @@ export const createDbConfig = (configService: ConfigService): TypeOrmModuleOptio
   password: configService.getOrThrow<string>('POSTGRES_PASSWORD'),
   database: configService.getOrThrow<string>('DB'),
   synchronize: configService.get<string>('NODE_ENV') === 'development',
+  ssl: configService.get<string>('NODE_ENV') !== 'development',
   logging: true,
   autoLoadEntities: true,
 })

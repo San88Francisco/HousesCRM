@@ -2,11 +2,14 @@ import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { createDbConfig } from './common/config/db.config'
-import { TestModule } from './test-module/test.module'
+import { UsersModule } from './users/users.module'
+import { RefreshTokenModule } from './refresh-token/refresh-token.module'
+import { HousesModule } from './houses/houses.module'
+import { ContractsModule } from './contracts/contracts.module'
+import { RentersModule } from './renters/renters.module'
 
 @Module({
   imports: [
-    TestModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -15,6 +18,11 @@ import { TestModule } from './test-module/test.module'
       inject: [ConfigService],
       useFactory: createDbConfig,
     }),
+    UsersModule,
+    RefreshTokenModule,
+    HousesModule,
+    ContractsModule,
+    RentersModule,
   ],
 })
 export class AppModule {}
