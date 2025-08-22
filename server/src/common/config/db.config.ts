@@ -12,5 +12,4 @@ export const createDbConfig = (configService: ConfigService): TypeOrmModuleOptio
   ssl: configService.get<string>('NODE_ENV') !== 'development',
   logging: true,
   autoLoadEntities: true,
-  ssl: configService.get<string>('NODE_ENV') !== 'development',
 })
