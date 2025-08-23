@@ -5,7 +5,6 @@ import { swaggerConfig } from './common/config/swagger.config'
 import { ConfigService } from '@nestjs/config'
 import { ValidationPipe, UnprocessableEntityException, ValidationError } from '@nestjs/common'
 
-// додали явний тип повернення
 const flattenErrors = (
   errs: ValidationError[],
   parent = '',
