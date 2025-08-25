@@ -3,24 +3,9 @@ import { AppModule } from './app.module'
 import { SwaggerModule } from '@nestjs/swagger'
 import { swaggerConfig } from './common/config/swagger.config'
 import { ConfigService } from '@nestjs/config'
-import { ValidationPipe, UnprocessableEntityException, ValidationError } from '@nestjs/common'
-
-const flattenErrors = (
-  errs: ValidationError[],
-  parent = '',
-  acc: Record<string, string> = {}
-): Record<string, string> => {
-  for (const e of errs) {
-    const path = parent ? `${parent}.${e.property}` : e.property
-    if (e.constraints) {
-      acc[path] = Object.values(e.constraints)[0]
-    }
-    if (e.children?.length) {
-      flattenErrors(e.children, path, acc)
-    }
-  }
-  return acc
-}
+import { ValidationPipe } from '@nestjs/common'
+import { DbExceptionFilter } from './common/filters/db-exception.filter'
+import { validationConfig } from './common/config/validation.config'
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule)
@@ -31,20 +16,8 @@ async function bootstrap(): Promise<void> {
 
   app.setGlobalPrefix('api')
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      stopAtFirstError: false,
-      validationError: { target: false, value: false },
-      exceptionFactory: (errors: ValidationError[]) =>
-        new UnprocessableEntityException({
-          error: 'Validation Error',
-          message: flattenErrors(errors),
-        }),
-    })
-  )
+  app.useGlobalPipes(new ValidationPipe(validationConfig))
+  app.useGlobalFilters(new DbExceptionFilter())
 
   await app.listen(port)
   // eslint-disable-next-line no-console
