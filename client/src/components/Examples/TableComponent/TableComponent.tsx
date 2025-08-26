@@ -3,6 +3,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -63,7 +64,7 @@ export const TableComponent = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-1/3">Invoice</TableHead>
+              <TableHead className="w-[100px]">Invoice</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Method</TableHead>
               <TableHead>Amount</TableHead>
@@ -79,6 +80,12 @@ export const TableComponent = () => {
               </TableRow>
             ))}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={3}>Total</TableCell>
+              <TableCell>$2,500.00</TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </CardContent>
     </Card>

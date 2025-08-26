@@ -16,10 +16,7 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn(
-      className,
-      'border-b-2 border-zinc-200 dark:border-zinc-400 text-zinc-400 max-h-10',
-    )}
+    className={cn(className, 'border-b-2 border-border text-muted max-h-10')}
     {...props}
   />
 ));
@@ -37,17 +34,25 @@ const TableFooter = React.forwardRef<
 >(({ className, ...props }, ref) => <tfoot ref={ref} className={cn(className)} {...props} />);
 TableFooter.displayName = 'TableFooter';
 
-const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTMLTableRowElement>>(
-  ({ className, children, ...props }, ref) => {
-    const count = React.Children.count(children);
+type TableRowVariant = 'default' | 'withData';
 
-    const template = `2fr ${'1fr '.repeat(count - 1).trim()}`;
+interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+  variant?: TableRowVariant;
+}
+
+const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
+  ({ className, children, variant = 'default', ...props }, ref) => {
+    const count = React.Children.count(children);
 
     return (
       <tr
         ref={ref}
-        className={cn('grid items-center place-content-center max-h-10 overflow-hidden', className)}
-        style={{ gridTemplateColumns: template }}
+        className={cn(
+          'grid items-center overflow-hidden',
+          variant === 'withData' && 'hover:bg-foreground rounded-lg',
+          className,
+        )}
+        style={{ gridTemplateColumns: `repeat(${count}, 1fr)` }}
         {...props}
       >
         {children}
@@ -55,15 +60,19 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
     );
   },
 );
-TableRow.displayName = 'TableRow';
 
+TableRow.displayName = 'TableRow';
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
 >(({ className, ...props }, ref) => (
   <th
     ref={ref}
-    className={cn('h-12 px-4 text-left align-middle font-medium flex items-center', className)}
+    className={cn(
+      'p-2 text-left align-middle font-medium',
+      'first:text-left text-right',
+      className,
+    )}
     {...props}
   />
 ));
@@ -73,9 +82,12 @@ const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement>
 >(({ className, ...props }, ref) => (
-  <td ref={ref} className={cn('p-4 align-middle ', className)} {...props} />
+  <td
+    ref={ref}
+    className={cn('p-2 align-middle', 'first:text-left text-right', className)}
+    {...props}
+  />
 ));
-TableCell.displayName = 'TableCell';
 TableCell.displayName = 'TableCell';
 
 const TableCaption = React.forwardRef<
