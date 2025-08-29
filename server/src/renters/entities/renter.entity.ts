@@ -1,5 +1,5 @@
 import { Contract } from 'src/contracts/entities/contract.entity'
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
 
 @Entity()
@@ -25,6 +25,6 @@ export class Renter {
   @UpdateDateColumn({ name: 'updated_at' })
   public updatedAt: Date
 
-  @OneToOne(() => Contract, (contract) => contract.renter)
-  public contract: Relation<Contract>
+  @OneToMany(() => Contract, (contract) => contract.renter, { onDelete: 'CASCADE' })
+  public contracts: Relation<Contract[]>
 }

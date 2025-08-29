@@ -25,3 +25,5 @@ export class DbExceptionFilter implements ExceptionFilter {
     })
   }
 }
+
+export const dbExceptionFilter = new DbExceptionFilter()
