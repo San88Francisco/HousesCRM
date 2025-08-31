@@ -1,4 +1,3 @@
-import React from 'react';
 import { ArrowDownWideNarrow, ArrowUpDown, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,19 +9,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Table } from '@tanstack/react-table';
 
-interface TableFiltersProps<T> {
+type TableFiltersProps<T> = {
   table: Table<T>;
   searchValue: string;
   onSearchChange: (value: string) => void;
   searchPlaceholder?: string;
-}
+};
 
-export function TableFilters<T>({
+export const TableFilters = <T,>({
   table,
   searchValue,
   onSearchChange,
   searchPlaceholder = 'Search...',
-}: TableFiltersProps<T>) {
+}: TableFiltersProps<T>) => {
   const emailColumn = table.getColumn('email');
 
   return (
@@ -67,4 +66,4 @@ export function TableFilters<T>({
       />
     </div>
   );
-}
+};

@@ -11,9 +11,9 @@ import {
 import { cn } from '@/lib/utils';
 import useVisiblePages from '@/hooks/useVisiblePages';
 
-interface TablePaginationProps<T> {
+type TablePaginationProps<T> = {
   table: Table<T>;
-}
+};
 
 const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
   const currentPageIndex = table.getState().pagination.pageIndex;
@@ -26,11 +26,10 @@ const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            onClick={table.getCanPreviousPage() ? () => table.previousPage() : undefined}
+            onClick={() => table.previousPage()}
             className={cn(
-              !table.getCanPreviousPage()
-                ? 'pointer-events-none text-muted'
-                : 'cursor-pointer text-text',
+              'cursor-pointer text-text',
+              !table.getCanPreviousPage() && 'pointer-events-none text-muted',
             )}
           />
         </PaginationItem>
@@ -46,8 +45,8 @@ const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
                 onClick={() => table.setPageIndex(page)}
                 isActive={currentPageIndex === page}
                 className={cn(
-                  'cursor-pointer',
-                  currentPageIndex === page ? 'text-muted' : 'text-text',
+                  'cursor-pointer text-text',
+                  currentPageIndex === page && 'text-muted',
                 )}
               >
                 {page + 1}
@@ -58,11 +57,10 @@ const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
 
         <PaginationItem>
           <PaginationNext
-            onClick={table.getCanNextPage() ? () => table.nextPage() : undefined}
+            onClick={() => table.nextPage()}
             className={cn(
-              !table.getCanNextPage()
-                ? 'pointer-events-none text-muted'
-                : 'cursor-pointer text-text',
+              'cursor-pointer text-text',
+              !table.getCanNextPage() && 'pointer-events-none text-muted',
             )}
           />
         </PaginationItem>

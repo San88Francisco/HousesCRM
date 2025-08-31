@@ -1,10 +1,8 @@
-import React from 'react';
-
-interface StatusCellProps {
+type StatusCellProps = {
   status: string;
-}
+};
 
-export function StatusCell({ status }: StatusCellProps) {
+export const StatusCell = ({ status }: StatusCellProps) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'success':
@@ -27,4 +25,4 @@ export function StatusCell({ status }: StatusCellProps) {
       {status}
     </div>
   );
-}
+};

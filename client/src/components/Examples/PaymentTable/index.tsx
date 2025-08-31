@@ -3,13 +3,13 @@ import { DataTable } from '@/components/DataTable';
 import { useTableColumns } from '@/hooks/useTableColumns';
 import { Payment } from '@/types/services/payment';
 
-interface PaymentTableProps {
+type PaymentTableProps = {
   data: Payment[];
   onEdit?: (payment: Payment) => void;
   onDelete?: (payment: Payment) => void;
-}
+};
 
-export function PaymentTable({ onEdit, onDelete, data }: PaymentTableProps) {
+export const PaymentTable = ({ onEdit, onDelete, data }: PaymentTableProps) => {
   const columns = useTableColumns({ onEdit, onDelete });
 
   return (
@@ -21,4 +21,4 @@ export function PaymentTable({ onEdit, onDelete, data }: PaymentTableProps) {
       searchColumn="email"
     />
   );
-}
+};

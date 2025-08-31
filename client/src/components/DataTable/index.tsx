@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useState } from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -25,25 +25,25 @@ import {
 import TablePagination from '@/components/TablePagination';
 import { TableFilters } from '@/components/TableFilters';
 
-interface DataTableProps<T> {
+type DataTableProps<T> = {
   data: T[];
   columns: ColumnDef<T>[];
   title?: string;
   searchPlaceholder?: string;
   searchColumn?: string;
-}
+};
 
-export function DataTable<T>({
+export const DataTable = <T,>({
   data,
   columns,
   title = 'Data List',
   searchPlaceholder = 'Search...',
   searchColumn = 'email',
-}: DataTableProps<T>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+}: DataTableProps<T>) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -133,4 +133,4 @@ export function DataTable<T>({
       </div>
     </div>
   );
-}
+};

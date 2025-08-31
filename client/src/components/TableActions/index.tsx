@@ -1,4 +1,3 @@
-import React from 'react';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -8,17 +7,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-interface TableActionsProps {
+type TableActionsProps = {
   onEdit?: () => void;
   onDelete?: () => void;
   customText?: string;
-}
+};
 
-export function TableActions({
+export const TableActions = ({
   onEdit,
   onDelete,
   customText = 'Твій текст тут',
-}: TableActionsProps) {
+}: TableActionsProps) => {
   return (
     <div className="flex justify-end items-center gap-4">
       <span className="text-sm text-text">{customText}</span>
@@ -35,4 +34,4 @@ export function TableActions({
       </DropdownMenu>
     </div>
   );
-}
+};
