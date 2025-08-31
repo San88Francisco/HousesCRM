@@ -23,6 +23,8 @@
   --active-bg: #1c1c1c;
   --bg-input: #f9fafb;
   --active-border: #2563eb;
+  --bg-dropdown: #ffffff;
+  --drop-down-hover: #f4f4f4;
 
   --blue: #b1e3ff;
   --blue-medium: #a8c5da;
@@ -64,6 +66,8 @@
   --active-bg: #c6c7f8;
   --bg-input: #4b5563;
   --active-border: #60a5fa;
+  --bg-dropdown: #484849;
+  --drop-down-hover: #515152;
 
   --blue: #b1e3ff;
   --blue-medium: #a8c5da;

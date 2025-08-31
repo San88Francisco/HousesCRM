@@ -21,11 +21,7 @@ export const ThemeDropDown: FC<Props> = ({ className }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="lg"
-          className={` dark:bg-[#0e1217] text-[#6b7280] px-16 ${className}`}
-        >
+        <Button variant="outline" size="lg" className={`  px-16 ${className}`}>
           {current?.icon}
         </Button>
       </DropdownMenuTrigger>
@@ -33,7 +29,7 @@ export const ThemeDropDown: FC<Props> = ({ className }) => {
       <DropdownMenuContent>
         {themeOptions.map(opt => (
           <DropdownMenuItem key={opt.value} onClick={() => changeTheme(opt.value)}>
-            <div className="flex items-center gap-2 w-full text-[#6b7280]">
+            <div className="flex items-center gap-2 w-full ">
               {opt.icon}
               {opt.label}
             </div>
