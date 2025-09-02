@@ -38,6 +38,6 @@ export class CreateHouseDto {
   public street: string
 
   @IsDefined({ message: 'apartmentType is required' })
-  @IsEnum(ApartmentType, { message: 'apartmentType must be a valid value' })
+  @IsEnum(ApartmentType, { message: 'apartmentType must be a valid enum value' })
   public apartmentType: ApartmentType
 }

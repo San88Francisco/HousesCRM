@@ -24,7 +24,7 @@ export class HousesController {
   @Post()
   public async create(@Body() dto: CreateHouseDto): Promise<HouseWithPricesDto> {
     // TODO: get userId from access token when authorization is implemented
-    return await this.housesService.create(dto, '004b4d7a-5393-4cf8-9f2b-32ff15b24780')
+    return await this.housesService.create(dto, '7973aae3-5684-40ec-92a6-e832ad393f26')
   }
 
   @Patch(HOUSES_ROUTES.BY_ID)
