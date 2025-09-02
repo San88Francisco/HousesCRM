@@ -1,15 +1,23 @@
 'use client';
-import Calendar from '@/components/ui/calendar';
+import Calendar, { CalendarMode, DateRange } from '@/components/ui/calendar';
 import { useState } from 'react';
 
 export const CalendarComponent = () => {
-  const [selectedDate, setSelectedDay] = useState(new Date());
+  // const [selectedDate, setSelectedDay] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDay] = useState<DateRange>({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
 
   console.warn(selectedDate);
 
   return (
     <div>
-      <Calendar onSelectedDate={date => setSelectedDay(date)} />
+      <Calendar
+        selectedDate={selectedDate}
+        mode={CalendarMode.Range}
+        setSelectedDate={setSelectedDay}
+      />
     </div>
   );
 };

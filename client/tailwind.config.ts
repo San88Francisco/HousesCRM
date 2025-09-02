@@ -42,6 +42,7 @@ export default {
         blue: 'var(--blue)',
         'blue-medium': 'var(--blue-medium)',
         'blue-light': 'var(--blue-light)',
+        'blue-dark': 'var(--blue-dark)',
 
         purple: 'var(--purple)',
         'purple-medium': 'var(--purple-medium)',
@@ -76,6 +77,7 @@ export default {
       spacing: {
         '18': '4.5rem',
         '72': '18rem',
+        '78': '19.25rem'
       },
       borderRadius: {
         xl: '1rem',
