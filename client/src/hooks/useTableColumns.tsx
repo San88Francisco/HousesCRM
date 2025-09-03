@@ -4,6 +4,7 @@ import { Payment } from '@/types/services/payment';
 import { Checkbox } from '@/components/ui/checkbox';
 import { StatusCell } from '../components/StatusCell';
 import { TableActions } from '../components/TableActions';
+import { formatCurrency } from '@/utils/table/formatters';
 
 type UseTableColumnsProps = {
   onEdit?: (payment: Payment) => void;
@@ -54,10 +55,7 @@ export const useTableColumns = ({ onEdit, onDelete }: UseTableColumnsProps = {})
         header: () => <div className="text-right">Amount</div>,
         cell: ({ row }) => {
           const amount = parseFloat(row.getValue('amount'));
-          const formatted = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-          }).format(amount);
+          const formatted = formatCurrency(amount);
           return <div className="text-right font-medium">{formatted}</div>;
         },
       },
