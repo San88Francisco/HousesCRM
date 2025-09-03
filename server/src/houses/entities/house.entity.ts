@@ -1,15 +1,5 @@
 import { Contract } from 'src/contracts/entities/contract.entity'
-import { User } from 'src/users/entities/user.entity'
-import {
-  Check,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm'
+import { Check, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
 import { ApartmentType } from '../enums/apartment-type.enum'
 import { HousePrice } from 'src/house-prices/entities/house-price.entity'
@@ -47,9 +37,6 @@ export class House {
 
   @UpdateDateColumn({ name: 'updated_at' })
   public updatedAt: Date
-
-  @ManyToOne(() => User, (user) => user.houses)
-  public user: Relation<User>
 
   @OneToMany(() => HousePrice, (price) => price.house, { cascade: true })
   public prices: Relation<HousePrice>[]

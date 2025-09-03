@@ -5,7 +5,7 @@ import { HousesService } from './houses.service'
 import { HouseDto } from './dto/house.dto'
 import { UpdateHouseDto } from './dto/update-house.dto'
 import { DeleteHouseDto } from './dto/delete-house.dto'
-import { HouseWithPricesDto } from './dto/house-with-prices.dto'
+import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
 
 @Controller(HOUSES_ROUTES.ROOT)
 export class HousesController {
@@ -17,18 +17,17 @@ export class HousesController {
   }
 
   @Get(HOUSES_ROUTES.BY_ID)
-  public findById(@Param('id') id: string): Promise<HouseWithPricesDto> {
+  public findById(@Param('id') id: string): Promise<HouseWithRelationsDto> {
     return this.housesService.findById(id)
   }
 
   @Post()
-  public async create(@Body() dto: CreateHouseDto): Promise<HouseWithPricesDto> {
-    // TODO: get userId from access token when authorization is implemented
-    return await this.housesService.create(dto, '7973aae3-5684-40ec-92a6-e832ad393f26')
+  public async create(@Body() dto: CreateHouseDto): Promise<HouseWithRelationsDto> {
+    return await this.housesService.create(dto)
   }
 
   @Patch(HOUSES_ROUTES.BY_ID)
-  public async update(@Body() dto: UpdateHouseDto, @Param('id') id: string): Promise<HouseWithPricesDto> {
+  public async update(@Body() dto: UpdateHouseDto, @Param('id') id: string): Promise<HouseWithRelationsDto> {
     return await this.housesService.update(dto, id)
   }
 

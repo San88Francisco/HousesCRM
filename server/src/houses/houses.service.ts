@@ -7,8 +7,9 @@ import { HouseDto } from './dto/house.dto'
 import { plainToInstance } from 'class-transformer'
 import { UpdateHouseDto } from './dto/update-house.dto'
 import { HousePriceService } from 'src/house-prices/house-price.service'
-import { HouseWithPricesDto } from './dto/house-with-prices.dto'
+import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
 import { HousePricesConverterService } from 'src/house-prices/house-prices.converter.service'
+import { Contract } from 'src/contracts/entities/contract.entity'
 
 @Injectable()
 export class HousesService {
@@ -27,41 +28,48 @@ export class HousesService {
     })
   }
 
-  public async findById(id: string): Promise<HouseWithPricesDto> {
+  public async findById(id: string): Promise<HouseWithRelationsDto> {
     const house = await this.houseRepository.findOneOrFail({
       where: { id },
-      relations: { prices: true },
-    })
-
-    return plainToInstance(HouseWithPricesDto, house, {
-      excludeExtraneousValues: true,
-    })
-  }
-
-  public async create(dto: CreateHouseDto, userId: string): Promise<HouseWithPricesDto> {
-    const entity = this.houseRepository.create({
-      ...dto,
-      user: {
-        id: userId,
+      relations: {
+        prices: true,
+        contracts: { renter: true },
       },
     })
 
-    entity.prices = this.housePricesConverterService.convert(dto.price, entity)
-
-    const newHouse = await this.houseRepository.save(entity)
-
-    return plainToInstance(HouseWithPricesDto, newHouse, {
+    return plainToInstance(HouseWithRelationsDto, house, {
       excludeExtraneousValues: true,
     })
   }
 
-  public async update(dto: UpdateHouseDto, id: string): Promise<HouseWithPricesDto> {
+  public async create(dto: CreateHouseDto): Promise<HouseWithRelationsDto> {
+    const houseToSave = this.houseRepository.create({
+      ...dto,
+      contracts: dto.contractIds?.map((id) => ({ id })),
+    })
+
+    houseToSave.prices = this.housePricesConverterService.convert(dto.price, houseToSave)
+
+    const savedHouse = await this.houseRepository.save(houseToSave)
+
+    const houseWithRelations = await this.findById(savedHouse.id)
+
+    return plainToInstance(HouseWithRelationsDto, houseWithRelations, {
+      excludeExtraneousValues: true,
+    })
+  }
+
+  public async update(dto: UpdateHouseDto, id: string): Promise<HouseWithRelationsDto> {
     const house = await this.houseRepository.findOneOrFail({
       where: { id },
-      relations: { prices: true },
+      relations: { contracts: true, prices: true },
     })
 
     Object.assign(house, dto)
+
+    if (dto.contractIds) {
+      house.contracts = dto.contractIds.map((id) => ({ id }) as Contract)
+    }
 
     if (dto.price) {
       await this.housePriceService.deleteByHouseId(id)
@@ -71,7 +79,9 @@ export class HousesService {
 
     const updatedHouse = await this.houseRepository.save(house)
 
-    return plainToInstance(HouseWithPricesDto, updatedHouse, {
+    const houseWithRelations = await this.findById(updatedHouse.id)
+
+    return plainToInstance(HouseWithRelationsDto, houseWithRelations, {
       excludeExtraneousValues: true,
     })
   }

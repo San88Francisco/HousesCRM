@@ -1,4 +1,17 @@
-import { IsDate, IsDefined, IsEnum, IsNumber, IsPositive, IsString, MaxLength, Min } from 'class-validator'
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsDate,
+  IsDefined,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  IsUUID,
+  MaxLength,
+  Min,
+} from 'class-validator'
 import { Type } from 'class-transformer'
 import { ApartmentType } from '../enums/apartment-type.enum'
 
@@ -40,4 +53,10 @@ export class CreateHouseDto {
   @IsDefined({ message: 'apartmentType is required' })
   @IsEnum(ApartmentType, { message: 'apartmentType must be a valid enum value' })
   public apartmentType: ApartmentType
+
+  @IsOptional()
+  @IsArray({ message: 'contractIds must be an array' })
+  @ArrayNotEmpty({ message: 'contractIds must not be empty' })
+  @IsUUID('4', { each: true, message: 'contractId must be a valid UUID' })
+  public contractIds?: string[]
 }

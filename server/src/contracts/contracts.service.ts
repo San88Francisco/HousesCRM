@@ -35,34 +35,38 @@ export class ContractsService {
   }
 
   public async create(dto: CreateContractDto): Promise<ContractWithRelationsDto> {
-    const entity = this.contractsRepository.create({
+    const contractToSave = this.contractsRepository.create({
       ...dto,
       house: { id: dto.houseId },
       renter: { id: dto.renterId },
     })
 
-    const newContract = await this.contractsRepository.save(entity)
+    const savedContract = await this.contractsRepository.save(contractToSave)
 
-    return plainToInstance(ContractWithRelationsDto, newContract, {
+    const contractWithRelations = await this.findById(savedContract.id)
+
+    return plainToInstance(ContractWithRelationsDto, contractWithRelations, {
       excludeExtraneousValues: true,
     })
   }
 
   public async update(dto: UpdateContractDto, id: string): Promise<ContractWithRelationsDto> {
-    const contract = await this.contractsRepository.preload({
+    const contractToUpdate = await this.contractsRepository.preload({
       id,
       house: { id: dto.houseId },
       renter: { id: dto.renterId },
       ...dto,
     })
 
-    if (!contract) {
+    if (!contractToUpdate) {
       throw new NotFoundException('Contract not found')
     }
 
-    const entity = await this.contractsRepository.save(contract)
+    const savedContract = await this.contractsRepository.save(contractToUpdate)
 
-    return plainToInstance(ContractWithRelationsDto, entity, {
+    const contractWithRelations = await this.findById(savedContract.id)
+
+    return plainToInstance(ContractWithRelationsDto, contractWithRelations, {
       excludeExtraneousValues: true,
     })
   }
