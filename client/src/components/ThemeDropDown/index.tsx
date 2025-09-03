@@ -8,6 +8,7 @@ import {
 import { useTheme } from '@/hooks/useTheme';
 import { themeOptions } from '@/constants/themeOptions/themeOptions';
 import { FC } from 'react';
+import { cn } from '@/lib/utils';
 
 type Props = {
   className?: string;
@@ -21,7 +22,7 @@ export const ThemeDropDown: FC<Props> = ({ className }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="lg" className={`  px-16 ${className}`}>
+        <Button variant="outline" size="lg" className={cn('px-16', className)}>
           {current?.icon}
         </Button>
       </DropdownMenuTrigger>
