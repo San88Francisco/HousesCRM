@@ -186,7 +186,7 @@ const Calendar: FC<CalendarProps> = ({
   //todo range mode styles
   // todo change page to the peaked year date
   return (
-    <div className="w-78 bg-background rounded-lg shadow-lg p-4">
+    <div className="w-80 bg-background rounded-lg shadow-lg p-4">
       <div className="flex items-center justify-between mb-4">
         <button onClick={handlePrevPage} className="p-1 hover:bg-gray-100 rounded">
           <MoveLeft className="w-5 h-5 text-gray-600" />
@@ -220,7 +220,7 @@ const Calendar: FC<CalendarProps> = ({
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-7 gap-1 mb-6">
+          <div className="grid grid-cols-7 gap-y-1 mb-6">
             {calendarDays.map(day => {
               mode === CalendarMode.Single && (
                 <time
@@ -228,7 +228,7 @@ const Calendar: FC<CalendarProps> = ({
                   dateTime={format(day, 'yyyy-MM-dd')}
                   onClick={() => handleSelect(day)}
                   className={cn(
-                    'h-[2.125rem] w-[2.5rem] text-sm font-semibold rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                    'h-[2.125rem] w-full text-sm font-semibold rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
                     !isSameMonth(day, firtsDayCurrentMonth) && 'text-dark-medium',
                     isToday(day) &&
                       'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]', //todo
@@ -256,15 +256,15 @@ const Calendar: FC<CalendarProps> = ({
                     onClick={() => handleSelect(day)}
                     onMouseEnter={() => handleHover(day)}
                     className={cn(
-                      'h-[2.125rem] w-[2.5rem] rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                      'h-[2.125rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
                       !isSameMonth(day, firtsDayCurrentMonth) && 'text-dark-medium',
                       isToday(day) &&
                         'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]',
                       inRange && 'bg-dark-lightest rounded-[0]',
                       isEqual(day, rangeStart) &&
-                        'rounded-l-[0.75rem] ml-[2px] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                        'rounded-l-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
                       isEqual(day, rangeEnd) &&
-                        'rounded-r-[0.75rem] mr-[2px] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                        'rounded-r-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
                     )}
                   >
                     {format(day, 'd')}
@@ -284,7 +284,7 @@ const Calendar: FC<CalendarProps> = ({
                 dateTime={format(year, 'yyyy-MM-dd')}
                 onClick={() => setSelectedDate(year)}
                 className={cn(
-                  'h-[40px] w-[w-100%] text-md font-semibold text-center rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                  'h-[40px] w-full text-md font-semibold text-center rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
                   isThisYear(year) &&
                     'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-transparent',
                   isEqual(year, selectedDate) &&
@@ -311,13 +311,13 @@ const Calendar: FC<CalendarProps> = ({
                   onClick={() => handleSelect(year)}
                   onMouseEnter={() => handleHover(year)}
                   className={cn(
-                    'h-[40px] w-[100%] rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                    'h-[40px] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
                     !isSameYear(year, firtsDayCurrentMonth) && 'text-dark-medium',
                     isThisYear(year) &&
                       'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]',
                     inRange && 'bg-dark-lightest rounded-[0]',
                     isSameYear(year, rangeStart) &&
-                      'rounded-l-[0.75rem] rounded-r-[0] ml-[2px] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                      'rounded-l-[0.75rem] ml-[2px] rounded-r-[0] bg-active-border text-white hover:text-white hover:bg-blue-dark',
                     isSameYear(year, rangeEnd) &&
                       'rounded-r-[0.75rem] mr-[2px] bg-active-border text-white hover:text-white hover:bg-blue-dark',
                   )}
