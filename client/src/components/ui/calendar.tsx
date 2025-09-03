@@ -13,6 +13,7 @@ import {
   getYear,
   isEqual,
   isSameMonth,
+  isSameYear,
   isThisYear,
   isToday,
   isWithinInterval,
@@ -231,17 +232,8 @@ const Calendar: FC<CalendarProps> = ({
                     !isSameMonth(day, firtsDayCurrentMonth) && 'text-dark-medium',
                     isToday(day) &&
                       'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]', //todo
-                    // mode === CalendarMode.Single &&
                     isEqual(day, selectedDate) &&
                       'bg-active-border text-white hover:text-white hover:bg-blue-dark',
-
-                    // mode === CalendarMode.Range &&
-                    //   cn(
-                    //     isEqual(day, selectedDate.startDate) &&
-                    //       'bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                    //     isEqual(day, selectedDate.endDate) &&
-                    //       'bg-active-border text-white hover:text-white hover:bg-blue-dark ',
-                    //   ),
                   )}
                 >
                   {format(day, 'd')}
@@ -272,7 +264,7 @@ const Calendar: FC<CalendarProps> = ({
                       isEqual(day, rangeStart) &&
                         'rounded-l-[0.75rem] ml-[2px] bg-active-border text-white hover:text-white hover:bg-blue-dark',
                       isEqual(day, rangeEnd) &&
-                        'rounded-r-[0.75rem] mr-[0.375rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                        'rounded-r-[0.75rem] mr-[2px] bg-active-border text-white hover:text-white hover:bg-blue-dark',
                     )}
                   >
                     {format(day, 'd')}
@@ -283,26 +275,60 @@ const Calendar: FC<CalendarProps> = ({
           </div>
         </Fragment>
       )}
-      {/* {viewMode === 'years' && (
+      {viewMode === 'years' && (
         <div className="grid grid-cols-3 gap-y-3 mb-6 place-items-center">
-          {calendarYears.map(year => (
-            <time
-              key={year.toString()}
-              dateTime={format(year, 'yyyy-MM-dd')}
-              onClick={() => setSelectedDate(year)}
-              className={cn(
-                'h-[40px] w-[75px] text-md font-semibold text-center rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                isThisYear(year) &&
-                  'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-transparent',
-                isEqual(year, selectedDate) &&
-                  'bg-active-border text-white hover:text-white hover:bg-blue-dark',
-              )}
-            >
-              {format(year, 'y')}
-            </time>
-          ))}
+          {calendarYears.map(year => {
+            mode === CalendarMode.Single && (
+              <time
+                key={year.toString()}
+                dateTime={format(year, 'yyyy-MM-dd')}
+                onClick={() => setSelectedDate(year)}
+                className={cn(
+                  'h-[40px] w-[w-100%] text-md font-semibold text-center rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                  isThisYear(year) &&
+                    'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-transparent',
+                  isEqual(year, selectedDate) &&
+                    'bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                )}
+              >
+                {format(year, 'y')}
+              </time>
+            );
+
+            if (mode === CalendarMode.Range) {
+              const rangeStart = hoveredDate.startDate || selectedDate.startDate;
+              const rangeEnd = hoveredDate.endDate || selectedDate.endDate;
+
+              const inRange =
+                rangeStart &&
+                rangeEnd &&
+                isWithinInterval(year, { start: rangeStart, end: rangeEnd });
+
+              return (
+                <time
+                  key={year.toString()}
+                  dateTime={format(year, 'yyyy-MM-dd')}
+                  onClick={() => handleSelect(year)}
+                  onMouseEnter={() => handleHover(year)}
+                  className={cn(
+                    'h-[40px] w-[100%] rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                    !isSameYear(year, firtsDayCurrentMonth) && 'text-dark-medium',
+                    isThisYear(year) &&
+                      'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]',
+                    inRange && 'bg-dark-lightest rounded-[0]',
+                    isSameYear(year, rangeStart) &&
+                      'rounded-l-[0.75rem] rounded-r-[0] ml-[2px] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                    isSameYear(year, rangeEnd) &&
+                      'rounded-r-[0.75rem] mr-[2px] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                  )}
+                >
+                  {format(year, 'y')}
+                </time>
+              );
+            }
+          })}
         </div>
-      )} */}
+      )}
       {/* <div className='flex gap-5'>
         <Button variant='default' className='bg'>Ok</Button>
         <Button variant='outline'>Cancel</Button>
