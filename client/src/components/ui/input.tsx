@@ -1,7 +1,10 @@
 'use client';
-import * as React from 'react';
+
+import { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 import { CircleAlert } from 'lucide-react';
+import { FormFieldWrapper } from '../FormFieldWrapper';
+import { useFormFieldFocus } from '@/hooks/use-formfield-Focus';
 
 interface InputProps extends React.ComponentProps<'input'> {
   helperText?: string;
@@ -10,53 +13,37 @@ interface InputProps extends React.ComponentProps<'input'> {
   iconWithError?: boolean;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     { className, type, helperText, error, icon, iconWithError = false, disabled, ...props },
     ref,
   ) => {
-    const [isFocused, setIsFocused] = React.useState<boolean>(false);
+    const { isFocused, handleFocus, handleBlur } = useFormFieldFocus();
 
     return (
-      <div>
-        <div
+      <FormFieldWrapper
+        isFocused={isFocused}
+        error={error}
+        disabled={disabled}
+        helperText={helperText}
+        icon={icon}
+        errorIcon={error && iconWithError ? <CircleAlert className="text-red" /> : undefined}
+        className="h-10"
+      >
+        <input
           className={cn(
-            'flex items-center h-10 px-2 w-full text-sm transition-all duration-200 ease-in-out bg-bg-input rounded-lg border border-solid border-border [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4',
-            disabled && 'cursor-not-allowed opacity-50',
-            isFocused && 'border-active-border',
-            error && 'border-red text-red',
+            'flex w-full px-2 bg-inherit text-text text-sm ring-offset-none placeholder:text-muted focus-visible:outline-none border-none disabled:cursor-not-allowed disabled:opacity-50',
+            error && 'text-red',
             className,
           )}
-        >
-          {icon && (
-            <span
-              className={cn(
-                'transition-all duration-200 ease-in-out text-muted',
-                isFocused && 'text-active-border',
-                error && 'text-red',
-              )}
-            >
-              {icon}
-            </span>
-          )}
-          <input
-            className={cn(
-              'flex w-full px-2 bg-inherit text-text text-sm ring-offset-none placeholder:text-muted focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50',
-              error && 'text-red',
-            )}
-            type={type}
-            ref={ref}
-            disabled={disabled}
-            {...props}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-          />
-          {error && iconWithError && <CircleAlert className="text-red" />}
-        </div>
-        {helperText && (
-          <p className={cn('mt-1 text-sm', error ? 'text-red' : 'text-muted')}>{helperText}</p>
-        )}
-      </div>
+          type={type}
+          ref={ref}
+          disabled={disabled}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          {...props}
+        />
+      </FormFieldWrapper>
     );
   },
 );

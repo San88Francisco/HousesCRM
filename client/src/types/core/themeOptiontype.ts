@@ -1,4 +1,4 @@
-import { ThemeValue } from '@/hooks/useTheme';
+import { ThemeValue } from '@/hooks/use-theme';
 import { JSX } from 'react';
 
 export type ThemeOptionType = {

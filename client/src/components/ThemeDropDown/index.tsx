@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { useTheme } from '@/hooks/useTheme';
+import { useTheme } from '@/hooks/use-theme';
 import { themeOptions } from '@/constants/themeOptions/themeOptions';
 import { FC } from 'react';
 
