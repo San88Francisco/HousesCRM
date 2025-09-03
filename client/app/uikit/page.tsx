@@ -6,7 +6,7 @@ import { InputComponent } from '@/components/Examples/InputComponent';
 import { PaymentTable } from '@/components/Examples/PaymentTable';
 import { TableComponent } from '@/components/Examples/TableComponent/TableComponent';
 import TabsComponent from '@/components/Examples/TabsComponent';
-import { mockData } from '@/constants/dataTable';
+import { mockData } from '@/constants/table/dataTable';
 
 export default function Page() {
   return (
