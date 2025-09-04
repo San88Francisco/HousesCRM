@@ -1,10 +1,8 @@
 'use client';
-
-import { ComponentProps, forwardRef, useCallback } from 'react';
+import { ComponentProps, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
-import { useFormFieldFocus } from '@/hooks/use-formfield-Focus';
 import { FormFieldWrapper } from '../FormFieldWrapper';
-import { useAutoResize } from '@/hooks/use-auto-resize';
+import { useTextarea } from '@/hooks/use-textarea';
 
 interface TextareaProps extends ComponentProps<'textarea'> {
   helperText?: string;
@@ -14,29 +12,11 @@ interface TextareaProps extends ComponentProps<'textarea'> {
 
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, helperText, error, disabled, autoResize = true, onChange, ...props }, ref) => {
-    const { isFocused, handleFocus, handleBlur } = useFormFieldFocus();
-    const { textareaRef, handleInput } = useAutoResize();
-
-    const combinedRef = useCallback(
-      (node: HTMLTextAreaElement) => {
-        textareaRef.current = node;
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [ref, textareaRef],
-    );
-
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      if (autoResize) {
-        handleInput();
-      }
-      if (onChange) {
-        onChange(e);
-      }
-    };
+    const { isFocused, handleFocus, handleBlur, combinedRef, handleChange } = useTextarea({
+      autoResize,
+      onChange,
+      ref,
+    });
 
     return (
       <FormFieldWrapper
@@ -44,15 +24,18 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         error={error}
         disabled={disabled}
         helperText={helperText}
-        className="min-h-[80px] w-[300px] items-start py-2"
+        className={cn('items-start  py-2', className)}
       >
         <textarea
           className={cn(
-            'flex w-full bg-inherit text-text placeholder:text-muted focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 border-none p-0 overflow-hidden',
-            autoResize ? 'resize-none' : 'resize-y',
+            'flex w-full bg-inherit text-text placeholder:text-muted focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 border-none p-0 resize-y',
             error && 'text-red',
             className,
           )}
+          style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+          }}
           ref={combinedRef}
           disabled={disabled}
           onFocus={handleFocus}

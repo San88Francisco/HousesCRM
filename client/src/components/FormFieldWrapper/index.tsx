@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 
-interface FormFieldWrapperProps {
+type FormFieldWrapperProps = {
   children: React.ReactNode;
   isFocused: boolean;
   error?: boolean;
@@ -11,7 +11,7 @@ interface FormFieldWrapperProps {
   helperText?: string;
   icon?: React.ReactNode;
   errorIcon?: React.ReactNode;
-}
+};
 
 export const FormFieldWrapper = ({
   children,
