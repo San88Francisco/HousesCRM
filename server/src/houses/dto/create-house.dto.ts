@@ -4,6 +4,7 @@ import {
   IsDate,
   IsDefined,
   IsEnum,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsPositive,
@@ -18,6 +19,7 @@ import { ApartmentType } from '../enums/apartment-type.enum'
 export class CreateHouseDto {
   @IsDefined({ message: 'apartmentName is required' })
   @IsString({ message: 'apartmentName must be a string' })
+  @IsNotEmpty({ message: 'apartmentName must not be empty' })
   @MaxLength(30)
   public apartmentName: string
 
@@ -48,6 +50,7 @@ export class CreateHouseDto {
 
   @IsDefined({ message: 'street is required' })
   @IsString({ message: 'street must be a string' })
+  @IsNotEmpty({ message: 'street must not be empty' })
   public street: string
 
   @IsDefined({ message: 'apartmentType is required' })
