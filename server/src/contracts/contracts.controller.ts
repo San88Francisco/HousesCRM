@@ -1,19 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
 import { ContractsService } from './contracts.service'
 import { CONTRACTS_ROUTES } from './constants/contracts.routes'
 import { CreateContractDto } from './dto/create-contract.dto'
-import { ContractDto } from './dto/contract.dto'
 import { ContractWithRelationsDto } from './dto/contract-with-relations.dto'
 import { UpdateContractDto } from './dto/update-contract-dto'
 import { DeleteContractDto } from './dto/delete-contract.dto'
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto'
+import { PaginatedContractResponseDto } from './dto/paginated-contract-response.dto'
 
 @Controller(CONTRACTS_ROUTES.ROOT)
 export class ContractsController {
   constructor(private readonly contractsService: ContractsService) {}
 
   @Get()
-  public async findAll(): Promise<ContractDto[]> {
-    return await this.contractsService.findAll()
+  public async findAll(@Query() dto: PaginationQueryDto): Promise<PaginatedContractResponseDto> {
+    return await this.contractsService.findAll(dto)
   }
 
   @Get(CONTRACTS_ROUTES.BY_ID)

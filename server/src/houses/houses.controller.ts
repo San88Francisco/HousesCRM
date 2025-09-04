@@ -1,19 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
 import { HOUSES_ROUTES } from './constants/houses.routes'
 import { CreateHouseDto } from './dto/create-house.dto'
 import { HousesService } from './houses.service'
-import { HouseDto } from './dto/house.dto'
 import { UpdateHouseDto } from './dto/update-house.dto'
 import { DeleteHouseDto } from './dto/delete-house.dto'
 import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto'
+import { PaginatedHouseResponseDto } from './dto/paginated-houses-response.dto'
 
 @Controller(HOUSES_ROUTES.ROOT)
 export class HousesController {
   constructor(private readonly housesService: HousesService) {}
 
   @Get()
-  public findAll(): Promise<HouseDto[]> {
-    return this.housesService.findAll()
+  public findAll(@Query() dto: PaginationQueryDto): Promise<PaginatedHouseResponseDto> {
+    return this.housesService.findAll(dto)
   }
 
   @Get(HOUSES_ROUTES.BY_ID)

@@ -7,6 +7,8 @@ import { CreateContractDto } from './dto/create-contract.dto'
 import { plainToInstance } from 'class-transformer'
 import { ContractWithRelationsDto } from './dto/contract-with-relations.dto'
 import { UpdateContractDto } from './dto/update-contract-dto'
+import { PaginatedContractResponseDto } from './dto/paginated-contract-response.dto'
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto'
 
 @Injectable()
 export class ContractsService {
@@ -15,10 +17,28 @@ export class ContractsService {
     private contractsRepository: Repository<Contract>
   ) {}
 
-  public async findAll(): Promise<ContractDto[]> {
-    const contracts = await this.contractsRepository.find()
+  public async findAll(dto: PaginationQueryDto): Promise<PaginatedContractResponseDto> {
+    const { page = 1, limit = 10 } = dto
 
-    return plainToInstance(ContractDto, contracts, {
+    const [contracts, total] = await this.contractsRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    const contractsDto = plainToInstance(ContractDto, contracts, {
+      excludeExtraneousValues: true,
+    })
+
+    const rawData = {
+      data: contractsDto,
+      meta: {
+        total,
+        page,
+        limit,
+      },
+    }
+
+    return plainToInstance(PaginatedContractResponseDto, rawData, {
       excludeExtraneousValues: true,
     })
   }

@@ -10,6 +10,8 @@ import { HousePriceService } from 'src/house-prices/house-price.service'
 import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
 import { HousePricesConverterService } from 'src/house-prices/house-prices.converter.service'
 import { Contract } from 'src/contracts/entities/contract.entity'
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto'
+import { PaginatedHouseResponseDto } from './dto/paginated-houses-response.dto'
 
 @Injectable()
 export class HousesService {
@@ -20,10 +22,28 @@ export class HousesService {
     private housePricesConverterService: HousePricesConverterService
   ) {}
 
-  public async findAll(): Promise<HouseDto[]> {
-    const houses = await this.houseRepository.find()
+  public async findAll(dto: PaginationQueryDto): Promise<PaginatedHouseResponseDto> {
+    const { page = 1, limit = 10 } = dto
 
-    return plainToInstance(HouseDto, houses, {
+    const [houses, total] = await this.houseRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    const housesDto = plainToInstance(HouseDto, houses, {
+      excludeExtraneousValues: true,
+    })
+
+    const rawData = {
+      data: housesDto,
+      meta: {
+        total,
+        page,
+        limit,
+      },
+    }
+
+    return plainToInstance(PaginatedHouseResponseDto, rawData, {
       excludeExtraneousValues: true,
     })
   }
