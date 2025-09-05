@@ -1,4 +1,3 @@
-import { House } from 'src/houses/entities/house.entity'
 import { RefreshToken } from 'src/refresh-token/refresh-token.entity'
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
@@ -25,7 +24,4 @@ export class User {
 
   @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
   public refreshTokens: Relation<RefreshToken>[]
-
-  @OneToMany(() => House, (house) => house.user)
-  public houses: Relation<House>[]
 }

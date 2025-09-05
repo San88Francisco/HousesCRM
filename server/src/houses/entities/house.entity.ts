@@ -1,21 +1,12 @@
 import { Contract } from 'src/contracts/entities/contract.entity'
-import { User } from 'src/users/entities/user.entity'
-import {
-  Check,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm'
+import { Check, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
 import { ApartmentType } from '../enums/apartment-type.enum'
+import { HousePrice } from 'src/house-prices/entities/house-price.entity'
 
 @Entity()
 // eslint-disable-next-line quotes
-@Check(`"rooms_count" > 0 AND "total_area" > 0 AND "price_uah" > 0 AND "usd_rate" > 0 AND "floor" >= 0`)
+@Check(`"rooms_count" > 0 AND "total_area" > 0 AND "floor" >= 0`)
 export class House {
   @PrimaryGeneratedColumn('uuid')
   public id: string
@@ -32,12 +23,6 @@ export class House {
   @Column({ name: 'purchase_date' })
   public purchaseDate: Date
 
-  @Column({ name: 'price_uah' })
-  public priceUah: number
-
-  @Column({ name: 'usd_rate', type: 'float' })
-  public usdRate: number
-
   @Column()
   public floor: number
 
@@ -53,9 +38,9 @@ export class House {
   @UpdateDateColumn({ name: 'updated_at' })
   public updatedAt: Date
 
-  @ManyToOne(() => User, (user) => user.houses)
-  public user: Relation<User>
+  @OneToMany(() => HousePrice, (price) => price.house, { cascade: true })
+  public prices: Relation<HousePrice>[]
 
   @OneToMany(() => Contract, (contract) => contract.house)
-  public contracts: Relation<Contract>
+  public contracts: Relation<Contract>[]
 }

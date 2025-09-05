@@ -1,22 +1,9 @@
 import { House } from 'src/houses/entities/house.entity'
-import {
-  Check,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm'
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
 import { ContractStatus } from '../enums/contract-status.enum'
 import { Renter } from 'src/renters/entities/renter.entity'
-
 @Entity()
-// eslint-disable-next-line quotes
-@Check(`"monthly_payment" > 0`)
 export class Contract {
   @PrimaryGeneratedColumn('uuid')
   public id: string
@@ -27,9 +14,6 @@ export class Contract {
   @Column()
   public termination: Date
 
-  @Column({ name: 'monthly_payment' })
-  public monthlyPayment: number
-
   @Column({ type: 'enum', enum: ContractStatus, default: ContractStatus.ACTIVE })
   public status: ContractStatus
 
@@ -39,10 +23,12 @@ export class Contract {
   @UpdateDateColumn({ name: 'updated_at' })
   public updatedAt: Date
 
+  @Column({ name: 'monthly_payment' })
+  public monthlyPayment: number
+
   @ManyToOne(() => House, (house) => house.contracts, { onDelete: 'CASCADE' })
   public house: Relation<House>
 
-  @OneToOne(() => Renter, (renter) => renter.contract)
-  @JoinColumn()
+  @ManyToOne(() => Renter, (renter) => renter.contracts)
   public renter: Relation<Renter>
 }

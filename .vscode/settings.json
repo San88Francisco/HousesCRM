@@ -83,5 +83,6 @@
   "search.followSymlinks": false,
   "search.smartCase": true,
   "search.maxResults": 5000,
-  "typescript.preferences.includePackageJsonAutoImports": "off"
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "postman.settings.dotenv-detection-notification-visibility": false
 }
