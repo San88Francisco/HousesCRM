@@ -5,15 +5,15 @@ import { CreateContractDto } from './dto/create-contract.dto'
 import { ContractWithRelationsDto } from './dto/contract-with-relations.dto'
 import { UpdateContractDto } from './dto/update-contract-dto'
 import { DeleteContractDto } from './dto/delete-contract.dto'
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto'
-import { PaginatedContractResponseDto } from './dto/paginated-contract-response.dto'
+import { ContractResponseDto } from './dto/contract-response.dto'
+import { QueryDto } from 'src/common/dto/query.dto'
 
 @Controller(CONTRACTS_ROUTES.ROOT)
 export class ContractsController {
   constructor(private readonly contractsService: ContractsService) {}
 
   @Get()
-  public async findAll(@Query() dto: PaginationQueryDto): Promise<PaginatedContractResponseDto> {
+  public async findAll(@Query() dto: QueryDto): Promise<ContractResponseDto> {
     return await this.contractsService.findAll(dto)
   }
 

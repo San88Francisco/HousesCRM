@@ -5,15 +5,15 @@ import { HousesService } from './houses.service'
 import { UpdateHouseDto } from './dto/update-house.dto'
 import { DeleteHouseDto } from './dto/delete-house.dto'
 import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto'
-import { PaginatedHouseResponseDto } from './dto/paginated-houses-response.dto'
+import { HouseResponseDto } from './dto/houses-response.dto'
+import { HouseQueryDto } from './dto/house-query.dto'
 
 @Controller(HOUSES_ROUTES.ROOT)
 export class HousesController {
   constructor(private readonly housesService: HousesService) {}
 
   @Get()
-  public findAll(@Query() dto: PaginationQueryDto): Promise<PaginatedHouseResponseDto> {
+  public findAll(@Query() dto: HouseQueryDto): Promise<HouseResponseDto> {
     return this.housesService.findAll(dto)
   }
 

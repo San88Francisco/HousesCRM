@@ -5,15 +5,15 @@ import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
 import { CreateRenterDto } from './dto/create-renter.dto'
 import { UpdateRenterDto } from './dto/update-renter.dto'
 import { DeleteRenterDto } from './dto/delete-renter.dto'
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto'
-import { PaginatedRenterResponseDto } from './dto/paginated-renter-response.dto'
+import { QueryDto } from 'src/common/dto/query.dto'
+import { RenterResponseDto } from './dto/renter-response.dto'
 
 @Controller(RENTERS_ROUTES.ROOT)
 export class RentersController {
   constructor(private readonly rentersService: RentersService) {}
 
   @Get()
-  public async findAll(@Query() dto: PaginationQueryDto): Promise<PaginatedRenterResponseDto> {
+  public async findAll(@Query() dto: QueryDto): Promise<RenterResponseDto> {
     return this.rentersService.findAll(dto)
   }
 

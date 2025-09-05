@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { House } from './entities/house.entity'
-import { EntityNotFoundError, Repository } from 'typeorm'
+import { Between, EntityNotFoundError, Repository } from 'typeorm'
 import { CreateHouseDto } from './dto/create-house.dto'
-import { HouseDto } from './dto/house.dto'
 import { plainToInstance } from 'class-transformer'
 import { UpdateHouseDto } from './dto/update-house.dto'
 import { HousePriceService } from 'src/house-prices/house-price.service'
 import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
 import { HousePricesConverterService } from 'src/house-prices/house-prices.converter.service'
 import { Contract } from 'src/contracts/entities/contract.entity'
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto'
-import { PaginatedHouseResponseDto } from './dto/paginated-houses-response.dto'
+import { HouseResponseDto } from './dto/houses-response.dto'
+import { HouseQueryDto } from './dto/house-query.dto'
+import { HouseWithPricesDto } from './dto/house-with-prices.dto'
+import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
+import { HOUSE_QUERY_DEFAULTS } from './constants/house-query.constant'
 
 @Injectable()
 export class HousesService {
@@ -22,15 +24,35 @@ export class HousesService {
     private housePricesConverterService: HousePricesConverterService
   ) {}
 
-  public async findAll(dto: PaginationQueryDto): Promise<PaginatedHouseResponseDto> {
-    const { page = 1, limit = 10 } = dto
+  public async findAll(dto: HouseQueryDto): Promise<HouseResponseDto> {
+    const {
+      page = QUERY_DEFAULTS.PAGE,
+      limit = QUERY_DEFAULTS.LIMIT,
+      order = QUERY_DEFAULTS.ORDER,
+      sortBy = QUERY_DEFAULTS.SORT_BY,
+      minPrice = HOUSE_QUERY_DEFAULTS.MIN_PRICE,
+      maxPrice = HOUSE_QUERY_DEFAULTS.MAX_PRICE,
+      currency = HOUSE_QUERY_DEFAULTS.CURRENCY,
+      ...filters
+    } = dto
 
     const [houses, total] = await this.houseRepository.findAndCount({
+      relations: { prices: true },
       skip: (page - 1) * limit,
       take: limit,
+      order: {
+        [sortBy]: order,
+      },
+      where: {
+        ...filters,
+        prices: {
+          amount: Between(minPrice, maxPrice),
+          code: currency,
+        },
+      },
     })
 
-    const housesDto = plainToInstance(HouseDto, houses, {
+    const housesDto = plainToInstance(HouseWithPricesDto, houses, {
       excludeExtraneousValues: true,
     })
 
@@ -43,7 +65,7 @@ export class HousesService {
       },
     }
 
-    return plainToInstance(PaginatedHouseResponseDto, rawData, {
+    return plainToInstance(HouseResponseDto, rawData, {
       excludeExtraneousValues: true,
     })
   }

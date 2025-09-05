@@ -2,7 +2,7 @@ import { Expose, Type } from 'class-transformer'
 import { PaginationMetaDto } from 'src/common/dto/pagination-meta.dto'
 import { RenterDto } from './renter.dto'
 
-export class PaginatedRenterResponseDto {
+export class RenterResponseDto {
   @Expose()
   public data: RenterDto[]
 

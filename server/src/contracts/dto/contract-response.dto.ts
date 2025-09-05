@@ -1,10 +1,10 @@
 import { Expose, Type } from 'class-transformer'
-import { HouseDto } from './house.dto'
+import { ContractDto } from './contract.dto'
 import { PaginationMetaDto } from 'src/common/dto/pagination-meta.dto'
 
-export class PaginatedHouseResponseDto {
+export class ContractResponseDto {
   @Expose()
-  public data: HouseDto[]
+  public data: ContractDto[]
 
   @Expose()
   @Type(() => PaginationMetaDto)

@@ -7,8 +7,8 @@ import { RenterDto } from './dto/renter.dto'
 import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
 import { CreateRenterDto } from './dto/create-renter.dto'
 import { UpdateRenterDto } from './dto/update-renter.dto'
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto'
-import { PaginatedRenterResponseDto } from './dto/paginated-renter-response.dto'
+import { QueryDto } from 'src/common/dto/query.dto'
+import { RenterResponseDto } from './dto/renter-response.dto'
 
 @Injectable()
 export class RentersService {
@@ -17,7 +17,7 @@ export class RentersService {
     private readonly rentersRepository: Repository<Renter>
   ) {}
 
-  public async findAll(dto: PaginationQueryDto): Promise<PaginatedRenterResponseDto> {
+  public async findAll(dto: QueryDto): Promise<RenterResponseDto> {
     const { page = 1, limit = 10 } = dto
 
     const [renters, total] = await this.rentersRepository.findAndCount({
@@ -38,7 +38,7 @@ export class RentersService {
       },
     }
 
-    return plainToInstance(PaginatedRenterResponseDto, rawData, {
+    return plainToInstance(RenterResponseDto, rawData, {
       excludeExtraneousValues: true,
     })
   }
