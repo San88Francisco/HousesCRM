@@ -24,4 +24,13 @@ export class User {
 
   @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
   public refreshTokens: Relation<RefreshToken>[]
+
+  @Column({
+    name: 'refresh_token_hash',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    select: false,
+  })
+  public refreshTokenHash: string | null
 }

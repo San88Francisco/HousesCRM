@@ -1,7 +1,7 @@
 import { IsEmail, MinLength, Matches, IsDefined } from 'class-validator'
 import { VALIDATION_PATTERNS } from 'src/common/constants/validation.constant'
 
-export class CreateUserDto {
+export class CreateUserRequestDto {
   @IsDefined({ message: 'Email is required' })
   @IsEmail({}, { message: 'Invalid email format' })
   public readonly email: string
