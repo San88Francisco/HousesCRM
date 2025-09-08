@@ -6,12 +6,12 @@ import { StatusCell } from '../components/StatusCell';
 import { TableActions } from '../components/TableActions';
 import { formatCurrency } from '@/utils/table/formatters';
 
-type UseTableColumnsProps = {
+type Props = {
   onEdit?: (payment: Payment) => void;
   onDelete?: (payment: Payment) => void;
 };
 
-export const useTableColumns = ({ onEdit, onDelete }: UseTableColumnsProps = {}) => {
+export const useTableColumns = ({ onEdit, onDelete }: Props = {}) => {
   return useMemo<ColumnDef<Payment>[]>(
     () => [
       {

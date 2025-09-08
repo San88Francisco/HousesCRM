@@ -3,13 +3,13 @@ import { DataTable } from '@/components/DataTable';
 import { useTableColumns } from '@/hooks/useTableColumns';
 import { Payment } from '@/types/services/payment';
 
-type PaymentTableProps = {
+type Props = {
   data: Payment[];
   onEdit?: (payment: Payment) => void;
   onDelete?: (payment: Payment) => void;
 };
 
-export const PaymentTable = ({ onEdit, onDelete, data }: PaymentTableProps) => {
+export const PaymentTable = ({ onEdit, onDelete, data }: Props) => {
   const columns = useTableColumns({ onEdit, onDelete });
 
   return (

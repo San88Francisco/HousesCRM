@@ -2,11 +2,11 @@ import { STATUS_COLOR } from '@/constants/table/statusColor';
 import { cn } from '@/lib/utils';
 import { Status } from '@/types/core/status';
 
-type StatusCellProps = {
+type Props = {
   status: Status;
 };
 
-export const StatusCell = ({ status }: StatusCellProps) => {
+export const StatusCell = ({ status }: Props) => {
   return (
     <div
       className={cn(
