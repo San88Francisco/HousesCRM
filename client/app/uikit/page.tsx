@@ -2,6 +2,7 @@ import { ButtonComponent } from '@/components/Examples/ButtonComponent';
 import { CardComponent } from '@/components/Examples/CardComponent';
 import { ControlButtons } from '@/components/Examples/ControlButtons';
 
+import { DropDownComponent } from '@/components/Examples/DropDownComponent';
 import { InputComponent } from '@/components/Examples/InputComponent';
 import { PaymentTable } from '@/components/Examples/PaymentTable';
 import { TableComponent } from '@/components/Examples/TableComponent/TableComponent';
@@ -18,6 +19,7 @@ export default function Page() {
       <PaymentTable data={mockData} />
       <TabsComponent />
       <InputComponent />
+      <DropDownComponent />
     </div>
   );
 }

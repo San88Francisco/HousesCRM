@@ -37,6 +37,8 @@ export default {
         'bg-button': 'var(--bg-button)',
         'bg-input': 'var(--bg-input)',
         'active-border': 'var(--active-border)',
+        dropdown: 'var(--bg-dropdown)',
+        'drop-down-hover': 'var(--drop-down-hover)',
 
         red: 'var(--red)',
         blue: 'var(--blue)',
