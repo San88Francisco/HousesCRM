@@ -29,8 +29,6 @@ import { Button } from './button';
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-// type CalendarMode = 'single' | 'range';
-
 //! local, mode = single | range, viewMode?
 
 export enum CalendarMode {
@@ -97,8 +95,8 @@ const Calendar: FC<CalendarProps> = ({
   });
 
   const [hoveredDate, setHoveredDate] = useState<DateRange>({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: today,
+    endDate: today,
   });
 
   const nextMonth = () => {
@@ -182,8 +180,22 @@ const Calendar: FC<CalendarProps> = ({
     });
   };
 
-  // todo delete local state
-  //todo range mode styles
+  const handleCancelBtn = () => {
+    if (mode === CalendarMode.Single) {
+      setSelectedDate(today);
+    }
+    if (mode === CalendarMode.Range) {
+      setSelectedDate({
+        startDate: today,
+        endDate: today,
+      });
+      setHoveredDate({
+        startDate: today,
+        endDate: today,
+      });
+    }
+  };
+
   // todo change page to the peaked year date
   return (
     <div className="w-80 bg-background rounded-lg shadow-lg p-4">
@@ -222,23 +234,25 @@ const Calendar: FC<CalendarProps> = ({
           </div>
           <div className="grid grid-cols-7 gap-y-1 mb-6">
             {calendarDays.map(day => {
-              mode === CalendarMode.Single && (
-                <time
-                  key={day.toString()}
-                  dateTime={format(day, 'yyyy-MM-dd')}
-                  onClick={() => handleSelect(day)}
-                  className={cn(
-                    'h-[2.125rem] w-full text-sm font-semibold rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                    !isSameMonth(day, firtsDayCurrentMonth) && 'text-dark-medium',
-                    isToday(day) &&
-                      'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]', //todo
-                    isEqual(day, selectedDate) &&
-                      'bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                  )}
-                >
-                  {format(day, 'd')}
-                </time>
-              );
+              if (mode === CalendarMode.Single) {
+                return (
+                  <time
+                    key={day.toString()}
+                    dateTime={format(day, 'yyyy-MM-dd')}
+                    onClick={() => handleSelect(day)}
+                    className={cn(
+                      'h-[2.125rem] w-full text-sm font-semibold rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                      !isSameMonth(day, firtsDayCurrentMonth) && 'text-dark-medium',
+                      isToday(day) &&
+                        'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]', //todo
+                      isEqual(day, selectedDate) &&
+                        'bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                    )}
+                  >
+                    {format(day, 'd')}
+                  </time>
+                );
+              }
 
               if (mode === CalendarMode.Range) {
                 const rangeStart = hoveredDate.startDate || selectedDate.startDate;
@@ -278,22 +292,24 @@ const Calendar: FC<CalendarProps> = ({
       {viewMode === 'years' && (
         <div className="grid grid-cols-3 gap-y-3 mb-6 place-items-center">
           {calendarYears.map(year => {
-            mode === CalendarMode.Single && (
-              <time
-                key={year.toString()}
-                dateTime={format(year, 'yyyy-MM-dd')}
-                onClick={() => setSelectedDate(year)}
-                className={cn(
-                  'h-[40px] w-full text-md font-semibold text-center rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                  isThisYear(year) &&
-                    'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-transparent',
-                  isEqual(year, selectedDate) &&
-                    'bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                )}
-              >
-                {format(year, 'y')}
-              </time>
-            );
+            if (mode === CalendarMode.Single) {
+              return (
+                <time
+                  key={year.toString()}
+                  dateTime={format(year, 'yyyy-MM-dd')}
+                  onClick={() => setSelectedDate(year)}
+                  className={cn(
+                    'h-[40px] w-full text-md font-semibold text-center rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                    isThisYear(year) &&
+                      'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-transparent',
+                    isSameYear(year, selectedDate) &&
+                      'bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                  )}
+                >
+                  {format(year, 'y')}
+                </time>
+              );
+            }
 
             if (mode === CalendarMode.Range) {
               const rangeStart = hoveredDate.startDate || selectedDate.startDate;
@@ -329,10 +345,19 @@ const Calendar: FC<CalendarProps> = ({
           })}
         </div>
       )}
-      {/* <div className='flex gap-5'>
-        <Button variant='default' className='bg'>Ok</Button>
-        <Button variant='outline'>Cancel</Button>
-      </div> */}
+      <div className="flex gap-5">
+        <Button
+          // onClick={handleConfirmBtn}
+          type="submit"
+          variant="default"
+          className="bg-active-border hover:bg-blue-dark active:bg-active-border w-full"
+        >
+          Ok
+        </Button>
+        <Button onClick={handleCancelBtn} variant="outline" className="w-full">
+          Cancel
+        </Button>
+      </div>
     </div>
   );
 };
