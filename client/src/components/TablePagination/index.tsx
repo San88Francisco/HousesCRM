@@ -9,7 +9,7 @@ import {
   PaginationPrevious,
 } from '../ui/pagination';
 import { cn } from '@/lib/utils';
-import useVisiblePages from '@/hooks/useVisiblePages';
+import useVisiblePages from '@/hooks/use-visible-pages';
 
 type TablePaginationProps<T> = {
   table: Table<T>;

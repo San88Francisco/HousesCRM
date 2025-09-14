@@ -3,8 +3,8 @@
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { ReactNode, useState, useEffect } from 'react';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/Sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
+
 import { usePathname, useRouter } from 'next/navigation';
 import { noSidebarRoutes } from '@/constants/noSidebarRoutes';
 import { CurrencyProvider } from '@/context/CurrencyContext';
@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import store from '@/store/store';
 import cookies from 'js-cookie';
 import { ROUTES } from '@/routes';
+import { AppSidebar } from '@/components/Sidebar';
 
 export default function RootLayout({
   children,
@@ -32,14 +33,7 @@ export default function RootLayout({
   }, [router]);
 
   const mainContent = (
-    <main className="flex-1 overflow-x-hidden px-2 sm:px-8 py-5">
-      {!shouldHideSidebar && (
-        <div className="flex h-16 items-center absolute">
-          <SidebarTrigger className="-ml-8" />
-        </div>
-      )}
-      {children}
-    </main>
+    <main className="flex-1 overflow-x-hidden px-2 sm:px-8 py-5">{children}</main>
   );
 
   return (
@@ -51,7 +45,7 @@ export default function RootLayout({
               mainContent
             ) : (
               <SidebarProvider open={open} onOpenChange={setOpen}>
-                <AppSidebar />
+                <AppSidebar label="some-usergamil.com" />
                 {mainContent}
               </SidebarProvider>
             )}

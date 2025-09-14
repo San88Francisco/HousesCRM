@@ -25,6 +25,7 @@
   --active-border: #2563eb;
   --bg-dropdown: #ffffff;
   --drop-down-hover: #f4f4f4;
+  --scroll-bar: #f4f4f4;
 
   --blue: #b1e3ff;
   --blue-medium: #a8c5da;
@@ -68,6 +69,7 @@
   --active-border: #60a5fa;
   --bg-dropdown: #484849;
   --drop-down-hover: #515152;
+  --scroll-bar: #333333;
 
   --blue: #b1e3ff;
   --blue-medium: #a8c5da;
@@ -142,8 +144,8 @@ body {
   }
 
   span {
-    @apply text-xs;
-    color: var(--muted-foreground);
+    @apply text-sm;
+    color: var(--text);
   }
 
   * {
@@ -198,4 +200,26 @@ body {
   [class*='text-muted-foreground'] {
     color: var(--muted-foreground);
   }
+}
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-bar) var(--background);
 }
