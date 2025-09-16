@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useTheme } from '@/hooks/use-theme';
-import { useMounted } from '@/hooks/use-mounted';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 const LOGOS = {
   light: '/logo/lightLogo.png',
@@ -10,10 +10,22 @@ const LOGOS = {
 } as const;
 
 export const Logo = () => {
-  const { isDarkMode } = useTheme();
-  const mounted = useMounted();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  const logoSrc = mounted ? (isDarkMode ? LOGOS.dark : LOGOS.light) : LOGOS.light;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="p-4 flex justify-center">
+        <Image alt="logo" src={LOGOS.light} width={84} height={28} />
+      </div>
+    );
+  }
+
+  const logoSrc = resolvedTheme === 'dark' ? LOGOS.dark : LOGOS.light;
 
   return (
     <div className="p-4 flex justify-center">

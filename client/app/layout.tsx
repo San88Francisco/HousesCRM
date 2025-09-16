@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { ReactNode, useState, useEffect } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { ThemeProvider } from 'next-themes';
 
 import { usePathname, useRouter } from 'next/navigation';
 import { noSidebarRoutes } from '@/constants/noSidebarRoutes';
@@ -37,21 +38,28 @@ export default function RootLayout({
   );
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <Provider store={store}>
-          <CurrencyProvider>
-            {shouldHideSidebar ? (
-              mainContent
-            ) : (
-              <SidebarProvider open={open} onOpenChange={setOpen}>
-                <AppSidebar label="some-usergamil.com" />
-                {mainContent}
-              </SidebarProvider>
-            )}
-            <Toaster />
-          </CurrencyProvider>
-        </Provider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Provider store={store}>
+            <CurrencyProvider>
+              {shouldHideSidebar ? (
+                mainContent
+              ) : (
+                <SidebarProvider open={open} onOpenChange={setOpen}>
+                  <AppSidebar label="some-usergamil.com" />
+                  {mainContent}
+                </SidebarProvider>
+              )}
+              <Toaster />
+            </CurrencyProvider>
+          </Provider>
+        </ThemeProvider>
       </body>
     </html>
   );

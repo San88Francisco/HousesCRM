@@ -29,14 +29,7 @@ export const SidebarPagesGroup = ({ items }: SidebarPagesGroupProps) => {
           {pagesItems.map(item => {
             const isActive = isActiveItem(pathname, item.url);
 
-            return (
-              <SidebarMenuItem
-                key={item.title}
-                item={item}
-                pathname={pathname}
-                isActive={isActive}
-              />
-            );
+            return <SidebarMenuItem key={item.title} item={item} isActive={isActive} />;
           })}
         </SidebarMenu>
       </SidebarGroupContent>

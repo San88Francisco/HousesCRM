@@ -7,8 +7,11 @@ import {
 } from '@/components/ui/sidebar';
 import { SidebarMenuItemProps } from '@/types/navigation';
 import { getSidebarMenuItemClasses } from '@/constants/styles/sidebar';
+import { useAnimatedIcon } from '@/hooks';
 
 export const SidebarMenuItem = ({ item, isActive }: SidebarMenuItemProps) => {
+  const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(item.icon);
+
   if (!item.url) return null;
 
   return (
@@ -20,8 +23,8 @@ export const SidebarMenuItem = ({ item, isActive }: SidebarMenuItemProps) => {
           className: 'bg-text text-background',
         }}
       >
-        <Link href={item.url}>
-          {item.icon}
+        <Link href={item.url} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          {animatedIcon}
           <span>{item.title}</span>
         </Link>
       </SidebarMenuButton>

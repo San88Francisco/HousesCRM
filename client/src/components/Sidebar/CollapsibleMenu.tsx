@@ -19,13 +19,8 @@ export const CollapsibleMenu = ({ title, icon, items }: CollapsibleMenuProps) =>
 
   return (
     <div className={SIDEBAR_STYLES.collapsible.container}>
-      <div className={getCollapsibleHeaderClasses()}>
-        <Button
-          variant="icon"
-          size="xs"
-          className={SIDEBAR_STYLES.collapsible.button}
-          onClick={toggleOpen}
-        >
+      <div className={getCollapsibleHeaderClasses()} onClick={toggleOpen}>
+        <Button variant="icon" size="xs" className={SIDEBAR_STYLES.collapsible.button}>
           <ChevronRight className={getChevronClasses(isOpen)} />
         </Button>
 

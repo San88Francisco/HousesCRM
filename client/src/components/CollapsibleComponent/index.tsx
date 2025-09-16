@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ReactElement, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 type Item = { title: string; url: string };
 
@@ -25,7 +26,12 @@ export const CollapsibleComponent = ({ title, icon, items }: Props) => {
   return (
     <div className="flex flex-col w-full">
       <div
-        className={`flex items-center text-text gap-2 pl-[13px] py-2 ${hoverStyles} rounded-[12px] ${collapsibleIconStyles}`}
+        className={cn(
+          'flex items-center text-text gap-2 pl-[13px] py-2',
+          hoverStyles,
+          'rounded-[12px]',
+          collapsibleIconStyles,
+        )}
       >
         <Button variant="icon" size="xs" className="p-0" onClick={() => setIsOpen(prev => !prev)}>
           <ChevronRight
@@ -52,7 +58,7 @@ export const CollapsibleComponent = ({ title, icon, items }: Props) => {
       >
         <div className="flex flex-col gap-2   mt-2 w-full">
           {items?.map((item, i) => (
-            <Link key={i} href={item.url} className={`${hoverStyles} pl-[60px] py-2 ${linkStyles}`}>
+            <Link key={i} href={item.url} className={cn(hoverStyles, 'pl-[60px] py-2', linkStyles)}>
               {item.title}
             </Link>
           ))}

@@ -11,7 +11,7 @@ export const SIDEBAR_STYLES = {
     container: 'flex flex-col w-full',
     header: 'flex items-center text-text gap-2 pl-[13px] py-2 hover:bg-bg-input rounded-[12px]',
     headerCollapsed:
-      'group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:hover:bg-transparent',
+      'group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:hover:bg-transparent cursor-pointer',
     button: 'p-0',
     chevron: 'transition-transform duration-300',
     chevronRotated: 'rotate-90',
@@ -49,3 +49,4 @@ export const getCollapsibleHeaderClasses = () => {
 export const getChevronClasses = (isOpen: boolean) => {
   return `${SIDEBAR_STYLES.collapsible.chevron} ${isOpen ? SIDEBAR_STYLES.collapsible.chevronRotated : ''}`;
 };
+

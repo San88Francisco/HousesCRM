@@ -1,49 +1,67 @@
-import { useMemo } from 'react';
-import { Button } from '@/components/ui/button';
+'use client';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
+import { SunMoon, Moon, Sun } from 'lucide-react';
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTheme } from '@/hooks/use-theme';
-import { useMounted } from '@/hooks/use-mounted';
-import { themeOptions } from '@/constants/themeOptions/themeOptions';
-import { cn } from '@/lib/utils';
-import { ThemeValue } from '@/types/core/theme';
+import { NextTheme } from '@/types/core/theme';
 
-type Props = {
-  className?: string;
-};
+export const ThemeSwitch = () => {
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
-export const ThemeDropDown = ({ className }: Props) => {
-  const { theme, changeTheme } = useTheme();
-  const mounted = useMounted();
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const currentTheme = useMemo(() => (mounted ? theme : ThemeValue.Auto), [mounted, theme]);
+  const themeIconMap = {
+    [NextTheme.Light]: <Sun className="h-4 w-4" />,
+    [NextTheme.Dark]: <Moon className="h-4 w-4" />,
+    [NextTheme.System]: <SunMoon className="h-4 w-4" />,
+  };
 
-  const currentThemeOption = useMemo(
-    () => themeOptions.find(opt => opt.value === currentTheme),
-    [currentTheme],
-  );
+  const getThemeIcon = (themeValue: string) => {
+    return themeIconMap[themeValue as NextTheme] || themeIconMap[NextTheme.System];
+  };
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center justify-center w-10 h-10 rounded-md border bg-background opacity-50">
+        <SunMoon className="h-4 w-4" />
+      </div>
+    );
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="lg" className={cn('px-16', className)}>
-          {currentThemeOption?.icon}
-        </Button>
+        <button className="flex items-center justify-center w-10 h-10 rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
+          {getThemeIcon(theme || NextTheme.System)}
+        </button>
       </DropdownMenuTrigger>
-
-      <DropdownMenuContent>
-        {themeOptions.map(opt => (
-          <DropdownMenuItem key={opt.value} onClick={() => changeTheme(opt.value)}>
-            <div className="flex items-center gap-2 w-full">
-              {opt.icon}
-              {opt.label}
-            </div>
-          </DropdownMenuItem>
-        ))}
+      <DropdownMenuContent align="end" className="w-12">
+        <DropdownMenuItem
+          onClick={() => setTheme(NextTheme.Light)}
+          className="flex items-center justify-center p-3"
+        >
+          {themeIconMap[NextTheme.Light]}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => setTheme(NextTheme.Dark)}
+          className="flex items-center justify-center p-3"
+        >
+          {themeIconMap[NextTheme.Dark]}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => setTheme(NextTheme.System)}
+          className="flex items-center justify-center p-3"
+        >
+          {themeIconMap[NextTheme.System]}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

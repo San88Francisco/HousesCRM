@@ -1,5 +1,10 @@
 import { ReactNode } from 'react';
 
+export interface AnimatedIconHandle {
+  startAnimation: () => void;
+  stopAnimation: () => void;
+}
+
 export interface SubNavItem {
   title: string;
   url: string;
@@ -18,7 +23,6 @@ export interface SidebarProps {
 
 export interface SidebarMenuItemProps {
   item: NavItem;
-  pathname?: string;
   isActive: boolean;
 }
 

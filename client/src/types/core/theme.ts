@@ -1,10 +1,5 @@
-export enum ThemeValue {
-  Light = 'світла',
-  Dark = 'темна',
-  Auto = 'авто',
-}
-
-export enum ActualTheme {
-  Light = 'світла',
-  Dark = 'темна',
+export enum NextTheme {
+  Light = 'light',
+  Dark = 'dark',
+  System = 'system',
 }
