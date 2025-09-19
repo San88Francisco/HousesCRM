@@ -7,6 +7,7 @@ import { RefreshTokenModule } from './refresh-token/refresh-token.module'
 import { HousesModule } from './houses/houses.module'
 import { ContractsModule } from './contracts/contracts.module'
 import { RentersModule } from './renters/renters.module'
+import { HousesAnalyticsModule } from './analytics/houses-analytics/houses-analytics.module'
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RentersModule } from './renters/renters.module'
     HousesModule,
     ContractsModule,
     RentersModule,
+    HousesAnalyticsModule,
   ],
 })
 export class AppModule {}
