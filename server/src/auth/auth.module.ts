@@ -9,9 +9,11 @@ import { AuthController } from './auth.controller'
 import { JwtStrategy } from './strategies/jwt.strategy'
 import { LocalStrategy } from './strategies/local.strategies'
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy'
+import { TokensModule } from 'src/tokens/tokens.module'
 
 @Module({
-  imports: [UsersModule, PassportModule, ConfigModule.forFeature(jwtConfig), JwtModule.register({})],
+  // TODO JwtModule.register({})
+  imports: [UsersModule, PassportModule, TokensModule, ConfigModule.forFeature(jwtConfig), JwtModule.register({})],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy],
   exports: [AuthService, JwtModule],

@@ -1,5 +1,4 @@
-import { IsEmail, MinLength, Matches, IsDefined } from 'class-validator'
-import { VALIDATION_PATTERNS } from 'src/common/constants/validation.constant'
+import { IsEmail, MinLength, IsDefined } from 'class-validator'
 
 export class CreateUserRequestDto {
   @IsDefined({ message: 'Email is required' })
@@ -12,8 +11,5 @@ export class CreateUserRequestDto {
 
   @IsDefined({ message: 'Username is required' })
   @MinLength(3, { message: 'Username must be at least 3 characters long' })
-  @Matches(VALIDATION_PATTERNS.USERNAME, {
-    message: 'Username can only contain letters, numbers and underscore',
-  })
   public readonly username: string
 }

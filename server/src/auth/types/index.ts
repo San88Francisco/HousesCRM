@@ -1,10 +1,6 @@
 import type { Request } from 'express'
-
-export interface IUser {
-  id: string
-  email: string
-}
+import { UserDto } from 'src/users/dto/user.dto'
 
 export interface AuthenticatedRequest extends Request {
-  user: IUser
+  user: UserDto
 }

@@ -2,4 +2,7 @@ export const AUTH_ROUTES = {
   ROOT: '/auth',
   BY_ID: ':id',
   LOGIN: 'login',
+  REGISTRATION: 'registration',
+  REFRESH: 'refresh',
+  LOGOUT: 'logout',
 }
