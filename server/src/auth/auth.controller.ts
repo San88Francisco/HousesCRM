@@ -20,6 +20,7 @@ import { ConfigService } from '@nestjs/config'
 import { LoginUserResponseDto } from 'src/users/dto/res/login-user-res.dto'
 import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
 import { CreateUserResponseDto } from 'src/users/dto/res/create-user-response.dto'
+import { RefreshTokenResponseDto } from './dto/res/refresh-token.dto'
 
 @Controller(AUTH_ROUTES.ROOT)
 export class AuthController {
@@ -57,7 +58,7 @@ export class AuthController {
   public async RefreshTokenModulerefresh(
     @Req() req: AuthenticatedRequest,
     @Res({ passthrough: true }) res: Response
-  ): Promise<{ accessToken: string }> {
+  ): Promise<RefreshTokenResponseDto> {
     const ua = req.headers['user-agent']
     const userAgent: string = typeof ua === 'string' ? ua : 'unknown'
 
