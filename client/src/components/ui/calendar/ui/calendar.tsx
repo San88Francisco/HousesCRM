@@ -1,14 +1,7 @@
 'use client';
 import { cn } from '@/lib/utils';
 import {
-  add,
-  addYears,
   Day,
-  eachDayOfInterval,
-  eachYearOfInterval,
-  endOfDecade,
-  endOfMonth,
-  endOfWeek,
   format,
   getYear,
   isEqual,
@@ -17,29 +10,15 @@ import {
   isThisYear,
   isToday,
   isWithinInterval,
-  parse,
-  startOfDecade,
-  startOfMonth,
-  startOfToday,
-  startOfWeek,
 } from 'date-fns';
 import { MoveLeft, MoveRight } from 'lucide-react';
-import { FC, Fragment, useEffect, useState } from 'react';
-import { Button } from './button';
+import { FC, Fragment, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { CalendarMode, DateRange } from '@/types/core/calendar';
+import { useCalendarState } from '@/hooks/CalendarHooks/use-calendar-state';
+import { useCalendarNavigation } from '@/hooks/CalendarHooks/use-calendar-navigation';
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-//! local, mode = single | range, viewMode?
-
-export enum CalendarMode {
-  Single = 'single',
-  Range = 'range',
-}
-
-export interface DateRange {
-  startDate: Date;
-  endDate: Date;
-}
 
 type SingleModeCalendarProps = {
   selectedDate: Date;
@@ -57,16 +36,25 @@ type CalendarProps =
   | ({ mode: CalendarMode.Single } & SingleModeCalendarProps)
   | ({ mode: CalendarMode.Range } & RangeModeCalendarProps);
 
-type viewModeType = 'days' | 'months' | 'years';
-
 const Calendar: FC<CalendarProps> = ({
   selectedDate,
   setSelectedDate,
   mode,
   firstWeekDayNumber = 1,
 }) => {
-  const today = startOfToday();
-  const [viewMode, setViewMode] = useState<viewModeType>('days');
+  const {
+    today,
+    viewMode,
+    setViewMode,
+    setCurrentMonth,
+    firtsDayCurrentMonth,
+    calendarDays,
+    currentDecadeStart,
+    setCurrentDecadeStart,
+    calendarYears,
+    hoveredDate,
+    setHoveredDate,
+  } = useCalendarState(firstWeekDayNumber);
 
   useEffect(() => {
     if (mode === CalendarMode.Single) {
@@ -79,61 +67,13 @@ const Calendar: FC<CalendarProps> = ({
     }
   }, []);
 
-  const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMM-yyyy'));
-  const firtsDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date());
-
-  const calendarDays = eachDayOfInterval({
-    start: startOfWeek(startOfMonth(firtsDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
-    end: endOfWeek(endOfMonth(firtsDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
+  const { handlePrevPage, handleNextPage } = useCalendarNavigation({
+    viewMode,
+    firtsDayCurrentMonth,
+    currentDecadeStart,
+    setCurrentMonth,
+    setCurrentDecadeStart,
   });
-
-  const [currentDecadeStart, setCurrentDecadeStart] = useState<Date>(startOfDecade(today));
-
-  const calendarYears = eachYearOfInterval({
-    start: startOfDecade(currentDecadeStart),
-    end: addYears(endOfDecade(currentDecadeStart), 2),
-  });
-
-  const [hoveredDate, setHoveredDate] = useState<DateRange>({
-    startDate: today,
-    endDate: today,
-  });
-
-  const nextMonth = () => {
-    const firtsDayNextMonth = add(firtsDayCurrentMonth, { months: 1 });
-    setCurrentMonth(format(firtsDayNextMonth, 'MMM-yyyy'));
-  };
-
-  const prevMonth = () => {
-    const firtsDayNextMonth = add(firtsDayCurrentMonth, { months: -1 });
-    setCurrentMonth(format(firtsDayNextMonth, 'MMM-yyyy'));
-  };
-
-  const nextDecade = () => {
-    setCurrentDecadeStart(addYears(currentDecadeStart, 10));
-  };
-
-  const prevDecade = () => {
-    setCurrentDecadeStart(addYears(currentDecadeStart, -10));
-  };
-
-  const handleNextPage = () => {
-    if (viewMode === 'days') {
-      nextMonth();
-    }
-    if (viewMode === 'years') {
-      nextDecade();
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (viewMode === 'days') {
-      prevMonth();
-    }
-    if (viewMode === 'years') {
-      prevDecade();
-    }
-  };
 
   const handleSelect = (date: Date) => {
     if (mode === CalendarMode.Single) {
@@ -180,7 +120,7 @@ const Calendar: FC<CalendarProps> = ({
     });
   };
 
-  const handleCancelBtn = () => {
+  const handleCancel = () => {
     if (mode === CalendarMode.Single) {
       setSelectedDate(today);
     }
@@ -354,7 +294,7 @@ const Calendar: FC<CalendarProps> = ({
         >
           Ok
         </Button>
-        <Button onClick={handleCancelBtn} variant="outline" className="w-full">
+        <Button onClick={handleCancel} variant="outline" className="w-full">
           Cancel
         </Button>
       </div>
