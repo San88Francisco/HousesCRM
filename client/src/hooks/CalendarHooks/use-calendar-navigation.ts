@@ -7,7 +7,7 @@ const MONTHS_PAGE_STEP = 1;
 
 type useCalendarNavigationProps = {
   viewMode: viewModeType;
-  firtsDayCurrentMonth: Date;
+  firstDayCurrentMonth: Date;
   currentDecadeStart: Date;
   setCurrentMonth: (currentMonth: string) => void;
   setCurrentDecadeStart: (currentDecadeStart: Date) => void;
@@ -15,18 +15,18 @@ type useCalendarNavigationProps = {
 
 export const useCalendarNavigation = ({
   viewMode,
-  firtsDayCurrentMonth,
+  firstDayCurrentMonth,
   currentDecadeStart,
   setCurrentMonth,
   setCurrentDecadeStart,
 }: useCalendarNavigationProps) => {
   const nextMonth = () => {
-    const firtsDayNextMonth = add(firtsDayCurrentMonth, { months: MONTHS_PAGE_STEP });
+    const firtsDayNextMonth = add(firstDayCurrentMonth, { months: MONTHS_PAGE_STEP });
     setCurrentMonth(format(firtsDayNextMonth, 'MMM-yyyy'));
   };
 
   const prevMonth = () => {
-    const firtsDayNextMonth = add(firtsDayCurrentMonth, { months: -MONTHS_PAGE_STEP });
+    const firtsDayNextMonth = add(firstDayCurrentMonth, { months: -MONTHS_PAGE_STEP });
     setCurrentMonth(format(firtsDayNextMonth, 'MMM-yyyy'));
   };
 

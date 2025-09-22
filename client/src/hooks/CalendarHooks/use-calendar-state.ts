@@ -23,10 +23,10 @@ export const useCalendarState = (firstWeekDayNumber: Day) => {
   const today = startOfToday();
   const [viewMode, setViewMode] = useState<viewModeType>('days');
   const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMM-yyyy'));
-  const firtsDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date());
+  const firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date());
   const calendarDays = eachDayOfInterval({
-    start: startOfWeek(startOfMonth(firtsDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
-    end: endOfWeek(endOfMonth(firtsDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
+    start: startOfWeek(startOfMonth(firstDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
+    end: endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
   });
 
   const [currentDecadeStart, setCurrentDecadeStart] = useState<Date>(startOfDecade(today));
@@ -46,7 +46,7 @@ export const useCalendarState = (firstWeekDayNumber: Day) => {
     setViewMode,
     currentMonth,
     setCurrentMonth,
-    firtsDayCurrentMonth,
+    firstDayCurrentMonth,
     calendarDays,
     currentDecadeStart,
     setCurrentDecadeStart,

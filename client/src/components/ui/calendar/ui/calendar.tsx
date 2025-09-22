@@ -3,7 +3,6 @@ import { cn } from '@/lib/utils';
 import {
   Day,
   format,
-  getYear,
   isEqual,
   isSameMonth,
   isSameYear,
@@ -11,12 +10,13 @@ import {
   isToday,
   isWithinInterval,
 } from 'date-fns';
-import { MoveLeft, MoveRight } from 'lucide-react';
 import { FC, Fragment, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarMode, DateRange } from '@/types/core/calendar';
 import { useCalendarState } from '@/hooks/CalendarHooks/use-calendar-state';
 import { useCalendarNavigation } from '@/hooks/CalendarHooks/use-calendar-navigation';
+import CalendarHeader from './calendar-header';
+import CalendarCell from './calendar-cell';
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -47,7 +47,7 @@ const Calendar: FC<CalendarProps> = ({
     viewMode,
     setViewMode,
     setCurrentMonth,
-    firtsDayCurrentMonth,
+    firstDayCurrentMonth,
     calendarDays,
     currentDecadeStart,
     setCurrentDecadeStart,
@@ -69,12 +69,13 @@ const Calendar: FC<CalendarProps> = ({
 
   const { handlePrevPage, handleNextPage } = useCalendarNavigation({
     viewMode,
-    firtsDayCurrentMonth,
+    firstDayCurrentMonth,
     currentDecadeStart,
     setCurrentMonth,
     setCurrentDecadeStart,
   });
 
+  // todo make separate hook
   const handleSelect = (date: Date) => {
     if (mode === CalendarMode.Single) {
       setSelectedDate(date);
@@ -136,33 +137,24 @@ const Calendar: FC<CalendarProps> = ({
     }
   };
 
+  const base =
+    'w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest';
+
+  const currentDateStyle =
+    'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]';
+
+  // todo change render of weeks days names
   // todo change page to the peaked year date
   return (
     <div className="w-80 bg-background rounded-lg shadow-lg p-4">
-      <div className="flex items-center justify-between mb-4">
-        <button onClick={handlePrevPage} className="p-1 hover:bg-gray-100 rounded">
-          <MoveLeft className="w-5 h-5 text-gray-600" />
-        </button>
-
-        <h2 className="text-lg font-bold font-medium text-gray-900 flex gap-2">
-          {viewMode === 'days' && (
-            <Fragment>
-              <button>{format(firtsDayCurrentMonth, 'MMMM')}</button>
-              <button onClick={() => setViewMode('years')}>
-                {format(firtsDayCurrentMonth, 'yyyy')}
-              </button>
-            </Fragment>
-          )}
-          {viewMode === 'years' && (
-            <button onClick={() => setViewMode('days')}>
-              {getYear(calendarYears[0])}-{getYear(calendarYears[calendarYears.length - 1])}
-            </button>
-          )}
-        </h2>
-        <button onClick={handleNextPage} className="p-1 hover:bg-gray-100 rounded">
-          <MoveRight className="w-5 h-5 text-gray-600" />
-        </button>
-      </div>
+      <CalendarHeader
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        firstDayCurrentMonth={firstDayCurrentMonth}
+        calendarYears={calendarYears}
+        handlePrevPage={handlePrevPage}
+        handleNextPage={handleNextPage}
+      />
       {viewMode === 'days' && (
         <Fragment>
           <div className="grid grid-cols-7 gap-1 mb-2">
@@ -176,21 +168,32 @@ const Calendar: FC<CalendarProps> = ({
             {calendarDays.map(day => {
               if (mode === CalendarMode.Single) {
                 return (
-                  <time
+                  <CalendarCell
                     key={day.toString()}
                     dateTime={format(day, 'yyyy-MM-dd')}
                     onClick={() => handleSelect(day)}
-                    className={cn(
-                      'h-[2.125rem] w-full text-sm font-semibold rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                      !isSameMonth(day, firtsDayCurrentMonth) && 'text-dark-medium',
-                      isToday(day) &&
-                        'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]', //todo
-                      isEqual(day, selectedDate) &&
-                        'bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                    )}
+                    size="small"
+                    isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
+                    isCurrentDate={isToday(day)}
+                    isSelected={isEqual(day, selectedDate)}
                   >
                     {format(day, 'd')}
-                  </time>
+                  </CalendarCell>
+                  // <time
+                  //   key={day.toString()}
+                  //   dateTime={format(day, 'yyyy-MM-dd')}
+                  //   onClick={() => handleSelect(day)}
+                  //   className={cn(
+                  //     `h-[2.125rem] ${base}`,
+                  //     // 'h-[2.125rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                  //     !isSameMonth(day, firstDayCurrentMonth) && 'text-dark-medium',
+                  //     isToday(day) && currentDateStyle,
+                  //     isEqual(day, selectedDate) &&
+                  //       'bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                  //   )}
+                  // >
+                  //   {format(day, 'd')}
+                  // </time>
                 );
               }
 
@@ -204,25 +207,40 @@ const Calendar: FC<CalendarProps> = ({
                   isWithinInterval(day, { start: rangeStart, end: rangeEnd });
 
                 return (
-                  <time
+                  // <time
+                  //   key={day.toString()}
+                  //   dateTime={format(day, 'yyyy-MM-dd')}
+                  //   onClick={() => handleSelect(day)}
+                  //   onMouseEnter={() => handleHover(day)}
+                  //   className={cn(
+                  //     `h-[2.125rem] ${base}`,
+                  //     // 'h-[2.125rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                  //     !isSameMonth(day, firstDayCurrentMonth) && 'text-dark-medium',
+                  //     isToday(day) && currentDateStyle,
+                  //     inRange && 'bg-dark-lightest rounded-[0]',
+                  //     isEqual(day, rangeStart) &&
+                  //       'rounded-l-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                  //     isEqual(day, rangeEnd) &&
+                  //       'rounded-r-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                  //   )}
+                  // >
+                  //   {format(day, 'd')}
+                  // </time>
+                  <CalendarCell
                     key={day.toString()}
                     dateTime={format(day, 'yyyy-MM-dd')}
                     onClick={() => handleSelect(day)}
                     onMouseEnter={() => handleHover(day)}
-                    className={cn(
-                      'h-[2.125rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                      !isSameMonth(day, firtsDayCurrentMonth) && 'text-dark-medium',
-                      isToday(day) &&
-                        'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]',
-                      inRange && 'bg-dark-lightest rounded-[0]',
-                      isEqual(day, rangeStart) &&
-                        'rounded-l-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                      isEqual(day, rangeEnd) &&
-                        'rounded-r-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                    )}
+                    size="small"
+                    isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
+                    isCurrentDate={isToday(day)}
+                    isSelected={isEqual(day, rangeEnd) || isEqual(day, rangeStart)}
+                    isLeftSide={isEqual(day, rangeStart)}
+                    isRightSide={isEqual(day, rangeEnd)}
+                    inRange={inRange}
                   >
                     {format(day, 'd')}
-                  </time>
+                  </CalendarCell>
                 );
               }
             })}
@@ -234,20 +252,31 @@ const Calendar: FC<CalendarProps> = ({
           {calendarYears.map(year => {
             if (mode === CalendarMode.Single) {
               return (
-                <time
+                // <time
+                //   key={year.toString()}
+                //   dateTime={format(year, 'yyyy-MM-dd')}
+                //   onClick={() => setSelectedDate(year)}
+                //   className={cn(
+                //     `h-[2.5rem] ${base}`,
+                //     // 'h-[2.5rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                //     // !isSameYear(year, firstDayCurrentMonth) && 'text-dark-medium',
+                //     isThisYear(year) && currentDateStyle,
+                //     isSameYear(year, selectedDate) &&
+                //       'bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                //   )}
+                // >
+                //   {format(year, 'y')}
+                // </time>
+                <CalendarCell
                   key={year.toString()}
                   dateTime={format(year, 'yyyy-MM-dd')}
                   onClick={() => setSelectedDate(year)}
-                  className={cn(
-                    'h-[40px] w-full text-md font-semibold text-center rounded-[0.75rem] transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                    isThisYear(year) &&
-                      'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-transparent',
-                    isSameYear(year, selectedDate) &&
-                      'bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                  )}
+                  size="big"
+                  isCurrentDate={isThisYear(year)}
+                  isSelected={isSameYear(year, selectedDate)}
                 >
                   {format(year, 'y')}
-                </time>
+                </CalendarCell>
               );
             }
 
@@ -261,25 +290,39 @@ const Calendar: FC<CalendarProps> = ({
                 isWithinInterval(year, { start: rangeStart, end: rangeEnd });
 
               return (
-                <time
+                // <time
+                //   key={year.toString()}
+                //   dateTime={format(year, 'yyyy-MM-dd')}
+                //   onClick={() => handleSelect(year)}
+                //   onMouseEnter={() => handleHover(year)}
+                //   className={cn(
+                //     `h-[2.5rem] ${base}`,
+                //     // 'h-[2.5rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
+                //     // !isSameYear(year, firstDayCurrentMonth) && 'text-dark-medium',
+                //     isThisYear(year) && currentDateStyle,
+                //     inRange && 'bg-dark-lightest rounded-[0]',
+                //     isSameYear(year, rangeStart) &&
+                //       'rounded-l-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                //     isSameYear(year, rangeEnd) &&
+                //       'rounded-r-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
+                //   )}
+                // >
+                //   {format(year, 'y')}
+                // </time>
+                <CalendarCell
                   key={year.toString()}
                   dateTime={format(year, 'yyyy-MM-dd')}
                   onClick={() => handleSelect(year)}
                   onMouseEnter={() => handleHover(year)}
-                  className={cn(
-                    'h-[40px] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                    !isSameYear(year, firtsDayCurrentMonth) && 'text-dark-medium',
-                    isThisYear(year) &&
-                      'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]',
-                    inRange && 'bg-dark-lightest rounded-[0]',
-                    isSameYear(year, rangeStart) &&
-                      'rounded-l-[0.75rem] ml-[2px] rounded-r-[0] bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                    isSameYear(year, rangeEnd) &&
-                      'rounded-r-[0.75rem] mr-[2px] bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                  )}
+                  size="big"
+                  isCurrentDate={isThisYear(year)}
+                  isSelected={isSameYear(year, rangeStart) || isSameYear(year, rangeEnd)}
+                  isLeftSide={isSameYear(year, rangeStart)}
+                  isRightSide={isSameYear(year, rangeEnd)}
+                  inRange={inRange}
                 >
                   {format(year, 'y')}
-                </time>
+                </CalendarCell>
               );
             }
           })}
