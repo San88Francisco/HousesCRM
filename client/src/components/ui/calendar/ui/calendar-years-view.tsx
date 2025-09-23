@@ -1,14 +1,5 @@
-import {
-  Day,
-  format,
-  isEqual,
-  isSameMonth,
-  isSameYear,
-  isThisYear,
-  isToday,
-  isWithinInterval,
-} from 'date-fns';
-import { FC, Fragment, useEffect } from 'react';
+import { format, isSameYear, isThisYear, isWithinInterval } from 'date-fns';
+import { FC } from 'react';
 import { CalendarMode, DateRange } from '@/types/core/calendar';
 import CalendarCell from './calendar-cell';
 

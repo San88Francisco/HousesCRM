@@ -1,4 +1,4 @@
-import { CalendarMode, DateRange, viewModeType } from '@/types/core/calendar';
+import { CalendarMode, DateRange } from '@/types/core/calendar';
 import { FC, Fragment } from 'react';
 import CalendarCell from './calendar-cell';
 import { format, isEqual, isSameMonth, isToday, isWithinInterval } from 'date-fns';
@@ -12,31 +12,6 @@ interface ICalendarDaysViewProps {
   hoveredDate: DateRange;
   firstDayCurrentMonth: Date;
 }
-
-// type SingleModeCalendarProps = {
-//   selectedDate: Date;
-//   calendarDays: Date[];
-//   handleSelect: (day: Date) => void;
-//   handleHover: (day: Date) => void;
-//   hoveredDate: DateRange;
-//   firstDayCurrentMonth: Date;
-//   // firstWeekDayNumber?: Day;
-// };
-
-// type RangeModeCalendarProps = {
-//   selectedDate: DateRange;
-//   calendarDays: Date[];
-//   handleSelect: (date: Date) => void;
-//   handleHover: (day: Date) => void;
-//   hoveredDate: DateRange;
-//   firstDayCurrentMonth: Date;
-
-//   // firstWeekDayNumber?: Day;
-// };
-
-// type CalendarDaysViewProps =
-//   | ({ mode: CalendarMode.Single } & SingleModeCalendarProps)
-//   | ({ mode: CalendarMode.Range } & RangeModeCalendarProps);
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -108,99 +83,3 @@ const CalendarDaysView: FC<ICalendarDaysViewProps> = ({
 };
 
 export default CalendarDaysView;
-
-// import { FC, Fragment } from "react";
-// import { format, isEqual, isSameMonth, isToday, isWithinInterval } from "date-fns";
-// import CalendarCell from "./calendar-cell";
-// import { CalendarMode, DateRange } from "@/types/core/calendar";
-
-// interface CalendarDaysViewProps {
-//   mode: CalendarMode;
-//   calendarDays: Date[];
-//   selectedDate: Date | DateRange;
-//   hoveredDate: DateRange;
-//   firstDayCurrentMonth: Date;
-//   handleSelect: (date: Date) => void;
-//   handleHover: (date: Date) => void;
-// }
-
-// const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-// export const CalendarDaysView: FC<CalendarDaysViewProps> = ({
-//   mode,
-//   calendarDays,
-//   selectedDate,
-//   hoveredDate,
-//   firstDayCurrentMonth,
-//   handleSelect,
-//   handleHover,
-// }) => {
-//   return (
-//     <Fragment>
-//       {/* Заголовки дней недели */}
-//       <div className="grid grid-cols-7 gap-1 mb-2">
-//         {daysOfWeek.map((day) => (
-//           <div
-//             key={day}
-//             className="text-center text-sm font-medium text-gray-500 py-2"
-//           >
-//             {day}
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Сетка дней */}
-//       <div className="grid grid-cols-7 gap-y-1 mb-6">
-//         {calendarDays.map((day) => {
-//           if (mode === CalendarMode.Single) {
-//             return (
-//               <CalendarCell
-//                 key={day.toString()}
-//                 dateTime={format(day, "yyyy-MM-dd")}
-//                 onClick={() => handleSelect(day)}
-//                 size="small"
-//                 isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
-//                 isCurrentDate={isToday(day)}
-//                 isSelected={isEqual(day, selectedDate as Date)}
-//               >
-//                 {format(day, "d")}
-//               </CalendarCell>
-//             );
-//           }
-
-//           if (mode === CalendarMode.Range) {
-//             const rangeStart =
-//               hoveredDate.startDate || (selectedDate as DateRange).startDate;
-//             const rangeEnd =
-//               hoveredDate.endDate || (selectedDate as DateRange).endDate;
-
-//             const inRange =
-//               rangeStart &&
-//               rangeEnd &&
-//               isWithinInterval(day, { start: rangeStart, end: rangeEnd });
-
-//             return (
-//               <CalendarCell
-//                 key={day.toString()}
-//                 dateTime={format(day, "yyyy-MM-dd")}
-//                 onClick={() => handleSelect(day)}
-//                 onMouseEnter={() => handleHover(day)}
-//                 size="small"
-//                 isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
-//                 isCurrentDate={isToday(day)}
-//                 isSelected={
-//                   isEqual(day, rangeEnd) || isEqual(day, rangeStart)
-//                 }
-//                 isLeftSide={isEqual(day, rangeStart)}
-//                 isRightSide={isEqual(day, rangeEnd)}
-//                 inRange={inRange}
-//               >
-//                 {format(day, "d")}
-//               </CalendarCell>
-//             );
-//           }
-//         })}
-//       </div>
-//     </Fragment>
-//   );
-// };
