@@ -1,6 +1,6 @@
 import { IsDate, IsDefined, IsEnum, IsNumber, IsOptional, IsPositive, IsUUID } from 'class-validator'
-import { ContractStatus } from '../enums/contract-status.enum'
 import { Type } from 'class-transformer'
+import { ContractStatus } from '../entities/contract.entity'
 
 export class CreateContractDto {
   @IsDefined({ message: 'commencement is required' })

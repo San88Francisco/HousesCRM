@@ -1,8 +1,13 @@
 import { House } from 'src/houses/entities/house.entity'
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
-import { ContractStatus } from '../enums/contract-status.enum'
 import { Renter } from 'src/renters/entities/renter.entity'
+
+export enum ContractStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+}
+
 @Entity()
 export class Contract {
   @PrimaryGeneratedColumn('uuid')
