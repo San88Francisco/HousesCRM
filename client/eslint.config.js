@@ -10,9 +10,7 @@ import unusedImports from 'eslint-plugin-unused-imports';
 
 // Функція для очищення пробілів з ключів об'єкта globals
 function cleanGlobals(obj) {
-  return Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [key.trim(), value])
-  );
+  return Object.fromEntries(Object.entries(obj).map(([key, value]) => [key.trim(), value]));
 }
 
 export default [
