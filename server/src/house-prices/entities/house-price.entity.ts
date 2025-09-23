@@ -14,7 +14,7 @@ export class HousePrice {
   @Column({ name: 'exchange_rate', type: 'decimal', precision: 12, scale: 2, nullable: false })
   public exchangeRate: number
 
-  @Column({ type: 'enum', enum: CurrencyCode })
+  @Column({ type: 'enum', enum: CurrencyCode, enumName: 'house_price_code_enum' })
   public code: CurrencyCode
 
   @CreateDateColumn({ name: 'created_at' })
