@@ -1,7 +1,13 @@
 import { House } from 'src/houses/entities/house.entity'
-import { CurrencyCode } from 'src/house-prices/enums/currency-code.enum'
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
+
+export enum CurrencyCode {
+  UAH = 'UAH',
+  USD = 'USD',
+  EUR = 'EUR',
+  PLN = 'PLN',
+}
 
 @Entity()
 export class HousePrice {
@@ -14,7 +20,7 @@ export class HousePrice {
   @Column({ name: 'exchange_rate', type: 'decimal', precision: 12, scale: 2, nullable: false })
   public exchangeRate: number
 
-  @Column({ type: 'enum', enum: CurrencyCode, enumName: 'house_price_code_enum' })
+  @Column({ type: 'enum', enum: CurrencyCode, default: CurrencyCode.UAH })
   public code: CurrencyCode
 
   @CreateDateColumn({ name: 'created_at' })

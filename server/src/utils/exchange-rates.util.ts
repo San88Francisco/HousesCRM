@@ -1,4 +1,4 @@
-import { CurrencyCode } from 'src/house-prices/enums/currency-code.enum'
+import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getExchangeRates(date: Date): Record<CurrencyCode, number> {
