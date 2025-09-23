@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { FC, Fragment, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 
 type CellSize = 'small' | 'big';
 
@@ -12,7 +12,6 @@ interface ICalendarCellProps {
   isLeftSide?: boolean;
   isRightSide?: boolean;
   children: ReactNode;
-  // key: string;
   dateTime: string;
   onClick: () => void;
   onMouseEnter?: () => void;

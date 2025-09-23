@@ -11,6 +11,7 @@ export const CalendarComponent = () => {
   const [selectedDate, setSelectedDay] = useState<Date>(new Date());
 
   console.warn(selectedRangeDate);
+  console.warn(selectedDate);
 
   return (
     <div className="flex gap-10">

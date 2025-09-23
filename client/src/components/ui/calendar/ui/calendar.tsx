@@ -1,5 +1,4 @@
 'use client';
-import { cn } from '@/lib/utils';
 import {
   Day,
   format,
@@ -17,6 +16,9 @@ import { useCalendarState } from '@/hooks/CalendarHooks/use-calendar-state';
 import { useCalendarNavigation } from '@/hooks/CalendarHooks/use-calendar-navigation';
 import CalendarHeader from './calendar-header';
 import CalendarCell from './calendar-cell';
+// import { CalendarDaysView } from './calendar-days-view';
+import CalendarDaysView from './calendar-days-view';
+import CalendarYearsView from './calendar-years-view';
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -75,6 +77,7 @@ const Calendar: FC<CalendarProps> = ({
     setCurrentDecadeStart,
   });
 
+  // todo optimize
   // todo make separate hook
   const handleSelect = (date: Date) => {
     if (mode === CalendarMode.Single) {
@@ -137,12 +140,6 @@ const Calendar: FC<CalendarProps> = ({
     }
   };
 
-  const base =
-    'w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest';
-
-  const currentDateStyle =
-    'border border-solid border-active-border text-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]';
-
   // todo change render of weeks days names
   // todo change page to the peaked year date
   return (
@@ -156,177 +153,147 @@ const Calendar: FC<CalendarProps> = ({
         handleNextPage={handleNextPage}
       />
       {viewMode === 'days' && (
-        <Fragment>
-          <div className="grid grid-cols-7 gap-1 mb-2">
-            {daysOfWeek.map(day => (
-              <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
-                {day}
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-7 gap-y-1 mb-6">
-            {calendarDays.map(day => {
-              if (mode === CalendarMode.Single) {
-                return (
-                  <CalendarCell
-                    key={day.toString()}
-                    dateTime={format(day, 'yyyy-MM-dd')}
-                    onClick={() => handleSelect(day)}
-                    size="small"
-                    isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
-                    isCurrentDate={isToday(day)}
-                    isSelected={isEqual(day, selectedDate)}
-                  >
-                    {format(day, 'd')}
-                  </CalendarCell>
-                  // <time
-                  //   key={day.toString()}
-                  //   dateTime={format(day, 'yyyy-MM-dd')}
-                  //   onClick={() => handleSelect(day)}
-                  //   className={cn(
-                  //     `h-[2.125rem] ${base}`,
-                  //     // 'h-[2.125rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                  //     !isSameMonth(day, firstDayCurrentMonth) && 'text-dark-medium',
-                  //     isToday(day) && currentDateStyle,
-                  //     isEqual(day, selectedDate) &&
-                  //       'bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                  //   )}
-                  // >
-                  //   {format(day, 'd')}
-                  // </time>
-                );
-              }
+        // <Fragment>
+        //   <CalendarDaysView
+        //     mode={CalendarMode.Single}
+        //     calendarDays={calendarDays}
+        //     selectedDate={selectedDate as Date}
+        //     handleSelect={handleSelect}
+        //     handleHover={handleHover}
+        //     hoveredDate={hoveredDate}
+        //     firstDayCurrentMonth={firstDayCurrentMonth}
+        //   />
+        //   <CalendarDaysView
+        //     mode={CalendarMode.Range}
+        //     calendarDays={calendarDays}
+        //     selectedDate={selectedDate as DateRange}
+        //     handleSelect={handleSelect}
+        //     handleHover={handleHover}
+        //     hoveredDate={hoveredDate}
+        //     firstDayCurrentMonth={firstDayCurrentMonth}
+        //   />
+        // </Fragment>
+        <CalendarDaysView
+          mode={mode}
+          calendarDays={calendarDays}
+          selectedDate={selectedDate}
+          hoveredDate={hoveredDate}
+          firstDayCurrentMonth={firstDayCurrentMonth}
+          handleSelect={handleSelect}
+          handleHover={handleHover}
+        />
 
-              if (mode === CalendarMode.Range) {
-                const rangeStart = hoveredDate.startDate || selectedDate.startDate;
-                const rangeEnd = hoveredDate.endDate || selectedDate.endDate;
+        // <Fragment>
+        //   <div className="grid grid-cols-7 gap-1 mb-2">
+        //     {daysOfWeek.map(day => (
+        //       <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+        //         {day}
+        //       </div>
+        //     ))}
+        //   </div>
+        //   <div className="grid grid-cols-7 gap-y-1 mb-6">
+        //     {calendarDays.map(day => {
+        //       if (mode === CalendarMode.Single) {
+        //         return (
+        //           <CalendarCell
+        //             key={day.toString()}
+        //             dateTime={format(day, 'yyyy-MM-dd')}
+        //             onClick={() => handleSelect(day)}
+        //             size="small"
+        //             isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
+        //             isCurrentDate={isToday(day)}
+        //             isSelected={isEqual(day, selectedDate)}
+        //           >
+        //             {format(day, 'd')}
+        //           </CalendarCell>
+        //         );
+        //       }
 
-                const inRange =
-                  rangeStart &&
-                  rangeEnd &&
-                  isWithinInterval(day, { start: rangeStart, end: rangeEnd });
+        //       if (mode === CalendarMode.Range) {
+        //         const rangeStart = hoveredDate.startDate || selectedDate.startDate;
+        //         const rangeEnd = hoveredDate.endDate || selectedDate.endDate;
 
-                return (
-                  // <time
-                  //   key={day.toString()}
-                  //   dateTime={format(day, 'yyyy-MM-dd')}
-                  //   onClick={() => handleSelect(day)}
-                  //   onMouseEnter={() => handleHover(day)}
-                  //   className={cn(
-                  //     `h-[2.125rem] ${base}`,
-                  //     // 'h-[2.125rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                  //     !isSameMonth(day, firstDayCurrentMonth) && 'text-dark-medium',
-                  //     isToday(day) && currentDateStyle,
-                  //     inRange && 'bg-dark-lightest rounded-[0]',
-                  //     isEqual(day, rangeStart) &&
-                  //       'rounded-l-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                  //     isEqual(day, rangeEnd) &&
-                  //       'rounded-r-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                  //   )}
-                  // >
-                  //   {format(day, 'd')}
-                  // </time>
-                  <CalendarCell
-                    key={day.toString()}
-                    dateTime={format(day, 'yyyy-MM-dd')}
-                    onClick={() => handleSelect(day)}
-                    onMouseEnter={() => handleHover(day)}
-                    size="small"
-                    isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
-                    isCurrentDate={isToday(day)}
-                    isSelected={isEqual(day, rangeEnd) || isEqual(day, rangeStart)}
-                    isLeftSide={isEqual(day, rangeStart)}
-                    isRightSide={isEqual(day, rangeEnd)}
-                    inRange={inRange}
-                  >
-                    {format(day, 'd')}
-                  </CalendarCell>
-                );
-              }
-            })}
-          </div>
-        </Fragment>
+        //         const inRange =
+        //           rangeStart &&
+        //           rangeEnd &&
+        //           isWithinInterval(day, { start: rangeStart, end: rangeEnd });
+
+        //         return (
+        //           <CalendarCell
+        //             key={day.toString()}
+        //             dateTime={format(day, 'yyyy-MM-dd')}
+        //             onClick={() => handleSelect(day)}
+        //             onMouseEnter={() => handleHover(day)}
+        //             size="small"
+        //             isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
+        //             isCurrentDate={isToday(day)}
+        //             isSelected={isEqual(day, rangeEnd) || isEqual(day, rangeStart)}
+        //             isLeftSide={isEqual(day, rangeStart)}
+        //             isRightSide={isEqual(day, rangeEnd)}
+        //             inRange={inRange}
+        //           >
+        //             {format(day, 'd')}
+        //           </CalendarCell>
+        //         );
+        //       }
+        //     })}
+        //   </div>
+        // </Fragment>
       )}
       {viewMode === 'years' && (
-        <div className="grid grid-cols-3 gap-y-3 mb-6 place-items-center">
-          {calendarYears.map(year => {
-            if (mode === CalendarMode.Single) {
-              return (
-                // <time
-                //   key={year.toString()}
-                //   dateTime={format(year, 'yyyy-MM-dd')}
-                //   onClick={() => setSelectedDate(year)}
-                //   className={cn(
-                //     `h-[2.5rem] ${base}`,
-                //     // 'h-[2.5rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                //     // !isSameYear(year, firstDayCurrentMonth) && 'text-dark-medium',
-                //     isThisYear(year) && currentDateStyle,
-                //     isSameYear(year, selectedDate) &&
-                //       'bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                //   )}
-                // >
-                //   {format(year, 'y')}
-                // </time>
-                <CalendarCell
-                  key={year.toString()}
-                  dateTime={format(year, 'yyyy-MM-dd')}
-                  onClick={() => setSelectedDate(year)}
-                  size="big"
-                  isCurrentDate={isThisYear(year)}
-                  isSelected={isSameYear(year, selectedDate)}
-                >
-                  {format(year, 'y')}
-                </CalendarCell>
-              );
-            }
+        // <div className="grid grid-cols-3 gap-y-3 mb-6 place-items-center">
+        //   {calendarYears.map(year => {
+        //     if (mode === CalendarMode.Single) {
+        //       return (
+        //         <CalendarCell
+        //           key={year.toString()}
+        //           dateTime={format(year, 'yyyy-MM-dd')}
+        //           onClick={() => setSelectedDate(year)}
+        //           size="big"
+        //           isCurrentDate={isThisYear(year)}
+        //           isSelected={isSameYear(year, selectedDate)}
+        //         >
+        //           {format(year, 'y')}
+        //         </CalendarCell>
+        //       );
+        //     }
 
-            if (mode === CalendarMode.Range) {
-              const rangeStart = hoveredDate.startDate || selectedDate.startDate;
-              const rangeEnd = hoveredDate.endDate || selectedDate.endDate;
+        //     if (mode === CalendarMode.Range) {
+        //       const rangeStart = hoveredDate.startDate || selectedDate.startDate;
+        //       const rangeEnd = hoveredDate.endDate || selectedDate.endDate;
 
-              const inRange =
-                rangeStart &&
-                rangeEnd &&
-                isWithinInterval(year, { start: rangeStart, end: rangeEnd });
+        //       const inRange =
+        //         rangeStart &&
+        //         rangeEnd &&
+        //         isWithinInterval(year, { start: rangeStart, end: rangeEnd });
 
-              return (
-                // <time
-                //   key={year.toString()}
-                //   dateTime={format(year, 'yyyy-MM-dd')}
-                //   onClick={() => handleSelect(year)}
-                //   onMouseEnter={() => handleHover(year)}
-                //   className={cn(
-                //     `h-[2.5rem] ${base}`,
-                //     // 'h-[2.5rem] w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest',
-                //     // !isSameYear(year, firstDayCurrentMonth) && 'text-dark-medium',
-                //     isThisYear(year) && currentDateStyle,
-                //     inRange && 'bg-dark-lightest rounded-[0]',
-                //     isSameYear(year, rangeStart) &&
-                //       'rounded-l-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                //     isSameYear(year, rangeEnd) &&
-                //       'rounded-r-[0.75rem] bg-active-border text-white hover:text-white hover:bg-blue-dark',
-                //   )}
-                // >
-                //   {format(year, 'y')}
-                // </time>
-                <CalendarCell
-                  key={year.toString()}
-                  dateTime={format(year, 'yyyy-MM-dd')}
-                  onClick={() => handleSelect(year)}
-                  onMouseEnter={() => handleHover(year)}
-                  size="big"
-                  isCurrentDate={isThisYear(year)}
-                  isSelected={isSameYear(year, rangeStart) || isSameYear(year, rangeEnd)}
-                  isLeftSide={isSameYear(year, rangeStart)}
-                  isRightSide={isSameYear(year, rangeEnd)}
-                  inRange={inRange}
-                >
-                  {format(year, 'y')}
-                </CalendarCell>
-              );
-            }
-          })}
-        </div>
+        //       return (
+        //         <CalendarCell
+        //           key={year.toString()}
+        //           dateTime={format(year, 'yyyy-MM-dd')}
+        //           onClick={() => handleSelect(year)}
+        //           onMouseEnter={() => handleHover(year)}
+        //           size="big"
+        //           isCurrentDate={isThisYear(year)}
+        //           isSelected={isSameYear(year, rangeStart) || isSameYear(year, rangeEnd)}
+        //           isLeftSide={isSameYear(year, rangeStart)}
+        //           isRightSide={isSameYear(year, rangeEnd)}
+        //           inRange={inRange}
+        //         >
+        //           {format(year, 'y')}
+        //         </CalendarCell>
+        //       );
+        //     }
+        //   })}
+        // </div>
+        <CalendarYearsView
+          mode={mode}
+          calendarYears={calendarYears}
+          selectedDate={selectedDate}
+          hoveredDate={hoveredDate}
+          handleSelect={handleSelect}
+          handleHover={handleHover}
+        />
       )}
       <div className="flex gap-5">
         <Button
