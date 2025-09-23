@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
-import { ContractStatus } from 'src/contracts/enums/contract-status.enum'
 import { House } from 'src/houses/entities/house.entity'
 import { Repository } from 'typeorm'
 import { HouseOverviewDto } from './dto/houses-overview/houses-overview.dto'
@@ -51,9 +50,7 @@ export class HousesAnalyticsService {
   public async getHousesOverview(): Promise<HouseOverviewDto[]> {
     const houses = await this.houseRepository
       .createQueryBuilder('house')
-      .leftJoinAndMapOne('house.contract', 'house.contracts', 'contract', 'contract.status = :status', {
-        status: ContractStatus.ACTIVE,
-      })
+      .leftJoinAndMapMany('house.contract', 'house.contracts', 'contract')
       .leftJoinAndSelect('contract.renter', 'renter')
       .select([
         'house.id',

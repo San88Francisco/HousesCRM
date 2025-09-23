@@ -6,5 +6,5 @@ import { ContractSubsetDto } from './contract-subset.dto'
 export class HouseOverviewDto extends PickType(HouseDto, ['id', 'apartmentName'] as const) {
   @Expose()
   @Type(() => ContractSubsetDto)
-  public contract: ContractSubsetDto
+  public contract: ContractSubsetDto[]
 }
