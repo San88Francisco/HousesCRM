@@ -1,11 +1,12 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Init1756919335525 implements MigrationInterface {
-    name = 'Init1756919335525'
+export class Init1758654430575 implements MigrationInterface {
+    name = 'Init1758654430575'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`CREATE TABLE "refresh_token" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "hashed_token" character varying(255) NOT NULL, "jti" character varying(64) NOT NULL, "user_agent" character varying(255), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "expires_at" TIMESTAMP WITH TIME ZONE NOT NULL, "revoked" boolean NOT NULL DEFAULT false, "userId" uuid NOT NULL, CONSTRAINT "PK_b575dd3c21fb0831013c909e7fe" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE INDEX "IDX_e532a5fe469da358494917ce2b" ON "refresh_token" ("jti") `);
         await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" character varying NOT NULL, "username" character varying(15) NOT NULL, "password" character varying NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "refresh_token" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "token" character varying NOT NULL, "user_agent" character varying NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "expires_at" TIMESTAMP NOT NULL, "userId" uuid NOT NULL, CONSTRAINT "UQ_c31d0a2f38e6e99110df62ab0af" UNIQUE ("token"), CONSTRAINT "PK_b575dd3c21fb0831013c909e7fe" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "house_price" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "amount" numeric(12,2) NOT NULL, "exchange_rate" numeric(12,2) NOT NULL, "code" "public"."house_price_code_enum" NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "houseId" uuid NOT NULL, CONSTRAINT "PK_4f9ee3f3c846d191663f89dada8" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "house" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "apartment_name" character varying(30) NOT NULL, "rooms_count" integer NOT NULL, "total_area" double precision NOT NULL, "purchase_date" TIMESTAMP NOT NULL, "floor" integer NOT NULL, "street" character varying NOT NULL, "apartment_type" "public"."house_apartment_type_enum" NOT NULL DEFAULT 'new_build', "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "CHK_032a121e4caf2bf9069f766c62" CHECK ("rooms_count" > 0 AND "total_area" > 0 AND "floor" >= 0), CONSTRAINT "PK_8c9220195fd0a289745855fe908" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "contract" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "commencement" TIMESTAMP NOT NULL, "termination" TIMESTAMP NOT NULL, "status" "public"."contract_status_enum" NOT NULL DEFAULT 'active', "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "monthly_payment" integer NOT NULL, "houseId" uuid, "renterId" uuid, CONSTRAINT "PK_17c3a89f58a2997276084e706e8" PRIMARY KEY ("id"))`);
@@ -25,8 +26,9 @@ export class Init1756919335525 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "contract"`);
         await queryRunner.query(`DROP TABLE "house"`);
         await queryRunner.query(`DROP TABLE "house_price"`);
-        await queryRunner.query(`DROP TABLE "refresh_token"`);
         await queryRunner.query(`DROP TABLE "user"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_e532a5fe469da358494917ce2b"`);
+        await queryRunner.query(`DROP TABLE "refresh_token"`);
     }
 
 }
