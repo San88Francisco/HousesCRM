@@ -1,9 +1,12 @@
 import { Contract } from 'src/contracts/entities/contract.entity'
 import { Check, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
-import { ApartmentType } from '../enums/apartment-type.enum'
 import { HousePrice } from 'src/house-prices/entities/house-price.entity'
 
+export enum ApartmentType {
+  NEW_BUILD = 'new_build',
+  RESALE = 'resale',
+}
 @Entity()
 // eslint-disable-next-line quotes
 @Check(`"rooms_count" > 0 AND "total_area" > 0 AND "floor" >= 0`)
@@ -29,7 +32,7 @@ export class House {
   @Column()
   public street: string
 
-  @Column({ name: 'apartment_type', type: 'enum', enum: ApartmentType, default: ApartmentType.NEW_BUILD })
+  @Column({ type: 'enum', enum: ApartmentType, default: ApartmentType.NEW_BUILD })
   public apartmentType: ApartmentType
 
   @CreateDateColumn({ name: 'created_at' })

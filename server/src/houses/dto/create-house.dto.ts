@@ -14,7 +14,7 @@ import {
   Min,
 } from 'class-validator'
 import { Type } from 'class-transformer'
-import { ApartmentType } from '../enums/apartment-type.enum'
+import { ApartmentType } from '../entities/house.entity'
 
 export class CreateHouseDto {
   @IsDefined({ message: 'apartmentName is required' })

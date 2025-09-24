@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { House } from 'src/houses/entities/house.entity'
-import { HousePrice } from './entities/house-price.entity'
-import { CurrencyCode } from './enums/currency-code.enum'
+import { CurrencyCode, HousePrice } from './entities/house-price.entity'
 import { getExchangeRates } from 'src/utils/exchange-rates.util'
 
 @Injectable()

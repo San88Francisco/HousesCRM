@@ -1,6 +1,7 @@
-import { CurrencyCode } from 'src/house-prices/enums/currency-code.enum'
+
 import { formatDate } from './format-date'
 import { ServiceUnavailableException } from '@nestjs/common'
+import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
 
 type NBUExchangeRateItem = {
   r030: number
