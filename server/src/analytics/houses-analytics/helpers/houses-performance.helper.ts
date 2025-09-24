@@ -1,7 +1,7 @@
-import { ContractStatus } from 'src/contracts/enums/contract-status.enum'
 import { House } from 'src/houses/entities/house.entity'
 import { HousePerformanceDto } from '../dto/house-performance/house-performance.dto'
 import { calculateHouseRevenue } from './revenue.helpers'
+import { ContractStatus } from 'src/contracts/entities/contract.entity'
 
 export const housesPerformance = (houses: House[]): HousePerformanceDto[] => {
   return houses.map((house): HousePerformanceDto => {

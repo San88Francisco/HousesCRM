@@ -10,12 +10,12 @@ import { calculateHouseRevenue, calculateRevenuePercentages } from './helpers/re
 import { calculatePaybackStatsForHouses } from './helpers/payback-stats.helpers'
 import { HousePaybackStatsDto } from './dto/house-payback-stats/house-payback-stats.dto'
 import { getExchangeRates } from 'src/utils/exchange-rates.util'
-import { CurrencyCode } from 'src/house-prices/enums/currency-code.enum'
 import { CurrencyRevaluationDto } from './dto/currency-revaluation/currency-revaluation.dto'
 import { QueryDto } from 'src/common/dto/query.dto'
 import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { HousePerformanceResponseDto } from './dto/house-performance/house-performance-response.dto'
 import { housesPerformance } from './helpers/houses-performance.helper'
+import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
 
 @Injectable()
 export class HousesAnalyticsService {

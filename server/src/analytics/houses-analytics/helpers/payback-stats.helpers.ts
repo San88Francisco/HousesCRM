@@ -1,8 +1,8 @@
 import { Contract } from 'src/contracts/entities/contract.entity'
 import { calculateMonthsBetween } from './revenue.helpers'
-import { CurrencyCode } from 'src/house-prices/enums/currency-code.enum'
 import { House } from 'src/houses/entities/house.entity'
 import { HousePaybackStatsDto } from '../dto/house-payback-stats/house-payback-stats.dto'
+import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
 
 const calculateContractTotalIncomeUSD = (contract: Contract): number => {
   const months = calculateMonthsBetween(contract.commencement, contract.termination)
