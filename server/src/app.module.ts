@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module'
 import { HousesModule } from './houses/houses.module'
 import { ContractsModule } from './contracts/contracts.module'
 import { RentersModule } from './renters/renters.module'
+import { HousesAnalyticsModule } from './analytics/houses-analytics/houses-analytics.module'
 import { AuthModule } from './auth/auth.module'
 import { TokensModule } from './tokens/tokens.module'
 
@@ -24,6 +25,7 @@ import { TokensModule } from './tokens/tokens.module'
     HousesModule,
     ContractsModule,
     RentersModule,
+    HousesAnalyticsModule,
     AuthModule,
   ],
 })
