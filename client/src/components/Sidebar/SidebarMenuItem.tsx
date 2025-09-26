@@ -5,11 +5,16 @@ import {
   SidebarMenuButton,
   SidebarMenuItem as ShadcnSidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { SidebarMenuItemProps } from '@/types/navigation';
+
 import { getSidebarMenuItemClasses } from '@/constants/styles/sidebar';
 import { useAnimatedIcon } from '@/hooks';
+import { NavItem } from '@/types/navigation';
 
-export const SidebarMenuItem = ({ item, isActive }: SidebarMenuItemProps) => {
+type Props = {
+  item: NavItem;
+  isActive: boolean;
+};
+export const SidebarMenuItem = ({ item, isActive }: Props) => {
   const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(item.icon);
 
   if (!item.url) return null;

@@ -3,17 +3,12 @@
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { ReactNode, useState, useEffect } from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { ThemeProvider } from 'next-themes';
-
 import { usePathname, useRouter } from 'next/navigation';
-import { noSidebarRoutes } from '@/constants/noSidebarRoutes';
-import { CurrencyProvider } from '@/context/CurrencyContext';
-import { Provider } from 'react-redux';
-import store from '@/store/store';
+import { noSidebarRoutes } from '@/constants/sidebar/noSidebarRoutes';
 import cookies from 'js-cookie';
 import { ROUTES } from '@/routes';
 import { AppSidebar } from '@/components/Sidebar';
+import { Providers } from '@/components/Providers';
 
 export default function RootLayout({
   children,
@@ -39,27 +34,22 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+      <body suppressHydrationWarning>
+        <Providers
+          shouldHideSidebar={shouldHideSidebar}
+          sidebarOpen={open}
+          onSidebarOpenChange={setOpen}
         >
-          <Provider store={store}>
-            <CurrencyProvider>
-              {shouldHideSidebar ? (
-                mainContent
-              ) : (
-                <SidebarProvider open={open} onOpenChange={setOpen}>
-                  <AppSidebar label="some-usergamil.com" />
-                  {mainContent}
-                </SidebarProvider>
-              )}
-              <Toaster />
-            </CurrencyProvider>
-          </Provider>
-        </ThemeProvider>
+          {shouldHideSidebar ? (
+            mainContent
+          ) : (
+            <>
+              <AppSidebar label="some-usergamil.com" />
+              {mainContent}
+            </>
+          )}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

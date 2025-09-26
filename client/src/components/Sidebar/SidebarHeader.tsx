@@ -7,8 +7,6 @@ type Props = {
   label: string;
 };
 
-const sidebarTriggerStyles = 'h-7 w-7 p-0';
-
 export const SidebarHeaderComponent = ({ state, label }: Props) => {
   return (
     <SidebarHeader
@@ -44,7 +42,7 @@ export const SidebarHeaderComponent = ({ state, label }: Props) => {
                     : 'hidden',
                 )}
               >
-                <SidebarTrigger className={cn(sidebarTriggerStyles, 'w-10')} />
+                <SidebarTrigger className="h-7 w-7 p-0 " />
               </div>
             </div>
             <span className="text-sm font-medium whitespace-nowrap group-data-[collapsible=icon]:hidden">
@@ -53,7 +51,7 @@ export const SidebarHeaderComponent = ({ state, label }: Props) => {
           </div>
           {state === 'expanded' && (
             <div className="ml-auto">
-              <SidebarTrigger className={sidebarTriggerStyles} />
+              <SidebarTrigger className="h-7 w-7 p-0" />
             </div>
           )}
         </SidebarMenuItem>

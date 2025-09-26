@@ -12,11 +12,11 @@ import { SidebarMenuItem } from './SidebarMenuItem';
 import { isActiveItem } from '@/utils/sidebar/navigation';
 import { SIDEBAR_STYLES } from '@/constants/styles/sidebar';
 
-type SidebarPagesGroupProps = {
+type Props = {
   items: NavItem[];
 };
 
-export const SidebarPagesGroup = ({ items }: SidebarPagesGroupProps) => {
+export const SidebarPagesGroup = ({ items }: Props) => {
   const pathname = usePathname();
 
   const pagesItems = items.filter(item => item.url);

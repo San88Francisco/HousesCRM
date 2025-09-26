@@ -16,18 +16,3 @@ export interface NavItem {
   icon: ReactNode;
   items?: SubNavItem[];
 }
-
-export interface SidebarProps {
-  label: string;
-}
-
-export interface SidebarMenuItemProps {
-  item: NavItem;
-  isActive: boolean;
-}
-
-export interface CollapsibleMenuProps {
-  title: string;
-  icon: ReactNode;
-  items?: SubNavItem[];
-}

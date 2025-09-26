@@ -1,4 +1,3 @@
-// Utility hooks
 export { default as useVisiblePages } from './use-visible-pages';
 export { useIsMobile } from './use-mobile';
 export { useToast } from './use-toast';

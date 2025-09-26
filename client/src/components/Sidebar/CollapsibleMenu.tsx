@@ -1,19 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { CollapsibleMenuProps } from '@/types/navigation';
+
 import {
   SIDEBAR_STYLES,
   getCollapsibleHeaderClasses,
   getChevronClasses,
 } from '@/constants/styles/sidebar';
+import { SubNavItem } from '@/types/navigation';
 
-export const CollapsibleMenu = ({ title, icon, items }: CollapsibleMenuProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+type Props = {
+  title: string;
+  icon: ReactNode;
+  items?: SubNavItem[];
+};
+
+export const CollapsibleMenu = ({ title, icon, items }: Props) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleOpen = () => setIsOpen(prev => !prev);
 

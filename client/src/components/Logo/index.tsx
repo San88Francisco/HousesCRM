@@ -7,11 +7,11 @@ import { useEffect, useState } from 'react';
 const LOGOS = {
   light: '/logo/lightLogo.png',
   dark: '/logo/darkLogo.png',
-} as const;
+};
 
 export const Logo = () => {
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);
@@ -25,11 +25,14 @@ export const Logo = () => {
     );
   }
 
-  const logoSrc = resolvedTheme === 'dark' ? LOGOS.dark : LOGOS.light;
-
   return (
     <div className="p-4 flex justify-center">
-      <Image alt="logo" src={logoSrc} width={84} height={28} />
+      <Image
+        alt="logo"
+        src={resolvedTheme === 'dark' ? LOGOS.dark : LOGOS.light}
+        width={84}
+        height={28}
+      />
     </div>
   );
 };

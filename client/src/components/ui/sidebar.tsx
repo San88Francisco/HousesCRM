@@ -258,7 +258,7 @@ const SidebarTrigger = forwardRef<ElementRef<typeof Button>, ComponentProps<type
         ref={ref}
         data-sidebar="trigger"
         className={cn(
-          'h-7 w-7  hover:scale-110 transition-transform duration-300 cursor-ew-resize',
+          'h-7 w-7  hover:scale-110 transition-transform duration-300 cursor-pointer',
           className,
         )}
         onClick={event => {

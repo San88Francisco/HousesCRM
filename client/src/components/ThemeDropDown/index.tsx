@@ -9,9 +9,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { NextTheme } from '@/types/core/theme';
+import { Button } from '../ui/button';
+
+const THEME_OPTIONS = [NextTheme.Light, NextTheme.Dark, NextTheme.System];
 
 export const ThemeSwitch = () => {
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState<boolean>(false);
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
@@ -19,13 +22,14 @@ export const ThemeSwitch = () => {
   }, []);
 
   const themeIconMap = {
-    [NextTheme.Light]: <Sun className="h-4 w-4" />,
-    [NextTheme.Dark]: <Moon className="h-4 w-4" />,
-    [NextTheme.System]: <SunMoon className="h-4 w-4" />,
+    [NextTheme.Light]: Sun,
+    [NextTheme.Dark]: Moon,
+    [NextTheme.System]: SunMoon,
   };
 
   const getThemeIcon = (themeValue: string) => {
-    return themeIconMap[themeValue as NextTheme] || themeIconMap[NextTheme.System];
+    const Icon = themeIconMap[themeValue as NextTheme] || themeIconMap[NextTheme.System];
+    return <Icon className="h-4 w-4" />;
   };
 
   if (!mounted) {
@@ -38,30 +42,22 @@ export const ThemeSwitch = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="flex items-center justify-center w-10 h-10 rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
-          {getThemeIcon(theme || NextTheme.System)}
-        </button>
+      <DropdownMenuTrigger asChild className="w-10 h-10">
+        <Button variant="outline">{getThemeIcon(theme || NextTheme.System)}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-12">
-        <DropdownMenuItem
-          onClick={() => setTheme(NextTheme.Light)}
-          className="flex items-center justify-center p-3"
-        >
-          {themeIconMap[NextTheme.Light]}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setTheme(NextTheme.Dark)}
-          className="flex items-center justify-center p-3"
-        >
-          {themeIconMap[NextTheme.Dark]}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setTheme(NextTheme.System)}
-          className="flex items-center justify-center p-3"
-        >
-          {themeIconMap[NextTheme.System]}
-        </DropdownMenuItem>
+        {THEME_OPTIONS.map(option => (
+          <DropdownMenuItem
+            key={option}
+            onClick={() => setTheme(option)}
+            className="flex items-center justify-center p-3"
+          >
+            {(() => {
+              const Icon = themeIconMap[option];
+              return <Icon className="h-4 w-4" />;
+            })()}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

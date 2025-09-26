@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Table } from '@tanstack/react-table';
 
-type TableFiltersProps<T> = {
+type Props<T> = {
   table: Table<T>;
   searchValue: string;
   onSearchChange: (value: string) => void;
@@ -21,7 +21,7 @@ export const TableFilters = <T,>({
   searchValue,
   onSearchChange,
   searchPlaceholder = 'Search...',
-}: TableFiltersProps<T>) => {
+}: Props<T>) => {
   const emailColumn = table.getColumn('email');
 
   return (

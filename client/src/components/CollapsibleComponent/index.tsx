@@ -6,36 +6,23 @@ import { ReactElement, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-
-type Item = { title: string; url: string };
+import { NavItem } from '@/types/navigation';
 
 type Props = {
   title: string;
   icon: ReactElement;
-  items?: Item[];
+  items?: NavItem[];
 };
 
 export const CollapsibleComponent = ({ title, icon, items }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const hoverStyles = 'hover:bg-bg-input';
-  const collapsibleIconStyles =
-    'group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:hover:bg-transparent';
-  const linkStyles = 'text-text rounded-[12px]';
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <div className="flex flex-col w-full">
-      <div
-        className={cn(
-          'flex items-center text-text gap-2 pl-[13px] py-2',
-          hoverStyles,
-          'rounded-[12px]',
-          collapsibleIconStyles,
-        )}
-      >
+      <div className="flex items-center text-text gap-2 pl-[13px] py-2 hover:bg-bg-input rounded-[12px] group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:hover:bg-transparent">
         <Button variant="icon" size="xs" className="p-0" onClick={() => setIsOpen(prev => !prev)}>
           <ChevronRight
-            className={`transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}
+            className={cn('transition-transform duration-300', isOpen && 'rotate-90')}
           />
         </Button>
 
@@ -58,7 +45,11 @@ export const CollapsibleComponent = ({ title, icon, items }: Props) => {
       >
         <div className="flex flex-col gap-2   mt-2 w-full">
           {items?.map((item, i) => (
-            <Link key={i} href={item.url} className={cn(hoverStyles, 'pl-[60px] py-2', linkStyles)}>
+            <Link
+              key={i}
+              href={item.url as string}
+              className="hover:bg-bg-input pl-[60px] py-2 text-text rounded-[12px]"
+            >
               {item.title}
             </Link>
           ))}

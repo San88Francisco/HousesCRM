@@ -12,11 +12,11 @@ import { NavItem } from '@/types/navigation';
 import { CollapsibleMenu } from './CollapsibleMenu';
 import { SIDEBAR_STYLES } from '@/constants/styles/sidebar';
 
-type SidebarTablesGroupProps = {
+type Props = {
   items: NavItem[];
 };
 
-export const SidebarTablesGroup = ({ items }: SidebarTablesGroupProps) => {
+export const SidebarTablesGroup = ({ items }: Props) => {
   const tablesItems = items.filter(item => !item.url);
 
   return (

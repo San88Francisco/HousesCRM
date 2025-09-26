@@ -26,7 +26,7 @@ import {
 import TablePagination from '@/components/TablePagination';
 import { TableFilters } from '@/components/TableFilters';
 
-type DataTableProps<T> = {
+type Props<T> = {
   data: T[];
   columns: ColumnDef<T>[];
   title?: string;
@@ -40,7 +40,7 @@ export const DataTable = <T,>({
   title = 'Data List',
   searchPlaceholder = 'Search...',
   searchColumn = 'email',
-}: DataTableProps<T>) => {
+}: Props<T>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
