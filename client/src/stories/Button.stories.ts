@@ -1,54 +1,115 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+// import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { fn } from 'storybook/test';
+// import { fn } from 'storybook/test';
 
-import { Button } from './Button';
+// import { Button } from './Button';
 
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
-const meta = {
-  title: 'Example/Button',
+// // Базова конфігурація (мета-інформація) для Storybook
+// // `meta` описує: назву сторі, компонент, параметри, аргументи та документацію
+// const meta = {
+//   title: 'Приклад/Button', // Назва розділу та сторі у Storybook
+//   component: Button, // Компонент, для якого створюємо сторі
+//   parameters: {
+//     // Параметри — додаткові налаштування для сторі
+//     // `layout: 'centered'` — центрує компонент у Canvas (робочій області Storybook)
+//     layout: 'centered',
+//   },
+//   // Теги використовуються для автодокументації (Autodocs)
+//   // Storybook згенерує документацію автоматично
+//   tags: ['autodocs'],
+//   // Аргументи (argTypes) дозволяють змінювати властивості компонентів у UI Storybook
+//   // Тут ми додаємо можливість керувати кольором backgroundColor
+//   argTypes: {
+//     backgroundColor: { control: 'color' },
+//   },
+//   // args — значення аргументів за замовчуванням для історій
+//   // `fn()` — створює "шпигунську" функцію (spy) для onClick,
+//   // яка буде відображатися у вкладці Actions (панель подій Storybook)
+//   args: { onClick: fn() },
+// } satisfies Meta<typeof Button>; // `satisfies` перевіряє, що meta відповідає типу Meta
+// // це зручно для автодопомоги й безпеки типів
+
+// export default meta;
+
+// // Тип Story використовується для окремих історій
+// type Story = StoryObj<typeof meta>;
+
+// // === Історії (Stories) ===
+// // Кожна історія — це варіант відображення компонента з різними аргументами (props)
+
+// // Primary — кнопка з головним стилем
+// export const Primary: Story = {
+//   args: {
+//     primary: true, // Властивість primary вмикає основний (головний) стиль кнопки
+//     label: 'Кнопка', // Текст кнопки
+//   },
+// };
+
+// // Secondary — кнопка зі звичайним (неосновним) стилем
+// export const Secondary: Story = {
+//   args: {
+//     label: 'Кнопка', // Тільки текст без "primary"
+//   },
+// };
+
+// // Large — кнопка великого розміру
+// export const Large: Story = {
+//   args: {
+//     size: 'large', // Властивість size задає розмір
+//     label: 'Кнопка',
+//   },
+// };
+
+// // Small — кнопка маленького розміру
+// export const Small: Story = {
+//   args: {
+//     size: 'small',
+//     label: 'Кнопка',
+//   },
+// };
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+import type { Meta, StoryObj } from '@storybook/react';
+// import { Button } from './Button';
+import { Button } from '@/components/ui/button';
+
+const meta: Meta<typeof Button> = {
+  title: 'shadcn/Button',
   component: Button,
   parameters: {
-    // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered',
   },
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
-  // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
-    backgroundColor: { control: 'color' },
+    variant: {
+      control: { type: 'radio' },
+      options: ['default', 'secondary', 'outline', 'destructive', 'icon'],
+    },
+    size: {
+      control: { type: 'radio' },
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    },
+    children: {
+      control: { type: 'text' },
+    },
+    disabled: {
+      control: 'boolean',
+    },
+    onClick: {
+      action: 'clicked',
+    },
   },
-  // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
-  args: { onClick: fn() },
-} satisfies Meta<typeof Button>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Primary: Story = {
+export const Playground: Story = {
   args: {
-    primary: true,
-    label: 'Button',
-  },
-};
-
-export const Secondary: Story = {
-  args: {
-    label: 'Button',
-  },
-};
-
-export const Large: Story = {
-  args: {
-    size: 'large',
-    label: 'Button',
-  },
-};
-
-export const Small: Story = {
-  args: {
-    size: 'small',
-    label: 'Button',
+    variant: 'default',
+    size: 'md',
+    children: 'Button',
+    disabled: false,
   },
 };
