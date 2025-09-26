@@ -199,3 +199,25 @@ body {
     color: var(--muted-foreground);
   }
 }
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb, #94a3b8) var(--sb-track, transparent);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--sb-track, transparent);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--sb-thumb, #94a3b8);
+  border-radius: 9999px;
+  border: 2px solid var(--sb-track, transparent);
+}
+
+.custom-scrollbar--alt {
+  --sb-thumb: #22c55e; /* зелений */
+  --sb-track: transparent;
+}

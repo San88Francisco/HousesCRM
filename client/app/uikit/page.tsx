@@ -4,6 +4,7 @@ import { ControlButtons } from '@/components/Examples/ControlButtons';
 import { DropDownComponent } from '@/components/Examples/DropDownComponent';
 import { InputComponent } from '@/components/Examples/InputComponent';
 import TabsComponent from '@/components/Examples/TabsComponent';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function Page() {
   return (
@@ -14,6 +15,8 @@ export default function Page() {
       <TabsComponent />
       <InputComponent />
       <DropDownComponent />
+      <Textarea className="w-[400px]" placeholder="Введіть текст тут..." />
+      <Textarea maxLength={100} className="w-[400px]" placeholder="Введіть текст тут..." />
     </div>
   );
 }
