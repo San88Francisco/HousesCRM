@@ -32,30 +32,29 @@ export const Default: Story = {
   args: {
     variant: 'default',
     children: 'This is a default card',
-    className: 'p-4 w-64',
   },
 };
 
-export const Sky: Story = {
-  args: {
-    variant: 'sky',
-    children: 'This is a sky card',
-    className: 'p-4 w-64',
-  },
-};
+// export const Sky: Story = {
+//   args: {
+//     variant: 'sky',
+//     children: 'This is a sky card',
+//     className: 'p-4 w-64',
+//   },
+// };
 
-export const Purple: Story = {
-  args: {
-    variant: 'purple',
-    children: 'This is a purple card',
-    className: 'p-4 w-64',
-  },
-};
+// export const Purple: Story = {
+//   args: {
+//     variant: 'purple',
+//     children: 'This is a purple card',
+//     className: 'p-4 w-64',
+//   },
+// };
 
-export const CustomClass: Story = {
-  args: {
-    variant: 'default',
-    children: 'Card with custom styling',
-    className: 'p-6 w-80 border-2 border-blue-500',
-  },
-};
+// export const CustomClass: Story = {
+//   args: {
+//     variant: 'default',
+//     children: 'Card with custom styling',
+//     className: 'p-6 w-80 border-2 border-blue-500',
+//   },
+// };
