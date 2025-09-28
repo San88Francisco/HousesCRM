@@ -7,17 +7,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-type TableActionsProps = {
+type Props = {
   onEdit?: () => void;
   onDelete?: () => void;
   customText?: string;
 };
 
-export const TableActions = ({
-  onEdit,
-  onDelete,
-  customText = 'Твій текст тут',
-}: TableActionsProps) => {
+export const TableActions = ({ onEdit, onDelete, customText = 'Твій текст тут' }: Props) => {
   return (
     <div className="flex justify-end items-center gap-4">
       <span className="text-sm text-text">{customText}</span>

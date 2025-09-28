@@ -7,11 +7,14 @@ import { InputComponent } from '@/components/Examples/InputComponent';
 import { PaymentTable } from '@/components/Examples/PaymentTable';
 import { TableComponent } from '@/components/Examples/TableComponent/TableComponent';
 import TabsComponent from '@/components/Examples/TabsComponent';
+import { ThemeSwitch } from '@/components/ThemeDropDown';
+
 import { mockData } from '@/constants/table/dataTable';
 
 export default function Page() {
   return (
     <div className="flex flex-col gap-2">
+      <ThemeSwitch />
       <ButtonComponent />
       <CardComponent />
       <ControlButtons />
