@@ -1,4 +1,4 @@
-import { CurrencyCode } from 'src/house-prices/enums/currency-code.enum'
+import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
 
 export const HOUSE_QUERY_DEFAULTS = {
   MIN_PRICE: 1,

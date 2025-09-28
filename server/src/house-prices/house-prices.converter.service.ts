@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { House } from 'src/houses/entities/house.entity'
-import { HousePrice } from './entities/house-price.entity'
-import { CurrencyCode } from './enums/currency-code.enum'
+import { CurrencyCode, HousePrice } from './entities/house-price.entity'
 import { getExchangeRates } from 'src/utils/exchange-rates.util'
 
 @Injectable()
 export class HousePricesConverterService {
-  public convert(price: number, house: House): HousePrice[] {
-    const rates = getExchangeRates(house.purchaseDate)
+  public async convert(price: number, house: House): Promise<HousePrice[]> {
+    const rates = await getExchangeRates(house.purchaseDate)
 
     return Object.entries(rates).map(([code, rate]) =>
       this.createPrice(price / rate, code as CurrencyCode, house, rate)

@@ -90,7 +90,7 @@ export class HousesService {
       contracts: dto.contractIds?.map((id) => ({ id })),
     })
 
-    houseToSave.prices = this.housePricesConverterService.convert(dto.price, houseToSave)
+    houseToSave.prices = await this.housePricesConverterService.convert(dto.price, houseToSave)
 
     const savedHouse = await this.houseRepository.save(houseToSave)
 
@@ -116,7 +116,7 @@ export class HousesService {
     if (dto.price) {
       await this.housePriceService.deleteByHouseId(id)
 
-      house.prices = this.housePricesConverterService.convert(dto.price, house)
+      house.prices = await this.housePricesConverterService.convert(dto.price, house)
     }
 
     const updatedHouse = await this.houseRepository.save(house)
