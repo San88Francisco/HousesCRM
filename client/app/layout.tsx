@@ -9,6 +9,7 @@ import cookies from 'js-cookie';
 import { ROUTES } from '@/routes';
 import { AppSidebar } from '@/components/Sidebar';
 import { Providers } from '@/components/Providers';
+import { ThemeScript } from '@/scripts/ThemeScript';
 
 export default function RootLayout({
   children,
@@ -35,19 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark')
-                } else {
-                  document.documentElement.classList.remove('dark')
-                }
-              } catch (_) {}
-            `,
-          }}
-        />
+        <ThemeScript />
       </head>
       <body suppressHydrationWarning>
         <Providers
