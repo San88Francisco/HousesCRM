@@ -3,15 +3,13 @@
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { ReactNode, useState, useEffect } from 'react';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/Sidebar';
 import { usePathname, useRouter } from 'next/navigation';
-import { noSidebarRoutes } from '@/constants/noSidebarRoutes';
-import { CurrencyProvider } from '@/context/CurrencyContext';
-import { Provider } from 'react-redux';
-import store from '@/store/store';
+import { noSidebarRoutes } from '@/constants/sidebar/noSidebarRoutes';
 import cookies from 'js-cookie';
 import { ROUTES } from '@/routes';
+import { AppSidebar } from '@/components/Sidebar';
+import { Providers } from '@/components/Providers';
+import { ThemeScript } from '@/scripts/ThemeScript';
 
 export default function RootLayout({
   children,
@@ -32,38 +30,34 @@ export default function RootLayout({
   }, [router]);
 
   const mainContent = (
-    <main className="flex-1 overflow-x-hidden px-2 sm:px-8 py-5">
-      {!shouldHideSidebar && (
-        <div className="flex h-16 items-center absolute">
-          <SidebarTrigger className="-ml-8" />
-        </div>
-      )}
-      {children}
-    </main>
+    <main className="flex-1 overflow-x-hidden px-2 sm:px-8 py-5">{children}</main>
   );
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap&subset=cyrillic"
           rel="stylesheet"
         />
+        <ThemeScript />
       </head>
-      <body>
-        <Provider store={store}>
-          <CurrencyProvider>
-            {shouldHideSidebar ? (
-              mainContent
-            ) : (
-              <SidebarProvider open={open} onOpenChange={setOpen}>
-                <AppSidebar />
-                {mainContent}
-              </SidebarProvider>
-            )}
-            <Toaster />
-          </CurrencyProvider>
-        </Provider>
+      <body suppressHydrationWarning>
+        <Providers
+          shouldHideSidebar={shouldHideSidebar}
+          sidebarOpen={open}
+          onSidebarOpenChange={setOpen}
+        >
+          {shouldHideSidebar ? (
+            mainContent
+          ) : (
+            <>
+              <AppSidebar label="some-usergamil.com" />
+              {mainContent}
+            </>
+          )}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

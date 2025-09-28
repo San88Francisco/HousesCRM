@@ -1,39 +1,61 @@
-import { Button } from '@/components/ui/button';
+'use client';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
+import { SunMoon, Moon, Sun } from 'lucide-react';
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTheme } from '@/hooks/useTheme';
-import { themeOptions } from '@/constants/themeOptions/themeOptions';
-import { FC } from 'react';
-import { cn } from '@/lib/utils';
+import { NextTheme } from '@/types/core/theme';
+import { Button } from '../ui/button';
 
-type Props = {
-  className?: string;
-};
+const THEME_OPTIONS = [NextTheme.Light, NextTheme.Dark, NextTheme.System];
 
-export const ThemeDropDown: FC<Props> = ({ className }) => {
-  const { theme, changeTheme } = useTheme();
+export const ThemeSwitch = () => {
+  const [mounted, setMounted] = useState<boolean>(false);
+  const { theme, setTheme } = useTheme();
 
-  const current = themeOptions.find(opt => opt.value === theme);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const themeIconMap = {
+    [NextTheme.Light]: Sun,
+    [NextTheme.Dark]: Moon,
+    [NextTheme.System]: SunMoon,
+  };
+
+  const getThemeIcon = (themeValue: string) => {
+    const Icon = themeIconMap[themeValue as NextTheme] || themeIconMap[NextTheme.System];
+    return <Icon className="h-4 w-4" />;
+  };
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center justify-center w-10 h-10 rounded-md border bg-background opacity-50">
+        <SunMoon className="h-4 w-4" />
+      </div>
+    );
+  }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="lg" className={cn('px-16', className)}>
-          {current?.icon}
-        </Button>
+      <DropdownMenuTrigger asChild className="w-10 h-10">
+        <Button variant="outline">{getThemeIcon(theme || NextTheme.System)}</Button>
       </DropdownMenuTrigger>
-
-      <DropdownMenuContent>
-        {themeOptions.map(opt => (
-          <DropdownMenuItem key={opt.value} onClick={() => changeTheme(opt.value)}>
-            <div className="flex items-center gap-2 w-full ">
-              {opt.icon}
-              {opt.label}
-            </div>
+      <DropdownMenuContent align="end" className="w-12">
+        {THEME_OPTIONS.map(option => (
+          <DropdownMenuItem
+            key={option}
+            onClick={() => setTheme(option)}
+            className="flex items-center justify-center p-3"
+          >
+            {(() => {
+              const Icon = themeIconMap[option];
+              return <Icon className="h-4 w-4" />;
+            })()}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
