@@ -115,6 +115,14 @@ body {
     color 0.3s ease;
 }
 
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
 @layer base {
   h1,
   h2,

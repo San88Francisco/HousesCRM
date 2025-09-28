@@ -21,7 +21,13 @@ export const Providers = ({
   onSidebarOpenChange,
 }: Props) => {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+      storageKey="theme"
+    >
       <Provider store={store}>
         <CurrencyProvider>
           {shouldHideSidebar ? (
