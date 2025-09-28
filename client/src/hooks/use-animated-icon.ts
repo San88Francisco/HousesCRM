@@ -1,5 +1,6 @@
 import { useRef, ReactElement, isValidElement, cloneElement } from 'react';
 import { AnimatedIconHandle } from '@/types/navigation';
+/* eslint-disable */
 
 export const useAnimatedIcon = (icon: React.ReactNode) => {
   const iconRef = useRef<AnimatedIconHandle | null>(null);

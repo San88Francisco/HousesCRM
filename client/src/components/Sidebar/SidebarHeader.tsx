@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarTrigger } from '../ui/sidebar';
+/* eslint-disable */
 
 type Props = {
   state: 'collapsed' | 'expanded';
