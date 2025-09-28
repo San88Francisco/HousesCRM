@@ -4,16 +4,19 @@ import {
   addYears,
   Day,
   eachDayOfInterval,
+  eachMonthOfInterval,
   eachYearOfInterval,
   endOfDecade,
   endOfMonth,
   endOfWeek,
+  endOfYear,
   format,
   parse,
   startOfDecade,
   startOfMonth,
   startOfToday,
   startOfWeek,
+  startOfYear,
 } from 'date-fns';
 import { useState } from 'react';
 
@@ -24,11 +27,17 @@ export const useCalendarState = (firstWeekDayNumber: Day) => {
   const [viewMode, setViewMode] = useState<viewModeType>('days');
   const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMM-yyyy'));
   const firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date());
+
   const calendarDays = eachDayOfInterval({
     start: startOfWeek(startOfMonth(firstDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
     end: endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
   });
 
+  const [currentYear, setCurrentYear] = useState<Date>(startOfYear(today));
+  const calendarMonths = eachMonthOfInterval({
+    start: startOfYear(currentYear),
+    end: endOfYear(currentYear),
+  });
   const [currentDecadeStart, setCurrentDecadeStart] = useState<Date>(startOfDecade(today));
 
   const calendarYears = eachYearOfInterval({
@@ -53,5 +62,8 @@ export const useCalendarState = (firstWeekDayNumber: Day) => {
     calendarYears,
     hoveredDate,
     setHoveredDate,
+    calendarMonths,
+    currentYear,
+    setCurrentYear,
   };
 };

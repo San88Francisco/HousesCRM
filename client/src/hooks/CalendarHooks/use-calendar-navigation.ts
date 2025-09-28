@@ -4,12 +4,15 @@ import { add, addYears, format } from 'date-fns';
 
 const DECADE_PAGE_STEP = 10;
 const MONTHS_PAGE_STEP = 1;
+const YEARS_PAGE_STEP = 1;
 
 type useCalendarNavigationProps = {
   viewMode: viewModeType;
   firstDayCurrentMonth: Date;
   currentDecadeStart: Date;
+  currentYear: Date;
   setCurrentMonth: (currentMonth: string) => void;
+  setCurrentYear: (date: Date) => void;
   setCurrentDecadeStart: (currentDecadeStart: Date) => void;
 };
 
@@ -17,7 +20,9 @@ export const useCalendarNavigation = ({
   viewMode,
   firstDayCurrentMonth,
   currentDecadeStart,
+  currentYear,
   setCurrentMonth,
+  setCurrentYear,
   setCurrentDecadeStart,
 }: useCalendarNavigationProps) => {
   const nextMonth = () => {
@@ -28,6 +33,14 @@ export const useCalendarNavigation = ({
   const prevMonth = () => {
     const firtsDayNextMonth = add(firstDayCurrentMonth, { months: -MONTHS_PAGE_STEP });
     setCurrentMonth(format(firtsDayNextMonth, 'MMM-yyyy'));
+  };
+
+  const nextYear = () => {
+    setCurrentYear(addYears(currentYear, YEARS_PAGE_STEP));
+  };
+
+  const prevYear = () => {
+    setCurrentYear(addYears(currentYear, -YEARS_PAGE_STEP));
   };
 
   const nextDecade = () => {
@@ -42,6 +55,9 @@ export const useCalendarNavigation = ({
     if (viewMode === 'days') {
       nextMonth();
     }
+    if (viewMode === 'months') {
+      nextYear();
+    }
     if (viewMode === 'years') {
       nextDecade();
     }
@@ -50,6 +66,9 @@ export const useCalendarNavigation = ({
   const handlePrevPage = () => {
     if (viewMode === 'days') {
       prevMonth();
+    }
+    if (viewMode === 'months') {
+      prevYear();
     }
     if (viewMode === 'years') {
       prevDecade();

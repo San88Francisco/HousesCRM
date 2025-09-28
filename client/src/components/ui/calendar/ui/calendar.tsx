@@ -8,6 +8,7 @@ import { useCalendarNavigation } from '@/hooks/CalendarHooks/use-calendar-naviga
 import CalendarHeader from './calendar-header';
 import CalendarDaysView from './calendar-days-view';
 import CalendarYearsView from './calendar-years-view';
+import CalendarMonthsView from './calendar-months-view';
 
 type SingleModeCalendarProps = {
   selectedDate: Date;
@@ -43,6 +44,9 @@ const Calendar: FC<CalendarProps> = ({
     calendarYears,
     hoveredDate,
     setHoveredDate,
+    calendarMonths,
+    currentYear,
+    setCurrentYear,
   } = useCalendarState(firstWeekDayNumber);
 
   useEffect(() => {
@@ -60,8 +64,10 @@ const Calendar: FC<CalendarProps> = ({
     viewMode,
     firstDayCurrentMonth,
     currentDecadeStart,
+    currentYear,
     setCurrentMonth,
     setCurrentDecadeStart,
+    setCurrentYear,
   });
 
   // todo optimize
@@ -135,6 +141,7 @@ const Calendar: FC<CalendarProps> = ({
         viewMode={viewMode}
         setViewMode={setViewMode}
         firstDayCurrentMonth={firstDayCurrentMonth}
+        currentYear={currentYear}
         calendarYears={calendarYears}
         handlePrevPage={handlePrevPage}
         handleNextPage={handleNextPage}
@@ -146,6 +153,16 @@ const Calendar: FC<CalendarProps> = ({
           selectedDate={selectedDate}
           hoveredDate={hoveredDate}
           firstDayCurrentMonth={firstDayCurrentMonth}
+          handleSelect={handleSelect}
+          handleHover={handleHover}
+        />
+      )}
+      {viewMode === 'months' && (
+        <CalendarMonthsView
+          mode={mode}
+          calendarMonths={calendarMonths}
+          selectedDate={selectedDate}
+          hoveredDate={hoveredDate}
           handleSelect={handleSelect}
           handleHover={handleHover}
         />
