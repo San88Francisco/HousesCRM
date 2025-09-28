@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer'
-import { ContractStatus } from '../enums/contract-status.enum'
+import { ContractStatus } from '../entities/contract.entity'
 
 export class ContractDto {
   @Expose()

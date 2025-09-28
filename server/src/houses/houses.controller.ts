@@ -7,14 +7,24 @@ import { DeleteHouseDto } from './dto/delete-house.dto'
 import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
 import { HouseResponseDto } from './dto/houses-response.dto'
 import { HouseQueryDto } from './dto/house-query.dto'
+import { HousesAnalyticsService } from 'src/analytics/houses-analytics/houses-analytics.service'
+import { AllHousesAnalyticsDto } from 'src/analytics/houses-analytics/dto/all-houses-analytics.dto'
 
 @Controller(HOUSES_ROUTES.ROOT)
 export class HousesController {
-  constructor(private readonly housesService: HousesService) {}
+  constructor(
+    private readonly housesService: HousesService,
+    private readonly housesAnalyticsService: HousesAnalyticsService
+  ) {}
 
   @Get()
   public findAll(@Query() dto: HouseQueryDto): Promise<HouseResponseDto> {
     return this.housesService.findAll(dto)
+  }
+
+  @Get(HOUSES_ROUTES.ANALYTICS)
+  public async getHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
+    return await this.housesAnalyticsService.getAllHousesAnalytics()
   }
 
   @Get(HOUSES_ROUTES.BY_ID)

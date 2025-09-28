@@ -7,6 +7,7 @@ import { ValidationPipe } from '@nestjs/common'
 import { dbExceptionFilter } from './common/filters/db-exception.filter'
 import { validationConfig } from './common/config/validation.config'
 import { typeOrmNotFoundFilter } from './common/filters/typeorm-not-found.filter'
+import cookieParser from 'cookie-parser'
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule)
@@ -19,6 +20,8 @@ async function bootstrap(): Promise<void> {
 
   app.useGlobalPipes(new ValidationPipe(validationConfig))
   app.useGlobalFilters(dbExceptionFilter, typeOrmNotFoundFilter)
+
+  app.use(cookieParser())
 
   await app.listen(port)
   // eslint-disable-next-line no-console

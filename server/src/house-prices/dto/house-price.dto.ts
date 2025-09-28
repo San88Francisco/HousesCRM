@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer'
-import { CurrencyCode } from '../enums/currency-code.enum'
+import { CurrencyCode } from '../entities/house-price.entity'
 
 export class HousePriceDto {
   @Expose()

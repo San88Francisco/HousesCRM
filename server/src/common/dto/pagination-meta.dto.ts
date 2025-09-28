@@ -13,6 +13,7 @@ export class PaginationMetaDto {
   @Expose()
   @Transform(({ obj }: { obj: PaginationMetaDto }) => Math.ceil(obj.total / obj.limit))
   public totalPages: number
+
   @Expose()
   @Transform(({ obj }: { obj: PaginationMetaDto }) => obj.page < Math.ceil(obj.total / obj.limit))
   public hasNextPage: boolean

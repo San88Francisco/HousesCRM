@@ -3,10 +3,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { createDbConfig } from './common/config/db.config'
 import { UsersModule } from './users/users.module'
-import { RefreshTokenModule } from './refresh-token/refresh-token.module'
 import { HousesModule } from './houses/houses.module'
 import { ContractsModule } from './contracts/contracts.module'
 import { RentersModule } from './renters/renters.module'
+import { HousesAnalyticsModule } from './analytics/houses-analytics/houses-analytics.module'
+import { AuthModule } from './auth/auth.module'
+import { TokensModule } from './tokens/tokens.module'
 
 @Module({
   imports: [
@@ -19,10 +21,12 @@ import { RentersModule } from './renters/renters.module'
       useFactory: createDbConfig,
     }),
     UsersModule,
-    RefreshTokenModule,
+    TokensModule,
     HousesModule,
     ContractsModule,
     RentersModule,
+    HousesAnalyticsModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
