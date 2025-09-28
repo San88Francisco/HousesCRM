@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer'
-import { ApartmentType } from '../enums/apartment-type.enum'
+import { ApartmentType } from '../entities/house.entity'
 
 export class HouseDto {
   @Expose()

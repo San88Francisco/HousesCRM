@@ -1,4 +1,4 @@
-import { RefreshToken } from 'src/refresh-token/refresh-token.entity'
+import { RefreshToken } from 'src/tokens/entities/refresh-token.entity'
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
 
@@ -22,6 +22,6 @@ export class User {
   @UpdateDateColumn({ name: 'updated_at' })
   public updatedAt: Date
 
-  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
+  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.id)
   public refreshTokens: Relation<RefreshToken>[]
 }
