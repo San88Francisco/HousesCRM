@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '@/components/ui/button';
-import { User } from 'lucide-react';
+// import { User } from 'lucide-react';
+import { KeySquareIcon } from '@/components/ui/key';
 
 const meta: Meta<typeof Button> = {
   title: 'UI/Button',
@@ -37,7 +38,8 @@ export const IconOnly: Story = {
   args: {
     variant: 'outline',
     size: 'md',
-    children: <User />,
+    // children: <User />,
+    children: <KeySquareIcon />,
   },
 };
 
