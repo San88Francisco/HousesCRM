@@ -9,13 +9,13 @@ import {
   PaginationPrevious,
 } from '../ui/pagination';
 import { cn } from '@/lib/utils';
-import useVisiblePages from '@/hooks/useVisiblePages';
+import useVisiblePages from '@/hooks/use-visible-pages';
 
-type TablePaginationProps<T> = {
+type Props<T> = {
   table: Table<T>;
 };
 
-const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
+const TablePagination = <T,>({ table }: Props<T>) => {
   const currentPageIndex = table.getState().pagination.pageIndex;
   const totalPages = table.getPageCount();
 

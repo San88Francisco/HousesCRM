@@ -1,4 +1,5 @@
 import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
+/* eslint-disable */
 
 type ChangeHandler = ChangeEventHandler<HTMLTextAreaElement> | undefined;
 

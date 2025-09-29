@@ -1,5 +1,7 @@
+import { useMemo } from 'react';
+
 const useVisiblePages = (currentPageIndex: number, totalPages: number) => {
-  const generateVisiblePages = (): (number | 'ellipsis')[] => {
+  return useMemo((): (number | 'ellipsis')[] => {
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i);
     }
@@ -28,9 +30,7 @@ const useVisiblePages = (currentPageIndex: number, totalPages: number) => {
       'ellipsis' as const,
       totalPages - 1,
     ];
-  };
-
-  return generateVisiblePages();
+  }, [currentPageIndex, totalPages]);
 };
 
 export default useVisiblePages;

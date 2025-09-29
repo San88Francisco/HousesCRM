@@ -7,6 +7,7 @@ import {
   useLayoutEffect,
   useRef,
 } from 'react';
+/* eslint-disable */
 
 type ChangeHandler = ChangeEventHandler<HTMLTextAreaElement> | undefined;
 

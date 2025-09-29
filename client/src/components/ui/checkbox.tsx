@@ -50,7 +50,7 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
             'absolute inset-0 flex items-center justify-center',
             'transition-all duration-300 ease-in-out',
             'opacity-0 scale-90 data-[state=checked]:opacity-100 data-[state=checked]:scale-100',
-            'text-active-text',
+            'text-background',
           )}
         >
           <Check className="w-2.5 h-2.5 stroke-[3.5]" />
