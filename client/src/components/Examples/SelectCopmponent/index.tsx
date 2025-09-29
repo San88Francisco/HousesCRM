@@ -1,4 +1,4 @@
-import * as React from 'react';
+'use client';
 
 import {
   Select,
@@ -37,8 +37,8 @@ export const SelectComponent = () => {
           </SelectGroup>
         </SelectContent>
       </Select>
-      <Select disabled>
-        <SelectTrigger className="w-[180px]">
+      <Select>
+        <SelectTrigger disabled className="w-[180px]">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>
@@ -53,8 +53,8 @@ export const SelectComponent = () => {
         </SelectContent>
       </Select>
       <Select>
-        <SelectTrigger error className="w-[180px]">
-          <SelectValue placeholder="ERROR: Select a fruit" />
+        <SelectTrigger error helperText="required checked item" className="w-[180px]">
+          <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

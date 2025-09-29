@@ -15,27 +15,43 @@ interface SelectTriggerProps
   icon?: React.ReactNode;
   error?: boolean;
   disabled?: boolean;
+  helperText?: string;
 }
 
 const SelectTrigger = forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
->(({ className, children, icon, error, disabled, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      'flex h-10 w-full items-center justify-between rounded-md border-[2px] border-input bg-background px-3 py-2  ring-offset-background placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 font-medium text-text  ',
-      error && '!border-red !text-red [&>span]:!text-red',
-      disabled && 'cursor-not-allowed opacity-50',
-      className,
+>(({ className, children, icon, error, disabled, helperText, ...props }, ref) => (
+  <div>
+    <SelectPrimitive.Trigger
+      ref={ref}
+      disabled={disabled}
+      className={cn(
+        'flex h-10 w-full items-center justify-between rounded-md border border-input bg-bg-input px-2  ring-offset-background placeholder:text-muted focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-colors duration-200',
+        error && 'border-red text-red [&>span]:text-red',
+        disabled && 'cursor-not-allowed [&>span]:!text-muted !opacity-50',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown
+          className={cn('h-4 w-4 opacity-50 transition-colors duration-200', error && '!text-red')}
+        />
+      </SelectPrimitive.Icon>
+    </SelectPrimitive.Trigger>
+    {helperText && (
+      <p
+        className={cn(
+          'mt-1 text-sm transition-colors duration-200',
+          error ? 'text-red opacity-100' : 'text-muted opacity-0',
+        )}
+      >
+        {helperText}
+      </p>
     )}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className={cn('h-4 w-4 opacity-50', error && '!text-red')} />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
+  </div>
 ));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
@@ -75,7 +91,7 @@ const SelectContent = forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        'relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-lg border bg-dropdown text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2  text-xl font-medium text-text',
+        'relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-lg border bg-bg-input text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2  text-xl font-medium text-text',
         position === 'popper' &&
           'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
         className,
