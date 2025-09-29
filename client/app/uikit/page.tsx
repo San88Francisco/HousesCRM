@@ -7,7 +7,8 @@ import { InputComponent } from '@/components/Examples/InputComponent';
 import { PaymentTable } from '@/components/Examples/PaymentTable';
 import { TableComponent } from '@/components/Examples/TableComponent/TableComponent';
 import TabsComponent from '@/components/Examples/TabsComponent';
-import { Textarea } from '@/components/ui/textarea';
+import { TextareaComponent } from '@/components/Examples/TextareaComponent';
+
 import { mockData } from '@/constants/table/dataTable';
 
 export default function Page() {
@@ -21,8 +22,7 @@ export default function Page() {
       <TabsComponent />
       <InputComponent />
       <DropDownComponent />
-      <Textarea className="w-[400px]" placeholder="Введіть текст тут..." />
-      <Textarea maxLength={100} className="w-[400px]" placeholder="Введіть текст тут..." />
+      <TextareaComponent />
     </div>
   );
 }
