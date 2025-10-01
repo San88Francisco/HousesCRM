@@ -17,7 +17,9 @@ type Props = {
 export const SidebarMenuItem = ({ item, isActive }: Props) => {
   const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(item.icon);
 
-  if (!item.url) return null;
+  if (!item.url) {
+    return null;
+  }
 
   return (
     <ShadcnSidebarMenuItem className={getSidebarMenuItemClasses(isActive)}>
