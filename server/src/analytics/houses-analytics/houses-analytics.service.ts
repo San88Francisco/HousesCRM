@@ -16,6 +16,7 @@ import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { HousePerformanceResponseDto } from './dto/house-performance/house-performance-response.dto'
 import { housesPerformance } from './helpers/houses-performance.helper'
 import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
+import { HousesOverviewQueryDto } from './dto/houses-overview/houses-overview-query.dto'
 
 @Injectable()
 export class HousesAnalyticsService {
@@ -47,8 +48,11 @@ export class HousesAnalyticsService {
     })
   }
 
-  public async getHousesOverview(): Promise<HouseOverviewDto[]> {
-    const houses = await this.houseRepository
+  public async getHousesOverview(dto?: HousesOverviewQueryDto): Promise<HouseOverviewDto[]> {
+    const dateFrom = dto?.dateFrom
+    const dateTo = dto?.dateTo
+
+    const qb = this.houseRepository
       .createQueryBuilder('house')
       .leftJoinAndMapMany('house.contract', 'house.contracts', 'contract')
       .leftJoinAndSelect('contract.renter', 'renter')
@@ -63,7 +67,19 @@ export class HousesAnalyticsService {
         'renter.firstName',
         'renter.lastName',
       ])
-      .getMany()
+
+    if (dateFrom && dateTo) {
+      qb.andWhere('contract.commencement <= :dateTo', { dateTo }).andWhere(
+        '(contract.termination IS NULL OR contract.termination >= :dateFrom)',
+        { dateFrom }
+      )
+    } else if (dateFrom) {
+      qb.andWhere('(contract.termination IS NULL OR contract.termination >= :dateFrom)', { dateFrom })
+    } else if (dateTo) {
+      qb.andWhere('contract.commencement <= :dateTo', { dateTo })
+    }
+
+    const houses = await qb.getMany()
 
     return plainToInstance(HouseOverviewDto, houses, {
       excludeExtraneousValues: true,
