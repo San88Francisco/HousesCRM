@@ -10,12 +10,13 @@ import { JwtStrategy } from './strategies/jwt.strategy'
 import { LocalStrategy } from './strategies/local.strategies'
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy'
 import { TokensModule } from 'src/tokens/tokens.module'
+import { GoogleStrategy } from './strategies/google.strategy'
 
 @Module({
   // TODO JwtModule.register({})
   imports: [UsersModule, PassportModule, TokensModule, ConfigModule.forFeature(jwtConfig), JwtModule.register({})],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy, GoogleStrategy],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

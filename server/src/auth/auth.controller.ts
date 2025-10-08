@@ -21,6 +21,8 @@ import { LoginUserResponseDto } from 'src/users/dto/res/login-user-res.dto'
 import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
 import { CreateUserResponseDto } from 'src/users/dto/res/create-user-response.dto'
 import { RefreshTokenResponseDto } from './dto/res/refresh-token.dto'
+import { GoogleAuthGuard } from './guard/google-auth.guard'
+import { ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
 
 @Controller(AUTH_ROUTES.ROOT)
 export class AuthController {
@@ -98,5 +100,34 @@ export class AuthController {
       path: '/',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     })
+  }
+
+  @ApiOperation({
+    summary: 'Redirects user to Google OAuth page',
+    description: 'Frontend should navigate user here to start OAuth login. No request body and no response expected.',
+  })
+  @Get(AUTH_ROUTES.GOOGLE)
+  @UseGuards(GoogleAuthGuard)
+  public async googleAuth(): Promise<void> {}
+
+  @ApiExcludeEndpoint()
+  @Get(AUTH_ROUTES.GOOGLE_CALLBACK)
+  @UseGuards(GoogleAuthGuard)
+  public async googleAuthCallback(@Req() req: AuthenticatedRequest, @Res() res: Response): Promise<void> {
+    const userAgent = req.headers['user-agent'] || 'unknown'
+    const clientURL = this.config.getOrThrow<string>('FRONTEND_URL')
+    const cookieName = this.config.getOrThrow<string>('JWT_ACCESS_COOKIE')
+
+    const { accessToken, refreshToken } = await this.authService.login(req.user, userAgent)
+
+    this.setRefreshCookie(res, refreshToken)
+
+    res.cookie(cookieName, accessToken, {
+      httpOnly: false,
+      path: '/',
+      maxAge: 15 * 60 * 1000,
+    })
+
+    return res.redirect(clientURL)
   }
 }
