@@ -19,10 +19,10 @@ interface ICalendarCellProps {
 }
 
 const baseStyles =
-  'w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest';
+  'w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest dark:hover:text-dark-medium';
 
 const currentDateStyle =
-  'text-gray border border-solid border-gray hover:border-gray-medium hover:text-gray hover:bg-foreground';
+  'text-gray border border-solid border-gray hover:border-gray-medium hover:text-gray hover:bg-foreground dark:hover:text-gray';
 
 const CalendarCell: FC<ICalendarCellProps> = ({
   size = 'small',
@@ -57,7 +57,7 @@ const CalendarCell: FC<ICalendarCellProps> = ({
         isCurrentDate && currentDateStyle,
         inRange && 'bg-dark-lightest rounded-[0]',
         isSelected &&
-          'bg-gray text-white hover:text-white hover:bg-gray-medium active:bg-gray active:border-dark-light',
+          'bg-gray text-white hover:text-white hover:bg-gray-medium active:bg-gray active:border-dark-light dark:hover:text-white',
         isLeftSide && 'rounded-l-[0.75rem]',
         isRightSide && 'rounded-r-[0.75rem]',
       )}

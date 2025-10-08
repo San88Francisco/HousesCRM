@@ -27,9 +27,6 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
   lang,
   mode,
 }) => {
-  // const initialLevel: levelType =
-  //   mode === 'year' ? 'years' : mode === 'yearMonth' ? 'months' : 'days';
-
   const [level, setLevel] = useState<levelType>(levelMap[mode]);
 
   const nextLevelMap: Record<CalendarMode, Partial<Record<levelType, levelType>>> = {
@@ -44,22 +41,6 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
     const nextLevel = nextLevelMap[mode][level];
     if (nextLevel) setLevel(nextLevel);
   };
-  // const handleSelect = (date: Date) => {
-  //   setDate(date);
-
-  //   if (mode === 'year') return;
-
-  //   if (mode === 'yearMonth') {
-  //     if (level === 'years') setLevel('months');
-  //     return;
-  //   }
-
-  //   if (level === 'years') {
-  //     setLevel('months');
-  //   } else if (level === 'months') {
-  //     setLevel('days');
-  //   }
-  // };
 
   const {
     setCurrentMonth,

@@ -26,7 +26,10 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
 }) => {
   return (
     <div className="flex items-center justify-between mb-4">
-      <button onClick={handlePrevPage} className="p-1 hover:bg-gray-100 rounded">
+      <button
+        onClick={handlePrevPage}
+        className="p-1 hover:bg-dark-lightest rounded dark:hover:text-dark"
+      >
         <MoveLeft className="w-5 h-5 text-gray-600" />
       </button>
 
@@ -52,7 +55,10 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
           </button>
         )}
       </h2>
-      <button onClick={handleNextPage} className="p-1 hover:bg-gray-100 rounded">
+      <button
+        onClick={handleNextPage}
+        className="p-1 hover:bg-dark-lightest rounded dark:hover:text-dark"
+      >
         <MoveRight className="w-5 h-5 text-gray-600" />
       </button>
     </div>
