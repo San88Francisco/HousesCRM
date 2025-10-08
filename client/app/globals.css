@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/** === <COLOR NAME> === */
+/* --<color>-darkest: <#hex>;   найтемніший */
+/* --<color>-dark: <#hex>;      темний */
+/* --<color>: <#hex>;           базовий */
+/* --<color>-medium: <#hex>;    середній */
+/* --<color>-light: <#hex>;     світлий */
+/* --<color>-lightest: <#hex>;  найлегший */
+
 :root {
   --background: #ffffff;
   --foreground: #f7f9fb;
@@ -15,6 +23,9 @@
   --active-bg: #1c1c1c;
   --bg-input: #f9fafb;
   --active-border: #2563eb;
+  --bg-dropdown: #ffffff;
+  --drop-down-hover: #f4f4f4;
+  --scroll-bar: #f4f4f4;
 
   --blue-dark: #2158e1;
   --blue: #b1e3ff;
@@ -57,6 +68,9 @@
   --active-bg: #c6c7f8;
   --bg-input: #4b5563;
   --active-border: #60a5fa;
+  --bg-dropdown: #484849;
+  --drop-down-hover: #515152;
+  --scroll-bar: #333333;
 
   --blue: #b1e3ff;
   --blue-medium: #a8c5da;
@@ -102,6 +116,14 @@ body {
     color 0.3s ease;
 }
 
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
 @layer base {
   h1,
   h2,
@@ -131,8 +153,8 @@ body {
   }
 
   span {
-    @apply text-xs;
-    color: var(--muted-foreground);
+    @apply text-sm;
+    color: var(--text);
   }
 
   * {
@@ -187,4 +209,26 @@ body {
   [class*='text-muted-foreground'] {
     color: var(--muted-foreground);
   }
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb, #94a3b8) var(--sb-track, transparent);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--sb-track, transparent);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--sb-thumb, #94a3b8);
+  border-radius: 9999px;
+  border: 2px solid var(--sb-track, transparent);
+}
+
+.custom-scrollbar--alt {
+  --sb-thumb: #22c55e; /* зелений */
+  --sb-track: transparent;
 }

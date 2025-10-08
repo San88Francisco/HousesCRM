@@ -40,7 +40,7 @@ const CalendarRange: FC<ICalendarRangeProps> = ({
   };
 
   return (
-    <div className="bg-background rounded-lg shadow-lg p-4">
+    <div className="bg-background dark:bg-foreground rounded-lg shadow-lg p-4">
       <div className="flex gap-8">
         <CalendarDisplay
           firstWeekDayNumber={firstWeekDayNumber}

@@ -1,30 +1,32 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import appConfig from './common/configs/app.config'
-import { AppConfigService } from './common/services/app-config.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import dbConfig from './common/configs/db.config'
-import { createDatabaseConfig } from './db/db.factory'
-import { TestModule } from './test-module/test.module'
+import { createDbConfig } from './common/config/db.config'
+import { UsersModule } from './users/users.module'
+import { HousesModule } from './houses/houses.module'
+import { ContractsModule } from './contracts/contracts.module'
+import { RentersModule } from './renters/renters.module'
+import { HousesAnalyticsModule } from './analytics/houses-analytics/houses-analytics.module'
+import { AuthModule } from './auth/auth.module'
+import { TokensModule } from './tokens/tokens.module'
 
 @Module({
   imports: [
-    TestModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, dbConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: AppConfigService) => ({
-        ...createDatabaseConfig(configService),
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
+      useFactory: createDbConfig,
     }),
+    UsersModule,
+    TokensModule,
+    HousesModule,
+    ContractsModule,
+    RentersModule,
+    HousesAnalyticsModule,
+    AuthModule,
   ],
-  providers: [AppConfigService],
-  exports: [AppConfigService],
 })
 export class AppModule {}

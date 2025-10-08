@@ -29,7 +29,7 @@ const Calendar: FC<ICalendarProps> = ({
   };
 
   return (
-    <div className="bg-background rounded-lg shadow-lg p-4">
+    <div className="bg-background dark:bg-foreground rounded-lg shadow-lg p-4">
       <CalendarDisplay
         firstWeekDayNumber={firstWeekDayNumber}
         date={date}
