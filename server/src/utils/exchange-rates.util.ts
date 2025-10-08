@@ -1,4 +1,3 @@
-
 import { formatDate } from './format-date'
 import { ServiceUnavailableException } from '@nestjs/common'
 import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
