@@ -1,11 +1,6 @@
-export type viewModeType = 'days' | 'months' | 'years';
-
-export enum CalendarMode {
-  Single = 'single',
-  Range = 'range',
-}
+export type levelType = 'days' | 'months' | 'years';
 
 export interface DateRange {
-  startDate: Date;
-  endDate: Date;
+  from: Date;
+  to: Date;
 }

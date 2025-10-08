@@ -1,4 +1,4 @@
-import { viewModeType } from '@/types/core/calendar';
+import { levelType } from '@/types/core/calendar';
 import { format, getYear } from 'date-fns';
 import { MoveLeft, MoveRight } from 'lucide-react';
 import { FC, Fragment } from 'react';
@@ -6,21 +6,21 @@ import { FC, Fragment } from 'react';
 interface ICalendarHeaderProps {
   handlePrevPage: () => void;
   handleNextPage: () => void;
-  setViewMode: (viewMode: viewModeType) => void;
   calendarYears: Date[];
   currentYear: Date;
   firstDayCurrentMonth: Date;
-  viewMode: viewModeType;
+  level: levelType;
+  setLevel: (level: levelType) => void;
 }
 
 const CalendarHeader: FC<ICalendarHeaderProps> = ({
   handlePrevPage,
   handleNextPage,
-  setViewMode,
   calendarYears,
   currentYear,
-  viewMode,
   firstDayCurrentMonth,
+  level,
+  setLevel,
 }) => {
   return (
     <div className="flex items-center justify-between mb-4">
@@ -29,23 +29,23 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
       </button>
 
       <h2 className="text-lg font-bold font-medium text-gray-900 flex gap-2">
-        {viewMode === 'days' && (
+        {level === 'days' && (
           <Fragment>
-            <button onClick={() => setViewMode('months')}>
+            <button onClick={() => setLevel('months')}>
               {format(firstDayCurrentMonth, 'MMMM')}
             </button>
-            <button onClick={() => setViewMode('years')}>
+            <button onClick={() => setLevel('years')}>
               {format(firstDayCurrentMonth, 'yyyy')}
             </button>
           </Fragment>
         )}
-        {viewMode === 'years' && (
-          <button onClick={() => setViewMode('days')}>
+        {level === 'months' && (
+          <button onClick={() => setLevel('years')}>{format(currentYear, 'yyyy')}</button>
+        )}
+        {level === 'years' && (
+          <button onClick={() => setLevel('days')}>
             {getYear(calendarYears[0])}-{getYear(calendarYears[calendarYears.length - 1])}
           </button>
-        )}
-        {viewMode === 'months' && (
-          <button onClick={() => setViewMode('years')}>{format(currentYear, 'yyyy')}</button>
         )}
       </h2>
       <button onClick={handleNextPage} className="p-1 hover:bg-gray-100 rounded">

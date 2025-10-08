@@ -1,5 +1,5 @@
 'use client';
-import { viewModeType } from '@/types/core/calendar';
+import { levelType } from '@/types/core/calendar';
 import { add, addYears, format } from 'date-fns';
 
 const DECADE_PAGE_STEP = 10;
@@ -7,7 +7,7 @@ const MONTHS_PAGE_STEP = 1;
 const YEARS_PAGE_STEP = 1;
 
 type useCalendarNavigationProps = {
-  viewMode: viewModeType;
+  level: levelType;
   firstDayCurrentMonth: Date;
   currentDecadeStart: Date;
   currentYear: Date;
@@ -17,7 +17,7 @@ type useCalendarNavigationProps = {
 };
 
 export const useCalendarNavigation = ({
-  viewMode,
+  level,
   firstDayCurrentMonth,
   currentDecadeStart,
   currentYear,
@@ -52,25 +52,25 @@ export const useCalendarNavigation = ({
   };
 
   const handleNextPage = () => {
-    if (viewMode === 'days') {
+    if (level === 'days') {
       nextMonth();
     }
-    if (viewMode === 'months') {
+    if (level === 'months') {
       nextYear();
     }
-    if (viewMode === 'years') {
+    if (level === 'years') {
       nextDecade();
     }
   };
 
   const handlePrevPage = () => {
-    if (viewMode === 'days') {
+    if (level === 'days') {
       prevMonth();
     }
-    if (viewMode === 'months') {
+    if (level === 'months') {
       prevYear();
     }
-    if (viewMode === 'years') {
+    if (level === 'years') {
       prevDecade();
     }
   };

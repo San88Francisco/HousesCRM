@@ -1,0 +1,69 @@
+import { FC, Fragment } from 'react';
+import CalendarCell from './calendar-cell';
+import {
+  endOfDay,
+  format,
+  isAfter,
+  isBefore,
+  isEqual,
+  isSameMonth,
+  isToday,
+  startOfDay,
+} from 'date-fns';
+
+interface ICalendarDaysLevelProps {
+  date: Date;
+  handleSelect: (date: Date) => void;
+  firstDayCurrentMonth: Date;
+  calendarDays: Date[];
+  minDate?: Date;
+  maxDate?: Date;
+}
+
+// todo make it using date-fns
+const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+// todo remove selected method as range
+
+const CalendarDaysLevel: FC<ICalendarDaysLevelProps> = ({
+  date,
+  handleSelect,
+  firstDayCurrentMonth,
+  calendarDays,
+  minDate,
+  maxDate,
+}) => {
+  const isDateDisabled = (day: Date) => {
+    if (minDate && isBefore(day, startOfDay(minDate))) return true;
+    if (maxDate && isAfter(day, endOfDay(maxDate))) return true;
+    return false;
+  };
+  return (
+    <Fragment>
+      <div className="grid grid-cols-7 gap-1 mb-2">
+        {daysOfWeek.map(day => (
+          <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+            {day}
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-7 gap-y-1 mb-6">
+        {calendarDays.map(day => (
+          <CalendarCell
+            key={day.toString()}
+            dateTime={format(day, 'yyyy-MM-dd')}
+            onClick={() => handleSelect(day)}
+            size="small"
+            isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
+            isCurrentDate={isToday(day)}
+            isSelected={isEqual(day, date as Date)}
+            isDisabled={isDateDisabled(day)}
+          >
+            {format(day, 'd')}
+          </CalendarCell>
+        ))}
+      </div>
+    </Fragment>
+  );
+};
+
+export default CalendarDaysLevel;

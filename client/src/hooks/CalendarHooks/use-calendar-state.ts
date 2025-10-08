@@ -1,5 +1,5 @@
 'use client';
-import { DateRange, viewModeType } from '@/types/core/calendar';
+
 import {
   addYears,
   Day,
@@ -18,16 +18,16 @@ import {
   startOfWeek,
   startOfYear,
 } from 'date-fns';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const DECADE_GRID_FILLING = 2;
 
-export const useCalendarState = (firstWeekDayNumber: Day) => {
+export const useCalendarState = (firstWeekDayNumber: Day, currentDate: Date) => {
   const today = startOfToday();
-  const [viewMode, setViewMode] = useState<viewModeType>('days');
-  const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMM-yyyy'));
-  const firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date());
 
+  const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMM-yyyy'));
+
+  const firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date());
   const calendarDays = eachDayOfInterval({
     start: startOfWeek(startOfMonth(firstDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
     end: endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: firstWeekDayNumber }),
@@ -38,21 +38,21 @@ export const useCalendarState = (firstWeekDayNumber: Day) => {
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
   });
-  const [currentDecadeStart, setCurrentDecadeStart] = useState<Date>(startOfDecade(today));
 
+  const [currentDecadeStart, setCurrentDecadeStart] = useState<Date>(startOfDecade(today));
   const calendarYears = eachYearOfInterval({
     start: startOfDecade(currentDecadeStart),
     end: addYears(endOfDecade(currentDecadeStart), DECADE_GRID_FILLING),
   });
 
-  const [hoveredDate, setHoveredDate] = useState<DateRange>({
-    startDate: today,
-    endDate: today,
-  });
+  useEffect(() => {
+    setCurrentMonth(format(currentDate, 'MMM-yyyy'));
+    setCurrentYear(startOfYear(currentDate));
+    setCurrentDecadeStart(startOfDecade(currentDate));
+  }, [currentDate]);
+
   return {
     today,
-    viewMode,
-    setViewMode,
     currentMonth,
     setCurrentMonth,
     firstDayCurrentMonth,
@@ -60,8 +60,6 @@ export const useCalendarState = (firstWeekDayNumber: Day) => {
     currentDecadeStart,
     setCurrentDecadeStart,
     calendarYears,
-    hoveredDate,
-    setHoveredDate,
     calendarMonths,
     currentYear,
     setCurrentYear,
