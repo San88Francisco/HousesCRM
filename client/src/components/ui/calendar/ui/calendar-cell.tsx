@@ -22,10 +22,7 @@ const baseStyles =
   'w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest';
 
 const currentDateStyle =
-  // 'text-active-border border border-solid border-active-border hover:border-blue-dark hover:text-blue-dark hover:bg-[#dbeafe]';
   'text-gray border border-solid border-gray hover:border-gray-medium hover:text-gray hover:bg-foreground';
-
-// bg-gray text-white hover:bg-gray-medium active:bg-gray active:border-dark-light
 
 const CalendarCell: FC<ICalendarCellProps> = ({
   size = 'small',

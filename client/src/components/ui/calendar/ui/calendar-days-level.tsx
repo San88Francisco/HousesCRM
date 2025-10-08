@@ -1,37 +1,51 @@
 import { FC, Fragment } from 'react';
 import CalendarCell from './calendar-cell';
 import {
+  Day,
+  eachDayOfInterval,
   endOfDay,
+  endOfWeek,
   format,
   isAfter,
   isBefore,
   isEqual,
   isSameMonth,
   isToday,
+  Locale,
   startOfDay,
+  startOfWeek,
 } from 'date-fns';
 
 interface ICalendarDaysLevelProps {
   date: Date;
   handleSelect: (date: Date) => void;
   firstDayCurrentMonth: Date;
+  firstWeekDayNumber: Day;
   calendarDays: Date[];
   minDate?: Date;
   maxDate?: Date;
+  lang: Locale;
 }
 
-// todo make it using date-fns
-const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-// todo remove selected method as range
+const getDaysOfWeek = (locale: Locale, firstWeekDayNumber: Day): string[] => {
+  const start = startOfWeek(new Date(), { locale, weekStartsOn: firstWeekDayNumber });
+  const end = endOfWeek(new Date(), { locale, weekStartsOn: firstWeekDayNumber });
+
+  return eachDayOfInterval({ start, end }).map(day => format(day, 'EEEEEE', { locale }));
+};
 
 const CalendarDaysLevel: FC<ICalendarDaysLevelProps> = ({
   date,
   handleSelect,
   firstDayCurrentMonth,
+  firstWeekDayNumber,
   calendarDays,
   minDate,
   maxDate,
+  lang,
 }) => {
+  const daysOfWeek = getDaysOfWeek(lang, firstWeekDayNumber);
+
   const isDateDisabled = (day: Date) => {
     if (minDate && isBefore(day, startOfDay(minDate))) return true;
     if (maxDate && isAfter(day, endOfDay(maxDate))) return true;
@@ -50,7 +64,7 @@ const CalendarDaysLevel: FC<ICalendarDaysLevelProps> = ({
         {calendarDays.map(day => (
           <CalendarCell
             key={day.toString()}
-            dateTime={format(day, 'yyyy-MM-dd')}
+            dateTime={format(day, 'yyyy-MM-dd', { locale: lang })}
             onClick={() => handleSelect(day)}
             size="small"
             isOutOfPeriod={!isSameMonth(day, firstDayCurrentMonth)}
@@ -58,7 +72,7 @@ const CalendarDaysLevel: FC<ICalendarDaysLevelProps> = ({
             isSelected={isEqual(day, date as Date)}
             isDisabled={isDateDisabled(day)}
           >
-            {format(day, 'd')}
+            {format(day, 'd', { locale: lang })}
           </CalendarCell>
         ))}
       </div>

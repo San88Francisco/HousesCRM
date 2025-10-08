@@ -4,6 +4,7 @@ import { Calendar, CalendarRange } from '@/components/ui/calendar';
 import { DateRange } from '@/types/core/calendar';
 import { format, startOfToday } from 'date-fns';
 import { useState } from 'react';
+import { uk, enUS } from 'date-fns/locale';
 
 export const CalendarComponent = () => {
   const [selectedRangeDate, setSelectedRangeDay] = useState<DateRange>({
@@ -15,16 +16,13 @@ export const CalendarComponent = () => {
   return (
     <div className="flex gap-10">
       <div>
-        <Calendar date={selectedDate} setDate={setSelectedDay} />
+        <Calendar date={selectedDate} setDate={setSelectedDay} lang={enUS} />
         {format(selectedDate, 'dd-MM-yyyy')}
       </div>
       <div>
-        <CalendarRange date={selectedRangeDate} setDate={setSelectedRangeDay} />
+        <CalendarRange date={selectedRangeDate} setDate={setSelectedRangeDay} lang={uk} />
         {format(selectedRangeDate.from, 'dd-MM-yyyy')}-{format(selectedRangeDate.to, 'dd-MM-yyyy')}
       </div>
     </div>
   );
 };
-
-// ? multilanguage
-// ? styles

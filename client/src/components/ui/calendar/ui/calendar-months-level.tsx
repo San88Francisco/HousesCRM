@@ -7,6 +7,7 @@ import {
   isBefore,
   isSameMonth,
   isThisMonth,
+  Locale,
   startOfMonth,
 } from 'date-fns';
 
@@ -16,6 +17,7 @@ interface ICalendarMonthsLevelProps {
   calendarMonths: Date[];
   minDate?: Date;
   maxDate?: Date;
+  lang: Locale;
 }
 
 const CalendarMonthsLevel: FC<ICalendarMonthsLevelProps> = ({
@@ -24,6 +26,7 @@ const CalendarMonthsLevel: FC<ICalendarMonthsLevelProps> = ({
   calendarMonths,
   minDate,
   maxDate,
+  lang,
 }) => {
   const isMonthDisabled = (month: Date) => {
     if (minDate && isBefore(endOfMonth(month), startOfMonth(minDate))) return true;
@@ -36,14 +39,14 @@ const CalendarMonthsLevel: FC<ICalendarMonthsLevelProps> = ({
       {calendarMonths.map(month => (
         <CalendarCell
           key={month.toString()}
-          dateTime={format(month, 'yyyy-MM-dd')}
+          dateTime={format(month, 'yyyy-MM-dd', { locale: lang })}
           onClick={() => handleSelect(month)}
           size="big"
           isCurrentDate={isThisMonth(month)}
           isSelected={isSameMonth(month, date as Date)}
           isDisabled={isMonthDisabled(month)}
         >
-          {format(month, 'MMM')}
+          {format(month, 'MMM', { locale: lang })}
         </CalendarCell>
       ))}
     </div>

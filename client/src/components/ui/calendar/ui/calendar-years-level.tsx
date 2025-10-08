@@ -7,6 +7,7 @@ import {
   isBefore,
   isSameYear,
   isThisYear,
+  Locale,
   startOfYear,
 } from 'date-fns';
 
@@ -16,6 +17,7 @@ interface ICalendarYearsLevelProps {
   calendarYears: Date[];
   minDate?: Date;
   maxDate?: Date;
+  lang: Locale;
 }
 
 const CalendarYearsLevel: FC<ICalendarYearsLevelProps> = ({
@@ -24,6 +26,7 @@ const CalendarYearsLevel: FC<ICalendarYearsLevelProps> = ({
   calendarYears,
   minDate,
   maxDate,
+  lang,
 }) => {
   const isYearDisabled = (year: Date) => {
     if (minDate && isBefore(endOfYear(year), startOfYear(minDate))) return true;
@@ -35,14 +38,14 @@ const CalendarYearsLevel: FC<ICalendarYearsLevelProps> = ({
       {calendarYears.map(year => (
         <CalendarCell
           key={year.toString()}
-          dateTime={format(year, 'yyyy-MM-dd')}
+          dateTime={format(year, 'yyyy-MM-dd', { locale: lang })}
           onClick={() => handleSelect(year)}
           size="big"
           isCurrentDate={isThisYear(year)}
           isSelected={isSameYear(year, date as Date)}
           isDisabled={isYearDisabled(year)}
         >
-          {format(year, 'y')}
+          {format(year, 'y', { locale: lang })}
         </CalendarCell>
       ))}
     </div>

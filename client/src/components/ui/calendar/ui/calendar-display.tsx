@@ -3,12 +3,13 @@ import CalendarHeader from './calendar-header';
 import CalendarDaysLevel from './calendar-days-level';
 import CalendarMonthsLevel from './calendar-months-level';
 import CalendarYearsLevel from './calendar-years-level';
-import { Day } from 'date-fns';
+import { Day, Locale } from 'date-fns';
 import { useCalendarState } from '@/hooks/CalendarHooks/use-calendar-state';
 import { useCalendarNavigation } from '@/hooks/CalendarHooks/use-calendar-navigation';
 import { levelType } from '@/types/core/calendar';
 
 interface ICalendarDisplayProps {
+  lang: Locale;
   firstWeekDayNumber: Day;
   date: Date;
   setDate: (range: Date) => void;
@@ -22,6 +23,7 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
   setDate,
   minDate,
   maxDate,
+  lang,
 }) => {
   const [level, setLevel] = useState<levelType>('days');
 
@@ -67,15 +69,18 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
         calendarYears={calendarYears}
         level={level}
         setLevel={setLevel}
+        lang={lang}
       />
       {level === 'days' && (
         <CalendarDaysLevel
           handleSelect={handleSelect}
           date={date}
           firstDayCurrentMonth={firstDayCurrentMonth}
+          firstWeekDayNumber={firstWeekDayNumber}
           calendarDays={calendarDays}
           minDate={minDate}
           maxDate={maxDate}
+          lang={lang}
         />
       )}
       {level === 'months' && (
@@ -85,6 +90,7 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
           calendarMonths={calendarMonths}
           minDate={minDate}
           maxDate={maxDate}
+          lang={lang}
         />
       )}
       {level === 'years' && (
@@ -94,6 +100,7 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
           calendarYears={calendarYears}
           minDate={minDate}
           maxDate={maxDate}
+          lang={lang}
         />
       )}
     </div>

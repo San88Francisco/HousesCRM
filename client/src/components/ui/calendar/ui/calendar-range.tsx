@@ -1,5 +1,5 @@
 import { DateRange } from '@/types/core/calendar';
-import { Day, startOfToday } from 'date-fns';
+import { Day, Locale, startOfToday } from 'date-fns';
 import { FC, useEffect, useState } from 'react';
 import CalendarDisplay from './calendar-display';
 import { Button } from '../../button';
@@ -8,9 +8,15 @@ interface ICalendarRangeProps {
   date: DateRange;
   setDate: (range: DateRange) => void;
   firstWeekDayNumber?: Day;
+  lang: Locale;
 }
 
-const CalendarRange: FC<ICalendarRangeProps> = ({ date, setDate, firstWeekDayNumber = 1 }) => {
+const CalendarRange: FC<ICalendarRangeProps> = ({
+  date,
+  setDate,
+  firstWeekDayNumber = 1,
+  lang,
+}) => {
   const today = startOfToday();
 
   const [startDate, setStartDate] = useState<Date>(date.from);
@@ -39,12 +45,14 @@ const CalendarRange: FC<ICalendarRangeProps> = ({ date, setDate, firstWeekDayNum
           date={startDate}
           setDate={setStartDate}
           maxDate={endDate}
+          lang={lang}
         />
         <CalendarDisplay
           firstWeekDayNumber={firstWeekDayNumber}
           date={endDate}
           setDate={setEndDate}
           minDate={startDate}
+          lang={lang}
         />
       </div>
 

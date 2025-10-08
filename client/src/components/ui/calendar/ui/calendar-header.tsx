@@ -1,5 +1,5 @@
 import { levelType } from '@/types/core/calendar';
-import { format, getYear } from 'date-fns';
+import { format, getYear, Locale } from 'date-fns';
 import { MoveLeft, MoveRight } from 'lucide-react';
 import { FC, Fragment } from 'react';
 
@@ -11,6 +11,7 @@ interface ICalendarHeaderProps {
   firstDayCurrentMonth: Date;
   level: levelType;
   setLevel: (level: levelType) => void;
+  lang: Locale;
 }
 
 const CalendarHeader: FC<ICalendarHeaderProps> = ({
@@ -21,6 +22,7 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
   firstDayCurrentMonth,
   level,
   setLevel,
+  lang,
 }) => {
   return (
     <div className="flex items-center justify-between mb-4">
@@ -32,15 +34,17 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
         {level === 'days' && (
           <Fragment>
             <button onClick={() => setLevel('months')}>
-              {format(firstDayCurrentMonth, 'MMMM')}
+              {format(firstDayCurrentMonth, 'MMMM', { locale: lang })}
             </button>
             <button onClick={() => setLevel('years')}>
-              {format(firstDayCurrentMonth, 'yyyy')}
+              {format(firstDayCurrentMonth, 'yyyy', { locale: lang })}
             </button>
           </Fragment>
         )}
         {level === 'months' && (
-          <button onClick={() => setLevel('years')}>{format(currentYear, 'yyyy')}</button>
+          <button onClick={() => setLevel('years')}>
+            {format(currentYear, 'yyyy', { locale: lang })}
+          </button>
         )}
         {level === 'years' && (
           <button onClick={() => setLevel('days')}>
