@@ -2,15 +2,23 @@ import { Day, Locale, startOfToday } from 'date-fns';
 import { FC, useEffect } from 'react';
 import CalendarDisplay from './calendar-display';
 import { Button } from '../../button';
+import { CalendarMode } from '@/types/core/calendar';
 
 interface ICalendarProps {
   date: Date;
   setDate: (date: Date) => void;
   firstWeekDayNumber?: Day;
   lang: Locale;
+  mode?: CalendarMode;
 }
 
-const Calendar: FC<ICalendarProps> = ({ date, setDate, firstWeekDayNumber = 1, lang }) => {
+const Calendar: FC<ICalendarProps> = ({
+  date,
+  setDate,
+  firstWeekDayNumber = 1,
+  lang,
+  mode = 'yearMonthDay',
+}) => {
   const today = startOfToday();
   useEffect(() => {
     setDate(today);
@@ -27,6 +35,7 @@ const Calendar: FC<ICalendarProps> = ({ date, setDate, firstWeekDayNumber = 1, l
         date={date}
         setDate={setDate}
         lang={lang}
+        mode={mode}
       />
       <div className="flex gap-2">
         <Button type="submit" variant="default" className="w-full">

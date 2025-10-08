@@ -1,4 +1,4 @@
-import { DateRange } from '@/types/core/calendar';
+import { CalendarMode, DateRange } from '@/types/core/calendar';
 import { Day, Locale, startOfToday } from 'date-fns';
 import { FC, useEffect, useState } from 'react';
 import CalendarDisplay from './calendar-display';
@@ -9,6 +9,7 @@ interface ICalendarRangeProps {
   setDate: (range: DateRange) => void;
   firstWeekDayNumber?: Day;
   lang: Locale;
+  mode?: CalendarMode;
 }
 
 const CalendarRange: FC<ICalendarRangeProps> = ({
@@ -16,6 +17,7 @@ const CalendarRange: FC<ICalendarRangeProps> = ({
   setDate,
   firstWeekDayNumber = 1,
   lang,
+  mode = 'yearMonthDay',
 }) => {
   const today = startOfToday();
 
@@ -46,6 +48,7 @@ const CalendarRange: FC<ICalendarRangeProps> = ({
           setDate={setStartDate}
           maxDate={endDate}
           lang={lang}
+          mode={mode}
         />
         <CalendarDisplay
           firstWeekDayNumber={firstWeekDayNumber}
@@ -53,6 +56,7 @@ const CalendarRange: FC<ICalendarRangeProps> = ({
           setDate={setEndDate}
           minDate={startDate}
           lang={lang}
+          mode={mode}
         />
       </div>
 

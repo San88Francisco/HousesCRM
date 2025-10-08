@@ -6,7 +6,7 @@ import CalendarYearsLevel from './calendar-years-level';
 import { Day, Locale } from 'date-fns';
 import { useCalendarState } from '@/hooks/CalendarHooks/use-calendar-state';
 import { useCalendarNavigation } from '@/hooks/CalendarHooks/use-calendar-navigation';
-import { levelType } from '@/types/core/calendar';
+import { CalendarMode, levelMap, levelType } from '@/types/core/calendar';
 
 interface ICalendarDisplayProps {
   lang: Locale;
@@ -15,6 +15,7 @@ interface ICalendarDisplayProps {
   setDate: (range: Date) => void;
   minDate?: Date;
   maxDate?: Date;
+  mode: CalendarMode;
 }
 
 const CalendarDisplay: FC<ICalendarDisplayProps> = ({
@@ -24,18 +25,41 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
   minDate,
   maxDate,
   lang,
+  mode,
 }) => {
-  const [level, setLevel] = useState<levelType>('days');
+  // const initialLevel: levelType =
+  //   mode === 'year' ? 'years' : mode === 'yearMonth' ? 'months' : 'days';
+
+  const [level, setLevel] = useState<levelType>(levelMap[mode]);
+
+  const nextLevelMap: Record<CalendarMode, Partial<Record<levelType, levelType>>> = {
+    year: {},
+    yearMonth: { years: 'months' },
+    yearMonthDay: { years: 'months', months: 'days' },
+  };
 
   const handleSelect = (date: Date) => {
     setDate(date);
 
-    if (level === 'years') {
-      setLevel('months');
-    } else if (level === 'months') {
-      setLevel('days');
-    }
+    const nextLevel = nextLevelMap[mode][level];
+    if (nextLevel) setLevel(nextLevel);
   };
+  // const handleSelect = (date: Date) => {
+  //   setDate(date);
+
+  //   if (mode === 'year') return;
+
+  //   if (mode === 'yearMonth') {
+  //     if (level === 'years') setLevel('months');
+  //     return;
+  //   }
+
+  //   if (level === 'years') {
+  //     setLevel('months');
+  //   } else if (level === 'months') {
+  //     setLevel('days');
+  //   }
+  // };
 
   const {
     setCurrentMonth,
@@ -71,7 +95,7 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
         setLevel={setLevel}
         lang={lang}
       />
-      {level === 'days' && (
+      {mode === 'yearMonthDay' && level === 'days' && (
         <CalendarDaysLevel
           handleSelect={handleSelect}
           date={date}
@@ -83,7 +107,7 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
           lang={lang}
         />
       )}
-      {level === 'months' && (
+      {mode !== 'year' && level === 'months' && (
         <CalendarMonthsLevel
           handleSelect={handleSelect}
           date={date}
