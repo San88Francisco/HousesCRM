@@ -1,3 +1,4 @@
+import { GoogleLoginButton } from '@/components/GoogleAuthButton';
 import { Button } from '@/components/ui/button';
 import { User } from 'lucide-react';
 
@@ -95,6 +96,11 @@ export const ButtonComponent = () => {
         <Button size="lg" variant="icon">
           <User />
         </Button>
+      </div>
+      <div className="flex items-start gap-2">
+        <GoogleLoginButton size="xs" variant="default" />
+        <GoogleLoginButton size="sm" variant="secondary" />
+        <GoogleLoginButton size="md" variant="outline" />
       </div>
     </div>
   );
