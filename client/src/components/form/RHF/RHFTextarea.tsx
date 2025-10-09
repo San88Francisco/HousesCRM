@@ -1,34 +1,29 @@
 'use client';
 
-import { forwardRef, type InputHTMLAttributes } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+import { Textarea } from '@/components/ui/textarea';
+import { forwardRef, type TextareaHTMLAttributes } from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
 
-interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+interface Props extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'maxLength'> {
   name: string;
   label?: string;
   required?: boolean;
   helperText?: string;
-  icon?: React.ReactNode;
-  iconWithError?: boolean;
-  type?: string;
+  maxLength?: number | string;
   disabled?: boolean;
   placeholder?: string;
   className?: string;
 }
 
-const RHFInput = forwardRef<HTMLInputElement, Props>(
+const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
   (
     {
       name,
       label,
       required = false,
       helperText,
-      icon,
-      iconWithError = true,
-      type = 'text',
+      maxLength,
       className,
       disabled = false,
       placeholder,
@@ -45,7 +40,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
     const errorMessage = error?.message as string | undefined;
 
     return (
-      <div className={cn('space-y-2', className, !label && 'mt-[22px]')}>
+      <div className="space-y-2">
         {label && (
           <Label htmlFor={name} className="flex items-center gap-1">
             {label}
@@ -57,16 +52,14 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
           name={name}
           control={control}
           render={({ field }) => (
-            <Input
+            <Textarea
               id={name}
               {...field}
               value={field.value || ''}
               onChange={e => field.onChange(e.target.value)}
-              type={type}
               error={!!errorMessage}
-              helperText={errorMessage || helperText}
-              icon={icon}
-              iconWithError={iconWithError}
+              helperText={errorMessage}
+              maxLength={maxLength}
               disabled={disabled}
               placeholder={placeholder}
               className={className}
@@ -82,5 +75,5 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
   },
 );
 
-RHFInput.displayName = 'RHFInput';
-export { RHFInput };
+RHFTextarea.displayName = 'RHFTextarea';
+export { RHFTextarea };

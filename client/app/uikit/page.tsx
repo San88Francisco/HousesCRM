@@ -27,8 +27,6 @@ export default function Page() {
       <InputComponent />
       <DropDownComponent />
       <TextareaComponent />
-      <Textarea className="w-[400px]" placeholder="Введіть текст тут..." />
-      <Textarea maxLength={100} className="w-[400px]" placeholder="Введіть текст тут..." />
       <SelectComponent />
     </div>
   );
