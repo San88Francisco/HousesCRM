@@ -65,9 +65,9 @@ export default [
       '**/swagger',
       '**/swagger/**',
 
-      // === UI КОМПОНЕНТИ (shadcn/ui) ===
+      // === КОМПОНЕНТИ  ===
       '**/components/ui/**',
-      'client/src/components/ui/**',
+      '**/components/RHF/**',
 
       // === СИСТЕМНІ ФАЙЛИ ===
       '**/.git',
