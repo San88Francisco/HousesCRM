@@ -90,7 +90,7 @@ const UserIcon = forwardRef<UserIconHandle, UserIconProps>(
           strokeLinejoin="round"
         >
           <motion.circle cx="12" cy="8" r="5" animate={controls} variants={circleVariant} />
-
+          UserIconHandle
           <motion.path
             d="M20 21a8 8 0 0 0-16 0"
             variants={pathVariant}

@@ -1,7 +1,6 @@
 'use client';
 import { DataTable } from '@/components/DataTable';
 import { useTableColumns } from '@/hooks/use-table-columns';
-
 import { Payment } from '@/types/services/payment';
 
 type Props = {
