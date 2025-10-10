@@ -1,8 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '@/components/ui/button';
+import { User } from 'lucide-react';
+import React from 'react';
+import { KeySquareIcon } from '@/components/ui/key';
 
 const meta: Meta<typeof Button> = {
-  title: 'UI/Button',
+  title: 'UI/Icon',
   component: Button,
   parameters: {
     layout: 'centered',
@@ -18,7 +21,8 @@ const meta: Meta<typeof Button> = {
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
     children: {
-      control: 'text',
+      control: false,
+      description: 'Іконка',
     },
     disabled: {
       control: 'boolean',
@@ -41,34 +45,49 @@ export const Default: Story = {
     },
   },
   args: {
-    children: 'Button',
+    variant: 'default',
+    children: <User />,
   },
 };
 
 export const Secondary: Story = {
   args: {
     variant: 'secondary',
-    children: 'Secondary',
+    children: <User />,
   },
 };
 
 export const Outline: Story = {
   args: {
     variant: 'outline',
-    children: 'Outline',
+    children: <User />,
   },
 };
 
 export const Destructive: Story = {
   args: {
     variant: 'destructive',
-    children: 'Destructive',
+    children: <User />,
   },
 };
 
 export const Disabled: Story = {
   args: {
     disabled: true,
-    children: 'Disabled',
+    children: <User />,
+  },
+};
+
+export const KeyIcon: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Стандартна кнопка',
+      },
+    },
+  },
+  args: {
+    variant: 'default',
+    children: <KeySquareIcon />,
   },
 };

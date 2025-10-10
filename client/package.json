@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-pattern \"src/components/RHF/**/*\" --fix --color && prettier --write \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-path .prettierignore && echo \"\\n✅ Prettier formatting complete!\\n\" && eslint \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-pattern \"src/components/RHF/**/*\" --color",
-    "storybook": "storybook dev -p 6006",
+    "sb": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
