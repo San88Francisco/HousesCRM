@@ -9,15 +9,14 @@ import {
 } from '@/components/ui/card';
 import React from 'react';
 
-// додаткові пропси лише для Storybook
-type CardStoryProps = React.ComponentProps<typeof Card> & {
+type Props = React.ComponentProps<typeof Card> & {
   title?: string;
   description?: string;
   content?: string;
   footer?: string;
 };
 
-const meta: Meta<CardStoryProps> = {
+const meta: Meta<Props> = {
   title: 'UI/Card',
   component: Card,
   parameters: {
@@ -50,7 +49,7 @@ const meta: Meta<CardStoryProps> = {
 };
 
 export default meta;
-type Story = StoryObj<CardStoryProps>;
+type Story = StoryObj<Props>;
 
 const renderCard: Story['render'] = ({ variant, title, description, content, footer, ...rest }) => (
   <Card variant={variant} className="w-30" {...rest}>

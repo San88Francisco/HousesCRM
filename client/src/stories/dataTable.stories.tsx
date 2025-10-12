@@ -12,9 +12,11 @@ const meta: Meta<typeof PaymentTable> = {
 };
 
 export default meta;
+
 type Story = StoryObj<typeof PaymentTable>;
 
 export const Default: Story = {};
+
 export const Empty: Story = {
   args: {
     data: [],
