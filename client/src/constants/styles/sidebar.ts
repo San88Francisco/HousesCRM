@@ -49,4 +49,3 @@ export const getCollapsibleHeaderClasses = () => {
 export const getChevronClasses = (isOpen: boolean) => {
   return `${SIDEBAR_STYLES.collapsible.chevron} ${isOpen ? SIDEBAR_STYLES.collapsible.chevronRotated : ''}`;
 };
-
