@@ -8,9 +8,7 @@ import { SelectComponent } from '@/components/Examples/SelectCopmponent';
 import { TableComponent } from '@/components/Examples/TableComponent/TableComponent';
 import TabsComponent from '@/components/Examples/TabsComponent';
 import { TextareaComponent } from '@/components/Examples/TextareaComponent';
-
 import { ThemeSwitch } from '@/components/ThemeDropDown';
-import { Textarea } from '@/components/ui/textarea';
 import { mockData } from '@/constants/table/dataTable';
 
 export default function Page() {
@@ -28,8 +26,6 @@ export default function Page() {
       <InputComponent />
       <DropDownComponent />
       <TextareaComponent />
-      <Textarea className="w-[400px]" placeholder="Введіть текст тут..." />
-      <Textarea maxLength={100} className="w-[400px]" placeholder="Введіть текст тут..." />
       <SelectComponent />
     </div>
   );
