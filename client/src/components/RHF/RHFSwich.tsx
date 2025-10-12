@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 
 interface Props {
   name: string;
-  label?: React.ReactNode;
+  label?: ReactNode;
   disabled?: boolean;
   className?: string;
   onValueChange?: (checked: boolean) => void;
