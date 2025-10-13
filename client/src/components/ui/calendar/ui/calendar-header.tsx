@@ -1,4 +1,4 @@
-import { levelType } from '@/types/core/calendar';
+import { CalendarMode, levelType } from '@/types/core/calendar';
 import { format, getYear, Locale } from 'date-fns';
 import { MoveLeft, MoveRight } from 'lucide-react';
 import { FC, Fragment } from 'react';
@@ -9,6 +9,7 @@ interface ICalendarHeaderProps {
   calendarYears: Date[];
   currentYear: Date;
   firstDayCurrentMonth: Date;
+  mode: CalendarMode;
   level: levelType;
   setLevel: (level: levelType) => void;
   lang: Locale;
@@ -20,6 +21,7 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
   calendarYears,
   currentYear,
   firstDayCurrentMonth,
+  mode,
   level,
   setLevel,
   lang,
@@ -50,7 +52,11 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
           </button>
         )}
         {level === 'years' && (
-          <button onClick={() => setLevel('days')}>
+          <button
+            onClick={() =>
+              setLevel(mode === 'yearMonthDay' ? 'days' : mode === 'yearMonth' ? 'months' : 'years')
+            }
+          >
             {getYear(calendarYears[0])}-{getYear(calendarYears[calendarYears.length - 1])}
           </button>
         )}

@@ -72,6 +72,7 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
         firstDayCurrentMonth={firstDayCurrentMonth}
         currentYear={currentYear}
         calendarYears={calendarYears}
+        mode={mode}
         level={level}
         setLevel={setLevel}
         lang={lang}
