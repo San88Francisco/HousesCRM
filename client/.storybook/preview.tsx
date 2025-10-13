@@ -28,8 +28,6 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const theme = context.globals.theme;
-
-      // прибираємо попередній клас і додаємо новий
       document.documentElement.classList.remove('light', 'dark');
       document.documentElement.classList.add(theme);
 
