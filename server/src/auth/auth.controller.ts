@@ -115,7 +115,10 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   public async googleAuthCallback(@Req() req: AuthenticatedRequest, @Res() res: Response): Promise<void> {
     const userAgent = req.headers['user-agent'] || 'unknown'
-    const clientURL = this.config.getOrThrow<string>('FRONTEND_URL')
+    const nodeEnv = this.config.getOrThrow<string>('NODE_ENV')
+    const frontendDevURL = this.config.getOrThrow<string>('FRONTEND_DEV_URL')
+    const frontendProdURL = this.config.getOrThrow<string>('FRONTEND_PROD_URL')
+    const clientURL = nodeEnv === 'development' ? frontendDevURL : frontendProdURL
     const cookieName = this.config.getOrThrow<string>('JWT_ACCESS_COOKIE')
 
     const { accessToken, refreshToken } = await this.authService.login(req.user, userAgent)
