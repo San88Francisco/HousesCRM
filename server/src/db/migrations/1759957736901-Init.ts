@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Init1758733332961 implements MigrationInterface {
-    name = 'Init1758733332961'
+export class Init1759957736901 implements MigrationInterface {
+    name = 'Init1759957736901'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" character varying NOT NULL, "username" character varying(15) NOT NULL, "password" character varying NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "refresh_token" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "hashed_token" character varying(255) NOT NULL, "jti" character varying(64) NOT NULL, "user_agent" character varying(255), "created_at" TIMESTAMP NOT NULL DEFAULT now(), "expires_at" TIMESTAMP WITH TIME ZONE NOT NULL, "revoked" boolean NOT NULL DEFAULT false, "userId" uuid NOT NULL, CONSTRAINT "PK_b575dd3c21fb0831013c909e7fe" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_e532a5fe469da358494917ce2b" ON "refresh_token" ("jti") `);
+        await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" character varying NOT NULL, "username" character varying(15) NOT NULL, "password" character varying, "google_id" character varying, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "UQ_7adac5c0b28492eb292d4a93871" UNIQUE ("google_id"), CONSTRAINT "CHK_af1e74da4cf07055c5fe48a5ae" CHECK ("password" IS NOT NULL OR "google_id" IS NOT NULL), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "public"."house_price_code_enum" AS ENUM('UAH', 'USD', 'EUR', 'PLN')`);
         await queryRunner.query(`CREATE TABLE "house_price" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "amount" numeric(12,2) NOT NULL, "exchange_rate" numeric(12,2) NOT NULL, "code" "public"."house_price_code_enum" NOT NULL DEFAULT 'UAH', "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "houseId" uuid NOT NULL, CONSTRAINT "PK_4f9ee3f3c846d191663f89dada8" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "public"."house_apartmenttype_enum" AS ENUM('new_build', 'resale')`);
@@ -21,19 +21,20 @@ export class Init1758733332961 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-      await queryRunner.query(`ALTER TABLE "contract" DROP CONSTRAINT "FK_c53f3c74676e74930dd90c6cf92"`)
-      await queryRunner.query(`ALTER TABLE "contract" DROP CONSTRAINT "FK_71983fe8665bde9434cd63e3464"`)
-      await queryRunner.query(`ALTER TABLE "house_price" DROP CONSTRAINT "FK_a7eccc9200a37ee5e6530bd4cab"`)
-      await queryRunner.query(`ALTER TABLE "refresh_token" DROP CONSTRAINT "FK_8e913e288156c133999341156ad"`)
-      await queryRunner.query(`DROP TABLE "renter"`)
-      await queryRunner.query(`DROP TABLE "contract"`)
-      await queryRunner.query(`DROP TYPE "public"."contract_status_enum"`)
-      await queryRunner.query(`DROP TABLE "house"`)
-      await queryRunner.query(`DROP TYPE "public"."house_apartmenttype_enum"`)
-      await queryRunner.query(`DROP TABLE "house_price"`)
-      await queryRunner.query(`DROP TYPE "public"."house_price_code_enum"`)
-      await queryRunner.query(`DROP INDEX "public"."IDX_e532a5fe469da358494917ce2b"`)
-      await queryRunner.query(`DROP TABLE "refresh_token"`)
-      await queryRunner.query(`DROP TABLE "user"`)
+        await queryRunner.query(`ALTER TABLE "contract" DROP CONSTRAINT "FK_c53f3c74676e74930dd90c6cf92"`);
+        await queryRunner.query(`ALTER TABLE "contract" DROP CONSTRAINT "FK_71983fe8665bde9434cd63e3464"`);
+        await queryRunner.query(`ALTER TABLE "house_price" DROP CONSTRAINT "FK_a7eccc9200a37ee5e6530bd4cab"`);
+        await queryRunner.query(`ALTER TABLE "refresh_token" DROP CONSTRAINT "FK_8e913e288156c133999341156ad"`);
+        await queryRunner.query(`DROP TABLE "renter"`);
+        await queryRunner.query(`DROP TABLE "contract"`);
+        await queryRunner.query(`DROP TYPE "public"."contract_status_enum"`);
+        await queryRunner.query(`DROP TABLE "house"`);
+        await queryRunner.query(`DROP TYPE "public"."house_apartmenttype_enum"`);
+        await queryRunner.query(`DROP TABLE "house_price"`);
+        await queryRunner.query(`DROP TYPE "public"."house_price_code_enum"`);
+        await queryRunner.query(`DROP TABLE "user"`);
+        await queryRunner.query(`DROP INDEX "public"."IDX_e532a5fe469da358494917ce2b"`);
+        await queryRunner.query(`DROP TABLE "refresh_token"`);
     }
+
 }
