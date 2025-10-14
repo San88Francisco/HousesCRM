@@ -1,4 +1,4 @@
-enum PaymentStatus {
+export enum PaymentStatus {
   Pending = 'pending',
   Processing = 'processing',
   Success = 'success',
