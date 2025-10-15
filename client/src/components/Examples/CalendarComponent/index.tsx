@@ -16,7 +16,7 @@ export const CalendarComponent = () => {
   return (
     <div className="flex gap-10">
       <div>
-        <Calendar date={selectedDate} setDate={setSelectedDay} lang={enUS} mode="yearMonth" />
+        <Calendar date={selectedDate} setDate={setSelectedDay} lang={enUS} mode="yearMonthDay" />
         {format(selectedDate, 'dd-MM-yyyy')}
       </div>
       <div>

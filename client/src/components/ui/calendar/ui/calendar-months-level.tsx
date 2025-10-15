@@ -5,6 +5,7 @@ import {
   format,
   isAfter,
   isBefore,
+  isEqual,
   isSameMonth,
   isThisMonth,
   Locale,
@@ -33,6 +34,41 @@ const CalendarMonthsLevel: FC<ICalendarMonthsLevelProps> = ({
     if (maxDate && isAfter(startOfMonth(month), endOfMonth(maxDate))) return true;
     return false;
   };
+  const isInRange = (day: Date): boolean => {
+    if (!minDate && !maxDate) return false;
+
+    const start = minDate ?? date;
+    const end = maxDate ?? date;
+
+    if (!start || !end) return false;
+
+    const rangeStart = isBefore(start, end) ? startOfMonth(start) : startOfMonth(end);
+    const rangeEnd = isAfter(end, start) ? endOfMonth(end) : endOfMonth(start);
+
+    return !isBefore(day, rangeStart) && !isAfter(day, rangeEnd);
+  };
+
+  const isLeftSide = (day: Date) => {
+    if (!minDate && !maxDate) return false;
+
+    const start = minDate ?? date;
+    const end = maxDate ?? date;
+
+    const rangeStart = isBefore(start, end) ? startOfMonth(start) : startOfMonth(end);
+
+    return isEqual(day, rangeStart);
+  };
+
+  const isRightSide = (day: Date) => {
+    if (!minDate && !maxDate) return false;
+
+    const start = minDate ?? date;
+    const end = maxDate ?? date;
+
+    const rangeEnd = isAfter(end, start) ? startOfMonth(end) : startOfMonth(start);
+
+    return isEqual(day, rangeEnd);
+  };
 
   return (
     <div className="grid grid-cols-3 gap-y-3 mb-6 place-items-center">
@@ -45,6 +81,9 @@ const CalendarMonthsLevel: FC<ICalendarMonthsLevelProps> = ({
           isCurrentDate={isThisMonth(month)}
           isSelected={isSameMonth(month, date as Date)}
           isDisabled={isMonthDisabled(month)}
+          inRange={isInRange(month)}
+          isRightSide={isRightSide(month)}
+          isLeftSide={isLeftSide(month)}
         >
           {format(month, 'MMM', { locale: lang })}
         </CalendarCell>

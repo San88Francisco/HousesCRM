@@ -51,6 +51,42 @@ const CalendarDaysLevel: FC<ICalendarDaysLevelProps> = ({
     if (maxDate && isAfter(day, endOfDay(maxDate))) return true;
     return false;
   };
+
+  const isInRange = (day: Date): boolean => {
+    if (!minDate && !maxDate) return false;
+    const start = minDate ?? date;
+    const end = maxDate ?? date;
+
+    if (!start || !end) return false;
+
+    const rangeStart = isBefore(start, end) ? startOfDay(start) : startOfDay(end);
+    const rangeEnd = isAfter(end, start) ? endOfDay(end) : endOfDay(start);
+
+    return !isBefore(day, rangeStart) && !isAfter(day, rangeEnd);
+  };
+
+  const isLeftSide = (day: Date) => {
+    if (!minDate && !maxDate) return false;
+
+    const start = minDate ?? date;
+    const end = maxDate ?? date;
+
+    const rangeStart = isBefore(start, end) ? startOfDay(start) : startOfDay(end);
+
+    return isEqual(day, rangeStart);
+  };
+
+  const isRightSide = (day: Date) => {
+    if (!minDate && !maxDate) return false;
+
+    const start = minDate ?? date;
+    const end = maxDate ?? date;
+
+    const rangeEnd = isAfter(end, start) ? startOfDay(end) : startOfDay(start);
+
+    return isEqual(day, rangeEnd);
+  };
+
   return (
     <Fragment>
       <div className="grid grid-cols-7 gap-1 mb-2">
@@ -71,6 +107,9 @@ const CalendarDaysLevel: FC<ICalendarDaysLevelProps> = ({
             isCurrentDate={isToday(day)}
             isSelected={isEqual(day, date as Date)}
             isDisabled={isDateDisabled(day)}
+            inRange={isInRange(day)}
+            isRightSide={isRightSide(day)}
+            isLeftSide={isLeftSide(day)}
           >
             {format(day, 'd', { locale: lang })}
           </CalendarCell>
