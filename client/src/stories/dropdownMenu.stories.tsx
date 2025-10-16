@@ -24,15 +24,7 @@ const meta: Meta<typeof DropdownMenu> = {
   tags: ['autodocs'],
   decorators: [
     Story => (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          height: '100vh',
-          paddingTop: '40px',
-        }}
-      >
+      <div className="flex justify-center items-start h-screen pt-10">
         <Story />
       </div>
     ),

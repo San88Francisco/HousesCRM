@@ -33,7 +33,7 @@ const meta: Meta<typeof Input> = {
   },
   decorators: [
     Story => (
-      <div style={{ width: '320px', maxWidth: '100%' }}>
+      <div className="w-[320px] max-w-full">
         <Story />
       </div>
     ),
