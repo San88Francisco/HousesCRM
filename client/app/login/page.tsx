@@ -15,6 +15,7 @@ import { RHFForm } from '@/components/RHF/RHForm';
 import { motion } from 'framer-motion';
 import { loginSchema, loginDefaultValues } from '@/validation/login/login';
 import { LoginRequest } from '@/types/services/login';
+import { GoogleLoginButton } from '@/components/GoogleAuthButton';
 
 export default function Page() {
   const { errorToast, successToast } = useErrorToast();
@@ -78,6 +79,7 @@ export default function Page() {
           <Button type="submit" className="w-full " disabled={isSubmitting || isLoading}>
             {isLoading ? 'Авторизація...' : 'Увійти'}
           </Button>
+          <GoogleLoginButton />
         </RHFForm>
       </div>
       <motion.div
