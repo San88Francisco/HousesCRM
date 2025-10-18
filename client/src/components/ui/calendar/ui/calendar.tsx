@@ -17,7 +17,7 @@ const Calendar: FC<ICalendarProps> = ({
   setDate,
   firstWeekDayNumber = 1,
   lang,
-  mode = 'yearMonthDay',
+  mode = CalendarMode.YearsMonthsDays,
 }) => {
   const today = startOfToday();
   useEffect(() => {

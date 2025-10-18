@@ -54,7 +54,13 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
         {level === 'years' && (
           <button
             onClick={() =>
-              setLevel(mode === 'yearMonthDay' ? 'days' : mode === 'yearMonth' ? 'months' : 'years')
+              setLevel(
+                mode === CalendarMode.YearsMonthsDays
+                  ? 'days'
+                  : mode === CalendarMode.YearsMonths
+                    ? 'months'
+                    : 'years',
+              )
             }
           >
             {getYear(calendarYears[0])}-{getYear(calendarYears[calendarYears.length - 1])}

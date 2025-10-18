@@ -1,7 +1,7 @@
 'use client';
 
 import { Calendar, CalendarRange } from '@/components/ui/calendar';
-import { DateRange } from '@/types/core/calendar';
+import { CalendarMode, DateRange } from '@/types/core/calendar';
 import { format, startOfToday } from 'date-fns';
 import { useState } from 'react';
 import { uk, enUS } from 'date-fns/locale';
@@ -16,7 +16,12 @@ export const CalendarComponent = () => {
   return (
     <div className="flex gap-10">
       <div>
-        <Calendar date={selectedDate} setDate={setSelectedDay} lang={enUS} mode="yearMonthDay" />
+        <Calendar
+          date={selectedDate}
+          setDate={setSelectedDay}
+          lang={enUS}
+          mode={CalendarMode.YearsMonths}
+        />
         {format(selectedDate, 'dd-MM-yyyy')}
       </div>
       <div>

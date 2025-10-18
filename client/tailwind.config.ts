@@ -44,7 +44,6 @@ export default {
         blue: 'var(--blue)',
         'blue-medium': 'var(--blue-medium)',
         'blue-light': 'var(--blue-light)',
-        'blue-dark': 'var(--blue-dark)',
 
         purple: 'var(--purple)',
         'purple-medium': 'var(--purple-medium)',
