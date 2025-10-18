@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
@@ -9,7 +9,7 @@ import type { checkboxVariants } from '@/components/ui/checkbox';
 
 interface Props extends VariantProps<typeof checkboxVariants> {
   name: string;
-  label?: React.ReactNode;
+  label?: ReactNode;
   disabled?: boolean;
   className?: string;
   onValueChange?: (checked: boolean) => void;

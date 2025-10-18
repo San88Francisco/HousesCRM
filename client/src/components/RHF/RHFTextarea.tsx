@@ -9,7 +9,7 @@ interface Props extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'maxLe
   name: string;
   label?: string;
   required?: boolean;
-  helperText?: string;
+
   maxLength?: number | string;
   disabled?: boolean;
   placeholder?: string;
@@ -22,7 +22,6 @@ const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
       name,
       label,
       required = false,
-      helperText,
       maxLength,
       className,
       disabled = false,
@@ -57,8 +56,7 @@ const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
               {...field}
               value={field.value || ''}
               onChange={e => field.onChange(e.target.value)}
-              error={!!errorMessage}
-              helperText={errorMessage}
+              error={errorMessage}
               maxLength={maxLength}
               disabled={disabled}
               placeholder={placeholder}

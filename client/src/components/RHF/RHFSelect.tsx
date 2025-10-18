@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import {
   Select,
@@ -14,31 +14,30 @@ import {
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 
-interface SelectOption {
+type SelectOption = {
   value: string;
-  label: React.ReactNode;
-  icon?: React.ReactNode;
+  label: ReactNode;
+  icon?: ReactNode;
   disabled?: boolean;
-}
+};
 
-interface SelectOptionGroup {
+type SelectOptionGroup = {
   label: string;
   options: SelectOption[];
-}
+};
 
-interface Props {
+type Props = {
   name: string;
   options: SelectOption[] | SelectOptionGroup[];
-  label?: React.ReactNode;
+  label?: ReactNode;
   placeholder?: string;
   disabled?: boolean;
   className?: string;
   triggerClassName?: string;
   contentClassName?: string;
-  helperText?: string;
 
   onValueChange?: (value: string) => void;
-}
+};
 
 const isOptionGroup = (option: SelectOption | SelectOptionGroup): option is SelectOptionGroup => {
   return 'options' in option;
@@ -55,7 +54,6 @@ export const RHFSelect = forwardRef<HTMLButtonElement, Props>(
       className,
       triggerClassName,
       contentClassName,
-      helperText,
       onValueChange,
     },
     ref,
@@ -116,8 +114,17 @@ export const RHFSelect = forwardRef<HTMLButtonElement, Props>(
                 className={triggerClassName}
                 error={!!error}
                 disabled={disabled}
-                helperText={error?.message || helperText}
               >
+                {error && (
+                  <p
+                    className={cn(
+                      'mt-1 text-sm transition-colors duration-200',
+                      error ? 'text-red opacity-100' : 'text-muted opacity-0',
+                    )}
+                  >
+                    {error.message}
+                  </p>
+                )}
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent className={contentClassName}>{renderOptions(options)}</SelectContent>

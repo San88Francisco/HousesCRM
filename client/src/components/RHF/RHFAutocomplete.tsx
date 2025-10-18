@@ -21,7 +21,7 @@ export interface AutocompleteOption {
   label: string;
 }
 
-interface Props {
+type Props = {
   name: string;
   label?: string;
   required?: boolean;
@@ -34,7 +34,7 @@ interface Props {
   onValueChange?: (value: string) => void;
   loading?: boolean;
   disabled?: boolean;
-}
+};
 
 const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
   (

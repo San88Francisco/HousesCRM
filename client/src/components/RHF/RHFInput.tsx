@@ -10,7 +10,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   name: string;
   label?: string;
   required?: boolean;
-  helperText?: string;
+
   icon?: React.ReactNode;
   iconWithError?: boolean;
   type?: string;
@@ -25,7 +25,6 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
       name,
       label,
       required = false,
-      helperText,
       icon,
       iconWithError = true,
       type = 'text',
@@ -49,7 +48,6 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
         {label && (
           <Label htmlFor={name} className="flex items-center gap-1">
             {label}
-            {required && <span className="text-destructive">*</span>}
           </Label>
         )}
 
@@ -64,7 +62,6 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
               onChange={e => field.onChange(e.target.value)}
               type={type}
               error={!!errorMessage}
-              helperText={errorMessage || helperText}
               icon={icon}
               iconWithError={iconWithError}
               disabled={disabled}
@@ -77,6 +74,9 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
             />
           )}
         />
+        {error && (
+          <p className={cn('mt-1 text-sm', error ? 'text-red' : 'text-muted')}>{errorMessage}</p>
+        )}
       </div>
     );
   },
