@@ -7,6 +7,7 @@ import { LoginUserDto } from 'src/users/dto/login-user.dto'
 import { TokensService } from 'src/tokens/tokens.service'
 import { TokensDto } from 'src/tokens/dto/tokens.dto'
 import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
+import { UserWithGoogleDto } from 'src/users/dto/req/user-with-google.req.dto'
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<UserDto | null> {
     const user = await this.users.findOne(email)
-    const isValid = user && (await argon2.verify(user.password, password))
+    const isValid = user && user.password && (await argon2.verify(user.password, password))
 
     if (!isValid) {
       return null
@@ -54,5 +55,18 @@ export class AuthService {
 
   async logout(userId: string): Promise<void> {
     await this.tokens.revokeAll(userId)
+  }
+
+  async LoginWithGoogle(dto: UserWithGoogleDto): Promise<UserDto> {
+    const user = await this.users.findByGoogleId(dto.googleId)
+
+    if (!user) {
+      const newUser = await this.users.findOrCreateWithGoogle(dto)
+      return plainToInstance(UserDto, newUser, { excludeExtraneousValues: true })
+    }
+
+    return plainToInstance(UserDto, user, {
+      excludeExtraneousValues: true,
+    })
   }
 }

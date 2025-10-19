@@ -1,8 +1,10 @@
 import { RefreshToken } from 'src/tokens/entities/refresh-token.entity'
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Check, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
 
 @Entity()
+// eslint-disable-next-line quotes
+@Check(`"password" IS NOT NULL OR "google_id" IS NOT NULL`)
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -10,11 +12,14 @@ export class User {
   @Column({ unique: true })
   email: string
 
-  @Column({ length: 15 })
+  @Column({ length: 50 })
   username: string
 
-  @Column()
-  password: string
+  @Column({ nullable: true })
+  password?: string
+
+  @Column({ nullable: true, unique: true, name: 'google_id' })
+  googleId?: string
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date

@@ -28,11 +28,12 @@
   },
   "lint-staged": {
     "client/**/*.{js,jsx,ts,tsx}": [
-      "npm run lint --prefix client"
+      "npm run lint --prefix client",
+      "prettier --write"
     ],
     "server/**/*.{js,ts}": [
-      "echo \"\\n🔍 Linting SERVER...\\n\"",
-      "npm run lint --prefix server"
+      "npm run lint --prefix server",
+      "prettier --write"
     ],
     "*.{json,md,css,scss}": [
       "prettier --write"

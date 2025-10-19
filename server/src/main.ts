@@ -8,10 +8,16 @@ import { dbExceptionFilter } from './common/filters/db-exception.filter'
 import { validationConfig } from './common/config/validation.config'
 import { typeOrmNotFoundFilter } from './common/filters/typeorm-not-found.filter'
 import cookieParser from 'cookie-parser'
+import { corsConfig } from './common/config/cors.config'
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule)
-  const port = app.get(ConfigService).get<string>('PORT') || 8000
+
+  const configService = app.get(ConfigService)
+
+  const port = configService.get<string>('PORT') || 8000
+
+  app.enableCors(corsConfig(configService))
 
   const document = SwaggerModule.createDocument(app, swaggerConfig)
   SwaggerModule.setup('doc', app, document)

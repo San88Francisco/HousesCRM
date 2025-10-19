@@ -1,3 +1,5 @@
+import storybook from 'eslint-plugin-storybook';
+
 import js from '@eslint/js';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -10,9 +12,7 @@ import unusedImports from 'eslint-plugin-unused-imports';
 
 // Функція для очищення пробілів з ключів об'єкта globals
 function cleanGlobals(obj) {
-  return Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [key.trim(), value])
-  );
+  return Object.fromEntries(Object.entries(obj).map(([key, value]) => [key.trim(), value]));
 }
 
 export default [
@@ -46,14 +46,13 @@ export default [
       '.eslintcache',
       '**/.eslintcache',
 
-      // === КОНФІГИ ===
-      '*.config.js',
-      '*.config.ts',
-      '**/*.config.js',
-      '**/*.config.ts',
-      '**/next.config.*',
-      '**/tailwind.config.*',
-      '**/postcss.config.*',
+      // === КОНФІГИ (НЕ ВКЛЮЧАЄМО STORYBOOK) ===
+      'next.config.*',
+      'tailwind.config.*',
+      'postcss.config.*',
+      'vite.config.*',
+      'vitest.config.*',
+      'jest.config.*',
       '**/tsconfig*.json',
       '**/next-env.d.ts',
 
@@ -79,12 +78,20 @@ export default [
       '**/coverage/**',
     ],
 
-    // ТІЛЬКИ src папки + кореневі файли
-    files: ['src/**/*.{ts,tsx}', 'app/**/*.{ts,tsx}', 'middleware.ts'],
+    files: [
+      'src/**/*.{ts,tsx}',
+      'app/**/*.{ts,tsx}',
+      'middleware.ts',
+      '.storybook/**/*.{ts,tsx,js}', // Додаємо Storybook файли
+      '**/*.stories.{ts,tsx,js}', // Додаємо story файли
+    ],
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
       parser: tsParser,
+      parserOptions: {
+        project: './tsconfig.json', // Додаємо project для TypeScript
+      },
       globals: {
         ...cleanGlobals(globals.browser),
         ...cleanGlobals(globals.node),
@@ -139,7 +146,7 @@ export default [
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'error',
 
-      // Обов’язково використовуємо фігурні дужки в будь-яких блоках
+      // Обов'язково використовуємо фігурні дужки в будь-яких блоках
       curly: ['error', 'all'],
 
       // Обмежуємо складність функцій до 4 (ще жорсткіше)
@@ -175,4 +182,31 @@ export default [
       'no-magic-numbers': ['warn', { ignore: [0, 1], ignoreArrayIndexes: true }], // Мінімізувати "магічні" числа
     },
   },
+  // ОКРЕМА КОНФІГУРАЦІЯ ДЛЯ STORYBOOK ФАЙЛІВ
+  {
+    files: ['.storybook/**/*.{ts,tsx,js}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: 'module',
+      parser: tsParser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+      globals: {
+        ...cleanGlobals(globals.browser),
+        ...cleanGlobals(globals.node),
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint,
+    },
+    rules: {
+      // М'якші правила для конфігураційних файлів
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-magic-numbers': 'off',
+      'max-lines': 'off',
+      complexity: 'off',
+    },
+  },
+  ...storybook.configs['flat/recommended'],
 ];

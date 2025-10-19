@@ -5,4 +5,6 @@ export const AUTH_ROUTES = {
   REGISTRATION: 'registration',
   REFRESH: 'refresh',
   LOGOUT: 'logout',
+  GOOGLE: 'google',
+  GOOGLE_CALLBACK: 'google/callback',
 }

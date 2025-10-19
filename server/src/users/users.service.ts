@@ -5,6 +5,8 @@ import * as argon2 from 'argon2'
 import { User } from './entities/user.entity'
 import { CreateUserRequestDto } from './dto/req/create-user-req.dto'
 import { UserWithPasswordDto } from './dto/user-with-password.dto'
+import { plainToInstance } from 'class-transformer'
+import { UserWithGoogleDto } from './dto/req/user-with-google.req.dto'
 
 @Injectable()
 export class UsersService {
@@ -24,10 +26,33 @@ export class UsersService {
   }
 
   async findOne(email: string): Promise<UserWithPasswordDto | null> {
-    return this.usersRepository.findOne({ where: { email } })
+    const user = await this.usersRepository.findOne({ where: { email } })
+
+    return plainToInstance(UserWithPasswordDto, user, {
+      excludeExtraneousValues: true,
+    })
   }
 
   async findById(id: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { id } })
+  }
+
+  async findByGoogleId(googleId: string): Promise<User | null> {
+    return await this.usersRepository.findOneBy({ googleId })
+  }
+
+  async findOrCreateWithGoogle(dto: UserWithGoogleDto): Promise<User> {
+    const { email, username, googleId } = dto
+
+    const userWithEmail = await this.findOne(email)
+
+    const entity = this.usersRepository.create({
+      ...userWithEmail,
+      email: userWithEmail?.email || email,
+      username,
+      googleId,
+    })
+
+    return await this.usersRepository.save(entity)
   }
 }
