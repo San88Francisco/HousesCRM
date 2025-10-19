@@ -7,10 +7,10 @@ export class ContractWithRelationsDto extends ContractDto {
   @Expose()
   @Transform(({ value }: { value?: RenterDto }) => (value?.id ? value : null))
   @Type(() => RenterDto)
-  public renter: RenterDto | null
+  renter: RenterDto | null
 
   @Expose()
   @Transform(({ value }: { value?: HouseDto }) => (value?.id ? value : null))
   @Type(() => HouseDto)
-  public house: HouseDto | null
+  house: HouseDto | null
 }

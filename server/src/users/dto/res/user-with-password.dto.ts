@@ -3,5 +3,5 @@ import { UserDto } from './user.dto'
 
 export class UserWithPasswordDto extends UserDto {
   @Expose()
-  public password: string
+  password: string
 }

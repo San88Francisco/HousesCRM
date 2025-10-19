@@ -5,19 +5,19 @@ import { HouseDto } from 'src/houses/dto/house.dto'
 export class RevenueDistributionItemDto extends PickType(HouseDto, ['id', 'apartmentName'] as const) {
   @Expose()
   @Type(() => Number)
-  public apartmentTotalRevenue: number
+  apartmentTotalRevenue: number
 
   @Expose()
   @Type(() => Number)
-  public percentage: number
+  percentage: number
 }
 
 export class RevenueDistributionDto {
   @Expose()
   @Type(() => RevenueDistributionItemDto)
-  public data: RevenueDistributionItemDto[]
+  data: RevenueDistributionItemDto[]
 
   @Expose()
   @Type(() => Number)
-  public grandTotal: number
+  grandTotal: number
 }

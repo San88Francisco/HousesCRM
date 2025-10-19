@@ -34,7 +34,7 @@ export class AuthController {
   @Post(AUTH_ROUTES.LOGIN)
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
-  public async login(
+  async login(
     @Body() _dto: LoginRequestDto,
     @Req() req: AuthenticatedRequest,
     @Res({ passthrough: true }) res: Response
@@ -49,7 +49,7 @@ export class AuthController {
 
   @Post(AUTH_ROUTES.REGISTRATION)
   @HttpCode(HttpStatus.CREATED)
-  public async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
+  async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
     const user = await this.authService.registration(dto)
     return { message: 'User successfully created', data: { id: user.id } }
   }
@@ -57,7 +57,7 @@ export class AuthController {
   @Get(AUTH_ROUTES.REFRESH)
   @UseGuards(AuthGuard('jwt-refresh'))
   @HttpCode(HttpStatus.OK)
-  public async RefreshTokenModulerefresh(
+  async RefreshTokenModulerefresh(
     @Req() req: AuthenticatedRequest,
     @Res({ passthrough: true }) res: Response
   ): Promise<RefreshTokenResponseDto> {
@@ -80,10 +80,7 @@ export class AuthController {
   @Post(AUTH_ROUTES.LOGOUT)
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
-  public async logout(
-    @Req() req: AuthenticatedRequest,
-    @Res({ passthrough: true }) res: Response
-  ): Promise<{ ok: true }> {
+  async logout(@Req() req: AuthenticatedRequest, @Res({ passthrough: true }) res: Response): Promise<{ ok: true }> {
     await this.authService.logout(req.user.id)
     res.clearCookie(this.config.get<string>('jwt.refreshCookie') || 'refresh_token', {
       path: '/',
@@ -108,12 +105,12 @@ export class AuthController {
   })
   @Get(AUTH_ROUTES.GOOGLE)
   @UseGuards(GoogleAuthGuard)
-  public async googleAuth(): Promise<void> {}
+  async googleAuth(): Promise<void> {}
 
   @ApiExcludeEndpoint()
   @Get(AUTH_ROUTES.GOOGLE_CALLBACK)
   @UseGuards(GoogleAuthGuard)
-  public async googleAuthCallback(@Req() req: AuthenticatedRequest, @Res() res: Response): Promise<void> {
+  async googleAuthCallback(@Req() req: AuthenticatedRequest, @Res() res: Response): Promise<void> {
     const userAgent = req.headers['user-agent'] || 'unknown'
     const nodeEnv = this.config.getOrThrow<string>('NODE_ENV')
     const frontendDevURL = this.config.getOrThrow<string>('FRONTEND_DEV_URL')

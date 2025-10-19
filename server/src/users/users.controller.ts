@@ -12,7 +12,7 @@ export class UsersController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  public async getProfile(@Request() req: { user: { email: string } }): Promise<ProfileResponseDto> {
+  async getProfile(@Request() req: { user: { email: string } }): Promise<ProfileResponseDto> {
     const user = await this.usersService.findOne(req.user.email)
     if (!user) {
       throw new NotFoundException('User not found')

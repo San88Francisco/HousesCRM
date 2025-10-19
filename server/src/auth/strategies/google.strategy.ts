@@ -18,12 +18,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     })
   }
 
-  public async validate(
-    _accessToken: string,
-    _refreshToken: string,
-    profile: Profile,
-    cb: VerifyCallback
-  ): Promise<void> {
+  async validate(_accessToken: string, _refreshToken: string, profile: Profile, cb: VerifyCallback): Promise<void> {
     const { _json } = profile
     const user = await this.authService.LoginWithGoogle({
       email: _json.email as string,

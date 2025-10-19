@@ -11,29 +11,29 @@ export enum ContractStatus {
 @Entity()
 export class Contract {
   @PrimaryGeneratedColumn('uuid')
-  public id: string
+  id: string
 
   @Column()
-  public commencement: Date
+  commencement: Date
 
   @Column()
-  public termination: Date
+  termination: Date
 
   @Column({ type: 'enum', enum: ContractStatus, default: ContractStatus.ACTIVE })
-  public status: ContractStatus
+  status: ContractStatus
 
   @CreateDateColumn({ name: 'created_at' })
-  public createdAt: Date
+  createdAt: Date
 
   @UpdateDateColumn({ name: 'updated_at' })
-  public updatedAt: Date
+  updatedAt: Date
 
   @Column({ name: 'monthly_payment' })
-  public monthlyPayment: number
+  monthlyPayment: number
 
   @ManyToOne(() => House, (house) => house.contracts, { onDelete: 'CASCADE' })
-  public house: Relation<House>
+  house: Relation<House>
 
   @ManyToOne(() => Renter, (renter) => renter.contracts)
-  public renter: Relation<Renter>
+  renter: Relation<Renter>
 }

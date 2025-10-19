@@ -3,14 +3,14 @@ import { CurrencyCode } from '../entities/house-price.entity'
 
 export class HousePriceDto {
   @Expose()
-  public id: string
+  id: string
 
   @Expose()
-  public amount: number
+  amount: number
 
   @Expose()
-  public code: CurrencyCode
+  code: CurrencyCode
 
   @Expose()
-  public exchangeRate: number
+  exchangeRate: number
 }

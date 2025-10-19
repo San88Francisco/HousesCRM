@@ -5,17 +5,17 @@ import { HouseDto } from 'src/houses/dto/house.dto'
 export class CurrencyRevaluationDto extends PickType(HouseDto, ['id', 'apartmentName'] as const) {
   @Expose()
   @Transform(({ value }) => parseFloat(Number(value).toFixed(2)))
-  public purchaseRate: number
+  purchaseRate: number
 
   @Expose()
   @Transform(({ value }) => parseFloat(Number(value).toFixed(2)))
-  public currentRate: number
+  currentRate: number
 
   @Expose()
   @Transform(({ value }) => Math.round(Number(value)))
-  public revaluationAmountUah: number
+  revaluationAmountUah: number
 
   @Expose()
   @Transform(({ value }) => parseFloat(Number(value).toFixed(2)))
-  public purchaseAmountUah: number
+  purchaseAmountUah: number
 }

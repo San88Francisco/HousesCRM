@@ -1,3 +1,3 @@
 export class DeleteContractDto {
-  public message: string
+  message: string
 }

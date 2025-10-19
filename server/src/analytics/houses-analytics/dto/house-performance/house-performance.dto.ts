@@ -2,14 +2,14 @@ import { Expose } from 'class-transformer'
 
 export class HousePerformanceDto {
   @Expose()
-  public apartmentName: string
+  apartmentName: string
 
   @Expose()
-  public rentersCount: number
+  rentersCount: number
 
   @Expose()
-  public totalRevenue: number
+  totalRevenue: number
 
   @Expose()
-  public currentPayment: number
+  currentPayment: number
 }

@@ -13,27 +13,27 @@ export class ContractsController {
   constructor(private readonly contractsService: ContractsService) {}
 
   @Get()
-  public async findAll(@Query() dto: QueryDto): Promise<ContractResponseDto> {
+  async findAll(@Query() dto: QueryDto): Promise<ContractResponseDto> {
     return await this.contractsService.findAll(dto)
   }
 
   @Get(CONTRACTS_ROUTES.BY_ID)
-  public async findById(@Param('id') id: string): Promise<ContractWithRelationsDto> {
+  async findById(@Param('id') id: string): Promise<ContractWithRelationsDto> {
     return await this.contractsService.findById(id)
   }
 
   @Post()
-  public async create(@Body() dto: CreateContractDto): Promise<ContractWithRelationsDto> {
+  async create(@Body() dto: CreateContractDto): Promise<ContractWithRelationsDto> {
     return await this.contractsService.create(dto)
   }
 
   @Patch(CONTRACTS_ROUTES.BY_ID)
-  public async update(@Body() dto: UpdateContractDto, @Param('id') id: string): Promise<ContractWithRelationsDto> {
+  async update(@Body() dto: UpdateContractDto, @Param('id') id: string): Promise<ContractWithRelationsDto> {
     return await this.contractsService.update(dto, id)
   }
 
   @Delete(CONTRACTS_ROUTES.BY_ID)
-  public async remove(@Param('id') id: string): Promise<DeleteContractDto> {
+  async remove(@Param('id') id: string): Promise<DeleteContractDto> {
     await this.contractsService.remove(id)
     return { message: 'Contract deleted successfully' }
   }
