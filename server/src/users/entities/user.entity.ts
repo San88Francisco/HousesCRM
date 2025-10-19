@@ -5,23 +5,23 @@ import type { Relation } from 'typeorm'
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  public id: string
+  id: string
 
   @Column({ unique: true })
-  public email: string
+  email: string
 
   @Column({ length: 15 })
-  public username: string
+  username: string
 
   @Column()
-  public password: string
+  password: string
 
   @CreateDateColumn({ name: 'created_at' })
-  public createdAt: Date
+  createdAt: Date
 
   @UpdateDateColumn({ name: 'updated_at' })
-  public updatedAt: Date
+  updatedAt: Date
 
   @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.id)
-  public refreshTokens: Relation<RefreshToken>[]
+  refreshTokens: Relation<RefreshToken>[]
 }

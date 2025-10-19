@@ -1,6 +1,7 @@
 // @ts-check
 import eslint from '@eslint/js'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
+import configPrettier from 'eslint-config-prettier'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
@@ -10,14 +11,18 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
+
+  configPrettier,
+
   eslintPluginPrettierRecommended,
+
   {
     languageOptions: {
       globals: {
         ...globals.node,
         ...globals.jest,
       },
-      sourceType: 'module', // Змінено на module для сучасного JS
+      sourceType: 'module',
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
@@ -26,60 +31,45 @@ export default tseslint.config(
   },
   {
     rules: {
-      // TypeScript правила
-      '@typescript-eslint/no-explicit-any': 'error', // Забороняє використання `any`
-      '@typescript-eslint/no-floating-promises': 'error', // Вимагає обробки Promise
-      '@typescript-eslint/no-unsafe-argument': 'error', // Забороняє небезпечні аргументи
-      '@typescript-eslint/no-unsafe-assignment': 'error', // Забороняє небезпечні присвоєння
-      '@typescript-eslint/no-unsafe-call': 'error', // Забороняє небезпечні виклики
-      '@typescript-eslint/no-unsafe-member-access': 'error', // Забороняє небезпечний доступ до членів
-      '@typescript-eslint/require-await': 'error', // Вимагає async для асинхронних функцій
-      '@typescript-eslint/await-thenable': 'error', // Забороняє await не-thenable значень
-      '@typescript-eslint/no-misused-promises': 'error', // Забороняє неправильне використання Promise
-      '@typescript-eslint/no-unnecessary-type-assertion': 'error', // Забороняє зайві type assertions
-      '@typescript-eslint/restrict-plus-operands': 'error', // Перевіряє операнди для +
-      '@typescript-eslint/restrict-template-expressions': 'error', // Перевіряє шаблонні рядки
-      '@typescript-eslint/no-non-null-assertion': 'error', // Забороняє non-null assertion (!)
+      indent: 'off',
 
-      // NestJS специфічні правила
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-unsafe-argument': 'error',
+      '@typescript-eslint/no-unsafe-assignment': 'error',
+      '@typescript-eslint/no-unsafe-call': 'error',
+      '@typescript-eslint/no-unsafe-member-access': 'error',
+      '@typescript-eslint/require-await': 'error',
+      '@typescript-eslint/await-thenable': 'error',
+      '@typescript-eslint/no-misused-promises': 'error',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      '@typescript-eslint/restrict-plus-operands': 'error',
+      '@typescript-eslint/restrict-template-expressions': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error',
+
       '@typescript-eslint/explicit-function-return-type': [
-        // Вимагає явний тип повернення
         'error',
-        {
-          allowExpressions: true,
-          allowHigherOrderFunctions: true,
-          allowTypedFunctionExpressions: true,
-        },
+        { allowExpressions: true, allowHigherOrderFunctions: true, allowTypedFunctionExpressions: true },
       ],
+
       '@typescript-eslint/explicit-member-accessibility': [
-        // Вимагає явні модифікатори доступу
         'error',
-        {
-          accessibility: 'explicit',
-          overrides: {
-            constructors: 'no-public',
-          },
-        },
+        { accessibility: 'no-public', overrides: { constructors: 'no-public' } },
       ],
-      '@typescript-eslint/explicit-module-boundary-types': 'error', // Вимагає типи для експортів
 
-      // Стиль коду
-      'prefer-const': 'error', // Вимагає const для незмінних змінних
-      'no-var': 'error', // Забороняє var
-      eqeqeq: 'error', // Вимагає === замість ==
-      curly: 'error', // Вимагає фігурні дужки для блоків
-      'no-multi-spaces': 'error', // Забороняє багато пробілів
-      'no-trailing-spaces': 'error', // Забороняє пробіли в кінці рядка
-      indent: ['error', 2], // Відступи 2 пробіли
-      quotes: ['error', 'single'], // Одинарні лапки
+      '@typescript-eslint/explicit-module-boundary-types': 'error',
 
-      // Помилки
-      'no-console': 'error', // Забороняє console.log
-      'no-debugger': 'error', // Забороняє debugger
-
-      // Асинхронний код
-      'no-promise-executor-return': 'error', // Забороняє return в Promise executor
-      'no-async-promise-executor': 'error', // Забороняє async Promise executor
+      'prefer-const': 'error',
+      'no-var': 'error',
+      eqeqeq: 'error',
+      curly: 'error',
+      'no-multi-spaces': 'error',
+      'no-trailing-spaces': 'error',
+      quotes: ['error', 'single'],
+      'no-console': 'error',
+      'no-debugger': 'error',
+      'no-promise-executor-return': 'error',
+      'no-async-promise-executor': 'error',
     },
   }
 )

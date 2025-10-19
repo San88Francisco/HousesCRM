@@ -5,10 +5,10 @@ export class HousesOverviewQueryDto {
   @IsOptional()
   @IsISO8601()
   @Transform(({ value }: { value: Date }) => (value ? new Date(value).toISOString() : undefined))
-  public dateFrom?: string
+  dateFrom?: string
 
   @IsOptional()
   @IsISO8601()
   @Transform(({ value }: { value: Date }) => (value ? new Date(value).toISOString() : undefined))
-  public dateTo?: string
+  dateTo?: string
 }

@@ -6,7 +6,7 @@ import { DATABASE_ERRORS } from 'src/common/constants/database-errors.constant'
 
 @Catch(QueryFailedError)
 export class DbExceptionFilter implements ExceptionFilter {
-  public catch(exception: QueryFailedError, host: ArgumentsHost): void {
+  catch(exception: QueryFailedError, host: ArgumentsHost): void {
     const res = host.switchToHttp().getResponse<Response>()
 
     const driver = exception.driverError as unknown as PostgresDriverError

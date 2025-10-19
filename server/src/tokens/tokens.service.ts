@@ -48,10 +48,7 @@ export class TokensService {
     return { token, payload, expMs }
   }
 
-  public async generateTokens(
-    userId: string,
-    userAgent?: string
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async generateTokens(userId: string, userAgent?: string): Promise<{ accessToken: string; refreshToken: string }> {
     const [accessToken, refresh] = await Promise.all([this.signAccess(userId), this.signRefresh(userId)])
     const { token: refreshToken, payload, expMs } = refresh
 
@@ -67,7 +64,7 @@ export class TokensService {
     return { accessToken, refreshToken }
   }
 
-  public async verifyAndGet(userId: string, refreshToken: string): Promise<{ row: RefreshToken; email?: string }> {
+  async verifyAndGet(userId: string, refreshToken: string): Promise<{ row: RefreshToken; email?: string }> {
     const decoded = await this.jwt
       .verifyAsync<JwtPayload>(refreshToken, {
         secret: this.config.getOrThrow<string>('jwt.refreshSecret'),
@@ -97,7 +94,7 @@ export class TokensService {
     return { row, email: decoded.email }
   }
 
-  public async rotate(
+  async rotate(
     userId: string,
     currentRefresh: string,
     userAgent: string
@@ -108,7 +105,7 @@ export class TokensService {
     return this.generateTokens(userId, userAgent)
   }
 
-  public async revokeAll(userId: string): Promise<void> {
+  async revokeAll(userId: string): Promise<void> {
     await this.refreshTokenRepository
       .createQueryBuilder()
       .update()

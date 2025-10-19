@@ -4,8 +4,8 @@ export const getAccessToken = () => cookies.get('accessToken');
 export const getRefreshToken = () => cookies.get('refreshToken');
 
 export const setTokens = (accessToken: string, refreshToken: string) => {
-  cookies.set('accessToken', accessToken, { expires: 1 }); // 1 day
-  cookies.set('refreshToken', refreshToken, { expires: 7 }); // 7 days
+  cookies.set('accessToken', accessToken, { expires: 1 });
+  cookies.set('refreshToken', refreshToken, { expires: 7 });
 };
 
 export const clearTokens = () => {

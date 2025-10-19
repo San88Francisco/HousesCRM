@@ -15,7 +15,7 @@ export class AuthService {
     private readonly tokens: TokensService
   ) {}
 
-  public async validateUser(email: string, password: string): Promise<UserDto | null> {
+  async validateUser(email: string, password: string): Promise<UserDto | null> {
     const user = await this.users.findOne(email)
     const isValid = user && (await argon2.verify(user.password, password))
 
@@ -28,7 +28,7 @@ export class AuthService {
     })
   }
 
-  public async login(user: UserDto, userAgent: string): Promise<LoginUserDto> {
+  async login(user: UserDto, userAgent: string): Promise<LoginUserDto> {
     const { accessToken, refreshToken } = await this.tokens.generateTokens(user.id, userAgent)
 
     const transformUser = { ...user, accessToken, refreshToken }
@@ -37,14 +37,14 @@ export class AuthService {
       excludeExtraneousValues: true,
     })
   }
-  public async registration(dto: CreateUserRequestDto): Promise<UserDto> {
+  async registration(dto: CreateUserRequestDto): Promise<UserDto> {
     const user = await this.users.create(dto)
 
     return plainToInstance(UserDto, user, {
       excludeExtraneousValues: true,
     })
   }
-  public async rotateRefresh(userId: string, currentRefresh: string, userAgent: string): Promise<TokensDto> {
+  async rotateRefresh(userId: string, currentRefresh: string, userAgent: string): Promise<TokensDto> {
     const tokens = await this.tokens.rotate(userId, currentRefresh, userAgent)
 
     return plainToInstance(TokensDto, tokens, {
@@ -52,7 +52,7 @@ export class AuthService {
     })
   }
 
-  public async logout(userId: string): Promise<void> {
+  async logout(userId: string): Promise<void> {
     await this.tokens.revokeAll(userId)
   }
 }

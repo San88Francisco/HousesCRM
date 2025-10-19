@@ -13,7 +13,7 @@ export class UsersService {
     private readonly usersRepository: Repository<User>
   ) {}
 
-  public async create(dto: CreateUserRequestDto): Promise<User> {
+  async create(dto: CreateUserRequestDto): Promise<User> {
     const { email, password, username } = dto
     const entity = this.usersRepository.create({
       email,
@@ -23,11 +23,11 @@ export class UsersService {
     return this.usersRepository.save(entity)
   }
 
-  public async findOne(email: string): Promise<UserWithPasswordDto | null> {
+  async findOne(email: string): Promise<UserWithPasswordDto | null> {
     return this.usersRepository.findOne({ where: { email } })
   }
 
-  public async findById(id: string): Promise<User | null> {
+  async findById(id: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { id } })
   }
 }

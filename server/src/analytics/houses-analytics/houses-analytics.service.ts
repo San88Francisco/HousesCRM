@@ -17,6 +17,9 @@ import { HousePerformanceResponseDto } from './dto/house-performance/house-perfo
 import { housesPerformance } from './helpers/houses-performance.helper'
 import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
 import { HousesOverviewQueryDto } from './dto/houses-overview/houses-overview-query.dto'
+import { SortOrder } from 'src/common/enums/sort-order.enum'
+import { HousePerformanceDto } from './dto/house-performance/house-performance.dto'
+import { HousePerformanceSortBy } from 'src/common/enums/house-performance-sort-by'
 
 @Injectable()
 export class HousesAnalyticsService {
@@ -25,7 +28,7 @@ export class HousesAnalyticsService {
     private houseRepository: Repository<House>
   ) {}
 
-  public async getAllHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
+  async getAllHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
     const [housesOverview, revenueDistribution, housesPaybackStats, currencyRevaluation, housesPerformance] =
       await Promise.all([
         this.getHousesOverview(),
@@ -48,7 +51,7 @@ export class HousesAnalyticsService {
     })
   }
 
-  public async getHousesOverview(dto?: HousesOverviewQueryDto): Promise<HouseOverviewDto[]> {
+  async getHousesOverview(dto?: HousesOverviewQueryDto): Promise<HouseOverviewDto[]> {
     const dateFrom = dto?.dateFrom
     const dateTo = dto?.dateTo
 
@@ -86,7 +89,7 @@ export class HousesAnalyticsService {
     })
   }
 
-  public async getRevenueDistribution(): Promise<RevenueDistributionDto> {
+  async getRevenueDistribution(): Promise<RevenueDistributionDto> {
     const houses = await this.houseRepository.find({ relations: { contracts: true } })
 
     const housesRevenue = houses.map(calculateHouseRevenue)
@@ -98,7 +101,7 @@ export class HousesAnalyticsService {
     })
   }
 
-  public async getHousePaybackStats(): Promise<HousePaybackStatsDto[]> {
+  async getHousePaybackStats(): Promise<HousePaybackStatsDto[]> {
     const houses = await this.houseRepository.find({ relations: { contracts: true, prices: true } })
 
     const paybackStats = calculatePaybackStatsForHouses(houses)
@@ -108,7 +111,7 @@ export class HousesAnalyticsService {
     })
   }
 
-  public async getCurrencyRevaluation(): Promise<CurrencyRevaluationDto[]> {
+  async getCurrencyRevaluation(): Promise<CurrencyRevaluationDto[]> {
     const [houses, exchangeRates] = await Promise.all([
       this.houseRepository.find({
         relations: { prices: true },
@@ -141,7 +144,7 @@ export class HousesAnalyticsService {
     })
   }
 
-  public async getHousesPerformance(dto: QueryDto): Promise<HousePerformanceResponseDto> {
+  async getHousesPerformance(dto: QueryDto): Promise<HousePerformanceResponseDto> {
     const {
       page = QUERY_DEFAULTS.PAGE,
       limit = QUERY_DEFAULTS.LIMIT,
@@ -149,23 +152,58 @@ export class HousesAnalyticsService {
       sortBy = QUERY_DEFAULTS.SORT_BY,
     } = dto
 
-    const [houses, total] = await this.houseRepository.findAndCount({
-      relations: { contracts: { renter: true } },
-      skip: (page - 1) * limit,
-      take: limit,
-      order: {
-        [sortBy]: order,
-      },
-    })
+    const computedFields = new Set<HousePerformanceSortBy>([
+      HousePerformanceSortBy.RENTERS_COUNT,
+      HousePerformanceSortBy.TOTAL_REVENUE,
+      HousePerformanceSortBy.CURRENT_PAYMENT,
+    ])
 
-    const rawData = {
-      data: housesPerformance(houses),
-      meta: {
-        total,
-        page,
-        limit,
-      },
+    const isComputedSort = computedFields.has(sortBy as HousePerformanceSortBy)
+
+    let data: HousePerformanceDto[]
+    let total: number
+
+    if (isComputedSort) {
+      const houses = await this.houseRepository.find({
+        relations: { contracts: { renter: true } },
+      })
+      const computed = housesPerformance(houses)
+      const dir = order === SortOrder.ASC ? 1 : -1
+
+      computed.sort((a, b) => {
+        const va = a[sortBy] as number
+        const vb = b[sortBy] as number
+
+        if (va === null && vb === null) {
+          return 0
+        }
+        if (va === null) {
+          return 1
+        }
+        if (vb === null) {
+          return -1
+        }
+        return (va - vb) * dir
+      })
+
+      total = computed.length
+      const start = (page - 1) * limit
+      data = computed.slice(start, start + limit)
+    } else {
+      const qb = this.houseRepository
+        .createQueryBuilder('house')
+        .leftJoinAndSelect('house.contracts', 'contract')
+        .leftJoinAndSelect('contract.renter', 'renter')
+        .orderBy(`house.${sortBy}`, order)
+        .skip((page - 1) * limit)
+        .take(limit)
+
+      const [houses, count] = await qb.getManyAndCount()
+      total = count
+      data = housesPerformance(houses)
     }
+
+    const rawData = { data, meta: { total, page, limit } }
 
     return plainToInstance(HousePerformanceResponseDto, rawData, {
       excludeExtraneousValues: true,
