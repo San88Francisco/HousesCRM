@@ -1,4 +1,5 @@
 import { ButtonComponent } from '@/components/Examples/ButtonComponent';
+import { CalendarComponent } from '@/components/Examples/CalendarComponent';
 import { CardComponent } from '@/components/Examples/CardComponent';
 import { ControlButtons } from '@/components/Examples/ControlButtons';
 import { DropDownComponent } from '@/components/Examples/DropDownComponent';
@@ -26,6 +27,7 @@ export default function Page() {
       <PaymentTable data={mockData} />
       <TabsComponent />
       <InputComponent />
+      <CalendarComponent />
       <DropDownComponent />
       <TextareaComponent />
       <Textarea className="w-[400px]" placeholder="Введіть текст тут..." />
