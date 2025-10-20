@@ -8,6 +8,7 @@ export const authApi = rootApi.injectEndpoints({
         url: `/auth/login`,
         method: 'POST',
         body,
+        credentials: 'include', // Додаємо для отримання refresh token в cookie
       }),
     }),
   }),
