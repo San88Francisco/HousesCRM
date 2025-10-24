@@ -5,14 +5,12 @@ import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { CardTitle } from '@/components/ui/card';
 import cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLoginMutation } from '@/store/auth';
 import { ROUTES } from '@/routes';
 import { useErrorToast } from '@/hooks/use-error-toast';
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFForm } from '@/components/RHF/RHForm';
-
-import { motion } from 'framer-motion';
 import { loginSchema, loginDefaultValues } from '@/validation/login/login';
 import { LoginRequest } from '@/types/services/login';
 import { GoogleLoginButton } from '@/components/GoogleAuthButton';
@@ -20,6 +18,7 @@ import { GoogleLoginButton } from '@/components/GoogleAuthButton';
 export default function Page() {
   const { errorToast, successToast } = useErrorToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [login, { isLoading }] = useLoginMutation();
 
   const form = useForm<LoginRequest>({
@@ -32,25 +31,23 @@ export default function Page() {
   const onSubmit = async (data: LoginRequest) => {
     try {
       const result = await login({
-        username: data.username,
+        email: data.email,
         password: data.password,
       }).unwrap();
 
       if (result.accessToken) {
+        // Зберігаємо тільки access token
+        // Refresh token бекенд автоматично зберіг в HTTP-only cookie
         cookies.set('accessToken', result.accessToken, {
-          expires: 7,
-          path: ROUTES.HOME,
+          expires: 1, // 1 день
+          path: '/',
         });
 
-        if (result.refreshToken) {
-          cookies.set('refreshToken', result.refreshToken, {
-            expires: 30,
-            path: ROUTES.HOME,
-          });
-        }
-
         successToast('Увійшли успішно', 'Ласкаво просимо!');
-        router.push(ROUTES.ALL_APARTMENTS);
+
+        // Редірект на сторінку, з якої прийшов користувач, або на apartments
+        const redirectUrl = searchParams.get('redirect') || ROUTES.ALL_APARTMENTS;
+        router.push(redirectUrl);
       }
     } catch (error) {
       errorToast(error);
@@ -63,9 +60,9 @@ export default function Page() {
         <CardTitle className="text-2xl font-bold mb-4">Увійти</CardTitle>
         <RHFForm form={form} onSubmit={onSubmit}>
           <RHFInput
-            name="username"
+            name="email"
             label="Електронна пошта"
-            type="username"
+            type="email"
             placeholder="Введіть вашу електронну пошту"
             required
           />
@@ -76,18 +73,12 @@ export default function Page() {
             placeholder="Введіть ваш пароль"
             required
           />
-          <Button type="submit" className="w-full " disabled={isSubmitting || isLoading}>
+          <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
             {isLoading ? 'Авторизація...' : 'Увійти'}
           </Button>
           <GoogleLoginButton />
         </RHFForm>
       </div>
-      <motion.div
-        className="absolute left-0 bottom-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, ease: 'easeInOut' }}
-      ></motion.div>
     </div>
   );
 }

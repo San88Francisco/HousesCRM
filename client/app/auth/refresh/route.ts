@@ -9,7 +9,7 @@ export const POST = async (request: NextRequest) => {
     }
 
     const response = await fetch(`${process.env.API_BASE_URL}/auth/refresh`, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },

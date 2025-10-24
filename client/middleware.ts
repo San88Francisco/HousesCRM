@@ -1,81 +1,73 @@
-/* eslint-disable */
-
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const SECONDS_IN_MINUTE = 60;
-const MINUTES_IN_HOUR = 60;
-const HOURS_IN_DAY = 24;
-const DAYS_IN_WEEK = 7;
+// Публічні роути, які доступні без авторизації
+const PUBLIC_ROUTES = ['/login'];
 
-const ACCESS_TOKEN_AGE = SECONDS_IN_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY; // 1 день
-const REFRESH_TOKEN_AGE = ACCESS_TOKEN_AGE * DAYS_IN_WEEK; // 7 днів
+// Роути, на які авторизовані користувачі не повинні мати доступ
+const AUTH_ROUTES = ['/login'];
 
-const protectedRoutes = ['/', '/all-apartments', '/dashboard', '/profile'];
+// Приватні роути, які потребують авторизації
+const PROTECTED_ROUTES = [
+  '/',
+  '/all-apartments',
+  '/apartments',
+  '/dashboard',
+  '/profile',
+  '/uikit',
+];
+
+const isPublicRoute = (pathname: string) => PUBLIC_ROUTES.some(route => pathname.startsWith(route));
+
+const isAuthRoute = (pathname: string) => AUTH_ROUTES.some(route => pathname.startsWith(route));
 
 const isProtectedRoute = (pathname: string) =>
-  protectedRoutes.some(route => pathname.startsWith(route));
+  PROTECTED_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`));
 
-const refreshAccessToken = async (
-  origin: string,
-  refreshToken: string,
-): Promise<{ accessToken: string; refreshToken: string } | null> => {
-  try {
-    const response = await fetch(`${origin}/api/auth/refresh`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-    if (!response.ok) return null;
+  // Отримуємо access token з cookies
+  const accessToken = request.cookies.get('accessToken')?.value;
 
-    return await response.json();
-  } catch (error) {
-    console.error('Token refresh failed:', error);
-    return null;
-  }
-};
-
-export const middleware = async (req: NextRequest) => {
-  const accessToken = req.cookies.get('accessToken')?.value;
-  const refreshToken = req.cookies.get('refreshToken')?.value;
-  const { pathname, origin } = req.nextUrl;
-
-  if (!isProtectedRoute(pathname)) {
+  // Якщо це публічний роут, пропускаємо
+  if (isPublicRoute(pathname)) {
+    // Якщо користувач авторизований і намагається зайти на сторінку логіну
+    if (accessToken && isAuthRoute(pathname)) {
+      const redirectUrl = request.nextUrl.searchParams.get('redirect') || '/all-apartments';
+      return NextResponse.redirect(new URL(redirectUrl, request.url));
+    }
     return NextResponse.next();
   }
 
-  if (!accessToken && refreshToken) {
-    const data = await refreshAccessToken(origin, refreshToken);
-
-    if (data) {
-      const res = NextResponse.next();
-
-      res.cookies.set('accessToken', data.accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: ACCESS_TOKEN_AGE,
-      });
-
-      res.cookies.set('refreshToken', data.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: REFRESH_TOKEN_AGE,
-      });
-
-      return res;
+  // Якщо це приватний роут і немає токена - редірект на логін
+  if (isProtectedRoute(pathname) && !accessToken) {
+    const loginUrl = new URL('/login', request.url);
+    // Зберігаємо URL, на який користувач намагався зайти (але не "/")
+    if (pathname !== '/') {
+      loginUrl.searchParams.set('redirect', pathname);
     }
+    return NextResponse.redirect(loginUrl);
   }
 
-  if (!accessToken) {
-    return NextResponse.redirect(new URL('/login', req.url));
+  // Якщо користувач заходить на "/" з токеном - редірект на /all-apartments
+  if (pathname === '/' && accessToken) {
+    return NextResponse.redirect(new URL('/all-apartments', request.url));
   }
 
   return NextResponse.next();
-};
+}
 
+// Вказуємо, на які роути middleware повинен спрацьовувати
 export const config = {
-  matcher: ['/', '/all-apartments', '/dashboard', '/profile'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*|_next).*)',
+  ],
 };
