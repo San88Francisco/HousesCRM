@@ -14,6 +14,8 @@ interface SelectTriggerProps extends ComponentPropsWithoutRef<typeof SelectPrimi
   icon?: ReactNode;
   error?: boolean;
   disabled?: boolean;
+  className?: string;
+  children: ReactNode;
 }
 
 const SelectTrigger = forwardRef<ElementRef<typeof SelectPrimitive.Trigger>, SelectTriggerProps>(
@@ -119,6 +121,8 @@ SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
 interface SelectItemProps extends ComponentPropsWithoutRef<typeof SelectPrimitive.Item> {
   icon?: ReactNode;
+  className?: string;
+  children: ReactNode;
 }
 
 const SelectItem = forwardRef<ElementRef<typeof SelectPrimitive.Item>, SelectItemProps>(
