@@ -12,6 +12,8 @@ import { TokensModule } from './tokens/tokens.module'
 import KeyvRedis from '@keyv/redis'
 import { Keyv } from 'keyv'
 import { CacheModule } from '@nestjs/cache-manager'
+import { APP_GUARD } from '@nestjs/core'
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard'
 
 @Module({
   imports: [
@@ -25,11 +27,13 @@ import { CacheModule } from '@nestjs/cache-manager'
     }),
     CacheModule.registerAsync({
       isGlobal: true,
-      useFactory: () => {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
         return {
           stores: [
             new Keyv({
-              store: new KeyvRedis('redis://localhost:6379'),
+              store: new KeyvRedis(configService.getOrThrow('REDIS_URL')),
               ttl: 60000,
             }),
           ],
@@ -43,6 +47,12 @@ import { CacheModule } from '@nestjs/cache-manager'
     RentersModule,
     HousesAnalyticsModule,
     AuthModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
 export class AppModule {}

@@ -15,6 +15,7 @@ import { ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
 import { JwtPayload } from 'types/jwt/jwt.types'
 import { UserDto } from 'src/users/dto/res/user.dto'
 import { LogoutDto } from './dto/res/logout.dto'
+import { Public } from 'src/common/decorators/public.decorator'
 
 @Controller(AUTH_ROUTES.ROOT)
 export class AuthController {
@@ -26,6 +27,7 @@ export class AuthController {
   @Post(AUTH_ROUTES.LOGIN)
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
+  @Public()
   public async login(
     @Body() _dto: LoginRequestDto,
     @Req() req: AuthenticatedRequest<UserDto>,
@@ -38,6 +40,7 @@ export class AuthController {
     return user
   }
 
+  @Public()
   @Post(AUTH_ROUTES.REGISTRATION)
   @HttpCode(HttpStatus.CREATED)
   public async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
@@ -45,6 +48,7 @@ export class AuthController {
     return { message: 'User successfully created', data: { id: user.id } }
   }
 
+  @Public()
   @Post(AUTH_ROUTES.REFRESH)
   @UseGuards(AuthGuard('jwt-refresh'))
   @HttpCode(HttpStatus.OK)
