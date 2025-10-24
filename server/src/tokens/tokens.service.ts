@@ -1,119 +1,93 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
 import { ConfigService } from '@nestjs/config'
-import { randomUUID } from 'crypto'
 import * as argon2 from 'argon2'
-
-import { RefreshToken } from './entities/refresh-token.entity'
+import ms, { StringValue } from 'ms'
 import { JwtPayload } from 'types/jwt/jwt.types'
+import { TokensDto } from './dto/tokens.dto'
+import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto'
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
+import { RefreshTokenDto } from './dto/refresh-token.dto'
 
 @Injectable()
 export class TokensService {
-  constructor(
-    @InjectRepository(RefreshToken) private readonly refreshTokenRepository: Repository<RefreshToken>,
-    private readonly jwt: JwtService,
-    private readonly config: ConfigService
-  ) {}
+  private readonly refreshSecret: string
+  private readonly refreshExpiresIn: StringValue
+  private readonly accessSecret: string
+  private readonly accessExpiresIn: string
 
-  private async signAccess(userId: string): Promise<string> {
-    const payload = { sub: userId, jti: randomUUID() }
-    return this.jwt.signAsync(payload, {
-      secret: this.config.getOrThrow<string>('jwt.accessSecret'),
-      expiresIn: this.config.getOrThrow<string>('jwt.accessExp'),
-    })
+  constructor(
+    private readonly jwt: JwtService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
+    private readonly config: ConfigService
+  ) {
+    this.refreshSecret = this.config.getOrThrow<string>('jwt.refreshSecret')
+    this.refreshExpiresIn = this.config.getOrThrow<StringValue>('jwt.refreshExp')
+    this.accessSecret = this.config.getOrThrow<string>('jwt.accessSecret')
+    this.accessExpiresIn = this.config.getOrThrow<string>('jwt.accessExp')
   }
 
-  private async signRefresh(userId: string): Promise<{
-    token: string
-    payload: { sub: string; jti: string }
-    expMs: number
-  }> {
-    const payload = { sub: userId, jti: randomUUID() }
-    const expiresIn = this.config.getOrThrow<string>('jwt.refreshExp')
-    const secret = this.config.getOrThrow<string>('jwt.refreshSecret')
-    const token = await this.jwt.signAsync(payload, { secret, expiresIn })
+  public async verify(payload: JwtPayload, token: string): Promise<JwtPayload | null> {
+    const { userAgent, sub } = payload
+    const CACHE_KEY = `refresh:${sub}:${userAgent}`
 
-    const decodedRaw: string = this.jwt.decode(token)
-    let expMs = 0
+    const cached = await this.cacheManager.get<RefreshTokenDto>(CACHE_KEY)
 
-    if (decodedRaw && typeof decodedRaw === 'object' && 'exp' in decodedRaw) {
-      const exp = (decodedRaw as { exp?: unknown }).exp
-      if (typeof exp === 'number') {
-        expMs = Math.max(0, exp * 1000 - Date.now())
-      }
+    if (
+      cached &&
+      new Date(cached.expiresAt).getTime() > Date.now() &&
+      (await argon2.verify(cached.hashedToken, token))
+    ) {
+      return payload
     }
 
-    return { token, payload, expMs }
+    return null
   }
 
-  public async generateTokens(
-    userId: string,
-    userAgent?: string
-  ): Promise<{ accessToken: string; refreshToken: string }> {
-    const [accessToken, refresh] = await Promise.all([this.signAccess(userId), this.signRefresh(userId)])
-    const { token: refreshToken, payload, expMs } = refresh
+  public async generateTokens(userId: string, userAgent: string): Promise<TokensDto> {
+    const payload = {
+      sub: userId,
+      userAgent,
+    }
 
-    const row = this.refreshTokenRepository.create({
-      user: { id: userId },
-      jti: payload.jti,
-      hashedToken: await argon2.hash(refreshToken),
-      expiresAt: new Date(Date.now() + expMs),
-      userAgent: userAgent ?? null,
-    })
-    await this.refreshTokenRepository.save(row)
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwt.signAsync(payload, {
+        secret: this.accessSecret,
+        expiresIn: this.accessExpiresIn,
+      }),
+      this.jwt.signAsync(payload, {
+        secret: this.refreshSecret,
+        expiresIn: this.refreshExpiresIn,
+      }),
+    ])
+
+    await this.create({ payload, token: refreshToken })
 
     return { accessToken, refreshToken }
   }
 
-  public async verifyAndGet(userId: string, refreshToken: string): Promise<{ row: RefreshToken; email?: string }> {
-    const decoded = await this.jwt
-      .verifyAsync<JwtPayload>(refreshToken, {
-        secret: this.config.getOrThrow<string>('jwt.refreshSecret'),
-      })
-      .catch(() => {
-        throw new UnauthorizedException('Invalid refresh token')
-      })
-
-    if (decoded.sub !== userId) {
-      throw new UnauthorizedException('Token/user mismatch')
-    }
-
-    const row = await this.refreshTokenRepository.findOne({
-      where: { jti: decoded.jti, user: { id: userId } },
-      relations: ['user'],
-    })
-
-    if (!row || row.revoked || row.expiresAt <= new Date()) {
-      throw new UnauthorizedException('Refresh token revoked or expired')
-    }
-
-    const ok = await argon2.verify(row.hashedToken, refreshToken)
-    if (!ok) {
-      await this.revokeAll(userId)
-      throw new UnauthorizedException('Refresh token reuse detected')
-    }
-    return { row, email: decoded.email }
-  }
-
-  public async rotate(
-    userId: string,
-    currentRefresh: string,
-    userAgent: string
-  ): Promise<{ accessToken: string; refreshToken: string }> {
-    const { row } = await this.verifyAndGet(userId, currentRefresh)
-    row.revoked = true
-    await this.refreshTokenRepository.save(row)
+  public rotate(userId: string, userAgent: string): Promise<TokensDto> {
     return this.generateTokens(userId, userAgent)
   }
 
-  public async revokeAll(userId: string): Promise<void> {
-    await this.refreshTokenRepository
-      .createQueryBuilder()
-      .update()
-      .set({ revoked: true })
-      .where('"userId" = :userId AND revoked = false', { userId })
-      .execute()
+  public async create(data: CreateRefreshTokenDto): Promise<void> {
+    const { payload, token } = data
+
+    const CACHE_KEY = `refresh:${payload.sub}:${payload.userAgent}`
+    const TTL = Math.floor(ms(this.refreshExpiresIn) / 1000)
+
+    const raw = {
+      hashedToken: await argon2.hash(token),
+      expiresAt: new Date(Date.now() + ms(this.refreshExpiresIn)),
+    }
+
+    await this.cacheManager.set(CACHE_KEY, raw, TTL)
+  }
+
+  public async remove(userId: string, userAgent: string): Promise<void> {
+    const CACHE_KEY = `refresh:${userId}:${userAgent}`
+
+    await this.cacheManager.del(CACHE_KEY)
   }
 }

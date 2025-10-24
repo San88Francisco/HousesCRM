@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: 'postgres-DEV'
+    container_name: postgres-DEV
     restart: always
     ports:
       - "5432:5432"
@@ -10,5 +10,15 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis-DEV
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
 volumes:
   pgdata:
+  redis_data:

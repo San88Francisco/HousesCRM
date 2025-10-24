@@ -9,6 +9,9 @@ import { RentersModule } from './renters/renters.module'
 import { HousesAnalyticsModule } from './analytics/houses-analytics/houses-analytics.module'
 import { AuthModule } from './auth/auth.module'
 import { TokensModule } from './tokens/tokens.module'
+import KeyvRedis from '@keyv/redis'
+import { Keyv } from 'keyv'
+import { CacheModule } from '@nestjs/cache-manager'
 
 @Module({
   imports: [
@@ -19,6 +22,19 @@ import { TokensModule } from './tokens/tokens.module'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: createDbConfig,
+    }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: () => {
+        return {
+          stores: [
+            new Keyv({
+              store: new KeyvRedis('redis://localhost:6379'),
+              ttl: 60000,
+            }),
+          ],
+        }
+      },
     }),
     UsersModule,
     TokensModule,
