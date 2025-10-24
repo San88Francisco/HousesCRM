@@ -95,11 +95,13 @@ export class AuthController {
     summary: 'Redirects user to Google OAuth page',
     description: 'Frontend should navigate user here to start OAuth login. No request body and no response expected.',
   })
+  @Public()
   @Get(AUTH_ROUTES.GOOGLE)
   @UseGuards(GoogleAuthGuard)
   public async googleAuth(): Promise<void> {}
 
   @ApiExcludeEndpoint()
+  @Public()
   @Get(AUTH_ROUTES.GOOGLE_CALLBACK)
   @UseGuards(GoogleAuthGuard)
   public async googleAuthCallback(@Req() req: AuthenticatedRequest<UserDto>, @Res() res: Response): Promise<void> {
