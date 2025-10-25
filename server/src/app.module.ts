@@ -34,7 +34,6 @@ import { JwtAuthGuard } from './auth/guard/jwt-auth.guard'
           stores: [
             new Keyv({
               store: new KeyvRedis(configService.getOrThrow('REDIS_URL')),
-              ttl: 60000,
             }),
           ],
         }

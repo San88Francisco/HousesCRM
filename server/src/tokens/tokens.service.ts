@@ -75,7 +75,7 @@ export class TokensService {
     const { payload, token } = data
 
     const CACHE_KEY = `refresh:${payload.sub}:${payload.userAgent}`
-    const TTL = Math.floor(ms(this.refreshExpiresIn) / 1000)
+    const TTL = ms(this.refreshExpiresIn)
 
     const raw = {
       hashedToken: await argon2.hash(token),

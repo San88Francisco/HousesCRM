@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseInterceptors } from '@nestjs/common'
 import { HOUSES_ROUTES } from './constants/houses.routes'
 import { CreateHouseDto } from './dto/create-house.dto'
 import { HousesService } from './houses.service'
@@ -9,6 +9,8 @@ import { HouseResponseDto } from './dto/houses-response.dto'
 import { HouseQueryDto } from './dto/house-query.dto'
 import { HousesAnalyticsService } from 'src/analytics/houses-analytics/houses-analytics.service'
 import { AllHousesAnalyticsDto } from 'src/analytics/houses-analytics/dto/all-houses-analytics.dto'
+import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager'
+import { CACHE_KEY, TTL } from 'src/analytics/houses-analytics/constants/cache'
 
 @Controller(HOUSES_ROUTES.ROOT)
 export class HousesController {
@@ -23,6 +25,9 @@ export class HousesController {
   }
 
   @Get(HOUSES_ROUTES.ANALYTICS)
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey(CACHE_KEY)
+  @CacheTTL(TTL)
   public async getHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
     return await this.housesAnalyticsService.getAllHousesAnalytics()
   }

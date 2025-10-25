@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import { House } from 'src/houses/entities/house.entity'
@@ -16,26 +16,15 @@ import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { HousePerformanceResponseDto } from './dto/house-performance/house-performance-response.dto'
 import { housesPerformance } from './helpers/houses-performance.helper'
 import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
-import { CACHE_KEY, TTL } from './constants/cache'
+
 @Injectable()
 export class HousesAnalyticsService {
   constructor(
     @InjectRepository(House)
-    private houseRepository: Repository<House>,
-    @Inject(CACHE_MANAGER)
-    private cacheManager: Cache
+    private houseRepository: Repository<House>
   ) {}
 
   public async getAllHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
-    const cached = await this.cacheManager.get(CACHE_KEY)
-
-    if (cached) {
-      return plainToInstance(AllHousesAnalyticsDto, cached, {
-        excludeExtraneousValues: true,
-      })
-    }
-
     const [housesOverview, revenueDistribution, housesPaybackStats, currencyRevaluation, housesPerformance] =
       await Promise.all([
         this.getHousesOverview(),
@@ -52,8 +41,6 @@ export class HousesAnalyticsService {
       currencyRevaluation,
       housesPerformance,
     }
-
-    await this.cacheManager.set(CACHE_KEY, transformedData, TTL)
 
     return plainToInstance(AllHousesAnalyticsDto, transformedData, {
       excludeExtraneousValues: true,
