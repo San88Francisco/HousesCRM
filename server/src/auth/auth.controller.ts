@@ -96,7 +96,7 @@ export class AuthController {
     res.cookie(name, token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       path: '/',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     })
@@ -129,6 +129,7 @@ export class AuthController {
       httpOnly: false,
       path: '/',
       maxAge: 15 * 60 * 1000,
+      sameSite: 'none',
     })
 
     return res.redirect(clientURL)
