@@ -8,12 +8,11 @@ import { CircleAlert } from 'lucide-react';
 
 interface TextareaProps extends Omit<ComponentProps<'textarea'>, 'maxLength'> {
   maxLength?: number | string;
-  error?: boolean;
-  helperText?: string;
+  error?: string;
 }
 
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, onChange, maxLength, error, helperText, ...props }, ref) => {
+  ({ className, onChange, maxLength, error, ...props }, ref) => {
     const { normalizedMax, remaining, showCounter, composedOnChange } = useTextareaCounter(
       maxLength,
       props.value,
@@ -44,15 +43,15 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {showCounter && (
           <p
             className={cn(
-              'text-sm text-muted mt-1 text-right select-none pointer-events-none',
+              'text-sm text-muted mt-1  select-none pointer-events-none',
               error && 'text-red',
             )}
           >
-            {`remained ${remaining} symbols`}
+            {!error ? `remained ${remaining} symbols` : error}
           </p>
         )}
-        {helperText && (
-          <p className={cn('mt-1 text-sm', error ? 'text-red' : 'text-muted')}>{helperText}</p>
+        {error && !showCounter && (
+          <p className={cn('mt-1 text-sm', error ? 'text-red' : 'text-muted')}>{error}</p>
         )}
       </div>
     );

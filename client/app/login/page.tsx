@@ -9,12 +9,12 @@ import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/store/auth';
 import { ROUTES } from '@/routes';
 import { useErrorToast } from '@/hooks/use-error-toast';
-import { RHFInput } from '@/components/RHF/RHFInput';
+
 import { RHFForm } from '@/components/RHF/RHForm';
 
-import { motion } from 'framer-motion';
 import { loginSchema, loginDefaultValues } from '@/validation/login/login';
 import { LoginRequest } from '@/types/services/login';
+import { RHFInput } from '@/components/RHF/RHFInput';
 import { GoogleLoginButton } from '@/components/GoogleAuthButton';
 
 export default function Page() {
@@ -82,12 +82,6 @@ export default function Page() {
           <GoogleLoginButton />
         </RHFForm>
       </div>
-      <motion.div
-        className="absolute left-0 bottom-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, ease: 'easeInOut' }}
-      ></motion.div>
     </div>
   );
 }

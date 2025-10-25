@@ -8,7 +8,7 @@ import {
   FormProvider,
 } from 'react-hook-form';
 
-interface RHFFormProps<T extends FieldValues>
+interface Props<T extends FieldValues>
   extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   form: UseFormReturn<T>;
   onSubmit: SubmitHandler<T>;
@@ -21,7 +21,7 @@ export function RHFForm<T extends FieldValues>({
   children,
   className = 'space-y-4',
   ...props
-}: RHFFormProps<T>) {
+}: Props<T>) {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={className} {...props}>

@@ -47,7 +47,7 @@ export const Default: Story = {
 export const Error: Story = {
   render: args => (
     <Select {...args}>
-      <SelectTrigger error helperText="This field is required" className="w-[200px]">
+      <SelectTrigger error className="w-[200px]">
         <SelectValue placeholder="Select an option" />
       </SelectTrigger>
       <SelectContent>
