@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer'
-import { UserDto } from '../user.dto'
 import { OmitType } from '@nestjs/swagger'
+import { UserDto } from '../res/user.dto'
 
 export class UserWithGoogleDto extends OmitType(UserDto, ['id']) {
   @Expose() public googleId: string

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import * as argon2 from 'argon2'
 import { UsersService } from '../users/users.service'
-import { UserDto } from 'src/users/dto/user.dto'
 import { plainToInstance } from 'class-transformer'
 import { LoginUserDto } from 'src/users/dto/login-user.dto'
 import { TokensService } from 'src/tokens/tokens.service'
 import { TokensDto } from 'src/tokens/dto/tokens.dto'
 import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
 import { UserWithGoogleDto } from 'src/users/dto/req/user-with-google.req.dto'
+import { UserDto } from 'src/users/dto/res/user.dto'
 
 @Injectable()
 export class AuthService {
@@ -38,6 +38,7 @@ export class AuthService {
       excludeExtraneousValues: true,
     })
   }
+
   public async registration(dto: CreateUserRequestDto): Promise<UserDto> {
     const user = await this.users.create(dto)
 
@@ -45,16 +46,16 @@ export class AuthService {
       excludeExtraneousValues: true,
     })
   }
-  public async rotateRefresh(userId: string, currentRefresh: string, userAgent: string): Promise<TokensDto> {
-    const tokens = await this.tokens.rotate(userId, currentRefresh, userAgent)
+  public async rotateRefresh(userId: string, userAgent: string): Promise<TokensDto> {
+    const tokens = await this.tokens.rotate(userId, userAgent)
 
     return plainToInstance(TokensDto, tokens, {
       excludeExtraneousValues: true,
     })
   }
 
-  public async logout(userId: string): Promise<void> {
-    await this.tokens.revokeAll(userId)
+  public async logout(userId: string, userAgent: string): Promise<void> {
+    await this.tokens.remove(userId, userAgent)
   }
 
   public async LoginWithGoogle(dto: UserWithGoogleDto): Promise<UserDto> {

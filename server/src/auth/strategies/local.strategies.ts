@@ -1,10 +1,8 @@
-/* eslint-disable */
-
 import { Strategy } from 'passport-local'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable } from '@nestjs/common'
 import { AuthService } from '../auth.service'
-import { UserDto } from 'src/users/dto/user.dto'
+import { UserDto } from 'src/users/dto/res/user.dto'
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -12,7 +10,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super({ usernameField: 'email' })
   }
 
-  async validate(email: string, password: string): Promise<UserDto | null> {
+  public async validate(email: string, password: string): Promise<UserDto | null> {
     return await this.authService.validateUser(email, password)
   }
 }

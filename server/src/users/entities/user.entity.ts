@@ -1,7 +1,4 @@
-import { RefreshToken } from 'src/tokens/entities/refresh-token.entity'
-import { Check, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
-import type { Relation } from 'typeorm'
-
+import { Check, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 @Entity()
 // eslint-disable-next-line quotes
 @Check(`"password" IS NOT NULL OR "google_id" IS NOT NULL`)
@@ -26,7 +23,4 @@ export class User {
 
   @UpdateDateColumn({ name: 'updated_at' })
   public updatedAt: Date
-
-  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.id)
-  public refreshTokens: Relation<RefreshToken>[]
 }

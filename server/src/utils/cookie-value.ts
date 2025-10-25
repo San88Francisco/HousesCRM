@@ -1,6 +1,7 @@
+import { Request } from 'express'
+
 export const fromCookie = (cookieName: string) => {
-  return (req: Request | null): string | null => {
-    const value = (req as unknown as { cookies?: Record<string, unknown> })?.cookies?.[cookieName]
-    return typeof value === 'string' ? value : null
+  return (req: Request): string | null => {
+    return (req.cookies[cookieName] as string) ?? null
   }
 }

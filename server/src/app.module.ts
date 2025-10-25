@@ -9,6 +9,11 @@ import { RentersModule } from './renters/renters.module'
 import { HousesAnalyticsModule } from './analytics/houses-analytics/houses-analytics.module'
 import { AuthModule } from './auth/auth.module'
 import { TokensModule } from './tokens/tokens.module'
+import KeyvRedis from '@keyv/redis'
+import { Keyv } from 'keyv'
+import { CacheModule } from '@nestjs/cache-manager'
+import { APP_GUARD } from '@nestjs/core'
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard'
 
 @Module({
   imports: [
@@ -20,6 +25,20 @@ import { TokensModule } from './tokens/tokens.module'
       inject: [ConfigService],
       useFactory: createDbConfig,
     }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          stores: [
+            new Keyv({
+              store: new KeyvRedis(configService.getOrThrow('REDIS_URL')),
+            }),
+          ],
+        }
+      },
+    }),
     UsersModule,
     TokensModule,
     HousesModule,
@@ -27,6 +46,12 @@ import { TokensModule } from './tokens/tokens.module'
     RentersModule,
     HousesAnalyticsModule,
     AuthModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
 export class AppModule {}
