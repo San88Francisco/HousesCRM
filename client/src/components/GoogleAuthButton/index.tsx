@@ -12,7 +12,7 @@ export const GoogleLoginButton = ({
   ...props
 }: Omit<ButtonProps, 'onClick'>) => {
   const handleGoogleLogin = () => {
-    redirect(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`, RedirectType.replace);
+    redirect(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`, RedirectType.replace);
   };
 
   return (
