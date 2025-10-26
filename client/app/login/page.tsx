@@ -4,7 +4,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { CardTitle } from '@/components/ui/card';
-import cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLoginMutation } from '@/store/auth';
 import { ROUTES } from '@/routes';
@@ -14,6 +13,7 @@ import { RHFForm } from '@/components/RHF/RHForm';
 import { loginSchema, loginDefaultValues } from '@/validation/login/login';
 import { LoginRequest } from '@/types/services/login';
 import { GoogleLoginButton } from '@/components/GoogleAuthButton';
+import { setAccessToken } from '@/utils/auth/token';
 
 export default function Page() {
   const { errorToast, successToast } = useErrorToast();
@@ -36,16 +36,10 @@ export default function Page() {
       }).unwrap();
 
       if (result.accessToken) {
-        // Зберігаємо тільки access token
-        // Refresh token бекенд автоматично зберіг в HTTP-only cookie
-        cookies.set('accessToken', result.accessToken, {
-          expires: 1, // 1 день
-          path: '/',
-        });
+        setAccessToken(result.accessToken);
 
         successToast('Увійшли успішно', 'Ласкаво просимо!');
 
-        // Редірект на сторінку, з якої прийшов користувач, або на apartments
         const redirectUrl = searchParams.get('redirect') || ROUTES.ALL_APARTMENTS;
         router.push(redirectUrl);
       }
