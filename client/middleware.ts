@@ -19,7 +19,7 @@ const isProtectedRoute = (pathname: string) =>
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const accessToken = request.cookies.get('accessToken')?.value;
+  const accessToken = request.cookies.get('access_token')?.value;
 
   if (isPublicRoute(pathname)) {
     if (accessToken && isAuthRoute(pathname)) {

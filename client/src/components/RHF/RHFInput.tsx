@@ -4,8 +4,6 @@ import { forwardRef, type InputHTMLAttributes } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 interface RHFInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -43,23 +41,13 @@ const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
               onChange={e => {
                 field.onChange(e.target.value);
               }}
-              className={cn(
-                errorMessage && 'border-destructive focus-visible:ring-destructive',
-                className,
-              )}
+              error={errorMessage}
               aria-invalid={!!errorMessage}
               {...props}
               ref={ref}
             />
           )}
         />
-
-        {errorMessage && (
-          <div className="flex justify-center items-center mt-1.5 text-sm text-destructive bg-destructive/10 py-1.5 px-3 rounded-md animate-in fade-in-50 duration-300">
-            <AlertCircle className="h-4 w-4 mr-2 flex-shrink-0" />
-            <span>{errorMessage}</span>
-          </div>
-        )}
       </div>
     );
   },
