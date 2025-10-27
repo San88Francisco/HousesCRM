@@ -6,5 +6,5 @@ export class ContractWithHouseDto extends ContractDto {
   @Expose()
   @Transform(({ value }: { value?: HouseDto }) => (value?.id ? value : null))
   @Type(() => HouseDto)
-  public house: HouseDto | null
+  house: HouseDto | null
 }

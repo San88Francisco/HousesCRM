@@ -3,26 +3,26 @@ import { ApartmentType } from '../entities/house.entity'
 
 export class HouseDto {
   @Expose()
-  public id: string
+  id: string
 
   @Expose()
-  public apartmentName: string
+  apartmentName: string
 
   @Expose()
-  public roomsCount: number
+  roomsCount: number
 
   @Expose()
-  public totalArea: number
+  totalArea: number
 
   @Expose()
-  public purchaseDate: Date
+  purchaseDate: Date
 
   @Expose()
-  public floor: number
+  floor: number
 
   @Expose()
-  public street: string
+  street: string
 
   @Expose()
-  public apartmentType: ApartmentType
+  apartmentType: ApartmentType
 }

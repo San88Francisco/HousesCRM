@@ -12,23 +12,23 @@ export enum CurrencyCode {
 @Entity()
 export class HousePrice {
   @PrimaryGeneratedColumn('uuid')
-  public id: string
+  id: string
 
   @Column({ type: 'decimal', precision: 12, scale: 2, nullable: false })
-  public amount: number
+  amount: number
 
   @Column({ name: 'exchange_rate', type: 'decimal', precision: 12, scale: 2, nullable: false })
-  public exchangeRate: number
+  exchangeRate: number
 
   @Column({ type: 'enum', enum: CurrencyCode, default: CurrencyCode.UAH })
-  public code: CurrencyCode
+  code: CurrencyCode
 
   @CreateDateColumn({ name: 'created_at' })
-  public createdAt: Date
+  createdAt: Date
 
   @UpdateDateColumn({ name: 'updated_at' })
-  public updatedAt: Date
+  updatedAt: Date
 
   @ManyToOne(() => House, (house) => house.prices, { onDelete: 'CASCADE', nullable: false })
-  public house: Relation<House>
+  house: Relation<House>
 }

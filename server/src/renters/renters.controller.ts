@@ -13,27 +13,27 @@ export class RentersController {
   constructor(private readonly rentersService: RentersService) {}
 
   @Get()
-  public async findAll(@Query() dto: QueryDto): Promise<RenterResponseDto> {
+  async findAll(@Query() dto: QueryDto): Promise<RenterResponseDto> {
     return this.rentersService.findAll(dto)
   }
 
   @Get(RENTERS_ROUTES.BY_ID)
-  public async findById(@Param('id') id: string): Promise<RenterWithContractDto> {
+  async findById(@Param('id') id: string): Promise<RenterWithContractDto> {
     return this.rentersService.findById(id)
   }
 
   @Post()
-  public async create(@Body() renterDto: CreateRenterDto): Promise<RenterWithContractDto> {
+  async create(@Body() renterDto: CreateRenterDto): Promise<RenterWithContractDto> {
     return this.rentersService.create(renterDto)
   }
 
   @Patch(RENTERS_ROUTES.BY_ID)
-  public async update(@Body() renterDto: UpdateRenterDto, @Param('id') id: string): Promise<RenterWithContractDto> {
+  async update(@Body() renterDto: UpdateRenterDto, @Param('id') id: string): Promise<RenterWithContractDto> {
     return this.rentersService.update(renterDto, id)
   }
 
   @Delete(RENTERS_ROUTES.BY_ID)
-  public async remove(@Param('id') id: string): Promise<DeleteRenterDto> {
+  async remove(@Param('id') id: string): Promise<DeleteRenterDto> {
     await this.rentersService.remove(id)
     return { message: 'Renter deleted successfully' }
   }

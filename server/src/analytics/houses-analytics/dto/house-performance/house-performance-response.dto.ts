@@ -5,9 +5,9 @@ import { HousePerformanceDto } from './house-performance.dto'
 export class HousePerformanceResponseDto {
   @Expose()
   @Type(() => HousePerformanceDto)
-  public data: HousePerformanceDto[]
+  data: HousePerformanceDto[]
 
   @Expose()
   @Type(() => PaginationMetaDto)
-  public meta: PaginationMetaDto
+  meta: PaginationMetaDto
 }

@@ -1,5 +1,5 @@
-export const HOUSES_ROUTES = {
-  ROOT: '/houses',
+export const HOUSES_ANALYTICS_ROUTES = {
+  ROOT: '/houses-analytics',
   BY_ID: ':id',
   ANALYTICS: 'all-analytics',
   HOUSES_OVERVIEW_ANALYTIC: 'houses-overview-analytic',

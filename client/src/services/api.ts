@@ -4,7 +4,6 @@ export const rootApi = createApi({
   reducerPath: 'api',
   tagTypes: ['Auth'],
   baseQuery: fetchBaseQuery({
-    // Використовуємо повний URL до бекенду
     baseUrl: 'http://localhost:5000',
     prepareHeaders: headers => {
       const token =
@@ -17,7 +16,6 @@ export const rootApi = createApi({
       }
       return headers;
     },
-    // Додаємо credentials для передачі кук
     credentials: 'include',
   }),
   endpoints: () => ({}),

@@ -10,3 +10,4 @@ build/
 *.lock
 package-lock.json
 .git/
+.storybook/**

@@ -3,17 +3,17 @@ import { ContractStatus } from '../entities/contract.entity'
 
 export class ContractDto {
   @Expose()
-  public id: string
+  id: string
 
   @Expose()
-  public commencement: Date
+  commencement: Date
 
   @Expose()
-  public termination: Date
+  termination: Date
 
   @Expose()
-  public monthlyPayment: number
+  monthlyPayment: number
 
   @Expose()
-  public status: ContractStatus
+  status: ContractStatus
 }

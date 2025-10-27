@@ -20,7 +20,7 @@ export class HousesController {
   ) {}
 
   @Get()
-  public findAll(@Query() dto: HouseQueryDto): Promise<HouseResponseDto> {
+  findAll(@Query() dto: HouseQueryDto): Promise<HouseResponseDto> {
     return this.housesService.findAll(dto)
   }
 
@@ -28,27 +28,27 @@ export class HousesController {
   @UseInterceptors(CacheInterceptor)
   @CacheKey(CACHE_KEY)
   @CacheTTL(TTL)
-  public async getHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
+  async getHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
     return await this.housesAnalyticsService.getAllHousesAnalytics()
   }
 
   @Get(HOUSES_ROUTES.BY_ID)
-  public findById(@Param('id') id: string): Promise<HouseWithRelationsDto> {
+  findById(@Param('id') id: string): Promise<HouseWithRelationsDto> {
     return this.housesService.findById(id)
   }
 
   @Post()
-  public async create(@Body() dto: CreateHouseDto): Promise<HouseWithRelationsDto> {
+  async create(@Body() dto: CreateHouseDto): Promise<HouseWithRelationsDto> {
     return await this.housesService.create(dto)
   }
 
   @Patch(HOUSES_ROUTES.BY_ID)
-  public async update(@Body() dto: UpdateHouseDto, @Param('id') id: string): Promise<HouseWithRelationsDto> {
+  async update(@Body() dto: UpdateHouseDto, @Param('id') id: string): Promise<HouseWithRelationsDto> {
     return await this.housesService.update(dto, id)
   }
 
   @Delete(HOUSES_ROUTES.BY_ID)
-  public async remove(@Param('id') id: string): Promise<DeleteHouseDto> {
+  async remove(@Param('id') id: string): Promise<DeleteHouseDto> {
     await this.housesService.remove(id)
     return { message: 'House successfully deleted' }
   }

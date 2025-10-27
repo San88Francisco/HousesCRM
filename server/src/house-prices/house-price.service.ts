@@ -10,7 +10,7 @@ export class HousePriceService {
     private housePriceRepository: Repository<HousePrice>
   ) {}
 
-  public async deleteByHouseId(houseId: string): Promise<void> {
+  async deleteByHouseId(houseId: string): Promise<void> {
     await this.housePriceRepository.delete({ house: { id: houseId } })
   }
 }

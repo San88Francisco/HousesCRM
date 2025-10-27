@@ -2,5 +2,5 @@ import { Expose } from 'class-transformer'
 import { UserDto } from './res/user.dto'
 
 export class UserWithPasswordDto extends UserDto {
-  @Expose() public password: string
+  @Expose() password: string
 }

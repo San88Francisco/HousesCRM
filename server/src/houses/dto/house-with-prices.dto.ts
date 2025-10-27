@@ -5,5 +5,5 @@ import { HousePriceDto } from 'src/house-prices/dto/house-price.dto'
 export class HouseWithPricesDto extends HouseDto {
   @Expose()
   @Type(() => HousePriceDto)
-  public prices: HousePriceDto[]
+  prices: HousePriceDto[]
 }

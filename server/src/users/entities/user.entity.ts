@@ -4,23 +4,23 @@ import { Check, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Update
 @Check(`"password" IS NOT NULL OR "google_id" IS NOT NULL`)
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  public id: string
+  id: string
 
   @Column({ unique: true })
-  public email: string
+  email: string
 
   @Column({ length: 50 })
-  public username: string
+  username: string
 
   @Column({ nullable: true })
-  public password?: string
+  password?: string
 
   @Column({ nullable: true, unique: true, name: 'google_id' })
-  public googleId?: string
+  googleId?: string
 
   @CreateDateColumn({ name: 'created_at' })
-  public createdAt: Date
+  createdAt: Date
 
   @UpdateDateColumn({ name: 'updated_at' })
-  public updatedAt: Date
+  updatedAt: Date
 }

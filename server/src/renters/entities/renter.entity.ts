@@ -5,26 +5,26 @@ import type { Relation } from 'typeorm'
 @Entity()
 export class Renter {
   @PrimaryGeneratedColumn('uuid')
-  public id: string
+  id: string
 
   @Column({ name: 'first_name', length: 15 })
-  public firstName: string
+  firstName: string
 
   @Column({ name: 'last_name', length: 20 })
-  public lastName: string
+  lastName: string
 
   @Column()
-  public occupied: Date
+  occupied: Date
 
   @Column()
-  public vacated: Date
+  vacated: Date
 
   @CreateDateColumn({ name: 'created_at' })
-  public createdAt: Date
+  createdAt: Date
 
   @UpdateDateColumn({ name: 'updated_at' })
-  public updatedAt: Date
+  updatedAt: Date
 
   @OneToMany(() => Contract, (contract) => contract.renter, { onDelete: 'CASCADE' })
-  public contracts: Relation<Contract[]>
+  contracts: Relation<Contract[]>
 }
