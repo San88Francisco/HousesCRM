@@ -14,10 +14,7 @@ const meta: Meta<typeof Input> = {
       control: { type: 'text' },
       description: 'Тип інпуту (text, password, email тощо)',
     },
-    helperText: {
-      control: { type: 'text' },
-      description: 'Допоміжний текст під інпутом',
-    },
+
     error: {
       control: { type: 'boolean' },
       description: 'Стан помилки',
@@ -60,7 +57,6 @@ export const WithHelperText: Story = {
   args: {
     placeholder: 'Search...',
     icon: <Search />,
-    helperText: 'You can search by keyword or email',
   },
 };
 
@@ -71,7 +67,6 @@ export const ErrorState: Story = {
     icon: <Lock />,
     error: true,
     iconWithError: true,
-    helperText: 'Incorrect password',
   },
 };
 

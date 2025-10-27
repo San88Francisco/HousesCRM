@@ -53,7 +53,7 @@ export const SelectComponent = () => {
         </SelectContent>
       </Select>
       <Select>
-        <SelectTrigger error helperText="required checked item" className="w-[180px]">
+        <SelectTrigger error className="w-[180px]">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>
