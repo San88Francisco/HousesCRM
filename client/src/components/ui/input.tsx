@@ -1,21 +1,18 @@
 'use client';
-import * as React from 'react';
+
 import { cn } from '@/lib/utils';
 import { CircleAlert } from 'lucide-react';
+import { ComponentProps, forwardRef, ReactNode, useState } from 'react';
 
-interface InputProps extends React.ComponentProps<'input'> {
-  helperText?: string;
+interface InputProps extends ComponentProps<'input'> {
   error?: boolean;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   iconWithError?: boolean;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    { className, type, helperText, error, icon, iconWithError = false, disabled, ...props },
-    ref,
-  ) => {
-    const [isFocused, setIsFocused] = React.useState<boolean>(false);
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, error, icon, iconWithError = false, disabled, ...props }, ref) => {
+    const [isFocused, setIsFocused] = useState<boolean>(false);
 
     return (
       <div>
@@ -53,9 +50,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           {error && iconWithError && <CircleAlert className="text-red" />}
         </div>
-        {helperText && (
-          <p className={cn('mt-1 text-sm', error ? 'text-red' : 'text-muted')}>{helperText}</p>
-        )}
       </div>
     );
   },

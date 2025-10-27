@@ -4,17 +4,37 @@ import { forwardRef, type InputHTMLAttributes } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface RHFInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   name: string;
   label?: string;
   required?: boolean;
+
+  icon?: React.ReactNode;
+  iconWithError?: boolean;
+  type?: string;
+  disabled?: boolean;
+  placeholder?: string;
+  className?: string;
 }
 
-const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
-  ({ name, label, required = false, className, ...props }, ref) => {
+const RHFInput = forwardRef<HTMLInputElement, Props>(
+  (
+    {
+      name,
+      label,
+      required = false,
+      icon,
+      iconWithError = true,
+      type = 'text',
+      className,
+      disabled = false,
+      placeholder,
+      ...props
+    },
+    ref,
+  ) => {
     const {
       control,
       formState: { errors },
@@ -24,11 +44,10 @@ const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
     const errorMessage = error?.message as string | undefined;
 
     return (
-      <div className="space-y-2">
+      <div className={cn('space-y-2', className, !label && 'mt-[22px]')}>
         {label && (
-          <Label htmlFor={name} className="flex items-center gap-1 ">
+          <Label htmlFor={name} className="flex items-center gap-1">
             {label}
-            {required && <span className="text-destructive">*</span>}
           </Label>
         )}
 
@@ -40,25 +59,23 @@ const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
               id={name}
               {...field}
               value={field.value || ''}
-              onChange={e => {
-                field.onChange(e.target.value);
-              }}
-              className={cn(
-                errorMessage && 'border-destructive focus-visible:ring-destructive',
-                className,
-              )}
+              onChange={e => field.onChange(e.target.value)}
+              type={type}
+              error={!!errorMessage}
+              icon={icon}
+              iconWithError={iconWithError}
+              disabled={disabled}
+              placeholder={placeholder}
+              className={className}
               aria-invalid={!!errorMessage}
+              aria-describedby={errorMessage ? `${name}-error` : undefined}
               {...props}
               ref={ref}
             />
           )}
         />
-
-        {errorMessage && (
-          <div className="flex justify-center items-center mt-1.5 text-sm text-destructive bg-destructive/10 py-1.5 px-3 rounded-md animate-in fade-in-50 duration-300">
-            <AlertCircle className="h-4 w-4 mr-2 flex-shrink-0" />
-            <span>{errorMessage}</span>
-          </div>
+        {error && (
+          <p className={cn('mt-1 text-sm', error ? 'text-red' : 'text-muted')}>{errorMessage}</p>
         )}
       </div>
     );
@@ -66,5 +83,4 @@ const RHFInput = forwardRef<HTMLInputElement, RHFInputProps>(
 );
 
 RHFInput.displayName = 'RHFInput';
-
 export { RHFInput };

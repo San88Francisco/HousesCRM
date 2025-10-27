@@ -18,14 +18,14 @@ const meta: Meta<typeof Textarea> = {
     placeholder: { control: 'text', description: 'Підказка в полі вводу' },
     maxLength: { control: 'number', description: 'Максимальна кількість символів' },
     error: { control: 'boolean', description: 'Показати стан помилки' },
-    helperText: { control: 'text', description: 'Текст під полем вводу' },
+
     disabled: { control: 'boolean', description: 'Вимкнене поле' },
   },
   args: {
     placeholder: 'Enter your message...',
     maxLength: 120,
-    error: false,
-    helperText: '',
+    error: '',
+
     disabled: false,
   },
   decorators: [
@@ -63,7 +63,6 @@ export const WithHelperText: Story = {
     },
   },
   args: {
-    helperText: 'You can describe your issue here.',
     placeholder: 'Describe your issue...',
   },
   render: args => <Textarea {...args} />,
@@ -79,8 +78,8 @@ export const WithError: Story = {
     },
   },
   args: {
-    error: true,
-    helperText: 'This field is required.',
+    error: '',
+
     placeholder: 'Enter something...',
   },
   render: args => <Textarea {...args} />,

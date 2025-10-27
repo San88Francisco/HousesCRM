@@ -2,7 +2,7 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
+import { ComponentPropsWithoutRef, ElementRef, forwardRef, ReactNode } from 'react';
 
 const Select = SelectPrimitive.Root;
 
@@ -10,49 +10,41 @@ const SelectGroup = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
 
-interface SelectTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
-  icon?: React.ReactNode;
+interface SelectTriggerProps extends ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
+  icon?: ReactNode;
   error?: boolean;
   disabled?: boolean;
-  helperText?: string;
+  className?: string;
+  children: ReactNode;
 }
 
-const SelectTrigger = forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Trigger>,
-  SelectTriggerProps
->(({ className, children, icon, error, disabled, helperText, ...props }, ref) => (
-  <div>
-    <SelectPrimitive.Trigger
-      ref={ref}
-      disabled={disabled}
-      className={cn(
-        'flex h-10 w-full items-center justify-between rounded-md border border-input bg-bg-input px-2  ring-offset-background placeholder:text-muted focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-colors duration-200',
-        error && 'border-red text-red [&>span]:text-red',
-        disabled && 'cursor-not-allowed [&>span]:!text-muted !opacity-50',
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      <SelectPrimitive.Icon asChild>
-        <ChevronDown
-          className={cn('h-4 w-4 opacity-50 transition-colors duration-200', error && '!text-red')}
-        />
-      </SelectPrimitive.Icon>
-    </SelectPrimitive.Trigger>
-    {helperText && (
-      <p
+const SelectTrigger = forwardRef<ElementRef<typeof SelectPrimitive.Trigger>, SelectTriggerProps>(
+  ({ className, children, icon, error, disabled, ...props }, ref) => (
+    <div>
+      <SelectPrimitive.Trigger
+        ref={ref}
+        disabled={disabled}
         className={cn(
-          'mt-1 text-sm transition-colors duration-200',
-          error ? 'text-red opacity-100' : 'text-muted opacity-0',
+          'flex h-10 w-full items-center justify-between rounded-md border border-input bg-bg-input px-2  ring-offset-background placeholder:text-muted focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-colors duration-200',
+          error && 'border-red text-red [&>span]:text-red',
+          disabled && 'cursor-not-allowed [&>span]:!text-muted !opacity-50',
+          className,
         )}
+        {...props}
       >
-        {helperText}
-      </p>
-    )}
-  </div>
-));
+        {children}
+        <SelectPrimitive.Icon asChild>
+          <ChevronDown
+            className={cn(
+              'h-4 w-4 opacity-50 transition-colors duration-200',
+              error && '!text-red',
+            )}
+          />
+        </SelectPrimitive.Icon>
+      </SelectPrimitive.Trigger>
+    </div>
+  ),
+);
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 const SelectScrollUpButton = forwardRef<
@@ -128,7 +120,9 @@ const SelectLabel = forwardRef<
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
 interface SelectItemProps extends ComponentPropsWithoutRef<typeof SelectPrimitive.Item> {
-  icon?: React.ReactNode;
+  icon?: ReactNode;
+  className?: string;
+  children: ReactNode;
 }
 
 const SelectItem = forwardRef<ElementRef<typeof SelectPrimitive.Item>, SelectItemProps>(
