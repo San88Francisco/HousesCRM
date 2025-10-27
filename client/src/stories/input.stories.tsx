@@ -65,7 +65,7 @@ export const ErrorState: Story = {
     placeholder: 'Password',
     type: 'password',
     icon: <Lock />,
-    error: true,
+    error: 'Oh snape! There was an error.',
     iconWithError: true,
   },
 };

@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { CardTitle } from '@/components/ui/card';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/store/auth';
 import { ROUTES } from '@/routes';
 import { useErrorToast } from '@/hooks/use-error-toast';
@@ -19,7 +19,7 @@ import { setAccessToken } from '@/utils/auth/token';
 export default function Page() {
   const { errorToast, successToast } = useErrorToast();
   const router = useRouter();
-  const searchParams = useSearchParams();
+
   const [login, { isLoading }] = useLoginMutation();
 
   const form = useForm<LoginRequest>({
@@ -38,11 +38,8 @@ export default function Page() {
 
       if (result.accessToken) {
         setAccessToken(result.accessToken);
-
         successToast('Увійшли успішно', 'Ласкаво просимо!');
-
-        const redirectUrl = searchParams.get('redirect') || ROUTES.ALL_APARTMENTS;
-        router.push(redirectUrl);
+        router.push(ROUTES.ALL_APARTMENTS);
       }
     } catch (error) {
       errorToast(error);
@@ -59,14 +56,12 @@ export default function Page() {
             label="Електронна пошта"
             type="email"
             placeholder="Введіть вашу електронну пошту"
-            required
           />
           <RHFInput
             name="password"
             label="Пароль"
             type="password"
             placeholder="Введіть ваш пароль"
-            required
           />
           <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
             {isLoading ? 'Авторизація...' : 'Увійти'}
