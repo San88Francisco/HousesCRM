@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, type InputHTMLAttributes } from 'react';
+import { forwardRef, HTMLInputTypeAttribute, type InputHTMLAttributes } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,7 +13,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
 
   icon?: React.ReactNode;
   iconWithError?: boolean;
-  type?: string;
+  type?: HTMLInputTypeAttribute;
   disabled?: boolean;
   placeholder?: string;
   className?: string;
@@ -59,6 +59,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
               id={name}
               {...field}
               value={field.value || ''}
+              type={type as HTMLInputTypeAttribute}
               onChange={e => {
                 field.onChange(e.target.value);
               }}
