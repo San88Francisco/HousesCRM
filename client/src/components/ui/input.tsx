@@ -5,7 +5,6 @@ import { CircleAlert } from 'lucide-react';
 import { ComponentProps, forwardRef, ReactNode, useState } from 'react';
 
 interface InputProps extends ComponentProps<'input'> {
-  helperText?: string;
   error?: string;
   icon?: ReactNode;
   iconWithError?: boolean;
