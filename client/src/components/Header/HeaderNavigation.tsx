@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 import { Star } from 'lucide-react';
@@ -14,6 +13,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from '../ui/breadcrumb';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const LIKED_ROUTES_KEY = 'likedRoutes';
 
@@ -76,12 +76,19 @@ const HeaderNavigation = () => {
     <div className="flex items-center gap-1">
       <Button
         variant="icon"
-        className="w-10 h-10 bg-transparent"
+        className="w-10 h-10 bg-transparent transition-all"
         onClick={toggleLike}
-        aria-label={isLiked ? 'Unlike this route' : 'Like this route'}
       >
-        <Star className={isLiked ? 'fill-current' : ''} />
+        <Star
+          className={
+            isLiked
+              ? 'text-[color:gold] fill-[color:gold] drop-shadow-[0_0_6px_rgba(245,197,66,0.55)]'
+              : 'text-text'
+          }
+          fill={isLiked ? 'currentColor' : 'none'}
+        />
       </Button>
+
       <Breadcrumb>
         <BreadcrumbList>
           {breadcrumbItems.map((item, index) => (

@@ -29,9 +29,7 @@ export const ThemeSwitch = () => {
   useEffect(() => setMounted(true), []);
   const CurrentIcon = themeIconMap[theme as NextTheme] || SunMoonIcon;
 
-  const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
-    <CurrentIcon className="h-4 w-4" />,
-  );
+  const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(<CurrentIcon />);
 
   if (!mounted) {
     return (
@@ -39,7 +37,7 @@ export const ThemeSwitch = () => {
         variant="icon"
         className="flex items-center justify-center w-10 h-10 rounded-md border bg-background opacity-50"
       >
-        <SunMoonIcon className="h-4 w-4" />
+        <SunMoonIcon />
       </Button>
     );
   }
@@ -47,7 +45,12 @@ export const ThemeSwitch = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="w-10 h-10">
-        <Button variant="icon" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <Button
+          size="lg"
+          variant="icon"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           {animatedIcon}
         </Button>
       </DropdownMenuTrigger>

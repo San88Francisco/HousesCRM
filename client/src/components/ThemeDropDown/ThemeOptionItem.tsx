@@ -10,9 +10,7 @@ interface ThemeOptionItemProps {
 }
 
 export const ThemeOptionItem = ({ icon: Icon, onClick }: ThemeOptionItemProps) => {
-  const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
-    <Icon className="h-4 w-4" />,
-  );
+  const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(<Icon />);
 
   return (
     <DropdownMenuItem
@@ -21,7 +19,7 @@ export const ThemeOptionItem = ({ icon: Icon, onClick }: ThemeOptionItemProps) =
       onMouseLeave={handleMouseLeave}
       className="flex items-center justify-center p-3"
     >
-      <Button variant="icon" className="p-0 m-0">
+      <Button size="lg" variant="icon" className="p-0 m-0">
         {animatedIcon}
       </Button>
     </DropdownMenuItem>
