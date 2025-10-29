@@ -44,7 +44,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
     const errorMessage = error?.message as string | undefined;
 
     return (
-      <div className={cn('space-y-2', className, !label && 'mt-[22px]')}>
+      <div className={cn('space-y-2', className, label && 'mt-[22px]')}>
         {label && (
           <Label htmlFor={name} className="flex items-center gap-1">
             {label}
