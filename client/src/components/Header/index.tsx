@@ -6,7 +6,7 @@ import { RHFInput } from '../RHF/RHFInput';
 import { ThemeSwitch } from '../ThemeDropDown';
 import { Search } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import HeaderNavigation from './header-navigation';
+import HeaderNavigation from './HeaderNavigation';
 
 const Header = () => {
   const form = useForm<SearchRequest>({
@@ -25,11 +25,9 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-3">
-        <div>
-          <RHFForm form={form} onSubmit={onSubmit}>
-            <RHFInput name="query" type="query" placeholder="Search..." icon={<Search />} />
-          </RHFForm>
-        </div>
+        <RHFForm form={form} onSubmit={onSubmit}>
+          <RHFInput name="query" type="query" placeholder="Search..." icon={<Search />} />
+        </RHFForm>
         <ThemeSwitch />
       </div>
     </header>
