@@ -15,6 +15,7 @@ import {
 } from '../ui/breadcrumb';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { LIKED_ROUTES_KEY } from '@/constants/breadcrumbs/breadcrumbs';
+import { ROUTES } from '@/routes';
 
 const HeaderNavigation = () => {
   const searchParams = useSearchParams();
@@ -37,10 +38,10 @@ const HeaderNavigation = () => {
 
   const breadcrumbItems = (() => {
     const pathSegments = pathname.split('/').filter(Boolean);
-    const items = [{ label: 'Home', href: '/' }];
+    const items = [{ label: 'Home', href: ROUTES.HOME }];
 
     pathSegments.forEach((segment, index) => {
-      const href = '/' + pathSegments.slice(0, index + 1).join('/');
+      const href = ROUTES.HOME + pathSegments.slice(0, index + 1).join('/');
       const label = segment
         .split('-')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
