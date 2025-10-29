@@ -14,8 +14,7 @@ import {
   BreadcrumbPage,
 } from '../ui/breadcrumb';
 import { usePathname, useSearchParams } from 'next/navigation';
-
-const LIKED_ROUTES_KEY = 'likedRoutes';
+import { LIKED_ROUTES_KEY } from '@/constants/breadcrumbs/breadcrumbs';
 
 const HeaderNavigation = () => {
   const searchParams = useSearchParams();
