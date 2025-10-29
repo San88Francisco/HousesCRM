@@ -62,8 +62,11 @@ export class TokensService {
       }),
     ])
 
-    await this.create({ payload, token: refreshToken })
-
+    this.create({ payload, token: refreshToken }).catch((err) =>
+      // TODO: Implement Logger
+      // eslint-disable-next-line no-console
+      console.error('Failed to store refresh token in Redis', err)
+    )
     return { accessToken, refreshToken }
   }
 
