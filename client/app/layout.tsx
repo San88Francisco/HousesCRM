@@ -10,6 +10,7 @@ import { ROUTES } from '@/routes';
 import { AppSidebar } from '@/components/Sidebar';
 import { Providers } from '@/components/Providers';
 import { ThemeScript } from '@/scripts/ThemeScript';
+import Header from '@/components/Header';
 
 export default function RootLayout({
   children,
@@ -53,7 +54,10 @@ export default function RootLayout({
           ) : (
             <>
               <AppSidebar label="some-usergamil.com" />
-              {mainContent}
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                {mainContent}
+              </div>
             </>
           )}
           <Toaster />

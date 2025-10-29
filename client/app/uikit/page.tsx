@@ -9,15 +9,14 @@ import { SelectComponent } from '@/components/Examples/SelectCopmponent';
 import { TableComponent } from '@/components/Examples/TableComponent/TableComponent';
 import TabsComponent from '@/components/Examples/TabsComponent';
 import { TextareaComponent } from '@/components/Examples/TextareaComponent';
-import { ThemeSwitch } from '@/components/ThemeDropDown';
 import { mockData } from '@/constants/table/dataTable';
 
 export default function Page() {
   return (
     <div className="flex flex-col gap-2">
-      <div className="fixed top-2 right-2  z-10">
+      {/* <div className="fixed top-2 right-2  z-10">
         <ThemeSwitch />
-      </div>
+      </div> */}
       <ButtonComponent />
       <CardComponent />
       <ControlButtons />
