@@ -2,9 +2,9 @@
 
 import { forwardRef, ReactNode } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
-import { Label } from '@/components/ui/label';
+import { Switch } from '@/shared/ui/switch';
+import { cn } from '@/shared/utils/cn';
+import { Label } from '@/shared/ui/label';
 
 interface Props {
   name: string;

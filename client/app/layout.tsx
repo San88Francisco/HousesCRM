@@ -1,15 +1,15 @@
 'use client';
 
-import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { ReactNode, useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { noSidebarRoutes } from '@/constants/sidebar/noSidebarRoutes';
 import cookies from 'js-cookie';
-import { ROUTES } from '@/routes';
-import { AppSidebar } from '@/components/Sidebar';
-import { Providers } from '@/components/Providers';
 import { ThemeScript } from '@/scripts/ThemeScript';
+import { noSidebarRoutes } from '@/shared/constants/sidebar/noSidebarRoutes';
+import { ROUTES } from '@/shared/routes';
+import { Providers } from '@/shared/providers';
+import { Toaster } from '@/shared/ui/sonner';
+import { AppSidebar } from '@/widgets/Layout/Sidebar/AppSidebar';
 
 export default function RootLayout({
   children,
