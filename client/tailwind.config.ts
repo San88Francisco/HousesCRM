@@ -39,6 +39,8 @@ export default {
         'active-border': 'var(--active-border)',
         dropdown: 'var(--bg-dropdown)',
         'drop-down-hover': 'var(--drop-down-hover)',
+        positive: 'var(--positive)',
+        info: 'var(--info)',
 
         red: 'var(--red)',
         blue: 'var(--blue)',
@@ -78,7 +80,7 @@ export default {
       spacing: {
         '18': '4.5rem',
         '72': '18rem',
-        '80': '20rem'
+        '80': '20rem',
       },
       borderRadius: {
         xl: '1rem',

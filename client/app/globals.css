@@ -24,6 +24,8 @@
   --bg-dropdown: #ffffff;
   --drop-down-hover: #f4f4f4;
   --scroll-bar: #f4f4f4;
+  --positive: #388e3c;
+  --info: #fb923c;
 
   --blue: #b1e3ff;
   --blue-medium: #a8c5da;
@@ -68,6 +70,8 @@
   --bg-dropdown: #484849;
   --drop-down-hover: #515152;
   --scroll-bar: #333333;
+  --positive: #388e3c;
+  --info: #fb923c;
 
   --blue: #b1e3ff;
   --blue-medium: #a8c5da;
@@ -228,4 +232,9 @@ html.dark {
 .custom-scrollbar--alt {
   --sb-thumb: #22c55e; /* зелений */
   --sb-track: transparent;
+}
+.shadow-custom {
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
