@@ -26,6 +26,7 @@
   --scroll-bar: #f4f4f4;
   --positive: #388e3c;
   --info: #fb923c;
+  --toast-shadow: #cbcdce;
 
   --blue: #b1e3ff;
   --blue-medium: #a8c5da;
@@ -72,6 +73,7 @@
   --scroll-bar: #333333;
   --positive: #388e3c;
   --info: #fb923c;
+  --toast-shadow: #2a2a2a;
 
   --blue: #b1e3ff;
   --blue-medium: #a8c5da;
@@ -229,12 +231,25 @@ html.dark {
   border: 2px solid var(--sb-track, transparent);
 }
 
-.custom-scrollbar--alt {
-  --sb-thumb: #22c55e; /* зелений */
-  --sb-track: transparent;
+[data-sonner-toast][data-type='success'] {
+  --normal-text: var(--positive);
+  border: 1px solid var(--positive) !important;
 }
-.shadow-custom {
-  box-shadow:
-    rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
-    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
+[data-sonner-toast][data-type='warning'] {
+  --normal-text: var(--info);
+  border: 1px solid var(--info) !important;
+}
+
+[data-sonner-toast][data-type='error'] {
+  --normal-text: var(--red);
+  border: 1px solid var(--red) !important;
+}
+[data-sonner-toast][data-type='info'] {
+  --normal-text: var(--active-border);
+  border: 1px solid var(--active-border) !important;
+}
+[data-sonner-toast][data-type='loading'] {
+  --normal-text: var(--active-border);
+  border: 1px solid var(--active-border) !important;
 }

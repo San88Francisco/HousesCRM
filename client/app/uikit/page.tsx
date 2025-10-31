@@ -11,6 +11,7 @@ import TabsComponent from '@/widgets/Uikit/TabsComponent';
 import { TextareaComponent } from '@/widgets/Uikit/TextareaComponent';
 import { mockData } from '@/shared/constants/table/dataTable';
 import { ThemeSwitch } from '@/widgets/Uikit/ThemeDropDown';
+import { ToastCopmponent } from '@/widgets/Uikit/ToastComponent';
 
 export default function Page() {
   return (
@@ -29,6 +30,7 @@ export default function Page() {
       <DropDownComponent />
       <TextareaComponent />
       <SelectComponent />
+      <ToastCopmponent />
     </div>
   );
 }

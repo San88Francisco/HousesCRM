@@ -41,6 +41,7 @@ export default {
         'drop-down-hover': 'var(--drop-down-hover)',
         positive: 'var(--positive)',
         info: 'var(--info)',
+        'toast-shadow': 'var(--toast-shadow)',
 
         red: 'var(--red)',
         blue: 'var(--blue)',
