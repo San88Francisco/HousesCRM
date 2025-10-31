@@ -1,6 +1,7 @@
 import { CircleCheck, Info, LoaderCircle, OctagonX, TriangleAlert } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { ComponentProps } from 'react';
+
 import { Toaster as Sonner } from 'sonner';
 
 type ToasterProps = ComponentProps<typeof Sonner>;
