@@ -4,16 +4,19 @@ import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { Provider } from 'react-redux';
 import store from '@/store/store';
-import { SidebarProvider } from '@/shared/ui/sidebar';
+
+import { SidebarProvider } from '../ui/sidebar';
+import { AppSidebar } from '@/widgets/Layout/Sidebar/AppSidebar';
 
 type Props = {
   children: ReactNode;
-  shouldHideSidebar?: boolean;
-  sidebarOpen?: boolean;
-  onSidebarOpenChange?: (open: boolean) => void;
 };
 
-export const Providers = ({ children, sidebarOpen = false, onSidebarOpenChange }: Props) => {
+export const Providers = ({ children }: Props) => {
+  const mainContent = (
+    <main className="flex-1 overflow-x-hidden px-2 sm:px-8 py-5">{children}</main>
+  );
+
   return (
     <ThemeProvider
       attribute="class"
@@ -23,8 +26,9 @@ export const Providers = ({ children, sidebarOpen = false, onSidebarOpenChange }
       storageKey="theme"
     >
       <Provider store={store}>
-        <SidebarProvider open={sidebarOpen} onOpenChange={onSidebarOpenChange}>
-          {children}
+        <SidebarProvider>
+          <AppSidebar label="some-usergamil.com" />
+          {mainContent}
         </SidebarProvider>
       </Provider>
     </ThemeProvider>

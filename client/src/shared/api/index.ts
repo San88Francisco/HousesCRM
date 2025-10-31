@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getAccessToken } from '../utils/auth/token';
+import Cookies from 'js-cookie';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -8,7 +8,7 @@ export const rootApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: headers => {
-      const token = getAccessToken();
+      const token = Cookies.get('access_token');
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
