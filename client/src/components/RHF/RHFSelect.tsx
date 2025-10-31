@@ -10,9 +10,9 @@ import {
   SelectValue,
   SelectGroup,
   SelectLabel,
-} from '@/shared/ui/select';
-import { cn } from '@/shared/utils/cn';
-import { Label } from '@/shared/ui/label';
+} from '@/components/ui/select';
+import { cn } from '@/lib/utils';
+import { Label } from '@/components/ui/label';
 
 type SelectOption = {
   value: string;

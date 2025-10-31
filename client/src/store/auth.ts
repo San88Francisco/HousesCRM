@@ -1,4 +1,4 @@
-import { rootApi } from '@/shared/api';
+import { rootApi } from '@/services/api';
 import type { LoginRequest, LoginResponse } from '@/types/services/login';
 
 export const authApi = rootApi.injectEndpoints({
@@ -11,6 +11,7 @@ export const authApi = rootApi.injectEndpoints({
       }),
     }),
   }),
+  overrideExisting: false,
 });
 
 export const { useLoginMutation } = authApi;

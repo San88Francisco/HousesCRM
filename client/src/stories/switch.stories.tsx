@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Switch } from '@/shared/ui/switch';
+import { Switch } from '@/components/ui/switch';
 
 const meta: Meta<typeof Switch> = {
   title: 'UI/Switch',

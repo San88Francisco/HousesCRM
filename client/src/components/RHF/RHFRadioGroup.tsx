@@ -2,8 +2,8 @@
 
 import { forwardRef } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { RadioGroup, RadioGroupItem } from '@/shared/ui/radio-group';
-import { cn } from '@/shared/utils/cn';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { cn } from '@/lib/utils';
 
 interface RadioOption {
   value: string;

@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import React from 'react';
 import {
-  CardFooter,
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from '@/shared/ui/card';
+  CardFooter,
+} from '@/components/ui/card';
+import React from 'react';
 
 type Props = React.ComponentProps<typeof Card> & {
   title?: string;

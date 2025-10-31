@@ -1,5 +1,5 @@
-import { STATUS_COLOR } from '@/shared/constants/table/statusColor';
-import { cn } from '@/shared/utils/cn';
+import { STATUS_COLOR } from '@/constants/table/statusColor';
+import { cn } from '@/lib/utils';
 import { Status } from '@/types/core/status';
 
 type Props = {

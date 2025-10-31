@@ -1,10 +1,10 @@
 'use client';
 
-import { forwardRef, HTMLInputTypeAttribute, type InputHTMLAttributes } from 'react';
+import { forwardRef, type InputHTMLAttributes } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
-import { cn } from '@/shared/utils/cn';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   name: string;
@@ -13,7 +13,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
 
   icon?: React.ReactNode;
   iconWithError?: boolean;
-  type?: HTMLInputTypeAttribute;
+  type?: string;
   disabled?: boolean;
   placeholder?: string;
   className?: string;
@@ -59,11 +59,14 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
               id={name}
               {...field}
               value={field.value || ''}
-              type={type as HTMLInputTypeAttribute}
-              onChange={e => {
-                field.onChange(e.target.value);
-              }}
-              error={errorMessage}
+              onChange={e => field.onChange(e.target.value)}
+              type={type}
+              error={!!errorMessage}
+              icon={icon}
+              iconWithError={iconWithError}
+              disabled={disabled}
+              placeholder={placeholder}
+              className={className}
               aria-invalid={!!errorMessage}
               aria-describedby={errorMessage ? `${name}-error` : undefined}
               {...props}
@@ -71,6 +74,9 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
             />
           )}
         />
+        {error && (
+          <p className={cn('mt-1 text-sm', error ? 'text-red' : 'text-muted')}>{errorMessage}</p>
+        )}
       </div>
     );
   },

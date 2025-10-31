@@ -9,7 +9,6 @@ import tsParser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
 import prettier from 'eslint-plugin-prettier';
 import unusedImports from 'eslint-plugin-unused-imports';
-import importPlugin from 'eslint-plugin-import';
 
 // Функція для очищення пробілів з ключів об'єкта globals
 function cleanGlobals(obj) {
@@ -106,18 +105,12 @@ export default [
       react,
       prettier,
       'unused-imports': unusedImports,
-      import: importPlugin,
     },
-
     settings: {
-      react: { version: 'detect' },
-      'import/resolver': {
-        typescript: {
-          project: './tsconfig.json',
-        },
+      react: {
+        version: 'detect',
       },
     },
-
     rules: {
       // Базові рекомендовані правила ESLint + TS + React Hooks
       ...js.configs.recommended.rules,
@@ -148,8 +141,6 @@ export default [
 
       // Жорсткі обмеження на типи (забороняємо any)
       '@typescript-eslint/no-explicit-any': 'error',
-
-      'import/no-unresolved': 'error',
 
       // Забороняємо небезпечне скасування null (non-null assertions)
       '@typescript-eslint/no-non-null-assertion': 'error',

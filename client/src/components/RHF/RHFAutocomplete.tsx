@@ -3,8 +3,8 @@
 import { forwardRef, useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { Label } from '@/shared/ui/label';
-import { Button } from '@/shared/ui/button';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -12,9 +12,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/shared/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
-import { cn } from '@/shared/utils/cn';
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 export interface AutocompleteOption {
   value: string;

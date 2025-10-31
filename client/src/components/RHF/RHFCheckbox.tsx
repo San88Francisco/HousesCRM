@@ -2,10 +2,10 @@
 
 import { forwardRef, ReactNode } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Checkbox } from '@/shared/ui/checkbox';
-import { cn } from '@/shared/utils/cn';
+import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from '@/lib/utils';
 import type { VariantProps } from 'class-variance-authority';
-import type { checkboxVariants } from '@/shared/ui/checkbox';
+import type { checkboxVariants } from '@/components/ui/checkbox';
 
 interface Props extends VariantProps<typeof checkboxVariants> {
   name: string;

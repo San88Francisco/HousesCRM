@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Payment } from '@/types/services/payment';
+import { Checkbox } from '@/components/ui/checkbox';
 import { StatusCell } from '../components/StatusCell';
-import { formatCurrency } from '@/shared/utils/table/formatters';
-import { Checkbox } from '@/shared/ui/checkbox';
-import { TableActions } from '@/shared/ui/data-table/TableActions';
+import { TableActions } from '../components/TableActions';
+import { formatCurrency } from '@/utils/table/formatters';
 
 type Props = {
   onEdit?: (payment: Payment) => void;

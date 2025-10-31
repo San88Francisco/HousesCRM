@@ -1,4 +1,4 @@
-import { rootApi } from '@/shared/api';
+import { rootApi } from '@/services/api';
 import { ContractsForPeriodRequest, ContractsForPeriodResponse } from '@/types/services/contracts';
 
 export const contractsApi = rootApi.injectEndpoints({
