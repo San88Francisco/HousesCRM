@@ -1,18 +1,20 @@
-import cookies from 'js-cookie';
+'use server';
 
-export const getAccessToken = () => cookies.get('access_token');
+import { cookies } from 'next/headers';
 
-export const setAccessToken = (accessToken: string) => {
-  cookies.set('access_token', accessToken, {
-    expires: 1,
-    path: '/',
-  });
-};
+export async function setCookie(
+  name: string,
+  value: string,
+  options?: { expires?: Date | number; path?: string },
+) {
+  (await cookies()).set(name, value, options);
+}
 
-export const clearAccessToken = () => {
-  cookies.remove('access_token');
-};
+export async function getCookie(name: string) {
+  const cookieStore = await cookies();
+  return cookieStore.get(name)?.value;
+}
 
-export const isAuthenticated = () => {
-  return !!getAccessToken();
-};
+export async function deleteCookie(name: string) {
+  (await cookies()).delete(name);
+}

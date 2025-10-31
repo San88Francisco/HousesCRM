@@ -59,7 +59,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
               id={name}
               {...field}
               value={field.value || ''}
-              type={type as HTMLInputTypeAttribute}
+              type={type}
               onChange={e => {
                 field.onChange(e.target.value);
               }}
