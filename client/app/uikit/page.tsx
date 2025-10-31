@@ -1,16 +1,16 @@
-import { ButtonComponent } from '@/components/Examples/ButtonComponent';
-import { CalendarComponent } from '@/components/Examples/CalendarComponent';
-import { CardComponent } from '@/components/Examples/CardComponent';
-import { ControlButtons } from '@/components/Examples/ControlButtons';
-import { DropDownComponent } from '@/components/Examples/DropDownComponent';
-import { InputComponent } from '@/components/Examples/InputComponent';
-import { PaymentTable } from '@/components/Examples/PaymentTable';
-import { SelectComponent } from '@/components/Examples/SelectCopmponent';
-import { TableComponent } from '@/components/Examples/TableComponent/TableComponent';
-import TabsComponent from '@/components/Examples/TabsComponent';
-import { TextareaComponent } from '@/components/Examples/TextareaComponent';
-import { ThemeSwitch } from '@/components/ThemeDropDown';
-import { mockData } from '@/constants/table/dataTable';
+import { ButtonComponent } from '@/widgets/Uikit/ButtonComponent';
+import { CalendarComponent } from '@/widgets/Uikit/CalendarComponent';
+import { CardComponent } from '@/widgets/Uikit/CardComponent';
+import { ControlButtons } from '@/widgets/Uikit/ControlButtons';
+import { DropDownComponent } from '@/widgets/Uikit/DropDownComponent';
+import { InputComponent } from '@/widgets/Uikit/InputComponent';
+import { PaymentTable } from '@/widgets/Uikit/PaymentTable';
+import { SelectComponent } from '@/widgets/Uikit/SelectCopmponent';
+import { TableComponent } from '@/widgets/Uikit/TableComponent/TableComponent';
+import TabsComponent from '@/widgets/Uikit/TabsComponent';
+import { TextareaComponent } from '@/widgets/Uikit/TextareaComponent';
+import { mockData } from '@/shared/constants/table/dataTable';
+import { ThemeSwitch } from '@/widgets/Uikit/ThemeDropDown';
 
 export default function Page() {
   return (
