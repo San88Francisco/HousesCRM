@@ -29,7 +29,7 @@ export default function Page() {
   const onSubmit = async (data: LoginRequest) => {
     try {
       const result = await login({
-        username: data.username,
+        email: data.email,
         password: data.password,
       }).unwrap();
 
@@ -61,9 +61,9 @@ export default function Page() {
         <CardTitle className="text-2xl font-bold mb-4">Увійти</CardTitle>
         <RHFForm form={form} onSubmit={onSubmit}>
           <RHFInput
-            name="username"
+            name="email"
             label="Електронна пошта"
-            type="username"
+            type="email"
             placeholder="Введіть вашу електронну пошту"
             required
           />
