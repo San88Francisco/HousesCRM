@@ -1,4 +1,4 @@
-import { rootApi } from '@/services/api';
+import { rootApi } from '@/shared/api';
 import type { LoginRequest, LoginResponse } from '@/types/services/login';
 
 export const authApi = rootApi.injectEndpoints({

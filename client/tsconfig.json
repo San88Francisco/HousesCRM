@@ -1,3 +1,4 @@
+// tsconfig.json
 {
   "compilerOptions": {
     "target": "ES2017",
@@ -13,14 +14,13 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     },
+
+    "plugins": [{ "name": "next" }],
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
