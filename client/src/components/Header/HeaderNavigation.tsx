@@ -73,7 +73,7 @@ const HeaderNavigation = () => {
   };
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-3">
       <Button
         variant="icon"
         className="w-10 h-10 bg-transparent transition-all"

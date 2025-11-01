@@ -4,12 +4,12 @@ import { Button } from '../ui/button';
 import { useAnimatedIcon } from '@/hooks';
 import { ElementType } from 'react';
 
-interface ThemeOptionItemProps {
+interface Props {
   icon: ElementType;
   onClick: () => void;
 }
 
-export const ThemeOptionItem = ({ icon: Icon, onClick }: ThemeOptionItemProps) => {
+export const ThemeOptionItem = ({ icon: Icon, onClick }: Props) => {
   const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(<Icon />);
 
   return (
