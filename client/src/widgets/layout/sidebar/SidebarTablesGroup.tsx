@@ -10,7 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
 } from '@/shared/ui/sidebar';
-import { CollapsibleMenu } from './CollapsibleMenu';
+import { CollapsibleMenu } from './ColapsibleMenu';
 
 type Props = {
   items: NavItem[];
