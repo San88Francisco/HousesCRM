@@ -11,6 +11,7 @@ import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
+import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 
 export default function Page() {
   return (
@@ -28,6 +29,7 @@ export default function Page() {
       <CalendarComponent />
       <DropDownComponent />
       <TextareaComponent />
+      <ToastCopmponent />
       <SelectComponent />
     </div>
   );

@@ -2,10 +2,10 @@
 
 import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
 import { useSidebar, Sidebar, SidebarContent } from '@/shared/ui/sidebar';
+import { Logo } from '@/components/logo';
 import { SidebarHeaderComponent } from './SidebarHeader';
 import { SidebarPagesGroup } from './SidebarPagesGroup';
 import { SidebarTablesGroup } from './SidebarTablesGroup';
-import { Logo } from '@/components/logo';
 
 type Props = {
   label: string;
