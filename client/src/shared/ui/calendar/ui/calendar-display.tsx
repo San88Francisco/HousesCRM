@@ -4,8 +4,8 @@ import CalendarDaysLevel from './calendar-days-level';
 import CalendarMonthsLevel from './calendar-months-level';
 import CalendarYearsLevel from './calendar-years-level';
 import { Day, Locale } from 'date-fns';
-import { useCalendarState } from '@/hooks/CalendarHooks/use-calendar-state';
-import { useCalendarNavigation } from '@/hooks/CalendarHooks/use-calendar-navigation';
+import { useCalendarState } from '@/hooks/calendar-hooks/use-calendar-state';
+import { useCalendarNavigation } from '@/hooks/calendar-hooks/use-calendar-navigation';
 import { CalendarMode, levelType } from '@/types/core/calendar';
 import { levelMap, nextLevelMap } from '@/shared/constants/calendar/calendar';
 /* eslint-disable */

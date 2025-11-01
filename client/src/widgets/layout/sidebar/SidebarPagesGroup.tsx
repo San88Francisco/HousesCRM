@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation';
 import { NavItem } from '@/types/navigation';
-import { SidebarMenuItem } from './SidebarMenuItem';
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
 import { isActiveItem } from '@/shared/utils/sidebar/navigation';
 import {
@@ -11,6 +10,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
 } from '@/shared/ui/sidebar';
+import { SidebarMenuItem } from './SidebarMenuItem';
 
 type Props = {
   items: NavItem[];
