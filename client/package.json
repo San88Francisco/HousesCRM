@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "format": "prettier --config .prettierrc --write src/**/*.{ts,tsx,css}",
-    "build": "npm run format && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-pattern \"src/components/RHF/**/*\" --fix --color && prettier --write \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-path .prettierignore && echo \"\\n✅ Prettier formatting complete!\\n\" && eslint \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-pattern \"src/components/RHF/**/*\" --color",
     "sb": "storybook dev -p 6006",
