@@ -3,7 +3,7 @@ import { House } from 'src/houses/entities/house.entity'
 import {
   RevenueDistributionDto,
   RevenueDistributionItemDto,
-} from '../dto/revenue-distribution/revenue-distribution.dto'
+} from '../houses-analytics/dto/revenue-distribution/revenue-distribution.dto'
 
 export const calculateMonthsBetween = (start: Date, end: Date): number => {
   const startYear = start.getFullYear()

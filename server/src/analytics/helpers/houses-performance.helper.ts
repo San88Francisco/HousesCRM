@@ -1,5 +1,5 @@
 import { House } from 'src/houses/entities/house.entity'
-import { HousePerformanceDto } from '../dto/house-performance/house-performance.dto'
+import { HousePerformanceDto } from '../houses-analytics/dto/house-performance/house-performance.dto'
 import { calculateHouseRevenue } from './revenue.helpers'
 import { ContractStatus } from 'src/contracts/entities/contract.entity'
 

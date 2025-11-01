@@ -1,5 +1,5 @@
-import { PaymentTable } from '@/widgets/Uikit/PaymentTable';
 import { mockData } from '@/shared/constants/table/dataTable';
+import { PaymentTable } from '@/widgets/uikit/payment-table';
 
 const meta = {
   title: 'Components/DataTable',

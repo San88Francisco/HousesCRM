@@ -7,7 +7,7 @@ import { ThemeScript } from '@/scripts/ThemeScript';
 import { noSidebarRoutes } from '@/shared/constants/sidebar/noSidebarRoutes';
 import { Providers } from '@/shared/providers';
 import { Toaster } from '@/shared/ui/sonner';
-import { AppSidebar } from '@/widgets/Layout/Sidebar/AppSidebar';
+import { AppSidebar } from '@/widgets/layout/sidebar/AppSidebar';
 
 export default function RootLayout({
   children,
