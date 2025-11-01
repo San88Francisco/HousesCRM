@@ -1,6 +1,6 @@
 'use client';
 
-import { Logo } from '../../../components/logo';
+import { Logo } from '@/components/logo';
 import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
 import { useSidebar, Sidebar, SidebarContent } from '@/shared/ui/sidebar';
 import { SidebarHeaderComponent } from './SidebarHeader';
