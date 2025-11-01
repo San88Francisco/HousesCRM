@@ -5,7 +5,7 @@ import { useSidebar, Sidebar, SidebarContent } from '@/shared/ui/sidebar';
 import { SidebarHeaderComponent } from './SidebarHeader';
 import { SidebarPagesGroup } from './SidebarPagesGroup';
 import { SidebarTablesGroup } from './SidebarTablesGroup';
-import { Logo } from '@/components/logo';
+import { Logo } from '@/components/logo-houses';
 
 type Props = {
   label: string;
