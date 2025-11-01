@@ -1,7 +1,6 @@
 'use client';
 
 import { NavItem } from '@/types/navigation';
-import { CollapsibleMenu } from './CollapsibleMenu';
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
 import {
   SidebarMenuItem,
@@ -11,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
 } from '@/shared/ui/sidebar';
+import { CollapsibleMenu } from './CollapsibleMenu';
 
 type Props = {
   items: NavItem[];

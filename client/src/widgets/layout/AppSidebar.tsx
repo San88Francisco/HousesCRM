@@ -1,11 +1,11 @@
 'use client';
 
-import { Logo } from '../../../components/Logo';
-import { SidebarPagesGroup } from './SidebarPagesGroup';
-import { SidebarTablesGroup } from './SidebarTablesGroup';
-import { SidebarHeaderComponent } from './SidebarHeader';
+import { Logo } from '../../components/logo';
 import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
 import { useSidebar, Sidebar, SidebarContent } from '@/shared/ui/sidebar';
+import { SidebarHeaderComponent } from './SidebarHeader';
+import { SidebarPagesGroup } from './SidebarPagesGroup';
+import { SidebarTablesGroup } from './SidebarTablesGroup';
 
 type Props = {
   label: string;

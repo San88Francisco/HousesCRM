@@ -8,12 +8,12 @@ import { useLoginMutation } from '@/store/auth';
 import { RHFForm } from '@/components/RHF/RHForm';
 import { LoginRequest } from '@/types/services/login';
 import { RHFInput } from '@/components/RHF/RHFInput';
-import { GoogleLoginButton } from '@/widgets/Login/GoogleAuthButton';
 import { loginDefaultValues, loginSchema } from '@/shared/validation/login/login';
 import { ROUTES } from '@/shared/routes';
 import { toast } from 'sonner';
 import { CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
+import { GoogleLoginButton } from '@/widgets/login/google-auth-button';
 
 export default function Page() {
   const router = useRouter();
