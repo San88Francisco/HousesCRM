@@ -1,6 +1,6 @@
 'use client';
 
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, MouseEvent } from 'react';
 import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { useAnimation, Variants, motion } from 'framer-motion';
 import { cn } from '../utils/cn';
@@ -37,7 +37,7 @@ const SunIcon = forwardRef<SunIconHandle, SunIconProps>(
     });
 
     const handleMouseEnter = useCallback(
-      (e: React.MouseEvent<HTMLDivElement>) => {
+      (e: MouseEvent<HTMLDivElement>) => {
         if (!isControlledRef.current) {
           controls.start('animate');
         } else {
@@ -48,7 +48,7 @@ const SunIcon = forwardRef<SunIconHandle, SunIconProps>(
     );
 
     const handleMouseLeave = useCallback(
-      (e: React.MouseEvent<HTMLDivElement>) => {
+      (e: MouseEvent<HTMLDivElement>) => {
         if (!isControlledRef.current) {
           controls.start('normal');
         } else {

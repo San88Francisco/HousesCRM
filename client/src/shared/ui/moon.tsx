@@ -1,7 +1,6 @@
 'use client';
-
 import type { HTMLAttributes } from 'react';
-import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { Transition, useAnimation, motion, Variants } from 'framer-motion';
 import { cn } from '../utils/cn';
 

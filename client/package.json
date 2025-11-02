@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
-    "format": "prettier --config .prettierrc --write src/**/*.{ts,tsx,css}",
+    "lint": "eslint \"{src,app}/**/*.{ts,tsx}\" --max-warnings=0",
+    "lint:fix": "eslint \"{src,app}/**/*.{ts,tsx}\" --fix",
+    "format": "prettier --write \"{src,app}/**/*.{ts,tsx,css,md}\"",
+    "fix": "npm run format && npm run lint:fix",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-pattern \"src/components/RHF/**/*\" --fix --color && prettier --write \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-path .prettierignore && echo \"\\n✅ Prettier formatting complete!\\n\" && eslint \"src/**/*.{ts,tsx}\" \"app/**/*.{ts,tsx}\" middleware.ts --ignore-pattern \"src/components/RHF/**/*\" --color",
     "sb": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
