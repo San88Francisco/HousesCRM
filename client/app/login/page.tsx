@@ -2,23 +2,20 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import { CardTitle } from '@/components/ui/card';
 import cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { useLoginMutation } from '@/store/auth';
-import { ROUTES } from '@/routes';
-import { useErrorToast } from '@/hooks/use-error-toast';
-
 import { RHFForm } from '@/components/RHF/RHForm';
-
-import { loginSchema, loginDefaultValues } from '@/validation/login/login';
 import { LoginRequest } from '@/types/services/login';
 import { RHFInput } from '@/components/RHF/RHFInput';
-import { GoogleLoginButton } from '@/components/GoogleAuthButton';
+import { loginDefaultValues, loginSchema } from '@/shared/validation/login/login';
+import { ROUTES } from '@/shared/routes';
+import { toast } from 'sonner';
+import { CardTitle } from '@/shared/ui/card';
+import { Button } from '@/shared/ui/button';
+import { GoogleLoginButton } from '@/widgets/login/google-auth-button';
 
 export default function Page() {
-  const { errorToast, successToast } = useErrorToast();
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
 
@@ -32,7 +29,7 @@ export default function Page() {
   const onSubmit = async (data: LoginRequest) => {
     try {
       const result = await login({
-        username: data.username,
+        email: data.email,
         password: data.password,
       }).unwrap();
 
@@ -49,11 +46,12 @@ export default function Page() {
           });
         }
 
-        successToast('Увійшли успішно', 'Ласкаво просимо!');
+        toast.success('Увійшли успішно');
         router.push(ROUTES.ALL_APARTMENTS);
       }
     } catch (error) {
-      errorToast(error);
+      console.error('✌️error --->', error);
+      toast.error('Помилка під час входу');
     }
   };
 
@@ -63,9 +61,9 @@ export default function Page() {
         <CardTitle className="text-2xl font-bold mb-4">Увійти</CardTitle>
         <RHFForm form={form} onSubmit={onSubmit}>
           <RHFInput
-            name="username"
+            name="email"
             label="Електронна пошта"
-            type="username"
+            type="email"
             placeholder="Введіть вашу електронну пошту"
             required
           />

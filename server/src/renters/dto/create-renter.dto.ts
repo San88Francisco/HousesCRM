@@ -29,10 +29,10 @@ export class CreateRenterDto {
   @Type(() => Date)
   public occupied: Date
 
-  @IsDefined({ message: 'Vacated is required' })
+  @IsOptional()
   @IsDate({ message: 'Vacated must be a valid date' })
   @Type(() => Date)
-  public vacated: Date
+  public vacated?: Date
 
   @IsOptional()
   @IsArray({ message: 'contractIds must be an array' })

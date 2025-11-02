@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import { Star } from 'lucide-react';
-import { Button } from '../ui/button';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { LIKED_ROUTES_KEY } from '@/constants/breadcrumbs/breadcrumbs';
+import { ROUTES } from '@/shared/routes';
+import { Button } from '@/shared/ui/button';
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -12,10 +15,7 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
   BreadcrumbPage,
-} from '../ui/breadcrumb';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { LIKED_ROUTES_KEY } from '@/constants/breadcrumbs/breadcrumbs';
-import { ROUTES } from '@/routes';
+} from '@/shared/ui/breadcrumb';
 
 const HeaderNavigation = () => {
   const searchParams = useSearchParams();

@@ -2,8 +2,8 @@
 
 import { forwardRef, type TextareaHTMLAttributes } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+import { Textarea } from '@/shared/ui/textarea';
+import { Label } from '@/shared/ui/label';
 
 interface Props extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'maxLength'> {
   name: string;

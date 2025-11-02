@@ -1,4 +1,4 @@
-import { ThemeSwitch } from '../ThemeDropDown';
+import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
 import HeaderNavigation from './HeaderNavigation';
 import HeaderSearch from './HeaderSearch';
 

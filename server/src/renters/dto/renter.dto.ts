@@ -14,5 +14,5 @@ export class RenterDto {
   public occupied: Date
 
   @Expose()
-  public vacated: Date
+  public vacated?: Date | null
 }
