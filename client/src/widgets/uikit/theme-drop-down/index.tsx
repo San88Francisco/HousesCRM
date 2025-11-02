@@ -9,7 +9,6 @@ import { DropdownMenuTrigger, DropdownMenu, DropdownMenuContent } from '@/shared
 import { SunMoonIcon } from '@/shared/ui/sunmoon';
 import { Button } from '@/shared/ui/button';
 
-
 export const ThemeSwitch = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
