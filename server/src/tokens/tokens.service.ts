@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
+import { JwtService, JwtSignOptions } from '@nestjs/jwt' // ← додали JwtSignOptions
 import { ConfigService } from '@nestjs/config'
 import * as argon2 from 'argon2'
 import ms, { StringValue } from 'ms'
@@ -14,7 +14,7 @@ export class TokensService {
   private readonly refreshSecret: string
   private readonly refreshExpiresIn: StringValue
   private readonly accessSecret: string
-  private readonly accessExpiresIn: string
+  private readonly accessExpiresIn: JwtSignOptions['expiresIn']
 
   constructor(
     private readonly jwt: JwtService,
@@ -25,7 +25,7 @@ export class TokensService {
     this.refreshSecret = this.config.getOrThrow<string>('jwt.refreshSecret')
     this.refreshExpiresIn = this.config.getOrThrow<StringValue>('jwt.refreshExp')
     this.accessSecret = this.config.getOrThrow<string>('jwt.accessSecret')
-    this.accessExpiresIn = this.config.getOrThrow<string>('jwt.accessExp')
+    this.accessExpiresIn = this.config.getOrThrow<JwtSignOptions['expiresIn']>('jwt.accessExp')
   }
 
   async verify(payload: JwtPayload, token: string): Promise<JwtPayload | null> {
