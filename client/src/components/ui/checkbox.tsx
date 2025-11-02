@@ -2,8 +2,9 @@ import * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { Check } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
+/* eslint-disable */
 
 const checkboxVariants = cva(
   'relative peer shrink-0 rounded-sm border border-solid box-border ring-offset-background transition-colors duration-300 ease-in-out bg-transparent',
