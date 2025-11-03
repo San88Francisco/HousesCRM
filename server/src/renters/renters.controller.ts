@@ -7,10 +7,15 @@ import { UpdateRenterDto } from './dto/update-renter.dto'
 import { DeleteRenterDto } from './dto/delete-renter.dto'
 import { QueryDto } from 'src/common/dto/query.dto'
 import { RenterResponseDto } from './dto/renter-response.dto'
+import { RenterDetailAnalyticsService } from 'src/analytics/renter-detail-analytics/renter-detail-analytics.service'
+import { AllRenterAnalyticDto } from 'src/analytics/renter-detail-analytics/dto/all-renter-analytic-response.dto'
 
 @Controller(RENTERS_ROUTES.ROOT)
 export class RentersController {
-  constructor(private readonly rentersService: RentersService) {}
+  constructor(
+    private readonly rentersService: RentersService,
+    private readonly rentersAnalyticService: RenterDetailAnalyticsService
+  ) {}
 
   @Get()
   public async findAll(@Query() dto: QueryDto): Promise<RenterResponseDto> {
@@ -18,8 +23,8 @@ export class RentersController {
   }
 
   @Get(RENTERS_ROUTES.BY_ID)
-  public async findById(@Param('id') id: string): Promise<RenterWithContractDto> {
-    return this.rentersService.findById(id)
+  public async findById(@Param('id') id: string): Promise<AllRenterAnalyticDto> {
+    return await this.rentersAnalyticService.getAllRenterAnalytic(id)
   }
 
   @Post()
