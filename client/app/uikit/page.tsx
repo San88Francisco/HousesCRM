@@ -12,6 +12,8 @@ import { TextareaComponent } from '@/widgets/Uikit/TextareaComponent';
 import { mockData } from '@/shared/constants/table/dataTable';
 import { ThemeSwitch } from '@/widgets/Uikit/ThemeDropDown';
 
+import { PaybackChart } from '@/widgets/all-apartments/PaybackChart/PaybackChart';
+
 export default function Page() {
   return (
     <div className="flex flex-col gap-2">
@@ -29,6 +31,7 @@ export default function Page() {
       <DropDownComponent />
       <TextareaComponent />
       <SelectComponent />
+      <PaybackChart />
     </div>
   );
 }
