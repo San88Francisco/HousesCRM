@@ -1,20 +1,73 @@
+// shared/api/index.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import Cookies from 'js-cookie';
+import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { tokenStorage } from '../utils/auth/token';
+import { toast } from 'sonner';
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL_LOCAL;
+
+const baseQuery = fetchBaseQuery({
+  baseUrl,
+  credentials: 'include',
+  prepareHeaders: headers => {
+    const token = tokenStorage.getAccessToken();
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers;
+  },
+});
+
+const handleTokenRefresh = async (): Promise<string | null> => {
+  try {
+    const refreshResult = await fetch(`${baseUrl}/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (refreshResult.ok) {
+      const data = await refreshResult.json();
+      return data.accessToken || null;
+    }
+
+    return null;
+  } catch (error) {
+    toast.error('Помилка запиту оновлення токена', {
+      description: error instanceof Error ? error.message : String(error),
+    });
+    return null;
+  }
+};
+
+const handleAuthError = () => {
+  tokenStorage.clearTokens();
+  window.location.href = '/login';
+};
+
+const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions,
+) => {
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result.error && result.error.status === 401) {
+    const newAccessToken = await handleTokenRefresh();
+
+    if (newAccessToken) {
+      tokenStorage.setAccessToken(newAccessToken);
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      handleAuthError();
+    }
+  }
+
+  return result;
+};
 
 export const rootApi = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: headers => {
-      const token = Cookies.get('access_token');
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
-  tagTypes: ['Auth'],
+  baseQuery: baseQueryWithReauth,
+  tagTypes: ['Auth', 'Houses'],
   endpoints: () => ({}),
 });

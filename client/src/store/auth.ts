@@ -1,5 +1,5 @@
 import { rootApi } from '@/shared/api';
-import type { LoginRequest, LoginResponse } from '@/types/services/login';
+import type { LoginRequest, LoginResponse, RefreshResponse } from '@/types/services/login';
 
 export const authApi = rootApi.injectEndpoints({
   endpoints: build => ({
@@ -10,7 +10,13 @@ export const authApi = rootApi.injectEndpoints({
         body,
       }),
     }),
+    refresh: build.mutation<RefreshResponse, void>({
+      query: () => ({
+        url: `/auth/refresh`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useRefreshMutation } = authApi;

@@ -1,5 +1,11 @@
+import { TestGetHouses } from '@/components/Examples/TestGetHouses';
+
 const Page = () => {
-  return <div>Всі квартири</div>;
+  return (
+    <>
+      <TestGetHouses />
+    </>
+  );
 };
 
 export default Page;
