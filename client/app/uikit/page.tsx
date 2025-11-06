@@ -2,7 +2,6 @@ import { ButtonComponent } from '@/widgets/uikit/button-component';
 import { CalendarComponent } from '@/widgets/uikit/calendar-component';
 import { CardComponent } from '@/widgets/uikit/card-component';
 import { ControlButtons } from '@/widgets/uikit/control-buttons';
-import { DropDownComponent } from '@/widgets/uikit/dropdown-component';
 import { InputComponent } from '@/widgets/uikit/input-component';
 import { PaymentTable } from '@/widgets/uikit/payment-table';
 import { SelectComponent } from '@/widgets/uikit/select-copmponent';
@@ -11,6 +10,8 @@ import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { mockData } from '@/shared/constants/table/dataTable';
 import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
+import { ToastCopmponent } from '@/widgets/uikit/toast-component';
+import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 
 export default function Page() {
   return (
@@ -28,6 +29,7 @@ export default function Page() {
       <CalendarComponent />
       <DropDownComponent />
       <TextareaComponent />
+      <ToastCopmponent />
       <SelectComponent />
     </div>
   );
