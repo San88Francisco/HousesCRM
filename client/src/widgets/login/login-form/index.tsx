@@ -1,10 +1,10 @@
 'use client';
 
-import { RHFForm } from '@/components/RHF/RHForm';
 import { RHFInput } from '@/components/RHF/RHFInput';
-import { GoogleLoginButton } from '@/widgets/Login/GoogleAuthButton';
-import { CardTitle } from '@/shared/ui/card';
+import { RHFForm } from '@/components/RHF/RHForm';
 import { Button } from '@/shared/ui/button';
+import { CardTitle } from '@/shared/ui/card';
+import { GoogleLoginButton } from '../google-auth-button';
 import { useLogin } from '@/hooks/use-login';
 
 export const LoginForm = () => {

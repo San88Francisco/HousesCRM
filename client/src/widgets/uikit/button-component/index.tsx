@@ -1,5 +1,6 @@
 import { Button } from '@/shared/ui/button';
-import { GoogleLoginButton } from '@/widgets/Login/GoogleAuthButton';
+import { GoogleLoginButton } from '@/widgets/login/google-auth-button';
+
 import { User } from 'lucide-react';
 
 export const ButtonComponent = () => {

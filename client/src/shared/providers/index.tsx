@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import store from '@/store/store';
 
 import { SidebarProvider } from '../ui/sidebar';
-import { AppSidebar } from '@/widgets/Layout/Sidebar/AppSidebar';
+import { AppSidebar } from '@/widgets/layout/sidebar/AppSidebar';
 
 type Props = {
   children: ReactNode;
