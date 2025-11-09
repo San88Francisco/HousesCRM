@@ -25,7 +25,7 @@ export const ChartList: React.FC<Props> = ({ chartConfig, chartData }) => {
   }, []);
 
   return (
-    <ul className="w-full md:w-[60%] flex flex-col gap-5 max-h-[205px] overflow-y-auto pr-2 ">
+    <>
       {Object.entries(chartConfig).map(([key, item]) => {
         const match = chartData.find(d => d.apartmentName === item.label);
         const color = item.theme && isDark ? item.theme.dark : item.theme?.light;
@@ -48,6 +48,6 @@ export const ChartList: React.FC<Props> = ({ chartConfig, chartData }) => {
           </li>
         );
       })}
-    </ul>
+    </>
   );
 };
