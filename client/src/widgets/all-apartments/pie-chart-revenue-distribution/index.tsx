@@ -1,93 +1,49 @@
 'use client';
 
 import * as React from 'react';
-import { TrendingUp } from 'lucide-react';
 import { Label, Pie, PieChart } from 'recharts';
 
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from './PieChart';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from './CardPieChart';
-
-export const description = 'A donut chart with text';
-
-const chartData = [
-  { apatmentName: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
-  { apatmentName: 'safari', visitors: 200, fill: 'var(--color-safari)' },
-  { apatmentName: 'firefox', visitors: 287, fill: 'var(--color-firefox)' },
-  { apatmentName: 'edge', visitors: 173, fill: 'var(--color-edge)' },
-  { apatmentName: 'other', visitors: 190, fill: 'var(--color-other)' },
-];
-
-const chartConfig = {
-  chrome: {
-    label: 'Chrome',
-    theme: {
-      light: 'var(--purple)',
-      dark: 'var(--purple-light)',
-    },
-  },
-  safari: {
-    label: 'Safari',
-    theme: {
-      light: 'var(--blue)',
-      dark: 'var(--blue-light)',
-    },
-  },
-  firefox: {
-    label: 'Firefox',
-    theme: {
-      light: 'var(--green-light)',
-      dark: 'var(--green)',
-    },
-  },
-  edge: {
-    label: 'Edge',
-    theme: {
-      light: 'var(--yellow)',
-      dark: 'var(--purple-medium)',
-    },
-  },
-  other: {
-    label: 'Other',
-    theme: {
-      light: 'var(--dark-light)',
-      dark: 'var(--white-light)',
-    },
-  },
-} satisfies ChartConfig;
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from './PieChart';
+import { normalizeChartData } from '@/shared/utils/pie-chart/normalizeChartData';
+import { chartData } from '@/config/pie-chart/chartData';
+import { chartConfig } from '@/config/pie-chart/chartConfig';
+import { ChartList } from './ChartList';
 
 export function ChartPieDonutText() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
+  // Код тимчасовий, коли буде масив з бекенду, це видалимо, адже там є загальна сума
+  const grandApartmentTotalRevenue = chartData.reduce(
+    (acc, curr) => acc + curr.apartmentTotalRevenue,
+    0,
+  );
+
+  const adjustedData = React.useMemo(() => normalizeChartData(chartData), []);
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
+    <Card className="max-w-[600px] mx-auto">
+      <CardHeader className="items-center pb-0 mb-5">
+        <CardTitle>Загальний дохід по всіх квартирах</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
+      <CardContent className="flex flex-wrap md:flex-nowrap gap-10 items-center">
+        <ChartContainer
+          config={chartConfig}
+          className="flex-shrink-0 w-full md:w-[40%] max-h-[300px]"
+        >
           <PieChart>
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
             <Pie
-              data={chartData}
-              dataKey="visitors"
-              nameKey="apatmentName"
-              innerRadius={75} // внутрішній радіус, щоб зробити "donut"
-              outerRadius={100} // зовнішній радіус
-              paddingAngle={5} // відстань між секторами
-              cornerRadius={5} // заокруглення ліній
+              data={adjustedData}
+              dataKey="apartmentTotalRevenue"
+              nameKey="apartmentName"
+              innerRadius={75}
+              outerRadius={100}
+              paddingAngle={5}
+              cornerRadius={5}
             >
               <Label
+                className="text"
                 content={({ viewBox }) => {
                   if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
                     return (
@@ -97,13 +53,17 @@ export function ChartPieDonutText() {
                         textAnchor="middle"
                         dominantBaseline="middle"
                       >
-                        <tspan x={viewBox.cx} y={viewBox.cy} className="text text-3xl font-bold">
-                          {totalVisitors.toLocaleString()}
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-current text text-3xl font-bold"
+                        >
+                          {grandApartmentTotalRevenue.toLocaleString()}₴
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
-                          className="text-background"
+                          className="fill-current text"
                         >
                           Загальний дохід
                         </tspan>
@@ -115,13 +75,8 @@ export function ChartPieDonutText() {
             </Pie>
           </PieChart>
         </ChartContainer>
+        <ChartList chartConfig={chartConfig} chartData={chartData} />
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text leading-none">Showing total visitors for the last 6 months</div>
-      </CardFooter>
     </Card>
   );
 }
