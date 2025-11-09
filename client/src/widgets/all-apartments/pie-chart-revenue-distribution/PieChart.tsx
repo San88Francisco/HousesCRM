@@ -5,9 +5,10 @@ import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
 
 import { cn } from '@/shared/utils/cn';
-import { getPayloadConfigFromPayload } from '@/shared/utils/pie-chart/getPayloadConfigFromPayload';
 import { ChartContext, useChart } from '@/hooks/pie-chart/useChart';
-import { ChartConfig, THEMES } from './type';
+import { ChartConfig } from '@/types/core/chart-config';
+
+export const THEMES = { light: '', dark: '.dark' } as const;
 
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
@@ -208,5 +209,30 @@ const ChartTooltipContent = React.forwardRef<
   },
 );
 ChartTooltipContent.displayName = 'ChartTooltip';
+
+export function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
+  if (typeof payload !== 'object' || payload === null) {
+    return undefined;
+  }
+
+  const payloadPayload =
+    'payload' in payload && typeof payload.payload === 'object' && payload.payload !== null
+      ? payload.payload
+      : undefined;
+
+  let configLabelKey: string = key;
+
+  if (key in payload && typeof payload[key as keyof typeof payload] === 'string') {
+    configLabelKey = payload[key as keyof typeof payload] as string;
+  } else if (
+    payloadPayload &&
+    key in payloadPayload &&
+    typeof payloadPayload[key as keyof typeof payloadPayload] === 'string'
+  ) {
+    configLabelKey = payloadPayload[key as keyof typeof payloadPayload] as string;
+  }
+
+  return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config];
+}
 
 export { ChartContainer, ChartTooltip, ChartTooltipContent, ChartStyle };

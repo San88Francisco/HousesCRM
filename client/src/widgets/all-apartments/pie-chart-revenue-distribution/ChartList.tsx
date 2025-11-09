@@ -1,5 +1,7 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
+import { ChartConfig } from '@/types/core/chart-config';
+import { ChartDataItem } from '@/types/core/chart-item';
 import React from 'react';
-import { ChartConfig, ChartDataItem } from './type';
 
 interface Props {
   chartConfig: ChartConfig;
@@ -25,7 +27,7 @@ export const ChartList: React.FC<Props> = ({ chartConfig, chartData }) => {
   }, []);
 
   return (
-    <>
+    <ul className="w-full md:w-[60%] flex flex-col gap-5 max-h-[205px] overflow-y-auto pr-2">
       {Object.entries(chartConfig).map(([key, item]) => {
         const match = chartData.find(d => d.apartmentName === item.label);
         const color = item.theme && isDark ? item.theme.dark : item.theme?.light;
@@ -37,9 +39,14 @@ export const ChartList: React.FC<Props> = ({ chartConfig, chartData }) => {
                 className="h-2 w-2 shrink-0 rounded-full mt-1"
                 style={{ backgroundColor: color }}
               />
-              <span className="max-w-[180px] truncate" title={item.label as string}>
-                {item.label}
-              </span>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="max-w-[180px] truncate cursor-default">{item.label}</span>
+                </TooltipTrigger>
+                <TooltipContent className="bg-foreground">
+                  <p>{item.label}</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
 
             {match && (
@@ -48,6 +55,6 @@ export const ChartList: React.FC<Props> = ({ chartConfig, chartData }) => {
           </li>
         );
       })}
-    </>
+    </ul>
   );
 };

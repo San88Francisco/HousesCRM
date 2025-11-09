@@ -1,4 +1,4 @@
-import { ChartConfig } from '@/widgets/all-apartments/pie-chart-revenue-distribution/type';
+import { ChartConfig } from '@/types/core/chart-config';
 import * as React from 'react';
 
 type Props = {

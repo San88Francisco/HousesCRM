@@ -1,13 +1,5 @@
-import * as React from 'react';
-
-export const THEMES = { light: '', dark: '.dark' } as const;
-
-export type ChartDataItem = {
-  apartmentName: string;
-  apartmentTotalRevenue: number;
-  percentage: number;
-  fill: string;
-};
+import { THEMES } from '@/widgets/all-apartments/pie-chart-revenue-distribution/PieChart';
+import React from 'react';
 
 export type ChartConfig = {
   [k in string | number]: {

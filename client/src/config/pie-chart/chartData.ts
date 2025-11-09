@@ -1,4 +1,4 @@
-import { ChartDataItem } from '@/widgets/all-apartments/pie-chart-revenue-distribution/type';
+import { ChartDataItem } from '@/types/core/chart-item';
 
 export const chartData: ChartDataItem[] = [
   {

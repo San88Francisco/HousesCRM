@@ -12,7 +12,7 @@ import { chartConfig } from '@/config/pie-chart/chartConfig';
 import { ChartList } from './ChartList';
 
 export function ChartPieDonutText() {
-  // Код тимчасовий, коли будемо отримувати масив з бекенду, це видалимо, адже там є загальна сума
+  // TODO: Код тимчасовий, коли будемо отримувати масив з бекенду, це видалимо, адже там є загальна сума
   const grandApartmentTotalRevenue = chartData.reduce(
     (acc, curr) => acc + curr.apartmentTotalRevenue,
     0,
@@ -75,9 +75,7 @@ export function ChartPieDonutText() {
             </Pie>
           </PieChart>
         </ChartContainer>
-        <ul className="w-full md:w-[60%] flex flex-col gap-5 max-h-[205px] overflow-y-auto pr-2">
-          <ChartList chartConfig={chartConfig} chartData={chartData} />
-        </ul>
+        <ChartList chartConfig={chartConfig} chartData={chartData} />
       </CardContent>
     </Card>
   );

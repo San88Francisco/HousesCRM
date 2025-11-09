@@ -1,4 +1,4 @@
-import { ChartConfig } from '@/widgets/all-apartments/pie-chart-revenue-distribution/PieChart';
+import { ChartConfig } from '@/types/core/chart-config';
 
 export const chartConfig = {
   0: {
