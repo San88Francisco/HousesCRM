@@ -1,6 +1,4 @@
-import * as React from 'react';
-import { TICK_MAX_TEXT_LENGTH, truncateText } from '../utils/payback.utils';
-
+/* eslint-disable */
 interface CustomXAxisTickProps {
   x?: number;
   y?: number;
@@ -8,15 +6,16 @@ interface CustomXAxisTickProps {
   isDark: boolean;
 }
 
-export const CustomXAxisTick: React.FC<CustomXAxisTickProps> = props => {
-  if (!props.payload) {
+const MAX_TEXT_LENGTH = 12;
+
+export const CustomXAxisTick = ({ x = 0, y = 0, payload, isDark }: CustomXAxisTickProps) => {
+  if (!payload) {
     return null;
   }
-  const x = props.x ?? 0;
-  const y = props.y ?? 0;
-  const { value: text } = props.payload;
 
-  const displayText = truncateText(text, TICK_MAX_TEXT_LENGTH);
+  const text = payload.value;
+  const displayText =
+    text.length > MAX_TEXT_LENGTH ? `${text.substring(0, MAX_TEXT_LENGTH)}...` : text;
 
   return (
     <g transform={`translate(${x},${y})`}>
@@ -25,7 +24,7 @@ export const CustomXAxisTick: React.FC<CustomXAxisTickProps> = props => {
         y={0}
         dy={16}
         textAnchor="end"
-        fill={'#9ca3af'}
+        fill={isDark ? '#9ca3af' : '#9ca3af'}
         fontSize={13}
         fontWeight={400}
         transform="rotate(-45)"
