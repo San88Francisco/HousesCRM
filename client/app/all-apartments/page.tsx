@@ -5,10 +5,7 @@ import { ChartPieDonutText } from '@/widgets/all-apartments/pie-chart-revenue-di
 const Page = () => {
   return (
     <div>
-      <h1>Всі квартири</h1>
-      <div>
-        <ChartPieDonutText />
-      </div>
+      <ChartPieDonutText />
     </div>
   );
 };

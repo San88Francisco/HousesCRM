@@ -1,14 +1,14 @@
-import { ChartConfig } from '@/types/core/chart-config';
-import * as React from 'react';
+import { ChartPieConfig } from '@/types/core/chart-pie-config';
+import { createContext, useContext } from 'react';
 
 type Props = {
-  config: ChartConfig;
+  config: ChartPieConfig;
 };
 
-export const ChartContext = React.createContext<Props | null>(null);
+export const ChartContext = createContext<Props | null>(null);
 
 export function useChart() {
-  const context = React.useContext(ChartContext);
+  const context = useContext(ChartContext);
 
   if (!context) {
     throw new Error('useChart must be used within a <ChartContainer />');

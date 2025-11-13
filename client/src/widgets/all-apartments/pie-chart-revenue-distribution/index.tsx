@@ -1,24 +1,23 @@
 'use client';
-
-import * as React from 'react';
+import { useMemo } from 'react';
 import { Label, Pie, PieChart } from 'recharts';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './PieChart';
-import { normalizeChartData } from '@/shared/utils/pie-chart/normalizeChartData';
-import { chartData } from '@/config/pie-chart/chartData';
-import { chartConfig } from '@/config/pie-chart/chartConfig';
 import { ChartList } from './ChartList';
+
+import { normalizeChartData } from '@/shared/utils/pie-chart/normalizeChartData';
+import { chartHouseConfig } from '@/shared/constants/pie-chart/chartPieConfig';
+import { chartHouseData } from '@/shared/constants/pie-chart/chartPieData';
 
 export function ChartPieDonutText() {
   // TODO: Код тимчасовий, коли будемо отримувати масив з бекенду, це видалимо, адже там є загальна сума
-  const grandApartmentTotalRevenue = chartData.reduce(
+  const grandApartmentTotalRevenue = chartHouseData.reduce(
     (acc, curr) => acc + curr.apartmentTotalRevenue,
     0,
   );
 
-  const adjustedData = React.useMemo(() => normalizeChartData(chartData), []);
+  const adjustedData = useMemo(() => normalizeChartData(chartHouseData), []);
 
   return (
     <Card className="max-w-[600px] mx-auto">
@@ -28,7 +27,7 @@ export function ChartPieDonutText() {
       </CardHeader>
       <CardContent className="flex flex-wrap md:flex-nowrap gap-10 items-center">
         <ChartContainer
-          config={chartConfig}
+          config={chartHouseConfig}
           className="flex-shrink-0 w-full md:w-[40%] max-h-[300px]"
         >
           <PieChart>
@@ -75,7 +74,7 @@ export function ChartPieDonutText() {
             </Pie>
           </PieChart>
         </ChartContainer>
-        <ChartList chartConfig={chartConfig} chartData={chartData} />
+        <ChartList chartData={chartHouseData} />
       </CardContent>
     </Card>
   );

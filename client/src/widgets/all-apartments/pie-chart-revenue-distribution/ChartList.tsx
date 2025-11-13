@@ -1,60 +1,28 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
-import { ChartConfig } from '@/types/core/chart-config';
-import { ChartDataItem } from '@/types/core/chart-item';
-import React from 'react';
+import { HouseChartDataItem } from '@/types/core/chart-pie-item';
 
-interface Props {
-  chartConfig: ChartConfig;
-  chartData: ChartDataItem[];
-}
-
-export const ChartList: React.FC<Props> = ({ chartConfig, chartData }) => {
-  const [isDark, setIsDark] = React.useState(false);
-
-  // слухаємо зміни теми
-  React.useEffect(() => {
-    const checkTheme = () => setIsDark(document.documentElement.classList.contains('dark'));
-    checkTheme();
-
-    // якщо тема змінюється під час роботи
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
+export const ChartList = ({ chartData }: { chartData: HouseChartDataItem[] }) => {
   return (
     <ul className="w-full md:w-[60%] flex flex-col gap-5 max-h-[205px] overflow-y-auto pr-2">
-      {Object.entries(chartConfig).map(([key, item]) => {
-        const match = chartData.find(d => d.apartmentName === item.label);
-        const color = item.theme && isDark ? item.theme.dark : item.theme?.light;
-
-        return (
-          <li key={key} className="flex items-center justify-between gap-2 pb-1">
-            <div className="flex items-center gap-2">
-              <div
-                className="h-2 w-2 shrink-0 rounded-full mt-1"
-                style={{ backgroundColor: color }}
-              />
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="max-w-[180px] truncate cursor-default">{item.label}</span>
-                </TooltipTrigger>
-                <TooltipContent className="bg-foreground">
-                  <p>{item.label}</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
-
-            {match && (
-              <span className="text-sm text-gray-500 whitespace-nowrap">{match.percentage}%</span>
-            )}
-          </li>
-        );
-      })}
+      {chartData.map(item => (
+        <li key={item.id} className="flex items-center justify-between gap-2 pb-1">
+          <div className="flex items-center gap-2">
+            <div
+              className="h-2 w-2 shrink-0 rounded-full mt-1"
+              style={{ backgroundColor: item.fill }}
+            />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="max-w-[180px] truncate cursor-default">{item.apartmentName}</span>
+              </TooltipTrigger>
+              <TooltipContent className="bg-foreground">
+                <p>{item.apartmentName}</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <span className="text-sm text-gray-500 whitespace-nowrap">{item.percentage}%</span>
+        </li>
+      ))}
     </ul>
   );
 };

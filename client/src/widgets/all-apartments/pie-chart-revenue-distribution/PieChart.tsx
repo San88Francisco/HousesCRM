@@ -6,14 +6,14 @@ import * as RechartsPrimitive from 'recharts';
 
 import { cn } from '@/shared/utils/cn';
 import { ChartContext, useChart } from '@/hooks/pie-chart/useChart';
-import { ChartConfig } from '@/types/core/chart-config';
+import { ChartPieConfig } from '@/types/core/chart-pie-config';
 
 export const THEMES = { light: '', dark: '.dark' } as const;
 
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<'div'> & {
-    config: ChartConfig;
+    config: ChartPieConfig;
     children: React.ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>['children'];
   }
 >(({ id, className, children, config, ...props }, ref) => {
@@ -39,7 +39,7 @@ const ChartContainer = React.forwardRef<
 });
 ChartContainer.displayName = 'Chart';
 
-const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+const ChartStyle = ({ id, config }: { id: string; config: ChartPieConfig }) => {
   const colorConfig = Object.entries(config).filter(([, config]) => config.theme || config.color);
 
   if (!colorConfig.length) {
@@ -210,7 +210,7 @@ const ChartTooltipContent = React.forwardRef<
 );
 ChartTooltipContent.displayName = 'ChartTooltip';
 
-export function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
+export function getPayloadConfigFromPayload(config: ChartPieConfig, payload: unknown, key: string) {
   if (typeof payload !== 'object' || payload === null) {
     return undefined;
   }

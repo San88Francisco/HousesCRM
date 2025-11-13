@@ -1,7 +1,7 @@
 import { THEMES } from '@/widgets/all-apartments/pie-chart-revenue-distribution/PieChart';
 import React from 'react';
 
-export type ChartConfig = {
+export type ChartPieConfig = {
   [k in string | number]: {
     label?: React.ReactNode;
     icon?: React.ComponentType;
