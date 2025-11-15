@@ -1,5 +1,5 @@
 export const HOUSES_ANALYTICS_ROUTES = {
-  ROOT: '/houses',
+  ROOT: '/houses-analytics',
   ANALYTICS: 'all-analytics',
   HOUSES_OVERVIEW_ANALYTIC: 'houses-overview-analytic',
   REVENUE_DISTRIBUTION_ANALYTIC: 'revenue-distribution-analytic',

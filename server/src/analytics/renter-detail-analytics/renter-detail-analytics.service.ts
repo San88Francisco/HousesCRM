@@ -51,15 +51,18 @@ export class RenterDetailAnalyticsService {
       order = QUERY_DEFAULTS.ORDER,
       sortBy = QUERY_DEFAULTS.SORT_BY,
     } = dto ?? {}
+  const computedSortFields = new Set(['totalRevenue', 'rentersCount', 'currentPayment'])
 
-    const [contracts, total] = await this.contractRepository.findAndCount({
-      where: { renter: { id } },
-      skip: (page - 1) * limit,
-      take: limit,
-      order: {
-        [sortBy]: order,
-      },
-    })
+  const orderField = computedSortFields.has(sortBy as string) ? QUERY_DEFAULTS.SORT_BY : sortBy
+
+  const [contracts, total] = await this.contractRepository.findAndCount({
+    where: { renter: { id } },
+    skip: (page - 1) * limit,
+    take: limit,
+    order: {
+      [orderField]: order,
+    },
+  })
 
     const contractsWithRevenue = contracts.map<ContractWithRevenueDto>((contract) => ({
       ...contract,

@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
-import { House } from 'src/houses/entities/house.entity'
 import { Repository } from 'typeorm'
+
+import { House } from 'src/houses/entities/house.entity'
 import { HouseOverviewDto } from './dto/houses-overview/houses-overview.dto'
 import { RevenueDistributionDto } from './dto/revenue-distribution/revenue-distribution.dto'
 import { AllHousesAnalyticsDto } from './dto/all-houses-analytics.dto'
@@ -19,17 +20,18 @@ import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
 import { HousesOverviewQueryDto } from './dto/houses-overview/houses-overview-query.dto'
 import { SortOrder } from 'src/common/enums/sort-order.enum'
 import { HousePerformanceDto } from './dto/house-performance/house-performance.dto'
-import { HousePerformanceSortBy } from 'src/common/enums/house-performance-sort-by'
+import { PaginatedResult } from 'types/pagination/pagination'
+import { ComputedSortBy, computedSortMapping, isComputedSort } from './constants/computed-sort-mapping'
 
 @Injectable()
 export class HousesAnalyticsService {
   constructor(
     @InjectRepository(House)
-    private houseRepository: Repository<House>
+    private readonly houseRepository: Repository<House>
   ) {}
 
   async getAllHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
-    const [housesOverview, revenueDistribution, housesPaybackStats, currencyRevaluation, housesPerformance] =
+    const [housesOverview, revenueDistribution, housesPaybackStats, currencyRevaluation, housesPerformanceResult] =
       await Promise.all([
         this.getHousesOverview(),
         this.getRevenueDistribution(),
@@ -43,7 +45,7 @@ export class HousesAnalyticsService {
       revenueDistribution,
       housesPaybackStats,
       currencyRevaluation,
-      housesPerformance,
+      housesPerformance: housesPerformanceResult,
     }
 
     return plainToInstance(AllHousesAnalyticsDto, transformedData, {
@@ -52,6 +54,16 @@ export class HousesAnalyticsService {
   }
 
   async getHousesOverview(dto?: HousesOverviewQueryDto): Promise<HouseOverviewDto[]> {
+    const qb = this.buildHousesOverviewQuery(dto)
+
+    const houses = await qb.getMany()
+
+    return plainToInstance(HouseOverviewDto, houses, {
+      excludeExtraneousValues: true,
+    })
+  }
+
+  private buildHousesOverviewQuery(dto?: HousesOverviewQueryDto) {
     const dateFrom = dto?.dateFrom
     const dateTo = dto?.dateTo
 
@@ -82,18 +94,15 @@ export class HousesAnalyticsService {
       qb.andWhere('contract.commencement <= :dateTo', { dateTo })
     }
 
-    const houses = await qb.getMany()
-
-    return plainToInstance(HouseOverviewDto, houses, {
-      excludeExtraneousValues: true,
-    })
+    return qb
   }
 
   async getRevenueDistribution(): Promise<RevenueDistributionDto> {
-    const houses = await this.houseRepository.find({ relations: { contracts: true } })
+    const houses = await this.houseRepository.find({
+      relations: { contracts: true },
+    })
 
     const housesRevenue = houses.map(calculateHouseRevenue)
-
     const revenueData = calculateRevenuePercentages(housesRevenue)
 
     return plainToInstance(RevenueDistributionDto, revenueData, {
@@ -102,7 +111,9 @@ export class HousesAnalyticsService {
   }
 
   async getHousePaybackStats(): Promise<HousePaybackStatsDto[]> {
-    const houses = await this.houseRepository.find({ relations: { contracts: true, prices: true } })
+    const houses = await this.houseRepository.find({
+      relations: { contracts: true, prices: true },
+    })
 
     const paybackStats = calculatePaybackStatsForHouses(houses)
 
@@ -121,23 +132,25 @@ export class HousesAnalyticsService {
 
     const { USD } = exchangeRates
 
-    const currencyRevaluation = houses.map(({ apartmentName, id, prices }): CurrencyRevaluationDto | null => {
-      const usdPrice = prices.find((price) => price.code === CurrencyCode.USD)
-      const uahPrice = prices.find((price) => price.code === CurrencyCode.UAH)
+    const currencyRevaluation = houses
+      .map(({ apartmentName, id, prices }): CurrencyRevaluationDto | null => {
+        const usdPrice = prices.find((price) => price.code === CurrencyCode.USD)
+        const uahPrice = prices.find((price) => price.code === CurrencyCode.UAH)
 
-      if (!usdPrice || !uahPrice) {
-        return null
-      }
+        if (!usdPrice || !uahPrice) {
+          return null
+        }
 
-      return {
-        id,
-        apartmentName,
-        purchaseRate: usdPrice.exchangeRate,
-        currentRate: USD,
-        revaluationAmountUah: usdPrice.amount * USD,
-        purchaseAmountUah: uahPrice.amount,
-      }
-    })
+        return {
+          id,
+          apartmentName,
+          purchaseRate: usdPrice.exchangeRate,
+          currentRate: USD,
+          revaluationAmountUah: usdPrice.amount * USD,
+          purchaseAmountUah: uahPrice.amount,
+        }
+      })
+      .filter((item): item is CurrencyRevaluationDto => item !== null)
 
     return plainToInstance(CurrencyRevaluationDto, currencyRevaluation, {
       excludeExtraneousValues: true,
@@ -152,71 +165,82 @@ export class HousesAnalyticsService {
       sortBy = QUERY_DEFAULTS.SORT_BY,
     } = dto
 
-    type ComputedFieldKey = keyof Pick<HousePerformanceDto, 'rentersCount' | 'totalRevenue' | 'currentPayment'>
-
-    type ComputedSortBy =
-      | HousePerformanceSortBy.RENTERS_COUNT
-      | HousePerformanceSortBy.TOTAL_REVENUE
-      | HousePerformanceSortBy.CURRENT_PAYMENT
-
-    const computedSortMapping: Record<ComputedSortBy, ComputedFieldKey> = {
-      [HousePerformanceSortBy.RENTERS_COUNT]: 'rentersCount',
-      [HousePerformanceSortBy.TOTAL_REVENUE]: 'totalRevenue',
-      [HousePerformanceSortBy.CURRENT_PAYMENT]: 'currentPayment',
-    }
-
-    const isComputedSort = (value: string): value is ComputedSortBy =>
-      (Object.keys(computedSortMapping) as string[]).includes(value)
-
-    let data: HousePerformanceDto[]
-    let total: number
+    let result: PaginatedResult<HousePerformanceDto>
 
     if (isComputedSort(sortBy)) {
-      const houses = await this.houseRepository.find({
-        relations: { contracts: { renter: true } },
-      })
-
-      const computed = housesPerformance(houses)
-      const dir = order === SortOrder.ASC ? 1 : -1
-      const sortField = computedSortMapping[sortBy]
-
-      computed.sort((a, b) => {
-        const va = a[sortField] as number | null
-        const vb = b[sortField] as number | null
-
-        if (va === null && vb === null) {
-          return 0
-        }
-        if (va === null) {
-          return 1
-        }
-        if (vb === null) {
-          return -1
-        }
-        return (va - vb) * dir
-      })
-
-      total = computed.length
-      const start = (page - 1) * limit
-      data = computed.slice(start, start + limit)
+      result = await this.getComputedPerformance({ page, limit, order, sortBy })
     } else {
-      const qb = this.houseRepository
-        .createQueryBuilder('house')
-        .leftJoinAndSelect('house.contracts', 'contract')
-        .leftJoinAndSelect('contract.renter', 'renter')
-        .orderBy(`house.${sortBy}`, order)
-        .skip((page - 1) * limit)
-        .take(limit)
-
-      const [houses, count] = await qb.getManyAndCount()
-      total = count
-      data = housesPerformance(houses)
+      result = await this.getDbSortedPerformance({ page, limit, order, sortBy })
     }
 
-    const rawData = { data, meta: { total, page, limit } }
+    const rawData = {
+      data: result.data,
+      meta: {
+        total: result.total,
+        page,
+        limit,
+      },
+    }
 
     return plainToInstance(HousePerformanceResponseDto, rawData, {
       excludeExtraneousValues: true,
     })
+  }
+
+  private async getComputedPerformance(params: {
+    page: number
+    limit: number
+    order: SortOrder
+    sortBy: ComputedSortBy
+  }): Promise<PaginatedResult<HousePerformanceDto>> {
+    const { page, limit, order, sortBy } = params
+
+    const houses = await this.houseRepository.find({
+      relations: { contracts: { renter: true } },
+    })
+
+    const computed = housesPerformance(houses)
+
+    const dir = order === SortOrder.ASC ? 1 : -1
+    const sortField = computedSortMapping[sortBy]
+
+    computed.sort((a, b) => {
+      const va = a[sortField] as number | null
+      const vb = b[sortField] as number | null
+
+      if (va === null && vb === null) return 0
+      if (va === null) return 1
+      if (vb === null) return -1
+
+      return (va - vb) * dir
+    })
+
+    const total = computed.length
+    const start = (page - 1) * limit
+    const data = computed.slice(start, start + limit)
+
+    return { data, total }
+  }
+
+  private async getDbSortedPerformance(params: {
+    page: number
+    limit: number
+    order: SortOrder
+    sortBy: string
+  }): Promise<PaginatedResult<HousePerformanceDto>> {
+    const { page, limit, order, sortBy } = params
+
+    const qb = this.houseRepository
+      .createQueryBuilder('house')
+      .leftJoinAndSelect('house.contracts', 'contract')
+      .leftJoinAndSelect('contract.renter', 'renter')
+      .orderBy(`house.${sortBy}`, order)
+      .skip((page - 1) * limit)
+      .take(limit)
+
+    const [houses, count] = await qb.getManyAndCount()
+    const data = housesPerformance(houses)
+
+    return { data, total: count }
   }
 }

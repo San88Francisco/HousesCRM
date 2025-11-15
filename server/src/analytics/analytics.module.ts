@@ -14,3 +14,4 @@ import { HousesAnalyticsController } from './houses-analytics/houses-analytics.c
   exports: [HousesAnalyticsService, HouseDetailAnalyticsService, RenterDetailAnalyticsService],
 })
 export class AnalyticsModule {}
+ 

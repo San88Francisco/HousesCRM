@@ -8,9 +8,6 @@ import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
 import { HouseResponseDto } from './dto/houses-response.dto'
 import { HouseQueryDto } from './dto/house-query.dto'
 import { HousesAnalyticsService } from 'src/analytics/houses-analytics/houses-analytics.service'
-import { AllHousesAnalyticsDto } from 'src/analytics/houses-analytics/dto/all-houses-analytics.dto'
-import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager'
-import { CACHE_KEY, TTL } from 'src/analytics/houses-analytics/constants/cache'
 import { HouseDetailAnalyticsService } from 'src/analytics/house-detail-analytics/house-detail-analytics.service'
 import { HouseWithOccupancyReports } from './dto/house-with-occupancy-reports.dto'
 import { Auth } from 'src/common/decorators/auth.decorator'
@@ -29,14 +26,7 @@ export class HousesController {
     return this.housesService.findAll(dto)
   }
 
-  @Get(HOUSES_ROUTES.ANALYTICS)
-  @Auth()
-  @UseInterceptors(CacheInterceptor)
-  @CacheKey(CACHE_KEY)
-  @CacheTTL(TTL)
-  async getHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
-    return await this.housesAnalyticsService.getAllHousesAnalytics()
-  }
+
 
   @Get(HOUSES_ROUTES.BY_ID)
   @Auth()
