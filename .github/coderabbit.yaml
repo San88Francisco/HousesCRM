@@ -1,0 +1,6 @@
+language: auto
+pull_request:
+  enabled: true
+  review_on_push: true
+commit:
+  enabled: true
