@@ -4,11 +4,11 @@ import { Transform } from 'class-transformer'
 export class HousesOverviewQueryDto {
   @IsOptional()
   @IsISO8601()
-  @Transform(({ value }: { value: Date }) => (value ? new Date(value).toISOString() : undefined))
-  dateFrom?: string
+  @Transform(({ value }: { value: string }) => (value ? new Date(value).toISOString() : undefined))
+  public dateFrom?: string
 
   @IsOptional()
   @IsISO8601()
-  @Transform(({ value }: { value: Date }) => (value ? new Date(value).toISOString() : undefined))
-  dateTo?: string
+  @Transform(({ value }: { value: string }) => (value ? new Date(value).toISOString() : undefined))
+  public dateTo?: string
 }
