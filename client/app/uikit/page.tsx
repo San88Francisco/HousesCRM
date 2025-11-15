@@ -11,7 +11,13 @@
 // import TabsComponent from '@/widgets/uikit/tabs-component';
 // import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 // import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
-// import { ToastCopmponent } from '@/widgets/uikit/toast-component';
+/**
+ * Render a vertical flex container intended to host various UI components.
+ *
+ * The container is a div with column layout and a small gap between items; all child components are currently commented out.
+ *
+ * @returns A JSX element containing the flex column container used as the page root.
+ */
 
 export default function Page() {
   return (
