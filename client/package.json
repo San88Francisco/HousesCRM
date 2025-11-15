@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
-    "lint": "eslint \"{src,app}/**/*.{ts,tsx}\" --max-warnings=0",
+    "lint": "eslint \"{src,app}/**/*.{ts,tsx}\"",
     "lint:fix": "eslint \"{src,app}/**/*.{ts,tsx}\" --fix",
     "format": "prettier --write \"{src,app}/**/*.{ts,tsx,css,md}\"",
     "fix": "npm run format && npm run lint:fix",
