@@ -20,8 +20,8 @@ import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
 import { HousesOverviewQueryDto } from './dto/houses-overview/houses-overview-query.dto'
 import { SortOrder } from 'src/common/enums/sort-order.enum'
 import { HousePerformanceDto } from './dto/house-performance/house-performance.dto'
-import { PaginatedResult } from 'types/pagination/pagination'
 import { ComputedSortBy, computedSortMapping, isComputedSort } from './constants/computed-sort-mapping'
+import { PaginatedResult } from 'types'
 
 @Injectable()
 export class HousesAnalyticsService {
