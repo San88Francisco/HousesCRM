@@ -1,6 +1,77 @@
-language: auto
-pull_request:
-  enabled: true
-  review_on_push: true
-commit:
-  enabled: true
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: en-US
+
+reviews:
+  profile: strict                  # рівень суворості: strict
+  high_level_summary: true         # коротке резюме по PR
+  review_status: true              # показувати статус "review passed/failed"
+
+  auto_review:
+    enabled: true                  # авто-ревʼю
+    auto_incremental_review: true  # кожен новий пуш/коміт у PR
+    drafts: false                  # не чіпати draft PR
+    base_branches:
+      - "^develop$"                # всі PR, де target/base = develop
+    ignore_title_keywords:
+      - "WIP"
+      - "DRAFT"
+    ignore_usernames:
+      - "dependabot"
+      - "renovate-bot"
+
+  # Загальні інструкції для ревʼюера
+  instructions: |
+    You are reviewing a monorepo with:
+    - Next.js app in the "client" folder
+    - NestJS API in the "server" folder
+
+    General:
+    - Be strict about code quality, readability and maintainability.
+    - Suggest refactoring when code is too complex, duplicated or violates SOLID principles.
+    - Prefer short, focused functions and clear separation of concerns.
+    - Point out potential security, performance and reliability issues with clear, actionable suggestions.
+
+    For both client and server:
+    - Check for dead code, unused imports, and overly complex conditionals.
+    - Encourage consistent error handling and logging patterns.
+    - Make sure configuration and secrets are not hard-coded.
+
+  finishing_touches:
+    unit_tests: false              # НЕ навʼязуємо тести
+    docstrings: true               # але пропонуємо документацію до важливого коду
+
+# Які шляхи беремо в ревʼю
+path_filters:
+  - "client/**"
+  - "server/**"
+  - "!**/*.md"
+  - "!**/dist/**"
+  - "!**/build/**"
+
+# Спеціальні інструкції по клієнту (Next)
+path_instructions:
+  - path: "client/**"
+    instructions: |
+      This is a Next.js application.
+      - Check React component structure, props, and state management.
+      - Prefer small, reusable components over large ones.
+      - Point out unnecessary re-renders and obvious performance issues.
+      - Verify correct usage of Next.js features (data fetching, routing, API routes if any).
+      - Encourage accessibility (a11y), semantic HTML and clear UX.
+
+  - path: "server/**"
+    instructions: |
+      This is a NestJS backend application.
+      - Enforce NestJS best practices: clear separation of modules, controllers, services and providers.
+      - Suggest splitting or refactoring services/controllers that are too large or do too many things.
+      - Encourage use of DTOs, validation pipes and proper error handling.
+      - Check for security issues: input validation, missing guards, direct use of user input in queries, etc.
+      - Check dependency injection usage and avoid tight coupling.
+      - Suggest extracting shared logic into reusable providers/helpers where appropriate.
+
+tools:
+  eslint:
+    enabled: true          # для client + server (TS/JS)
+  gitleaks:
+    enabled: true          # щоб не протікали секрети
