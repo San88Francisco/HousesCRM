@@ -6,27 +6,27 @@ export class CreateContractDto {
   @IsDefined({ message: 'commencement is required' })
   @IsDate({ message: 'commencement must be a valid date' })
   @Type(() => Date)
-  public commencement: Date
+  commencement: Date
 
   @IsDefined({ message: 'termination is required' })
   @IsDate({ message: 'termination must be a valid date' })
   @Type(() => Date)
-  public termination: Date
+  termination: Date
 
   @IsDefined({ message: 'contractStatus is required' })
   @IsEnum(ContractStatus, { message: 'contractStatus must be a valid enum value' })
-  public status: ContractStatus
+  status: ContractStatus
 
   @IsDefined({ message: 'monthlyPayment is required' })
   @IsNumber({}, { message: 'monthlyPayment must be a number' })
   @IsPositive({ message: 'monthlyPayment must be positive' })
-  public monthlyPayment: number
+  monthlyPayment: number
 
   @IsOptional()
   @IsUUID('4', { message: 'houseId must be a valid UUID' })
-  public houseId?: string
+  houseId?: string
 
   @IsOptional()
   @IsUUID('4', { message: 'renterId must be a valid UUID' })
-  public renterId?: string
+  renterId?: string
 }

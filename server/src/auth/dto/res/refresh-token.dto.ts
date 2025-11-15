@@ -1,3 +1,3 @@
 export class RefreshTokenResponseDto {
-  public accessToken: string
+  accessToken: string
 }

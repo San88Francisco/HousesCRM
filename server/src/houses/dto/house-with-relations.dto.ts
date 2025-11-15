@@ -6,9 +6,9 @@ import { ContractWithRentersDto } from 'src/contracts/dto/contract-with-renters.
 export class HouseWithRelationsDto extends HouseDto {
   @Expose()
   @Type(() => HousePriceDto)
-  public prices: HousePriceDto[]
+  prices: HousePriceDto[]
 
   @Expose()
   @Type(() => ContractWithRentersDto)
-  public contracts: ContractWithRentersDto[]
+  contracts: ContractWithRentersDto[]
 }

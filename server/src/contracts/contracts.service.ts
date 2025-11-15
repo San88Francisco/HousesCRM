@@ -17,7 +17,7 @@ export class ContractsService {
     private contractsRepository: Repository<Contract>
   ) {}
 
-  public async findAll(dto: QueryDto): Promise<ContractResponseDto> {
+  async findAll(dto: QueryDto): Promise<ContractResponseDto> {
     const { page = 1, limit = 10 } = dto
 
     const [contracts, total] = await this.contractsRepository.findAndCount({
@@ -43,7 +43,7 @@ export class ContractsService {
     })
   }
 
-  public async findById(id: string): Promise<ContractWithRelationsDto> {
+  async findById(id: string): Promise<ContractWithRelationsDto> {
     const contract = await this.contractsRepository.findOneOrFail({
       where: { id },
       relations: { renter: true, house: true },
@@ -54,7 +54,7 @@ export class ContractsService {
     })
   }
 
-  public async create(dto: CreateContractDto): Promise<ContractWithRelationsDto> {
+  async create(dto: CreateContractDto): Promise<ContractWithRelationsDto> {
     const contractToSave = this.contractsRepository.create({
       ...dto,
       house: { id: dto.houseId },
@@ -70,7 +70,7 @@ export class ContractsService {
     })
   }
 
-  public async update(dto: UpdateContractDto, id: string): Promise<ContractWithRelationsDto> {
+  async update(dto: UpdateContractDto, id: string): Promise<ContractWithRelationsDto> {
     const contractToUpdate = await this.contractsRepository.preload({
       id,
       house: { id: dto.houseId },
@@ -91,7 +91,7 @@ export class ContractsService {
     })
   }
 
-  public async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     const res = await this.contractsRepository.delete(id)
 
     if (res.affected === 0) {

@@ -8,21 +8,21 @@ import { HousePerformanceResponseDto } from './house-performance/house-performan
 export class AllHousesAnalyticsDto {
   @Expose()
   @Type(() => HouseOverviewDto)
-  public housesOverview: HouseOverviewDto[]
+  housesOverview: HouseOverviewDto[]
 
   @Expose()
   @Type(() => RevenueDistributionDto)
-  public revenueDistribution: RevenueDistributionDto
+  revenueDistribution: RevenueDistributionDto
 
   @Expose()
   @Type(() => HousePaybackStatsDto)
-  public housesPaybackStats: HousePaybackStatsDto[]
+  housesPaybackStats: HousePaybackStatsDto[]
 
   @Expose()
   @Type(() => CurrencyRevaluationDto)
-  public currencyRevaluation: CurrencyRevaluationDto[]
+  currencyRevaluation: CurrencyRevaluationDto[]
 
   @Expose()
   @Type(() => HousePerformanceResponseDto)
-  public housesPerformance: HousePerformanceResponseDto
+  housesPerformance: HousePerformanceResponseDto
 }

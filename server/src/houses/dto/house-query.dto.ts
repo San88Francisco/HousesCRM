@@ -12,14 +12,14 @@ export class HouseQueryDto extends IntersectionType(
   @IsOptional()
   @Min(1)
   @Type(() => Number)
-  public minPrice?: number
+  minPrice?: number
 
   @IsOptional()
   @Min(2)
   @Type(() => Number)
-  public maxPrice?: number
+  maxPrice?: number
 
   @IsOptional()
   @IsEnum(CurrencyCode)
-  public currency?: CurrencyCode
+  currency?: CurrencyCode
 }

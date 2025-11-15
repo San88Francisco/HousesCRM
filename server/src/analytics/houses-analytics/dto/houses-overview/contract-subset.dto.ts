@@ -11,5 +11,5 @@ export class ContractSubsetDto extends PickType(ContractDto, [
 ] as const) {
   @Expose()
   @Type(() => RenterSubsetDto)
-  public renter: RenterSubsetDto
+  renter: RenterSubsetDto
 }
