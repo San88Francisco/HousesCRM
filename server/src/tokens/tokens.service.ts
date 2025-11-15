@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { JwtService, JwtSignOptions } from '@nestjs/jwt' // ← додали JwtSignOptions
+import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import * as argon2 from 'argon2'
 import ms, { StringValue } from 'ms'

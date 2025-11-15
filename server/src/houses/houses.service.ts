@@ -36,12 +36,16 @@ export class HousesService {
       ...filters
     } = dto
 
+    const computedSortFields = new Set(['totalRevenue', 'rentersCount', 'currentPayment'])
+
+    const orderField = computedSortFields.has(sortBy as string) ? QUERY_DEFAULTS.SORT_BY : sortBy
+
     const [houses, total] = await this.houseRepository.findAndCount({
       relations: { prices: true },
       skip: (page - 1) * limit,
       take: limit,
       order: {
-        [sortBy]: order,
+        [orderField]: order,
       },
       where: {
         ...filters,

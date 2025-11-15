@@ -11,11 +11,12 @@ import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
 import { CreateUserResponseDto } from 'src/users/dto/res/create-user-response.dto'
 import { RefreshTokenResponseDto } from './dto/res/refresh-token.dto'
 import { GoogleAuthGuard } from './guard/google-auth.guard'
-import { ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
 import { JwtPayload } from 'types/jwt/jwt.types'
 import { UserDto } from 'src/users/dto/res/user.dto'
 import { LogoutDto } from './dto/res/logout.dto'
 import { Public } from 'src/common/decorators/public.decorator'
+import { Auth } from 'src/common/decorators/auth.decorator'
 
 @Controller(AUTH_ROUTES.ROOT)
 export class AuthController {
@@ -42,6 +43,7 @@ export class AuthController {
 
   @Public()
   @Post(AUTH_ROUTES.REGISTRATION)
+  @Auth()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
     const user = await this.authService.registration(dto)
@@ -51,6 +53,7 @@ export class AuthController {
   @Public()
   @Post(AUTH_ROUTES.REFRESH)
   @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   async rotateRefresh(
     @Req() req: AuthenticatedRequest<JwtPayload>,
@@ -65,6 +68,7 @@ export class AuthController {
 
   @Post(AUTH_ROUTES.LOGOUT)
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   async logout(
     @Req() req: AuthenticatedRequest<JwtPayload>,

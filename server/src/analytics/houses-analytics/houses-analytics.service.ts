@@ -152,27 +152,37 @@ export class HousesAnalyticsService {
       sortBy = QUERY_DEFAULTS.SORT_BY,
     } = dto
 
-    const computedFields = new Set<HousePerformanceSortBy>([
-      HousePerformanceSortBy.RENTERS_COUNT,
-      HousePerformanceSortBy.TOTAL_REVENUE,
-      HousePerformanceSortBy.CURRENT_PAYMENT,
-    ])
+    type ComputedFieldKey = keyof Pick<HousePerformanceDto, 'rentersCount' | 'totalRevenue' | 'currentPayment'>
 
-    const isComputedSort = computedFields.has(sortBy as HousePerformanceSortBy)
+    type ComputedSortBy =
+      | HousePerformanceSortBy.RENTERS_COUNT
+      | HousePerformanceSortBy.TOTAL_REVENUE
+      | HousePerformanceSortBy.CURRENT_PAYMENT
+
+    const computedSortMapping: Record<ComputedSortBy, ComputedFieldKey> = {
+      [HousePerformanceSortBy.RENTERS_COUNT]: 'rentersCount',
+      [HousePerformanceSortBy.TOTAL_REVENUE]: 'totalRevenue',
+      [HousePerformanceSortBy.CURRENT_PAYMENT]: 'currentPayment',
+    }
+
+    const isComputedSort = (value: string): value is ComputedSortBy =>
+      (Object.keys(computedSortMapping) as string[]).includes(value)
 
     let data: HousePerformanceDto[]
     let total: number
 
-    if (isComputedSort) {
+    if (isComputedSort(sortBy)) {
       const houses = await this.houseRepository.find({
         relations: { contracts: { renter: true } },
       })
+
       const computed = housesPerformance(houses)
       const dir = order === SortOrder.ASC ? 1 : -1
+      const sortField = computedSortMapping[sortBy]
 
       computed.sort((a, b) => {
-        const va = a[sortBy] as number
-        const vb = b[sortBy] as number
+        const va = a[sortField] as number | null
+        const vb = b[sortField] as number | null
 
         if (va === null && vb === null) {
           return 0
