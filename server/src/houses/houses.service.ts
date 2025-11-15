@@ -75,7 +75,6 @@ export class HousesService {
       where: { id },
       relations: {
         prices: true,
-        contracts: { renter: true },
       },
     })
 

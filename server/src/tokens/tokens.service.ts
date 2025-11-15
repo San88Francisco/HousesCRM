@@ -14,7 +14,7 @@ export class TokensService {
   private readonly refreshSecret: string
   private readonly refreshExpiresIn: StringValue
   private readonly accessSecret: string
-  private readonly accessExpiresIn: JwtSignOptions['expiresIn']
+  private readonly accessExpiresIn: StringValue
 
   constructor(
     private readonly jwt: JwtService,
@@ -25,7 +25,7 @@ export class TokensService {
     this.refreshSecret = this.config.getOrThrow<string>('jwt.refreshSecret')
     this.refreshExpiresIn = this.config.getOrThrow<StringValue>('jwt.refreshExp')
     this.accessSecret = this.config.getOrThrow<string>('jwt.accessSecret')
-    this.accessExpiresIn = this.config.getOrThrow<JwtSignOptions['expiresIn']>('jwt.accessExp')
+    this.accessExpiresIn = this.config.getOrThrow<StringValue>('jwt.accessExp')
   }
 
   async verify(payload: JwtPayload, token: string): Promise<JwtPayload | null> {
@@ -67,6 +67,7 @@ export class TokensService {
       // eslint-disable-next-line no-console
       console.error('Failed to store refresh token in Redis', err)
     )
+
     return { accessToken, refreshToken }
   }
 
@@ -90,7 +91,6 @@ export class TokensService {
 
   async remove(userId: string, userAgent: string): Promise<void> {
     const CACHE_KEY = `refresh:${userId}:${userAgent}`
-
     await this.cacheManager.del(CACHE_KEY)
   }
 }

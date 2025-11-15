@@ -4,8 +4,9 @@ import { HousesController } from './houses.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { House } from './entities/house.entity'
 import { HousePriceModule } from 'src/house-prices/house-price.module'
+import { AnalyticsModule } from 'src/analytics/analytics.module'
 @Module({
-  imports: [TypeOrmModule.forFeature([House]), HousePriceModule],
+  imports: [TypeOrmModule.forFeature([House]), HousePriceModule, AnalyticsModule],
   controllers: [HousesController],
   providers: [HousesService],
   exports: [HousesModule],

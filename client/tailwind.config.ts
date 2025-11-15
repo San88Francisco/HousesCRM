@@ -39,6 +39,9 @@ export default {
         'active-border': 'var(--active-border)',
         dropdown: 'var(--bg-dropdown)',
         'drop-down-hover': 'var(--drop-down-hover)',
+        positive: 'var(--positive)',
+        info: 'var(--info)',
+        'toast-shadow': 'var(--toast-shadow)',
 
         red: 'var(--red)',
         blue: 'var(--blue)',

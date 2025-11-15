@@ -1,4 +1,4 @@
-import { Input } from '@/components/ui/input';
+import { Input } from '@/shared/ui/input';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Mail, Lock, Search } from 'lucide-react';
 
@@ -65,7 +65,7 @@ export const ErrorState: Story = {
     placeholder: 'Password',
     type: 'password',
     icon: <Lock />,
-    error: true,
+    error: 'Oh snape! There was an error.',
     iconWithError: true,
   },
 };

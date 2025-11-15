@@ -1,3 +1,4 @@
+// eslint.config.ts
 import storybook from 'eslint-plugin-storybook';
 
 import js from '@eslint/js';
@@ -9,6 +10,8 @@ import tsParser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
 import prettier from 'eslint-plugin-prettier';
 import unusedImports from 'eslint-plugin-unused-imports';
+import importPlugin from 'eslint-plugin-import';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 // Функція для очищення пробілів з ключів об'єкта globals
 function cleanGlobals(obj) {
@@ -65,7 +68,7 @@ export default [
       '**/swagger/**',
 
       // === КОМПОНЕНТИ  ===
-      '**/components/ui/**',
+      '**/shared/ui/**',
       '**/components/RHF/**',
 
       // === СИСТЕМНІ ФАЙЛИ ===
@@ -82,15 +85,15 @@ export default [
       'src/**/*.{ts,tsx}',
       'app/**/*.{ts,tsx}',
       'middleware.ts',
-      '.storybook/**/*.{ts,tsx,js}', // Додаємо Storybook файли
-      '**/*.stories.{ts,tsx,js}', // Додаємо story файли
+      '**/*.stories.{ts,tsx,js}', // story-файли лишаємо у загальному наборі
     ],
+
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
       parser: tsParser,
       parserOptions: {
-        project: './tsconfig.json', // Додаємо project для TypeScript
+        project: './tsconfig.json',
       },
       globals: {
         ...cleanGlobals(globals.browser),
@@ -98,19 +101,26 @@ export default [
         JSX: true,
       },
     },
+
     plugins: {
       '@typescript-eslint': tseslint,
+      react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      react,
-      prettier,
+      prettier, // плагін prettier (для правила prettier/prettier)
       'unused-imports': unusedImports,
+      import: importPlugin,
     },
+
     settings: {
-      react: {
-        version: 'detect',
+      react: { version: 'detect' },
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
       },
     },
+
     rules: {
       // Базові рекомендовані правила ESLint + TS + React Hooks
       ...js.configs.recommended.rules,
@@ -123,24 +133,28 @@ export default [
         'error',
         {
           vars: 'all',
-          varsIgnorePattern: '^_', // Змінні починаючи з _ — ігноруємо
+          varsIgnorePattern: '^_',
           args: 'after-used',
-          argsIgnorePattern: '^_', // Аргументи починаючи з _ — ігноруємо
+          argsIgnorePattern: '^_',
         },
       ],
+
       quotes: [
         'error',
         'single',
         {
-          avoidEscape: true, // Дозволити подвійні лапки якщо всередині є одинарні
-          allowTemplateLiterals: true, // Дозволити template literals (``)
+          avoidEscape: true,
+          allowTemplateLiterals: true,
         },
       ],
+
       // React Refresh: строго перевіряємо експорт компонентів
       'react-refresh/only-export-components': ['error', { allowConstantExport: true }],
 
       // Жорсткі обмеження на типи (забороняємо any)
       '@typescript-eslint/no-explicit-any': 'error',
+
+      'import/no-unresolved': 'error',
 
       // Забороняємо небезпечне скасування null (non-null assertions)
       '@typescript-eslint/no-non-null-assertion': 'error',
@@ -149,39 +163,58 @@ export default [
       // Обов'язково використовуємо фігурні дужки в будь-яких блоках
       curly: ['error', 'all'],
 
-      // Обмежуємо складність функцій до 4 (ще жорсткіше)
+      // Обмежуємо складність функцій до 5
       complexity: ['error', 5],
 
       // Максимальна довжина файлу 200 рядків (без пропусків і коментарів)
       'max-lines': ['error', { max: 200, skipBlankLines: true, skipComments: true }],
 
-      // Вимоги до стилю Prettier як помилка
-      'prettier/prettier': 'error',
+      // Стиль Prettier як помилка + фікс CRLF/LF
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto', // або 'lf' якщо хочеш суворо LF
+        },
+      ],
 
-      // Не дозволяємо any-типи в PropTypes — вимикаємо, бо TS кращий
+      // React специфіка
       'react/prop-types': 'off',
-
-      // Потрібно, щоб React був імпортований у JSX (можеш вимкнути, якщо React 17+)
       'react/react-in-jsx-scope': 'off',
 
-      // Строгі правила React Hooks (заперечення помилок)
+      // Строгі правила React Hooks
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
-      'no-restricted-syntax': 'error',
+      // Типові заборонені синтаксиси
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ForInStatement',
+          message: 'Уникай for..in — використовуй Object.keys/entries замість цього.',
+        },
+        {
+          selector: 'LabeledStatement',
+          message: 'Labels ускладнюють читання коду.',
+        },
+        {
+          selector: 'WithStatement',
+          message: '`with` заборонений у strict mode і нечіткий.',
+        },
+      ],
 
       // Додаткові корисні правила ESLint для чистоти коду:
-      eqeqeq: ['error', 'always'], // Використовувати ===, а не ==
-      'no-var': 'error', // Заборонити var, тільки let/const
-      'prefer-const': ['error', { destructuring: 'all' }], // Використовувати const де можна
-      'no-console': ['error', { allow: ['warn', 'error'] }], // console.log — попередження
-      'no-debugger': 'error', // Заборонити debugger
-      'no-empty-function': 'warn', // Попередження про пусті функції
-      'no-unreachable': 'error', // Забороняємо недосяжний код
-      'spaced-comment': ['error', 'always'], // Пробіли після коментарів
-      'no-magic-numbers': ['warn', { ignore: [0, 1], ignoreArrayIndexes: true }], // Мінімізувати "магічні" числа
+      eqeqeq: ['error', 'always'],
+      'no-var': 'error',
+      'prefer-const': ['error', { destructuring: 'all' }],
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+      'no-debugger': 'error',
+      'no-empty-function': 'warn',
+      'no-unreachable': 'error',
+      'spaced-comment': ['error', 'always'],
+      'no-magic-numbers': ['warn', { ignore: [0, 1], ignoreArrayIndexes: true }],
     },
   },
+
   // ОКРЕМА КОНФІГУРАЦІЯ ДЛЯ STORYBOOK ФАЙЛІВ
   {
     files: ['.storybook/**/*.{ts,tsx,js}'],
@@ -199,14 +232,25 @@ export default [
     },
     plugins: {
       '@typescript-eslint': tseslint,
+      prettier,
     },
     rules: {
-      // М'якші правила для конфігураційних файлів
       '@typescript-eslint/no-explicit-any': 'off',
       'no-magic-numbers': 'off',
       'max-lines': 'off',
       complexity: 'off',
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+      ],
     },
   },
+
+  // Рекомендовані налаштування для storybook
   ...storybook.configs['flat/recommended'],
+
+  // ОСТАННІМ — відключає стилістичні конфлікти на користь Prettier
+  eslintConfigPrettier,
 ];

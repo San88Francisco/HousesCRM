@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { User, Settings, LogOut, CreditCard, Keyboard, MousePointer } from 'lucide-react';
 import {
+  DropdownMenuShortcut,
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
@@ -13,10 +15,8 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuShortcut,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { User, Settings, LogOut, CreditCard, Keyboard, MousePointer } from 'lucide-react';
+} from '@/shared/ui/dropdown-menu';
+import { Button } from '@/shared/ui/button';
 
 const meta: Meta<typeof DropdownMenu> = {
   title: 'UI/DropdownMenu',

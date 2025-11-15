@@ -11,12 +11,15 @@ import { HousesAnalyticsService } from 'src/analytics/houses-analytics/houses-an
 import { AllHousesAnalyticsDto } from 'src/analytics/houses-analytics/dto/all-houses-analytics.dto'
 import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager'
 import { CACHE_KEY, TTL } from 'src/analytics/houses-analytics/constants/cache'
+import { HouseDetailAnalyticsService } from 'src/analytics/house-detail-analytics/house-detail-analytics.service'
+import { HouseWithOccupancyReports } from './dto/house-with-occupancy-reports.dto'
 
 @Controller(HOUSES_ROUTES.ROOT)
 export class HousesController {
   constructor(
     private readonly housesService: HousesService,
-    private readonly housesAnalyticsService: HousesAnalyticsService
+    private readonly housesAnalyticsService: HousesAnalyticsService,
+    private readonly houseDetailAnalytics: HouseDetailAnalyticsService
   ) {}
 
   @Get()
@@ -33,8 +36,13 @@ export class HousesController {
   }
 
   @Get(HOUSES_ROUTES.BY_ID)
-  findById(@Param('id') id: string): Promise<HouseWithRelationsDto> {
-    return this.housesService.findById(id)
+  public async findById(@Param('id') id: string): Promise<HouseWithOccupancyReports> {
+    const [houseDetail, occupancyReports] = await Promise.all([
+      this.housesService.findById(id),
+      this.houseDetailAnalytics.getHouseOccupancyReport(id),
+    ])
+
+    return { houseDetail, occupancyReports }
   }
 
   @Post()

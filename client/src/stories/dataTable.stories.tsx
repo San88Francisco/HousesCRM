@@ -1,8 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { mockData } from '@/constants/table/dataTable';
-import { PaymentTable } from '@/components/Examples/PaymentTable';
+import { mockData } from '@/shared/constants/table/dataTable';
+import { PaymentTable } from '@/widgets/uikit/payment-table';
 
-const meta: Meta<typeof PaymentTable> = {
+const meta = {
   title: 'Components/DataTable',
   component: PaymentTable,
   tags: ['autodocs'],
@@ -13,11 +12,9 @@ const meta: Meta<typeof PaymentTable> = {
 
 export default meta;
 
-type Story = StoryObj<typeof PaymentTable>;
+export const Default = {};
 
-export const Default: Story = {};
-
-export const Empty: Story = {
+export const Empty = {
   args: {
     data: [],
   },

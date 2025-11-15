@@ -1,10 +1,10 @@
 'use client';
 
-import { forwardRef, type InputHTMLAttributes } from 'react';
+import { forwardRef, HTMLInputTypeAttribute, type InputHTMLAttributes } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { cn } from '@/shared/utils/cn';
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   name: string;
@@ -13,7 +13,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
 
   icon?: React.ReactNode;
   iconWithError?: boolean;
-  type?: string;
+  type?: HTMLInputTypeAttribute;
   disabled?: boolean;
   placeholder?: string;
   className?: string;
@@ -44,7 +44,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
     const errorMessage = error?.message as string | undefined;
 
     return (
-      <div className={cn('space-y-2', className, !label && 'mt-[22px]')}>
+      <div className={cn('space-y-2', className, label && 'mt-[22px]')}>
         {label && (
           <Label htmlFor={name} className="flex items-center gap-1">
             {label}
@@ -59,14 +59,11 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
               id={name}
               {...field}
               value={field.value || ''}
-              onChange={e => field.onChange(e.target.value)}
-              type={type}
-              error={!!errorMessage}
-              icon={icon}
-              iconWithError={iconWithError}
-              disabled={disabled}
-              placeholder={placeholder}
-              className={className}
+              type={type as HTMLInputTypeAttribute}
+              onChange={e => {
+                field.onChange(e.target.value);
+              }}
+              error={errorMessage}
               aria-invalid={!!errorMessage}
               aria-describedby={errorMessage ? `${name}-error` : undefined}
               {...props}
@@ -74,9 +71,6 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
             />
           )}
         />
-        {error && (
-          <p className={cn('mt-1 text-sm', error ? 'text-red' : 'text-muted')}>{errorMessage}</p>
-        )}
       </div>
     );
   },
