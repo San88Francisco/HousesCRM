@@ -3,7 +3,6 @@
 import { CircleAlert } from 'lucide-react';
 import { ComponentProps, forwardRef, ReactNode, useState } from 'react';
 import { cn } from '../utils/cn';
-/* eslint-disable */
 
 interface InputProps extends ComponentProps<'input'> {
   error?: string;
@@ -16,14 +15,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const [isFocused, setIsFocused] = useState<boolean>(false);
 
     return (
-      <div className="relative pb-7">
+      <div className={cn(className, "relative")}>
         <div
           className={cn(
-            ' flex items-center h-10 px-2 w-full text-sm transition-all duration-200 ease-in-out bg-bg-input rounded-lg border border-solid border-border [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4',
+            'flex items-center h-10 px-2 w-full text-sm',
+            'transition-all duration-200 ease-in-out',
+            'bg-bg-input rounded-lg border border-solid border-border',
+            '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4',
             disabled && 'cursor-not-allowed opacity-50',
             isFocused && 'border-active-border',
             error && 'border-red text-red',
-            className,
           )}
         >
           {icon && (
@@ -51,7 +52,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
           {error && iconWithError && <CircleAlert className="text-red" />}
         </div>
-        {error && <p className="mt-1 absolute bottom-0 left-0 text-sm text-red">{error}</p>}
+        {error && <p className="mt-1 absolute top-9 left-0 text-sm text-red">{error}</p>}
       </div>
     );
   },

@@ -5,9 +5,9 @@ export class ProfileResponseDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  public id: string
+  id: string
 
   @ApiProperty()
   @IsEmail()
-  public email: string
+  email: string
 }

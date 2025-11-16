@@ -1,5 +1,5 @@
 export class LoginResponseDto {
-  public id!: string
-  public email!: string
-  public accessToken!: string
+  id!: string
+  email!: string
+  accessToken!: string
 }

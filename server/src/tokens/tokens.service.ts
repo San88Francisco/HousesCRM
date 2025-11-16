@@ -28,7 +28,7 @@ export class TokensService {
     this.accessExpiresIn = this.config.getOrThrow<StringValue>('jwt.accessExp')
   }
 
-  public async verify(payload: JwtPayload, token: string): Promise<JwtPayload | null> {
+  async verify(payload: JwtPayload, token: string): Promise<JwtPayload | null> {
     const { userAgent, sub } = payload
     const CACHE_KEY = `refresh:${sub}:${userAgent}`
 
@@ -45,7 +45,7 @@ export class TokensService {
     return null
   }
 
-  public async generateTokens(userId: string, userAgent: string): Promise<TokensDto> {
+  async generateTokens(userId: string, userAgent: string): Promise<TokensDto> {
     const payload = {
       sub: userId,
       userAgent,
@@ -71,11 +71,11 @@ export class TokensService {
     return { accessToken, refreshToken }
   }
 
-  public rotate(userId: string, userAgent: string): Promise<TokensDto> {
+  rotate(userId: string, userAgent: string): Promise<TokensDto> {
     return this.generateTokens(userId, userAgent)
   }
 
-  public async create(data: CreateRefreshTokenDto): Promise<void> {
+  async create(data: CreateRefreshTokenDto): Promise<void> {
     const { payload, token } = data
 
     const CACHE_KEY = `refresh:${payload.sub}:${payload.userAgent}`
@@ -89,7 +89,7 @@ export class TokensService {
     await this.cacheManager.set(CACHE_KEY, raw, TTL)
   }
 
-  public async remove(userId: string, userAgent: string): Promise<void> {
+  async remove(userId: string, userAgent: string): Promise<void> {
     const CACHE_KEY = `refresh:${userId}:${userAgent}`
     await this.cacheManager.del(CACHE_KEY)
   }

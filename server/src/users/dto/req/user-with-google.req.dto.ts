@@ -3,5 +3,5 @@ import { OmitType } from '@nestjs/swagger'
 import { UserDto } from '../res/user.dto'
 
 export class UserWithGoogleDto extends OmitType(UserDto, ['id']) {
-  @Expose() public googleId: string
+  @Expose() googleId: string
 }

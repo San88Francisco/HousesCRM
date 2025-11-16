@@ -5,7 +5,7 @@ import { getExchangeRates } from 'src/utils/exchange-rates.util'
 
 @Injectable()
 export class HousePricesConverterService {
-  public async convert(price: number, house: House): Promise<HousePrice[]> {
+  async convert(price: number, house: House): Promise<HousePrice[]> {
     const rates = await getExchangeRates(house.purchaseDate)
 
     return Object.entries(rates).map(([code, rate]) =>
