@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: en-US
+
+reviews:
+  profile: assertive
+  high_level_summary: true
+  review_status: true
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    base_branches:
+      - "^develop$"
+    ignore_title_keywords:
+      - "WIP"
+      - "DRAFT"
+    ignore_usernames:
+      - "dependabot"
+      - "renovate-bot"
+
+  instructions: |
+    You are reviewing a monorepo with:
+    - Next.js app in the "client" folder
+    - NestJS API in the "server" folder
+
+    General:
+    - Be strict about code quality, readability and maintainability.
+    - Suggest refactoring when code is too complex, duplicated or violates SOLID principles.
+    - Prefer small, focused functions and clear separation of concerns.
+    - Point out potential security, performance and reliability issues with clear, actionable suggestions.
+    - Make sure configuration and secrets are not hard-coded.
+    - Encourage consistent error handling and logging patterns.
+
+path_filters:
+  - "client/**"
+  - "server/**"
+  - "!**/*.md"
+  - "!**/dist/**"
+  - "!**/build/**"
+
+path_instructions:
+  - path: "client/**"
+    instructions: |
+      This is a Next.js application.
+      - Check React component structure, props, and state management.
+      - Prefer small, reusable components over large ones.
+      - Point out unnecessary re-renders and obvious performance issues.
+      - Verify correct usage of Next.js features (routing, data fetching).
+      - Encourage accessibility (a11y), semantic HTML and clear UX.
+
+  - path: "server/**"
+    instructions: |
+      This is a NestJS backend application.
+      - Enforce NestJS best practices: modules, controllers, services, providers separation.
+      - Suggest splitting or refactoring services/controllers that are too large.
+      - Encourage use of DTOs, validation pipes and proper error handling.
+      - Check for security issues: validation, guards, unsafe queries, etc.
+      - Use dependency injection properly and avoid tight coupling.
+      - Suggest extracting shared logic into reusable providers/helpers where appropriate.
+
+tools:
+  eslint:
+    enabled: true
+  gitleaks:
+    enabled: true

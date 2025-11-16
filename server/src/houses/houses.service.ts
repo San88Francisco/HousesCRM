@@ -24,7 +24,7 @@ export class HousesService {
     private housePricesConverterService: HousePricesConverterService
   ) {}
 
-  public async findAll(dto: HouseQueryDto): Promise<HouseResponseDto> {
+  async findAll(dto: HouseQueryDto): Promise<HouseResponseDto> {
     const {
       page = QUERY_DEFAULTS.PAGE,
       limit = QUERY_DEFAULTS.LIMIT,
@@ -36,12 +36,16 @@ export class HousesService {
       ...filters
     } = dto
 
+    const computedSortFields = new Set(['totalRevenue', 'rentersCount', 'currentPayment'])
+
+    const orderField = computedSortFields.has(sortBy as string) ? QUERY_DEFAULTS.SORT_BY : sortBy
+
     const [houses, total] = await this.houseRepository.findAndCount({
       relations: { prices: true },
       skip: (page - 1) * limit,
       take: limit,
       order: {
-        [sortBy]: order,
+        [orderField]: order,
       },
       where: {
         ...filters,
@@ -70,12 +74,11 @@ export class HousesService {
     })
   }
 
-  public async findById(id: string): Promise<HouseWithRelationsDto> {
+  async findById(id: string): Promise<HouseWithRelationsDto> {
     const house = await this.houseRepository.findOneOrFail({
       where: { id },
       relations: {
         prices: true,
-        contracts: { renter: true },
       },
     })
 
@@ -84,7 +87,7 @@ export class HousesService {
     })
   }
 
-  public async create(dto: CreateHouseDto): Promise<HouseWithRelationsDto> {
+  async create(dto: CreateHouseDto): Promise<HouseWithRelationsDto> {
     const houseToSave = this.houseRepository.create({
       ...dto,
       contracts: dto.contractIds?.map((id) => ({ id })),
@@ -101,7 +104,7 @@ export class HousesService {
     })
   }
 
-  public async update(dto: UpdateHouseDto, id: string): Promise<HouseWithRelationsDto> {
+  async update(dto: UpdateHouseDto, id: string): Promise<HouseWithRelationsDto> {
     const house = await this.houseRepository.findOneOrFail({
       where: { id },
       relations: { contracts: true, prices: true },
@@ -128,7 +131,7 @@ export class HousesService {
     })
   }
 
-  public async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     const res = await this.houseRepository.delete(id)
 
     if (res.affected === 0) {

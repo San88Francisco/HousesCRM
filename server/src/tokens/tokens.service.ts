@@ -14,7 +14,7 @@ export class TokensService {
   private readonly refreshSecret: string
   private readonly refreshExpiresIn: StringValue
   private readonly accessSecret: string
-  private readonly accessExpiresIn: string
+  private readonly accessExpiresIn: StringValue
 
   constructor(
     private readonly jwt: JwtService,
@@ -25,10 +25,10 @@ export class TokensService {
     this.refreshSecret = this.config.getOrThrow<string>('jwt.refreshSecret')
     this.refreshExpiresIn = this.config.getOrThrow<StringValue>('jwt.refreshExp')
     this.accessSecret = this.config.getOrThrow<string>('jwt.accessSecret')
-    this.accessExpiresIn = this.config.getOrThrow<string>('jwt.accessExp')
+    this.accessExpiresIn = this.config.getOrThrow<StringValue>('jwt.accessExp')
   }
 
-  public async verify(payload: JwtPayload, token: string): Promise<JwtPayload | null> {
+  async verify(payload: JwtPayload, token: string): Promise<JwtPayload | null> {
     const { userAgent, sub } = payload
     const CACHE_KEY = `refresh:${sub}:${userAgent}`
 
@@ -45,7 +45,7 @@ export class TokensService {
     return null
   }
 
-  public async generateTokens(userId: string, userAgent: string): Promise<TokensDto> {
+  async generateTokens(userId: string, userAgent: string): Promise<TokensDto> {
     const payload = {
       sub: userId,
       userAgent,
@@ -67,14 +67,15 @@ export class TokensService {
       // eslint-disable-next-line no-console
       console.error('Failed to store refresh token in Redis', err)
     )
+
     return { accessToken, refreshToken }
   }
 
-  public rotate(userId: string, userAgent: string): Promise<TokensDto> {
+  rotate(userId: string, userAgent: string): Promise<TokensDto> {
     return this.generateTokens(userId, userAgent)
   }
 
-  public async create(data: CreateRefreshTokenDto): Promise<void> {
+  async create(data: CreateRefreshTokenDto): Promise<void> {
     const { payload, token } = data
 
     const CACHE_KEY = `refresh:${payload.sub}:${payload.userAgent}`
@@ -88,9 +89,8 @@ export class TokensService {
     await this.cacheManager.set(CACHE_KEY, raw, TTL)
   }
 
-  public async remove(userId: string, userAgent: string): Promise<void> {
+  async remove(userId: string, userAgent: string): Promise<void> {
     const CACHE_KEY = `refresh:${userId}:${userAgent}`
-
     await this.cacheManager.del(CACHE_KEY)
   }
 }

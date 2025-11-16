@@ -12,38 +12,38 @@ export enum ApartmentType {
 @Check(`"rooms_count" > 0 AND "total_area" > 0 AND "floor" >= 0`)
 export class House {
   @PrimaryGeneratedColumn('uuid')
-  public id: string
+  id: string
 
   @Column({ name: 'apartment_name', length: 30 })
-  public apartmentName: string
+  apartmentName: string
 
   @Column({ name: 'rooms_count' })
-  public roomsCount: number
+  roomsCount: number
 
   @Column({ name: 'total_area', type: 'float' })
-  public totalArea: number
+  totalArea: number
 
   @Column({ name: 'purchase_date' })
-  public purchaseDate: Date
+  purchaseDate: Date
 
   @Column()
-  public floor: number
+  floor: number
 
   @Column()
-  public street: string
+  street: string
 
   @Column({ type: 'enum', enum: ApartmentType, default: ApartmentType.NEW_BUILD })
-  public apartmentType: ApartmentType
+  apartmentType: ApartmentType
 
   @CreateDateColumn({ name: 'created_at' })
-  public createdAt: Date
+  createdAt: Date
 
   @UpdateDateColumn({ name: 'updated_at' })
-  public updatedAt: Date
+  updatedAt: Date
 
   @OneToMany(() => HousePrice, (price) => price.house, { cascade: true })
-  public prices: Relation<HousePrice>[]
+  prices: Relation<HousePrice>[]
 
   @OneToMany(() => Contract, (contract) => contract.house)
-  public contracts: Relation<Contract>[]
+  contracts: Relation<Contract>[]
 }

@@ -4,11 +4,11 @@ import { HouseDto } from 'src/houses/dto/house.dto'
 
 export class HousePaybackStatsDto extends PickType(HouseDto, ['id', 'apartmentName', 'purchaseDate'] as const) {
   @Expose()
-  public purchasePriceUSD: number
+  purchasePriceUSD: number
 
   @Expose()
-  public totalIncomeUSD: number
+  totalIncomeUSD: number
 
   @Expose()
-  public paybackCoefficient: number
+  paybackCoefficient: number
 }

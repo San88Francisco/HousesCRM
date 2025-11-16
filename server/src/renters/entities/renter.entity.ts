@@ -16,7 +16,7 @@ export class Renter {
   @Column()
   public occupied: Date
 
-  @Column()
+  @Column({ nullable: true })
   public vacated: Date
 
   @CreateDateColumn({ name: 'created_at' })

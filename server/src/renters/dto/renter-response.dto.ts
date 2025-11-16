@@ -4,9 +4,9 @@ import { RenterDto } from './renter.dto'
 
 export class RenterResponseDto {
   @Expose()
-  public data: RenterDto[]
+  data: RenterDto[]
 
   @Expose()
   @Type(() => PaginationMetaDto)
-  public meta: PaginationMetaDto
+  meta: PaginationMetaDto
 }
