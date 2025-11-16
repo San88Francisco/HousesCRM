@@ -1,3 +1,3 @@
 export class DeleteHouseDto {
-  public message: string
+  message: string
 }

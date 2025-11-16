@@ -10,20 +10,28 @@ export const InputComponent = () => {
       <Input name="password" placeholder="Simple Empty" icon={<Search />} required />
       <Input name="password" placeholder="Simple Empty" disabled />
       <Input name="password" placeholder="Simple Empty" icon={<Search />} disabled />
-      <Input name="password" placeholder="Simple Empty" error="Oh snape! There was an error." />
       <Input
+        className="mb-5"
+        name="password"
+        placeholder="Simple Empty"
+        error="Oh snape! There was an error."
+      />
+      <Input
+        className="mb-5"
         name="password"
         placeholder="Simple Empty"
         error="Oh snape! There was an error."
         icon={<Search />}
       />
       <Input
+        className="mb-5"
         name="password"
         placeholder="Simple Empty"
         error="Oh snape! There was an error."
         iconWithError={true}
       />
       <Input
+        className="mb-5"
         name="password"
         placeholder="Simple Empty"
         error="Oh snape! There was an error."

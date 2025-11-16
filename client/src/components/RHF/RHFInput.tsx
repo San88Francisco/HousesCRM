@@ -30,7 +30,6 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
       type = 'text',
       className,
       disabled = false,
-      placeholder,
       ...props
     },
     ref,
@@ -66,6 +65,8 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
               error={errorMessage}
               aria-invalid={!!errorMessage}
               aria-describedby={errorMessage ? `${name}-error` : undefined}
+              icon={icon}
+              iconWithError={iconWithError}
               {...props}
               ref={ref}
             />

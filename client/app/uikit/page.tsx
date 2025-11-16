@@ -10,16 +10,12 @@ import { SelectComponent } from '@/widgets/uikit/select-copmponent';
 import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
-import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { CurrencyRevaluationChart } from '@/widgets/all-apartments/CurrencyRevaluationChart/CurrencyRevaluationChart';
 
 export default function Page() {
   return (
     <div className="flex flex-col gap-2">
-      <div className="fixed top-2 right-2  z-10">
-        <ThemeSwitch />
-      </div>
       <ButtonComponent />
       <CardComponent />
       <ControlButtons />
