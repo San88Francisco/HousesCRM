@@ -12,6 +12,7 @@ import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
+import { CurrencyRevaluationChart } from '@/widgets/all-apartments/CurrencyRevaluationChart/CurrencyRevaluationChart';
 
 export default function Page() {
   return (
@@ -31,6 +32,7 @@ export default function Page() {
       <TextareaComponent />
       <ToastCopmponent />
       <SelectComponent />
+      <CurrencyRevaluationChart />
     </div>
   );
 }
