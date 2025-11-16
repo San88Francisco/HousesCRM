@@ -9,16 +9,12 @@ import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { mockData } from '@/shared/constants/table/dataTable';
-import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 
 export default function Page() {
   return (
     <div className="flex flex-col gap-2">
-      <div className="fixed top-2 right-2  z-10">
-        <ThemeSwitch />
-      </div>
       <ButtonComponent />
       <CardComponent />
       <ControlButtons />

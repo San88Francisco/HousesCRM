@@ -15,7 +15,7 @@ export class UsersService {
     private readonly usersRepository: Repository<User>
   ) {}
 
-  public async create(dto: CreateUserRequestDto): Promise<User> {
+  async create(dto: CreateUserRequestDto): Promise<User> {
     const { email, password, username } = dto
     const entity = this.usersRepository.create({
       email,
@@ -25,7 +25,7 @@ export class UsersService {
     return this.usersRepository.save(entity)
   }
 
-  public async findOne(email: string): Promise<UserWithPasswordDto | null> {
+  async findOne(email: string): Promise<UserWithPasswordDto | null> {
     const user = await this.usersRepository.findOne({ where: { email } })
 
     return plainToInstance(UserWithPasswordDto, user, {
@@ -33,15 +33,15 @@ export class UsersService {
     })
   }
 
-  public async findById(id: string): Promise<User | null> {
+  async findById(id: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { id } })
   }
 
-  public async findByGoogleId(googleId: string): Promise<User | null> {
+  async findByGoogleId(googleId: string): Promise<User | null> {
     return await this.usersRepository.findOneBy({ googleId })
   }
 
-  public async findOrCreateWithGoogle(dto: UserWithGoogleDto): Promise<User> {
+  async findOrCreateWithGoogle(dto: UserWithGoogleDto): Promise<User> {
     const { email, username, googleId } = dto
 
     const userWithEmail = await this.findOne(email)

@@ -11,11 +11,12 @@ import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
 import { CreateUserResponseDto } from 'src/users/dto/res/create-user-response.dto'
 import { RefreshTokenResponseDto } from './dto/res/refresh-token.dto'
 import { GoogleAuthGuard } from './guard/google-auth.guard'
-import { ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
 import { JwtPayload } from 'types/jwt/jwt.types'
 import { UserDto } from 'src/users/dto/res/user.dto'
 import { LogoutDto } from './dto/res/logout.dto'
 import { Public } from 'src/common/decorators/public.decorator'
+import { Auth } from 'src/common/decorators/auth.decorator'
 
 @Controller(AUTH_ROUTES.ROOT)
 export class AuthController {
@@ -28,7 +29,7 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @Public()
-  public async login(
+  async login(
     @Body() _dto: LoginRequestDto,
     @Req() req: AuthenticatedRequest<UserDto>,
     @Res({ passthrough: true }) res: Response
@@ -42,8 +43,9 @@ export class AuthController {
 
   @Public()
   @Post(AUTH_ROUTES.REGISTRATION)
+  @Auth()
   @HttpCode(HttpStatus.CREATED)
-  public async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
+  async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
     const user = await this.authService.registration(dto)
     return { message: 'User successfully created', data: { id: user.id } }
   }
@@ -51,8 +53,9 @@ export class AuthController {
   @Public()
   @Post(AUTH_ROUTES.REFRESH)
   @UseGuards(AuthGuard('jwt-refresh'))
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  public async rotateRefresh(
+  async rotateRefresh(
     @Req() req: AuthenticatedRequest<JwtPayload>,
     @Res({ passthrough: true }) res: Response
   ): Promise<RefreshTokenResponseDto> {
@@ -65,8 +68,9 @@ export class AuthController {
 
   @Post(AUTH_ROUTES.LOGOUT)
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  public async logout(
+  async logout(
     @Req() req: AuthenticatedRequest<JwtPayload>,
     @Res({ passthrough: true }) res: Response
   ): Promise<LogoutDto> {
@@ -98,13 +102,13 @@ export class AuthController {
   @Public()
   @Get(AUTH_ROUTES.GOOGLE)
   @UseGuards(GoogleAuthGuard)
-  public async googleAuth(): Promise<void> {}
+  async googleAuth(): Promise<void> {}
 
   @ApiExcludeEndpoint()
   @Public()
   @Get(AUTH_ROUTES.GOOGLE_CALLBACK)
   @UseGuards(GoogleAuthGuard)
-  public async googleAuthCallback(@Req() req: AuthenticatedRequest<UserDto>, @Res() res: Response): Promise<void> {
+  async googleAuthCallback(@Req() req: AuthenticatedRequest<UserDto>, @Res() res: Response): Promise<void> {
     const userAgent = req.headers['user-agent'] || 'unknown'
     const nodeEnv = this.config.getOrThrow<string>('NODE_ENV')
     const frontendDevURL = this.config.getOrThrow<string>('FRONTEND_DEV_URL')

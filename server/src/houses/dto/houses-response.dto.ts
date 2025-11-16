@@ -4,9 +4,9 @@ import { HouseWithPricesDto } from './house-with-prices.dto'
 
 export class HouseResponseDto {
   @Expose()
-  public data: HouseWithPricesDto[]
+  data: HouseWithPricesDto[]
 
   @Expose()
   @Type(() => PaginationMetaDto)
-  public meta: PaginationMetaDto
+  meta: PaginationMetaDto
 }

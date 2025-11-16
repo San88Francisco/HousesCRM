@@ -1,3 +1,3 @@
 export class DeleteRenterDto {
-  public message: string
+  message: string
 }

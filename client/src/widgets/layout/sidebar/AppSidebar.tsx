@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { SidebarHeaderComponent } from './SidebarHeader';
 import { SidebarPagesGroup } from './SidebarPagesGroup';
 import { SidebarTablesGroup } from './SidebarTablesGroup';
-import { Logo } from '@/components/logo';
+import { Logo } from '@/components/Logo/Logo';
 
 type Props = {
   label: string;
