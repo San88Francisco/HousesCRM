@@ -4,8 +4,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useTheme } from 'next-themes';
-import { mockCurrencyRevaluation } from './mock-data';
-import { transformCurrencyData, formatCurrency, truncateText } from './utils';
+import { mockCurrencyRevaluation } from '../../../shared/constants/currency-revaluation-chart/mock-data';
+import {
+  transformCurrencyData,
+  formatCurrency,
+  truncateText,
+} from '../../../shared/utils/all-apartments/currency-revaluation-chart/utils';
 import { CustomTooltip } from './CustomTooltip';
 
 const ROW_HEIGHT = 45;
@@ -139,11 +143,12 @@ export const CurrencyRevaluationChart = () => {
               barSize={10}
               fill={purchaseBarFill}
               isAnimationActive={true}
-              animationDuration={800}
+              animationBegin={0}
+              animationDuration={350}
+              animationEasing="ease-out"
             >
               {chartData.map((entry, index) => {
                 const isHovered = hoveredIndex === index;
-
                 return (
                   <Cell
                     key={`purchase-${index}`}
@@ -162,12 +167,12 @@ export const CurrencyRevaluationChart = () => {
               barSize={10}
               fill={growthBarFill}
               isAnimationActive={true}
-              animationDuration={800}
-              animationBegin={100}
+              animationBegin={300}
+              animationDuration={550}
+              animationEasing="ease-out"
             >
               {chartData.map((entry, index) => {
                 const isHovered = hoveredIndex === index;
-
                 return (
                   <Cell
                     key={`growth-${index}`}

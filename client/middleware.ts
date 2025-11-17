@@ -4,7 +4,7 @@ import { ROUTES } from '@/shared/routes';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const PUBLIC_ROUTES = [ROUTES.UIKIT];
+const PUBLIC_ROUTES = [ROUTES.ALL_APARTMENTS];
 
 const AUTH_ROUTES = [ROUTES.LOGIN];
 

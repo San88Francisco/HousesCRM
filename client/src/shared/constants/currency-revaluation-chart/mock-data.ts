@@ -1,11 +1,11 @@
-import { CurrencyRevaluation } from './types';
+import { CurrencyRevaluation } from '../../../types/core/currency-revaluation-chart/types';
 
 export const mockCurrencyRevaluation: CurrencyRevaluation[] = [
   {
     id: '1',
     apartmentName: 'Сонячна 42А',
-    purchaseAmountUah: 5600000, // 700k USD * 8 грн/$
-    revaluationAmountUah: 28000000, // 700k USD * 40 грн/$
+    purchaseAmountUah: 5600000,
+    revaluationAmountUah: 28000000,
     purchaseRate: 8,
     currentRate: 40,
   },

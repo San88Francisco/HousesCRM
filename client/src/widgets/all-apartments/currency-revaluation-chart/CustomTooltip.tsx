@@ -1,6 +1,10 @@
 /* eslint-disable */
-import { ChartDataItem } from './types';
-import { formatCurrency, formatRate, truncateText } from './utils';
+import { ChartDataItem } from '../../../types/core/currency-revaluation-chart/types';
+import {
+  formatCurrency,
+  formatRate,
+  truncateText,
+} from '../../../shared/utils/all-apartments/currency-revaluation-chart/utils';
 
 interface CustomTooltipProps {
   active?: boolean;
