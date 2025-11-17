@@ -1,4 +1,3 @@
-/* eslint-disable */
 interface CustomXAxisTickProps {
   x?: number;
   y?: number;
@@ -8,7 +7,7 @@ interface CustomXAxisTickProps {
 
 const MAX_TEXT_LENGTH = 12;
 
-export const CustomXAxisTick = ({ x = 0, y = 0, payload, isDark }: CustomXAxisTickProps) => {
+export const CustomXAxisTick = ({ x = 0, y = 0, payload }: CustomXAxisTickProps) => {
   if (!payload) {
     return null;
   }
@@ -19,16 +18,16 @@ export const CustomXAxisTick = ({ x = 0, y = 0, payload, isDark }: CustomXAxisTi
 
   return (
     <g transform={`translate(${x},${y})`}>
+      <title>{text}</title>
       <text
         x={0}
         y={0}
         dy={16}
         textAnchor="end"
-        fill={isDark ? '#9ca3af' : '#9ca3af'}
+        fill="#9ca3af"
         fontSize={13}
         fontWeight={400}
         transform="rotate(-45)"
-        title={text}
       >
         {displayText}
       </text>
