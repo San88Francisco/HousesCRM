@@ -2,7 +2,6 @@ interface CustomXAxisTickProps {
   x?: number;
   y?: number;
   payload?: { value: string };
-  isDark: boolean;
 }
 
 const MAX_TEXT_LENGTH = 12;
