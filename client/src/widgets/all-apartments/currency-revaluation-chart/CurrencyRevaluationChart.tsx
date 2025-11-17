@@ -7,7 +7,6 @@ import { useTheme } from 'next-themes';
 import { mockCurrencyRevaluation } from '@/shared/constants/currency-revaluation-chart/mock-data';
 import {
   transformCurrencyData,
-  formatCurrency,
   truncateText,
 } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 import { CustomTooltip } from './CustomTooltip';
@@ -18,6 +17,10 @@ const LOADING_DELAY = 500;
 const Y_AXIS_PADDING = 0.15;
 const MAX_TEXT_LENGTH_YAXIS = 10;
 const FULL_CHART_HEIGHT = mockCurrencyRevaluation.length * ROW_HEIGHT + 30;
+
+const formatYAxisTick = (value: string) => {
+  return truncateText(value, MAX_TEXT_LENGTH_YAXIS);
+};
 
 export const CurrencyRevaluationChart = () => {
   const { theme, systemTheme } = useTheme();
@@ -49,7 +52,6 @@ export const CurrencyRevaluationChart = () => {
     return transformed
       .map(item => ({
         ...item,
-        purchaseAmount: item.purchaseAmount,
         growthAmount: item.revaluationAmount - item.purchaseAmount,
       }))
       .reverse();
@@ -75,15 +77,6 @@ export const CurrencyRevaluationChart = () => {
     );
   }
 
-  const formatYAxisTick = (value: string) => {
-    return truncateText(value, MAX_TEXT_LENGTH_YAXIS);
-  };
-
-  const scrollbarHiddenStyle = {
-    msOverflowStyle: 'none',
-    scrollbarWidth: 'none',
-  };
-
   return (
     <div
       className={`w-full p-6 rounded-2xl shadow-xl ${isDark ? 'bg-gray-900' : 'bg-white'}`}
@@ -98,7 +91,6 @@ export const CurrencyRevaluationChart = () => {
         style={{
           maxHeight: MAX_VISIBLE_ROWS * ROW_HEIGHT + 30,
           overflowY: 'scroll',
-          ...scrollbarHiddenStyle,
         }}
       >
         <ResponsiveContainer width="100%" height={FULL_CHART_HEIGHT} minWidth={280}>
@@ -131,10 +123,7 @@ export const CurrencyRevaluationChart = () => {
               width={110}
             />
 
-            <Tooltip
-              content={<CustomTooltip isDark={isDark} chartHeight={FULL_CHART_HEIGHT} />}
-              cursor={{ fill: 'transparent' }}
-            />
+            <Tooltip content={<CustomTooltip isDark={isDark} />} cursor={{ fill: 'transparent' }} />
 
             <Bar
               dataKey="purchaseAmount"
@@ -147,7 +136,7 @@ export const CurrencyRevaluationChart = () => {
               animationDuration={350}
               animationEasing="ease-out"
             >
-              {chartData.map((entry, index) => {
+              {chartData.map((_, index) => {
                 const isHovered = hoveredIndex === index;
                 return (
                   <Cell
@@ -171,7 +160,7 @@ export const CurrencyRevaluationChart = () => {
               animationDuration={550}
               animationEasing="ease-out"
             >
-              {chartData.map((entry, index) => {
+              {chartData.map((_, index) => {
                 const isHovered = hoveredIndex === index;
                 return (
                   <Cell

@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart/types';
 import {
-  formatCurrency,
   formatRate,
+  formatCurrency,
   truncateText,
 } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 
@@ -44,8 +44,8 @@ export const CustomTooltip = ({ active, payload, isDark }: CustomTooltipProps) =
             </span>
           </div>
           <div className="flex justify-between gap-4">
-            <span className={isDark ? 'text-gray-500' : 'text-gray-500'}>Курс купівлі:</span>
-            <span className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+            <span className={isDark ? 'text-gray-500' : 'text-gray-600'}>Курс купівлі:</span>
+            <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
               {formatRate(data.purchaseRate)}
             </span>
           </div>
