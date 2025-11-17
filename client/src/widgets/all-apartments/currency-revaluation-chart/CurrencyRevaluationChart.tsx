@@ -4,12 +4,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useTheme } from 'next-themes';
-import { mockCurrencyRevaluation } from '../../../shared/constants/currency-revaluation-chart/mock-data';
+import { mockCurrencyRevaluation } from '@/shared/constants/currency-revaluation-chart/mock-data';
 import {
   transformCurrencyData,
   formatCurrency,
   truncateText,
-} from '../../../shared/utils/all-apartments/currency-revaluation-chart/utils';
+} from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 import { CustomTooltip } from './CustomTooltip';
 
 const ROW_HEIGHT = 45;
