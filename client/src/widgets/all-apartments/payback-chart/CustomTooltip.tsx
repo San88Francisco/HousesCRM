@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { PaybackChartData } from '@/types/core/analytics';
-import { formatPaybackCoefficient } from '@/shared/utils/payback';
+import { PaybackChartData } from '@/types/core/payback-chart/analytics';
+import { formatPaybackCoefficient } from '@/shared/utils/all-apartments/payback-chart/payback';
 
 interface CustomTooltipProps {
   active?: boolean;

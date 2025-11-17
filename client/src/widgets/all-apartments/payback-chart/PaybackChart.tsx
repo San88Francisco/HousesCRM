@@ -3,9 +3,9 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { PaybackChartData } from '@/types/core/analytics';
-import { transformPaybackData } from '@/shared/utils/payback';
-import { mockPaybackStats } from '@/shared/mocks/analytics.mock';
+import { PaybackChartData } from '@/types/core/payback-chart/analytics';
+import { transformPaybackData } from '@/shared/utils/all-apartments/payback-chart/payback';
+import { mockPaybackStats } from '@/shared/constants/payback-chart/analytics.mock';
 import { useTheme } from 'next-themes';
 import { CustomXAxisTick } from './CustomXAxisTick';
 import { CustomBar } from './CustomBar';

@@ -1,5 +1,5 @@
-import { HousePaybackStats, PaybackChartData } from '@/types/core/analytics';
-import { getApartmentColor } from '@/shared/utils/colors';
+import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart/analytics';
+import { getApartmentColor } from '@/shared/utils/all-apartments/payback-chart/colors';
 
 const FULL_PAYBACK_COEFFICIENT = 1;
 const PERCENTAGE_MULTIPLIER = 100;

@@ -1,4 +1,4 @@
-import { HousesAnalyticsResponse } from '@/types/core/analytics';
+import { HousesAnalyticsResponse } from '@/types/core/payback-chart/analytics';
 
 export const getHousesAnalytics = async (): Promise<HousesAnalyticsResponse> => {
   try {

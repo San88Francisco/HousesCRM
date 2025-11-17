@@ -12,8 +12,6 @@ import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 
-import { PaybackChart } from '@/widgets/all-apartments/PaybackChart/PaybackChart';
-
 export default function Page() {
   return (
     <div className="flex flex-col gap-2">
@@ -29,7 +27,6 @@ export default function Page() {
       <TextareaComponent />
       <ToastCopmponent />
       <SelectComponent />
-      <PaybackChart />
     </div>
   );
 }

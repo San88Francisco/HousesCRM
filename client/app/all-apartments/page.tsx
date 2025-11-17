@@ -1,5 +1,11 @@
+import { PaybackChart } from '@/widgets/all-apartments/payback-chart/PaybackChart';
+
 const Page = () => {
-  return <div>Всі квартири</div>;
+  return (
+    <div>
+      <PaybackChart />
+    </div>
+  );
 };
 
 export default Page;
