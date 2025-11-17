@@ -16,7 +16,7 @@ const MAX_VISIBLE_ROWS = 7;
 const LOADING_DELAY = 500;
 const Y_AXIS_PADDING = 0.15;
 const MAX_TEXT_LENGTH_YAXIS = 10;
-const FULL_CHART_HEIGHT = mockCurrencyRevaluation.length * ROW_HEIGHT + 30;
+const computeChartHeight = (dataLength: number) => dataLength * ROW_HEIGHT + 30;
 
 const formatYAxisTick = (value: string) => {
   return truncateText(value, MAX_TEXT_LENGTH_YAXIS);
@@ -58,6 +58,9 @@ export const CurrencyRevaluationChart = () => {
   }, []);
 
   const xAxisMax = useMemo(() => {
+    if (chartData.length === 0) {
+      return 1000000;
+    }
     const maxValue = Math.max(...chartData.map(d => d.revaluationAmount));
     return Math.ceil((maxValue * (1 + Y_AXIS_PADDING)) / 1000000) * 1000000;
   }, [chartData]);
@@ -93,7 +96,11 @@ export const CurrencyRevaluationChart = () => {
           overflowY: 'scroll',
         }}
       >
-        <ResponsiveContainer width="100%" height={FULL_CHART_HEIGHT} minWidth={280}>
+        <ResponsiveContainer
+          width="100%"
+          height={computeChartHeight(chartData.length)}
+          minWidth={280}
+        >
           <BarChart
             data={chartData}
             layout="vertical"
