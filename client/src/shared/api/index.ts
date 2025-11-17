@@ -3,7 +3,7 @@ import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolk
 import { tokenStorage } from '../utils/auth/token';
 import { toast } from 'sonner';
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL_LOCAL;
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const baseQuery = fetchBaseQuery({
   baseUrl,
@@ -30,17 +30,17 @@ const handleTokenRefresh = async (): Promise<string | null> => {
     }
 
     return null;
-  } catch (error) {
-    toast.error('Помилка запиту оновлення токена', {
-      description: error instanceof Error ? error.message : String(error),
-    });
+  } catch (error: unknown) {
+    toast.error(`Помилка запиту оновлення токена: ${error}`);
     return null;
   }
 };
 
 const handleAuthError = () => {
   tokenStorage.clearTokens();
-  window.location.href = '/login';
+  /*  if (typeof window !== 'undefined') {
+    window.location.href = '/login';
+  } */
 };
 
 const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (

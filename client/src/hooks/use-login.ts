@@ -30,12 +30,8 @@ export const useLogin = () => {
         toast.success('Увійшли успішно');
         router.push(ROUTES.ALL_APARTMENTS);
       }
-    } catch (error) {
-      let errorMessage = 'Помилка під час входу';
-      if (error instanceof Error && error.message) {
-        errorMessage += `: ${error.message}`;
-      }
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(`Невірні облікові дані або помилка авторизації: ${error}`);
     }
   };
 

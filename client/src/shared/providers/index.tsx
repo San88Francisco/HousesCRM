@@ -13,10 +13,6 @@ type Props = {
 };
 
 export const Providers = ({ children }: Props) => {
-  const mainContent = (
-    <main className="flex-1 overflow-x-hidden px-2 sm:px-8 py-5">{children}</main>
-  );
-
   return (
     <ThemeProvider
       attribute="class"
@@ -28,7 +24,7 @@ export const Providers = ({ children }: Props) => {
       <Provider store={store}>
         <SidebarProvider>
           <AppSidebar label="some-usergamil.com" />
-          {mainContent}
+          {children}
         </SidebarProvider>
       </Provider>
     </ThemeProvider>

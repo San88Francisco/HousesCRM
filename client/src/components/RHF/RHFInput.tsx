@@ -9,8 +9,6 @@ import { cn } from '@/shared/utils/cn';
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   name: string;
   label?: string;
-  required?: boolean;
-
   icon?: React.ReactNode;
   iconWithError?: boolean;
   type?: HTMLInputTypeAttribute;
@@ -43,8 +41,8 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
     const errorMessage = error?.message as string | undefined;
 
     return (
-      <div className={cn('space-y-2', className, label && 'mt-[22px]')}>
-        {label && (
+      <div className={cn('space-y-2 mb-5', className)}>
+        {label && !error && (
           <Label htmlFor={name} className="flex items-center gap-1">
             {label}
           </Label>
@@ -72,6 +70,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
             />
           )}
         />
+        {error && <p className="mt-1  text-sm text-red">{errorMessage}</p>}
       </div>
     );
   },
