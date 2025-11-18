@@ -1,4 +1,3 @@
-// client/src/widgets/layout/sidebar/AppSidebar.tsx
 'use client';
 
 import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
@@ -9,12 +8,10 @@ import { SidebarPagesGroup } from './SidebarPagesGroup';
 import { SidebarTablesGroup } from './SidebarTablesGroup';
 import { Logo } from '@/components/Logo/Logo';
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
+import { useUser } from '@/hooks/use-user';
 
-type Props = {
-  label: string;
-};
-
-export const AppSidebar = ({ label }: Props) => {
+export const AppSidebar = () => {
+  const { email } = useUser();
   const { state } = useSidebar();
   const pathname = usePathname();
 
@@ -24,7 +21,7 @@ export const AppSidebar = ({ label }: Props) => {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeaderComponent state={state} label={label} />
+      <SidebarHeaderComponent state={state} label={email || 'Guest'} />
       <SidebarContent>
         <SidebarPagesGroup items={itemsNav} />
         <SidebarTablesGroup items={itemsNav} />

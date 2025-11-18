@@ -2,6 +2,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { tokenStorage } from '../utils/auth/token';
 import { toast } from 'sonner';
+import { clearUser } from '@/store/user-slice';
+import store from '@/store/store';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -38,9 +40,12 @@ const handleTokenRefresh = async (): Promise<string | null> => {
 
 const handleAuthError = () => {
   tokenStorage.clearTokens();
-  /*  if (typeof window !== 'undefined') {
+
+  store.dispatch(clearUser());
+
+  if (typeof window !== 'undefined') {
     window.location.href = '/login';
-  } */
+  }
 };
 
 const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (

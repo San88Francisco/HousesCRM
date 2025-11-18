@@ -19,8 +19,15 @@ export const LoginForm = () => {
           label="Електронна пошта"
           type="email"
           placeholder="Введіть вашу електронну пошту"
+          autoComplete="email"
         />
-        <RHFInput name="password" label="Пароль" type="password" placeholder="Введіть ваш пароль" />
+        <RHFInput
+          name="password"
+          label="Пароль"
+          type="password"
+          placeholder="Введіть ваш пароль"
+          autoComplete="current-password"
+        />
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? 'Авторизація...' : 'Увійти'}
         </Button>

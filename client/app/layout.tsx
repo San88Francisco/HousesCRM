@@ -9,10 +9,6 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const mainContent = (
-    <main className="flex-1 overflow-x-hidden px-2 sm:px-8 py-5">{children}</main>
-  );
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -25,7 +21,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <Providers>
           <Toaster />
-          {mainContent}
+          <main className="flex-1 overflow-x-hidden px-2 sm:px-8 py-5">{children}</main>
         </Providers>
       </body>
     </html>
