@@ -28,13 +28,14 @@
   },
   "lint-staged": {
     "client/**/*.{js,jsx,ts,tsx}": [
-      "npm run lint --prefix client "
+      "npm run lint:fix --prefix client --",
+      "prettier --write --config client/.prettierrc --ignore-path client/.prettierignore"
     ],
     "server/**/*.{js,ts}": [
-      "npm run lint --prefix server",
-      "prettier --write"
+      "npm run lint --prefix server --",
+      "prettier --write --config server/.prettierrc --ignore-path server/.prettierignore"
     ],
-    "*.{json,md,css,scss}": [
+    "*.{json,md}": [
       "prettier --write"
     ]
   },
