@@ -7,7 +7,6 @@ import { PaybackChartData } from '@/types/core/payback-chart/analytics';
 import { transformPaybackData } from '@/shared/utils/all-apartments/payback-chart/payback';
 import { mockPaybackStats } from '@/shared/constants/payback-chart/analytics.mock';
 import { useTheme } from 'next-themes';
-import { CustomXAxisTick } from './CustomXAxisTick';
 import { CustomBar } from './CustomBar';
 import { CustomTooltip } from './CustomTooltip';
 
@@ -135,7 +134,6 @@ export const PaybackChart = () => {
                 angle={-45}
                 textAnchor="end"
                 height={80}
-                tick={<CustomXAxisTick isDark={isDark} />}
                 axisLine={false}
                 tickLine={false}
               />
@@ -156,7 +154,7 @@ export const PaybackChart = () => {
                   }
                   return value.toString();
                 }}
-                tick={{ fontSize: 14, fill: isDark ? '#9ca3af' : '#9ca3af', fontWeight: 500 }}
+                tick={{ fontSize: 14, fill: '#9ca3af', fontWeight: 500 }}
                 axisLine={false}
                 tickLine={false}
               />
