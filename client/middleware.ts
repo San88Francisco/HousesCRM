@@ -30,15 +30,15 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // if (isProtectedRoute(pathname) && !accessToken) {
-  //   const loginUrl = new URL(ROUTES.LOGIN, request.url);
+  if (isProtectedRoute(pathname) && !accessToken) {
+    const loginUrl = new URL(ROUTES.LOGIN, request.url);
 
-  //   return NextResponse.redirect(loginUrl);
-  // }
+    return NextResponse.redirect(loginUrl);
+  }
 
-  // if (pathname === '/' && accessToken) {
-  //   return NextResponse.redirect(new URL(ROUTES.ALL_APARTMENTS, request.url));
-  // }
+  if (pathname === '/' && accessToken) {
+    return NextResponse.redirect(new URL(ROUTES.ALL_APARTMENTS, request.url));
+  }
 
   return NextResponse.next();
 }
