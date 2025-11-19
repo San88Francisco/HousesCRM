@@ -1,5 +1,4 @@
 'use client';
-import { useMemo } from 'react';
 import { Label, Pie, PieChart } from 'recharts';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -17,7 +16,7 @@ export function ChartPieDonutText() {
     0,
   );
 
-  const adjustedData = useMemo(() => normalizeChartData(chartHouseData), []);
+  const adjustedData = normalizeChartData(chartHouseData);
 
   return (
     <Card className="max-w-[600px] mx-auto">
@@ -74,7 +73,7 @@ export function ChartPieDonutText() {
             </Pie>
           </PieChart>
         </ChartContainer>
-        <ChartList chartData={chartHouseData} />
+        <ChartList chartData={adjustedData} />
       </CardContent>
     </Card>
   );

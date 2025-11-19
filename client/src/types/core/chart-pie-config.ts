@@ -1,4 +1,4 @@
-import { THEMES } from '@/widgets/all-apartments/pie-chart-revenue-distribution/PieChart';
+import { THEMES } from '@/shared/constants/pie-chart/chartThemes';
 import React from 'react';
 
 export type ChartPieConfig = {
