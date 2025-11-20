@@ -23,7 +23,11 @@ const handleResponse = async (response: Response): Promise<CurrencyRevaluation[]
 const createAbortController = (signal?: AbortSignal): AbortController => {
   const controller = new AbortController();
   if (signal) {
-    signal.addEventListener('abort', () => controller.abort());
+    if (signal.aborted) {
+      controller.abort();
+    } else {
+      signal.addEventListener('abort', () => controller.abort());
+    }
   }
   return controller;
 };
@@ -50,7 +54,6 @@ export const getCurrencyRevaluation = async (
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
       signal: controller.signal,
