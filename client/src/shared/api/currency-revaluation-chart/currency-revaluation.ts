@@ -17,7 +17,12 @@ const handleResponse = async (response: Response): Promise<CurrencyRevaluation[]
     const error = await response.json().catch(() => ({ message: 'Request failed' }));
     throw new Error(error.message || `API Error: ${response.status}`);
   }
-  return response.json();
+
+  try {
+    return await response.json();
+  } catch {
+    throw new Error('Invalid JSON response from server');
+  }
 };
 
 const createAbortController = (signal?: AbortSignal): AbortController => {
@@ -26,15 +31,15 @@ const createAbortController = (signal?: AbortSignal): AbortController => {
     if (signal.aborted) {
       controller.abort();
     } else {
-      signal.addEventListener('abort', () => controller.abort());
+      signal.addEventListener('abort', () => controller.abort(), { once: true });
     }
   }
   return controller;
 };
 
-const handleFetchError = (error: unknown): never => {
+const handleFetchError = (error: unknown, didTimeout: boolean): never => {
   if (error instanceof Error && error.name === 'AbortError') {
-    throw new Error('Request timeout');
+    throw new Error(didTimeout ? 'Request timeout' : 'Request was aborted');
   }
   throw error;
 };
@@ -48,7 +53,11 @@ export const getCurrencyRevaluation = async (
 
   const token = getAuthToken();
   const controller = createAbortController(signal);
-  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+  let didTimeout = false;
+  const timeoutId = setTimeout(() => {
+    didTimeout = true;
+    controller.abort();
+  }, REQUEST_TIMEOUT);
 
   try {
     const response = await fetch(`${BASE_URL}${ENDPOINT}`, {
@@ -59,10 +68,10 @@ export const getCurrencyRevaluation = async (
       signal: controller.signal,
     });
 
-    clearTimeout(timeoutId);
     return await handleResponse(response);
   } catch (error) {
+    return handleFetchError(error, didTimeout);
+  } finally {
     clearTimeout(timeoutId);
-    return handleFetchError(error);
   }
 };
