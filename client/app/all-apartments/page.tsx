@@ -1,10 +1,12 @@
+import { TestGetHouses } from '@/components/Examples/TestGetHouses';
 import { CurrencyRevaluationChart } from '@/widgets/all-apartments/currency-revaluation-chart/CurrencyRevaluationChart';
 
 const Page = () => {
   return (
-    <div>
+    <>
+      <TestGetHouses />
       <CurrencyRevaluationChart />
-    </div>
+    </>
   );
 };
 

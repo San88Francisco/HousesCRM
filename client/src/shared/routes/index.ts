@@ -4,3 +4,5 @@ export const ROUTES = {
   HOME: '/',
   UIKIT: '/uikit',
 };
+
+export const SIDEBAR_PATTERNS = [/^\/$/, /^\/all-apartments/, /^\/uikit/] as const;

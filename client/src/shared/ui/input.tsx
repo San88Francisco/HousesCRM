@@ -15,7 +15,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const [isFocused, setIsFocused] = useState<boolean>(false);
 
     return (
-      <div className={cn(className, "relative")}>
+      <div className={cn(className, 'relative')}>
         <div
           className={cn(
             'flex items-center h-10 px-2 w-full text-sm',
@@ -52,7 +52,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
           {error && iconWithError && <CircleAlert className="text-red" />}
         </div>
-        {error && <p className="mt-1 absolute top-9 left-0 text-sm text-red">{error}</p>}
       </div>
     );
   },

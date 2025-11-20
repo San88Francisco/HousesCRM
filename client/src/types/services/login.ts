@@ -4,6 +4,12 @@ export type LoginRequest = {
 };
 
 export type LoginResponse = {
+  id: string;
+  email: string;
+  username: string;
   accessToken: string;
-  refreshToken: string;
+};
+
+export type RefreshResponse = {
+  accessToken: string;
 };

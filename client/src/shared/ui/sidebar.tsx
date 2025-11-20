@@ -57,15 +57,12 @@ const SidebarProvider = forwardRef<
   HTMLDivElement,
   ComponentProps<'div'> & {
     defaultOpen?: boolean;
-    open?: boolean;
-    onOpenChange?: (open: boolean) => void;
   }
 >(
   (
     {
       defaultOpen = true,
-      open: openProp,
-      onOpenChange: setOpenProp,
+
       className,
       style,
       children,
@@ -73,6 +70,8 @@ const SidebarProvider = forwardRef<
     },
     ref,
   ) => {
+    const [openProp, setOpenProp] = useState(false);
+
     const isMobile = useIsMobile();
     const [openMobile, setOpenMobile] = useState(false);
 
