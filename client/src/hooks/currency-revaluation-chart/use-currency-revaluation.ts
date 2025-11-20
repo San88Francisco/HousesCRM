@@ -8,26 +8,26 @@ interface UseCurrencyRevaluationResult {
   error: string | null;
 }
 
-const LOADING_DELAY = 500;
-
 export const useCurrencyRevaluation = (): UseCurrencyRevaluationResult => {
   const [data, setData] = useState<CurrencyRevaluation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const [apiData] = await Promise.all([
-          getCurrencyRevaluation(),
-          new Promise(resolve => setTimeout(resolve, LOADING_DELAY)),
-        ]);
+        const apiData = await getCurrencyRevaluation(controller.signal);
 
         setData(apiData);
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return;
+        }
         const errorMessage = err instanceof Error ? err.message : 'Не вдалося завантажити дані';
         setError(errorMessage);
         console.error('Error fetching currency revaluation:', err);
@@ -37,6 +37,10 @@ export const useCurrencyRevaluation = (): UseCurrencyRevaluationResult => {
     };
 
     void fetchData();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return { data, loading, error };
