@@ -1,21 +1,22 @@
 /* eslint-disable */
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useTheme } from 'next-themes';
-import { mockCurrencyRevaluation } from '@/shared/constants/currency-revaluation-chart/mock-data';
 import {
   transformCurrencyData,
   truncateText,
 } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 import { CustomTooltip } from './CustomTooltip';
+import { useCurrencyRevaluation } from '@/hooks/currency-revaluation-chart/use-currency-revaluation';
 
 const ROW_HEIGHT = 45;
+const MIN_VISIBLE_ROWS = 4; // Мінімум 4 рядки для нормального відображення
 const MAX_VISIBLE_ROWS = 7;
-const LOADING_DELAY = 500;
 const Y_AXIS_PADDING = 0.15;
 const MAX_TEXT_LENGTH_YAXIS = 10;
+const MILLION = 1_000_000;
 const computeChartHeight = (dataLength: number) => dataLength * ROW_HEIGHT + 30;
 
 const formatYAxisTick = (value: string) => {
@@ -24,30 +25,18 @@ const formatYAxisTick = (value: string) => {
 
 export const CurrencyRevaluationChart = () => {
   const { theme, systemTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { data: apiData, loading, error } = useCurrencyRevaluation();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const currentTheme = theme === 'system' ? systemTheme : theme;
   const isDark = currentTheme === 'dark';
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      await new Promise<void>(resolve => {
-        setTimeout(resolve, LOADING_DELAY);
-      });
-      setLoading(false);
-    };
-    void loadData();
-  }, []);
-
   const chartData = useMemo(() => {
-    const transformed = transformCurrencyData(mockCurrencyRevaluation);
+    if (!apiData || apiData.length === 0) {
+      return [];
+    }
+
+    const transformed = transformCurrencyData(apiData);
 
     return transformed
       .map(item => ({
@@ -55,30 +44,53 @@ export const CurrencyRevaluationChart = () => {
         growthAmount: item.revaluationAmount - item.purchaseAmount,
       }))
       .reverse();
-  }, []);
+  }, [apiData]);
 
   const xAxisMax = useMemo(() => {
     if (chartData.length === 0) {
-      return 1000000;
+      return MILLION;
     }
     const maxValue = Math.max(...chartData.map(d => d.revaluationAmount));
-    return Math.ceil((maxValue * (1 + Y_AXIS_PADDING)) / 1000000) * 1000000;
+    return Math.ceil((maxValue * (1 + Y_AXIS_PADDING)) / MILLION) * MILLION;
   }, [chartData]);
 
   const purchaseBarFill = isDark ? '#c6c7f856' : '#1f2937';
   const growthBarFill = isDark ? '#C6C7F8' : '#d1d5db';
 
-  if (!mounted) {
-    return null;
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>Завантаження...</p>
+        <div className="flex flex-col items-center gap-3">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white" />
+          <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>Завантаження...</p>
+        </div>
       </div>
     );
   }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <p className="text-red-500 mb-2">Помилка завантаження даних</p>
+          <p className="text-sm text-gray-500">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (chartData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>Немає даних для відображення</p>
+      </div>
+    );
+  }
+
+  const actualRows = chartData.length;
+  const displayRows = Math.min(Math.max(actualRows, MIN_VISIBLE_ROWS), MAX_VISIBLE_ROWS);
+  const containerHeight = displayRows * ROW_HEIGHT + 30;
+  const chartHeight = computeChartHeight(Math.max(actualRows, MIN_VISIBLE_ROWS));
 
   return (
     <div
@@ -92,15 +104,11 @@ export const CurrencyRevaluationChart = () => {
       <div
         className="w-full no-scrollbar"
         style={{
-          maxHeight: MAX_VISIBLE_ROWS * ROW_HEIGHT + 30,
-          overflowY: 'scroll',
+          height: containerHeight,
+          overflowY: actualRows > MAX_VISIBLE_ROWS ? 'auto' : 'hidden',
         }}
       >
-        <ResponsiveContainer
-          width="100%"
-          height={computeChartHeight(chartData.length)}
-          minWidth={280}
-        >
+        <ResponsiveContainer width="100%" height={chartHeight} minWidth={280}>
           <BarChart
             data={chartData}
             layout="vertical"
