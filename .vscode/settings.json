@@ -1,54 +1,42 @@
 {
-  "search.exclude": {
-    "client/.next": true,
-    "client/.next/**": true,
-    "client/node_modules": true,
-    "client/node_modules/**": true,
-    "client/.turbo": true,
-    "client/.turbo/**": true,
-    "client/out": true,
-    "client/out/**": true,
-    "client/.swc": true,
-    "client/.swc/**": true,
-    "server/node_modules": true,
-    "server/node_modules/**": true,
-    "server/dist": true,
-    "server/dist/**": true,
-    "node_modules": true,
-    "**/node_modules": true,
-    "**/node_modules/**": true,
-    ".next": true,
-    "**/.next": true,
-    "**/.next/**": true,
-    "dist": true,
-    "**/dist": true,
-    "**/dist/**": true,
-    "build": true,
-    "**/build": true,
-    "**/build/**": true,
-    ".turbo": true,
-    "**/.turbo": true,
-    "**/.turbo/**": true,
-    "out": true,
-    "**/out": true,
-    "**/out/**": true,
-    "coverage": true,
-    "**/coverage": true,
-    "**/coverage/**": true,
-    ".git": true,
-    "**/.git": true,
-    "**/.git/**": true,
-    ".eslintcache": true,
-    "**/.eslintcache": true,
-    "package-lock.json": true,
-    "**/package-lock.json": true,
-    "yarn.lock": true,
-    "**/yarn.lock": true,
-    "*.log": true,
-    "**/*.log": true,
-    ".DS_Store": true,
-    "**/.DS_Store": true
+  "prettier.requireConfig": true,
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
   },
+
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "search.exclude": {
+    "client/.next/**": true,
+    "client/node_modules/**": true,
+    "client/.turbo/**": true,
+    "client/out/**": true,
+    "server/node_modules/**": true,
+    "server/dist/**": true,
+    "**/node_modules/**": true,
+    "**/.git/**": true,
+    "**/.DS_Store": true,
+    "**/.eslintcache": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.turbo/**": true,
+    "**/coverage/**": true
+  },
+
   "files.exclude": {
     "client/.next": true,
     "client/node_modules": true,
@@ -57,14 +45,11 @@
     "server/node_modules": true,
     "server/dist": true,
     "node_modules": true,
-    "**/node_modules": true,
     ".git": true,
-    "**/.git": true,
     ".DS_Store": true,
-    "**/.DS_Store": true,
-    ".eslintcache": true,
-    "**/.eslintcache": true
+    ".eslintcache": true
   },
+
   "files.watcherExclude": {
     "client/.next/**": true,
     "client/node_modules/**": true,
@@ -73,16 +58,16 @@
     "server/node_modules/**": true,
     "server/dist/**": true,
     "node_modules/**": true,
-    "**/node_modules/**": true,
-    ".git/**": true,
-    "**/.git/**": true
+    ".git/**": true
   },
+
   "search.useIgnoreFiles": true,
   "search.useGlobalIgnoreFiles": true,
   "search.useParentIgnoreFiles": true,
-  "search.followSymlinks": false,
   "search.smartCase": true,
   "search.maxResults": 5000,
+  "search.followSymlinks": false,
+
   "typescript.preferences.includePackageJsonAutoImports": "off",
   "postman.settings.dotenv-detection-notification-visibility": false
 }
