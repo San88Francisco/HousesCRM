@@ -44,6 +44,14 @@ export const CurrencyRevaluationChart = () => {
       .reverse();
   }, [apiData]);
 
+  const xAxisMax = useMemo(() => {
+    if (chartData.length === 0) {
+      return MILLION;
+    }
+    const maxValue = Math.max(...chartData.map(d => d.revaluationAmount));
+    return Math.ceil((maxValue * (1 + Y_AXIS_PADDING)) / MILLION) * MILLION;
+  }, [chartData]);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -55,25 +63,18 @@ export const CurrencyRevaluationChart = () => {
   const currentTheme = theme === 'system' ? systemTheme : theme;
   const isDark = currentTheme === 'dark';
 
-  const xAxisMax = useMemo(() => {
-    if (chartData.length === 0) {
-      return MILLION;
-    }
-    const maxValue = Math.max(...chartData.map(d => d.revaluationAmount));
-    return Math.ceil((maxValue * (1 + Y_AXIS_PADDING)) / MILLION) * MILLION;
-  }, [chartData]);
-
-  const purchaseBarFill = isDark ? '#c6c7f856' : '#1f2937';
-  const growthBarFill = isDark ? '#C6C7F8' : '#d1d5db';
+  const purchaseBarFill = isDark ? 'rgba(198, 199, 248, 0.34)' : 'var(--dark)';
+  const growthBarFill = isDark ? 'var(--purple-medium)' : 'var(--dark-light)';
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="flex flex-col items-center gap-3">
           <div
-            className={`animate-spin rounded-full h-8 w-8 border-b-2 ${isDark ? 'border-white' : 'border-gray-900'}`}
+            className="animate-spin rounded-full h-8 w-8 border-b-2"
+            style={{ borderBottomColor: 'var(--text)' }}
           />
-          <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>Завантаження...</p>
+          <p style={{ color: 'var(--muted-text)' }}>Завантаження...</p>
         </div>
       </div>
     );
@@ -83,8 +84,12 @@ export const CurrencyRevaluationChart = () => {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <p className="text-red-500 mb-2">Помилка завантаження даних</p>
-          <p className="text-sm text-gray-500">{error}</p>
+          <p className="mb-2" style={{ color: 'var(--red)' }}>
+            Помилка завантаження даних
+          </p>
+          <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
+            {error}
+          </p>
         </div>
       </div>
     );
@@ -93,7 +98,7 @@ export const CurrencyRevaluationChart = () => {
   if (chartData.length === 0) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>Немає даних для відображення</p>
+        <p style={{ color: 'var(--muted-text)' }}>Немає даних для відображення</p>
       </div>
     );
   }
@@ -105,10 +110,14 @@ export const CurrencyRevaluationChart = () => {
 
   return (
     <div
-      className={`w-full p-6 rounded-2xl shadow-xl ${isDark ? 'bg-gray-900' : 'bg-white'}`}
-      style={{ maxWidth: '400px', margin: '0 auto' }}
+      className="w-full p-6 rounded-2xl shadow-xl"
+      style={{
+        maxWidth: '400px',
+        margin: '0 auto',
+        backgroundColor: isDark ? 'var(--foreground)' : 'var(--white)',
+      }}
     >
-      <h2 className={`text-lg font-semibold mb-8 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+      <h2 className="text-lg font-semibold mb-8" style={{ color: 'var(--text)' }}>
         Переоцінка валюти
       </h2>
 
@@ -141,7 +150,7 @@ export const CurrencyRevaluationChart = () => {
               tickFormatter={formatYAxisTick}
               tick={{
                 fontSize: 13,
-                fill: isDark ? '#d1d5db' : '#1f2937',
+                fill: isDark ? 'var(--dark-light)' : 'var(--dark)',
                 fontWeight: 500,
               }}
               axisLine={false}
