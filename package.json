@@ -27,7 +27,7 @@
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "client/**/*.{js,jsx,ts,tsx}": [
+    "client/**/*.{js,jsx,ts,tsx,css,scss}": [
       "npm run lint:fix --prefix client",
       "prettier --write --config client/.prettierrc --ignore-path client/.prettierignore"
     ],
