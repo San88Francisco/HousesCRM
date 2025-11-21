@@ -1,7 +1,7 @@
 /* eslint-disable */
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useTheme } from 'next-themes';
 import {
@@ -26,7 +26,16 @@ const formatYAxisTick = (value: string) => {
 export const CurrencyRevaluationChart = () => {
   const { theme, systemTheme } = useTheme();
   const { data: apiData, loading, error } = useCurrencyRevaluation();
+  const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   const currentTheme = theme === 'system' ? systemTheme : theme;
   const isDark = currentTheme === 'dark';
