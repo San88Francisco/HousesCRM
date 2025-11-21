@@ -12,7 +12,7 @@ import { CustomTooltip } from './CustomTooltip';
 import { useCurrencyRevaluation } from '@/hooks/currency-revaluation-chart/use-currency-revaluation';
 
 const ROW_HEIGHT = 45;
-const MIN_VISIBLE_ROWS = 4; // Мінімум 4 рядки для нормального відображення
+const MIN_VISIBLE_ROWS = 4;
 const MAX_VISIBLE_ROWS = 7;
 const Y_AXIS_PADDING = 0.15;
 const MAX_TEXT_LENGTH_YAXIS = 10;

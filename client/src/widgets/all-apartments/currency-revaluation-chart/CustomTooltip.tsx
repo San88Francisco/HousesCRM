@@ -61,10 +61,8 @@ export const CustomTooltip = ({ active, payload, isDark }: CustomTooltipProps) =
             </span>
           </div>
           <div className="flex justify-between gap-4">
-            <span className={isDark ? 'text-gray-500' : 'text-gray-500'}>Поточний курс:</span>
-            <span className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
-              {formatRate(data.currentRate)}
-            </span>
+            <span className="text-gray-500">Поточний курс:</span>
+            <span className="text-xs text-gray-500">{formatRate(data.currentRate)}</span>
           </div>
         </div>
       </div>
