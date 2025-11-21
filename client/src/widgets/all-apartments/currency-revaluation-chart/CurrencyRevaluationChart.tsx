@@ -37,11 +37,15 @@ export const CurrencyRevaluationChart = () => {
     const transformed = transformCurrencyData(apiData);
 
     return transformed
-      .map(item => ({
-        ...item,
-        growthAmount: Math.max(rawGrowth, 0),
-        realGrowthAmount: rawGrowth,
-      }))
+      .map(item => {
+        const rawGrowth = item.revaluationAmount - item.purchaseAmount;
+
+        return {
+          ...item,
+          growthAmount: Math.max(rawGrowth, 0),
+          realGrowthAmount: rawGrowth,
+        };
+      })
       .reverse();
   }, [apiData]);
 
