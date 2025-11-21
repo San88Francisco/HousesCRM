@@ -39,7 +39,8 @@ export const CurrencyRevaluationChart = () => {
     return transformed
       .map(item => ({
         ...item,
-        growthAmount: item.revaluationAmount - item.purchaseAmount,
+        growthAmount: Math.max(rawGrowth, 0),
+        realGrowthAmount: rawGrowth,
       }))
       .reverse();
   }, [apiData]);
@@ -48,7 +49,11 @@ export const CurrencyRevaluationChart = () => {
     if (chartData.length === 0) {
       return MILLION;
     }
-    const maxValue = Math.max(...chartData.map(d => d.revaluationAmount));
+
+    const maxValue = Math.max(
+      ...chartData.map(item => Math.max(item.purchaseAmount, item.revaluationAmount)),
+    );
+
     return Math.ceil((maxValue * (1 + Y_AXIS_PADDING)) / MILLION) * MILLION;
   }, [chartData]);
 
