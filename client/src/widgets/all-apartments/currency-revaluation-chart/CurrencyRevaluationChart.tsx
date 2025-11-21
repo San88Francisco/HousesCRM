@@ -61,7 +61,9 @@ export const CurrencyRevaluationChart = () => {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="flex flex-col items-center gap-3">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white" />
+          <div
+            className={`animate-spin rounded-full h-8 w-8 border-b-2 ${isDark ? 'border-white' : 'border-gray-900'}`}
+          />
           <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>Завантаження...</p>
         </div>
       </div>
@@ -122,7 +124,7 @@ export const CurrencyRevaluationChart = () => {
               setHoveredIndex(null);
             }}
           >
-            <XAxis type="number" domain={[0, xAxisMax]} hide={true} strokeOpacity={0} />
+            <XAxis type="number" domain={[0, xAxisMax]} hide={true} />
 
             <YAxis
               type="category"
