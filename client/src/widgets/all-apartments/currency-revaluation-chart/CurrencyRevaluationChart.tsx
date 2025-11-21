@@ -29,17 +29,6 @@ export const CurrencyRevaluationChart = () => {
   const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
-  const currentTheme = theme === 'system' ? systemTheme : theme;
-  const isDark = currentTheme === 'dark';
-
   const chartData = useMemo(() => {
     if (!apiData || apiData.length === 0) {
       return [];
@@ -54,6 +43,17 @@ export const CurrencyRevaluationChart = () => {
       }))
       .reverse();
   }, [apiData]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  const currentTheme = theme === 'system' ? systemTheme : theme;
+  const isDark = currentTheme === 'dark';
 
   const xAxisMax = useMemo(() => {
     if (chartData.length === 0) {
