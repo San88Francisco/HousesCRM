@@ -24,7 +24,6 @@ export const Logo = () => {
 
   const logoSrc = resolvedTheme === NextTheme.Dark ? LOGOS.dark : LOGOS.light;
 
-
   return (
     <div className="p-4 flex justify-center">
       <Image alt="logo" src={logoSrc} width={84} height={28} />
