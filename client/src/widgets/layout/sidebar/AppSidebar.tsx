@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { SidebarHeaderComponent } from './SidebarHeader';
 import { SidebarPagesGroup } from './SidebarPagesGroup';
 import { SidebarTablesGroup } from './SidebarTablesGroup';
-import { Logo } from '@/components/Logo/Logo';
+import { Logo } from '@/components/logo/Logo';
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
 import { useUser } from '@/hooks/use-user';
 

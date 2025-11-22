@@ -5,7 +5,6 @@ import { ThemeProvider } from 'next-themes';
 import { Provider } from 'react-redux';
 import store from '@/store/store';
 import { SidebarProvider } from '@/shared/ui/sidebar';
-import { AppSidebar } from '@/widgets/layout/sidebar/AppSidebar';
 
 type Props = {
   children: ReactNode;
@@ -21,10 +20,7 @@ export const Providers = ({ children }: Props) => {
       storageKey="theme"
     >
       <Provider store={store}>
-        <SidebarProvider>
-          <AppSidebar />
-          {children}
-        </SidebarProvider>
+        <SidebarProvider>{children}</SidebarProvider>
       </Provider>
     </ThemeProvider>
   );

@@ -1,9 +1,14 @@
+import BackgroundLogo from '@/widgets/login/background-logo/BackgroundLogo';
 import { LoginForm } from '@/widgets/login/login-form';
 
-export default function Page() {
+export default async function Page() {
   return (
-    <div className="h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
-      <LoginForm />
+    <div className="relative h-screen flex items-center justify-center overflow-hidden">
+      <BackgroundLogo />
+
+      <div className="relative z-10">
+        <LoginForm />
+      </div>
     </div>
   );
 }
