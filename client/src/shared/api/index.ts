@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { clearUser } from '@/store/user-slice';
 import store from '@/store/store';
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_URL1;
 
 const baseQuery = fetchBaseQuery({
   baseUrl,
@@ -72,6 +72,6 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const rootApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Auth', 'Houses'],
+  tagTypes: ['Auth', 'Houses', 'Analytics'],
   endpoints: () => ({}),
 });

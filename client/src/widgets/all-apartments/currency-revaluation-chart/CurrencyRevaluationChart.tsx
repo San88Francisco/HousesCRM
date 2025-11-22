@@ -9,7 +9,7 @@ import {
   truncateText,
 } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 import { CustomTooltip } from './CustomTooltip';
-import { useCurrencyRevaluation } from '@/hooks/currency-revaluation-chart/use-currency-revaluation';
+import { useGetCurrencyRevaluationQuery } from '@/shared/api/currency-revaluation-chart/currency-revaluation-api';
 
 const ROW_HEIGHT = 45;
 const MIN_VISIBLE_ROWS = 4;
@@ -25,7 +25,7 @@ const formatYAxisTick = (value: string) => {
 
 export const CurrencyRevaluationChart = () => {
   const { theme, systemTheme } = useTheme();
-  const { data: apiData, loading, error } = useCurrencyRevaluation();
+  const { data: apiData, isLoading, error } = useGetCurrencyRevaluationQuery();
   const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -75,7 +75,7 @@ export const CurrencyRevaluationChart = () => {
   const purchaseBarFill = isDark ? 'rgba(198, 199, 248, 0.34)' : 'var(--dark)';
   const growthBarFill = isDark ? 'var(--purple-medium)' : 'var(--dark-light)';
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="flex flex-col items-center gap-3">
@@ -90,6 +90,11 @@ export const CurrencyRevaluationChart = () => {
   }
 
   if (error) {
+    const errorMessage =
+      'status' in error
+        ? (error as unknown).data || 'Помилка завантаження даних'
+        : 'Помилка завантаження даних';
+
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
@@ -97,7 +102,7 @@ export const CurrencyRevaluationChart = () => {
             Помилка завантаження даних
           </p>
           <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-            {error}
+            {errorMessage}
           </p>
         </div>
       </div>
