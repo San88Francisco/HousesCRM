@@ -43,7 +43,6 @@ export const CurrencyRevaluationChart = () => {
         return {
           ...item,
           growthAmount: Math.max(rawGrowth, 0),
-          realGrowthAmount: rawGrowth,
         };
       })
       .reverse();
