@@ -22,11 +22,14 @@ export const Logo = () => {
     );
   }
 
-  const logoSrc = resolvedTheme === NextTheme.Dark ? LOGOS.dark : LOGOS.light;
-
   return (
     <div className="p-4 flex justify-center">
-      <Image alt="logo" src={logoSrc} width={84} height={28} />
+      <Image
+        alt="logo"
+        src={resolvedTheme === NextTheme.Dark ? LOGOS.dark : LOGOS.light}
+        width={84}
+        height={28}
+      />
     </div>
   );
 };
