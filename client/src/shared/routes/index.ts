@@ -1,6 +1,6 @@
 export const ROUTES = {
-  LOGIN: 'login',
-  REGISTER: 'register',
+  LOGIN: '/login',
+  REGISTER: '/register',
   ALL_APARTMENTS: '/all-apartments',
   HOME: '/',
   UIKIT: '/uikit',

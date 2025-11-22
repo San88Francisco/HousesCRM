@@ -3,11 +3,8 @@
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-
-const LOGOS = {
-  light: '/logo/lightLogo.png',
-  dark: '/logo/darkLogo.png',
-};
+import { LOGOS } from '@/constants/logo/logos';
+import { NextTheme } from '@/types/core/theme';
 
 export const Logo = () => {
   const [mounted, setMounted] = useState<boolean>(false);
@@ -29,7 +26,7 @@ export const Logo = () => {
     <div className="p-4 flex justify-center">
       <Image
         alt="logo"
-        src={resolvedTheme === 'dark' ? LOGOS.dark : LOGOS.light}
+        src={resolvedTheme === NextTheme.Dark ? LOGOS.dark : LOGOS.light}
         width={84}
         height={28}
       />

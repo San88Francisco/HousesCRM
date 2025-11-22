@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation';
 import { ROUTES } from '@/shared/routes';
 
 const Header = () => {
-  const pathname = usePathname();
-  const last = pathname.split('/').filter(Boolean).pop() || 'home';
+  const pathname = usePathname() ?? '/';
+  const last = pathname.split('/').filter(Boolean).pop();
 
   if (last === ROUTES.LOGIN || last === ROUTES.REGISTER) return null;
 
