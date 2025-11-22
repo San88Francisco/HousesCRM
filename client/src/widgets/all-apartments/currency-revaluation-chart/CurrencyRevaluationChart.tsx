@@ -90,11 +90,14 @@ export const CurrencyRevaluationChart = () => {
   }
 
   if (error) {
-    const errorMessage =
-      'status' in error
-        ? (error as unknown).data || 'Помилка завантаження даних'
-        : 'Помилка завантаження даних';
+    let errorMessage = 'Помилка завантаження даних';
 
+    if ('status' in error) {
+      errorMessage =
+        typeof error.data === 'string' ? error.data : (error.data as any)?.message || errorMessage;
+    } else if ('message' in error) {
+      errorMessage = error.message || errorMessage;
+    }
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
