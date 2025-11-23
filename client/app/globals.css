@@ -124,7 +124,6 @@ body {
     BlinkMacSystemFont,
     sans-serif;
 
-  /* якщо хочеш через CSS-змінні */
   color: var(--text);
   background: var(--background);
 
