@@ -9,16 +9,14 @@ import { SidebarTablesGroup } from './SidebarTablesGroup';
 
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
 import { useUser } from '@/hooks/use-user';
-import { Logo } from '@/components/Logo/Logo';
+import { LogoSidebar } from './LogoSidebar';
 
 export const AppSidebar = () => {
   const { email } = useUser();
   const { state } = useSidebar();
   const pathname = usePathname();
 
-  if (!shouldShowSidebar(pathname)) {
-    return null;
-  }
+  if (!shouldShowSidebar(pathname)) return null;
 
   return (
     <Sidebar collapsible="icon">
@@ -27,7 +25,7 @@ export const AppSidebar = () => {
         <SidebarPagesGroup items={itemsNav} />
         <SidebarTablesGroup items={itemsNav} />
       </SidebarContent>
-      <Logo />
+      <LogoSidebar />
     </Sidebar>
   );
 };

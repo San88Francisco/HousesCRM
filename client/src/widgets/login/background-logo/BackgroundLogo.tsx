@@ -1,40 +1,14 @@
 'use client';
-
-import { LOGOS } from '@/constants/logo/logos';
-import { cn } from '@/shared/utils/cn';
-import { NextTheme } from '@/types/core/theme';
-import { useTheme } from 'next-themes';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useIsMobile } from '@/hooks';
 
 export default function BackgroundLogo() {
-  const [mounted, setMounted] = useState<boolean>(false);
-  const { resolvedTheme } = useTheme();
+  const isMobile = useIsMobile();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="relative w-[80vw] max-w-[950px] aspect-square" />
-      </div>
-    );
-  }
-  const logoSrc = resolvedTheme === NextTheme.Dark ? LOGOS.dark : LOGOS.light;
-  const opacity = resolvedTheme === NextTheme.Dark ? 'opacity-[0.2]' : 'opacity-[0.3]';
+  if (isMobile) return null;
 
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <div className="relative w-[80vw] max-w-[950px] aspect-square">
-        <Image
-          alt="background logo"
-          src={logoSrc}
-          fill
-          className={cn('object-contain select-none', opacity)}
-        />
-      </div>
+      <div className="relative w-[80vw] max-w-[950px] aspect-square bg-logo bg-center bg-contain bg-no-repeat opacity-[0.03]" />
     </div>
   );
 }

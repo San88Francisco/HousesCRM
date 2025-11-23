@@ -42,7 +42,7 @@
 
   --yellow: #ffe999;
   --gold: #f5c542;
-  --red: #ff4747;
+  --red: #e24d4d;
 
   --gray: #374151;
   --gray-medium: #4b5563;
@@ -56,6 +56,7 @@
   --white-medium: #fafbfd;
   --white-light: #f9fafc;
   --white-lightest: #f7f9fb;
+  --bg-logo: url('/logo/light-logo.png');
 }
 
 .dark {
@@ -90,7 +91,7 @@
 
   --yellow: #ffe999;
   --gold: #f5c542;
-  --red: #d55b5b;
+  --red: #e24d4d;
 
   --gray: #374151;
   --gray-medium: #4b5563;
@@ -104,6 +105,7 @@
   --white-medium: #fafbfd;
   --white-light: #f9fafc;
   --white-lightest: #f7f9fb;
+  --bg-logo: url('/logo/dark-logo.png');
 }
 
 html,

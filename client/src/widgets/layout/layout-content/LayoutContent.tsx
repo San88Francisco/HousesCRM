@@ -13,7 +13,7 @@ export const LayoutContent = ({ children }: { children: ReactNode }) => {
 
         <div className="flex flex-1 flex-col">
           <Header />
-          <main className="flex-1 px-2 sm:px-8 py-5">{children}</main>
+          <main className="px-2 sm:px-8 py-5">{children}</main>
         </div>
       </Suspense>
     </SidebarProvider>

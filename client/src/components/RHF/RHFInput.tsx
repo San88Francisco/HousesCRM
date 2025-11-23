@@ -70,7 +70,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
             />
           )}
         />
-        {error && <p className="mt-1  text-sm text-red">{errorMessage}</p>}
+        {error && <p className="text-sm text-red !mt-0">{errorMessage}</p>}
       </div>
     );
   },
