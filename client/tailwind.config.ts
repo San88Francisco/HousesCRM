@@ -86,6 +86,9 @@ export default {
       borderRadius: {
         xl: '1rem',
       },
+      backgroundImage: {
+        logo: 'var(--bg-logo)',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

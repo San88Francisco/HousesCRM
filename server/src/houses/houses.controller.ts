@@ -26,8 +26,6 @@ export class HousesController {
     return this.housesService.findAll(dto)
   }
 
-
-
   @Get(HOUSES_ROUTES.BY_ID)
   @Auth()
   public async findById(@Param('id') id: string): Promise<HouseWithOccupancyReports> {
