@@ -1,75 +1,75 @@
-// {
-//   "prettier.requireConfig": true,
+{
+  "prettier.requireConfig": true,
 
-//   "eslint.useFlatConfig": true,
+  "eslint.useFlatConfig": true,
 
-//   "editor.defaultFormatter": "esbenp.prettier-vscode",
-//   "editor.formatOnSave": true,
-//   "editor.codeActionsOnSave": {
-//     "source.fixAll.eslint": "explicit"
-//   },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
 
-//   "[typescript]": {
-//     "editor.defaultFormatter": "esbenp.prettier-vscode"
-//   },
-//   "[typescriptreact]": {
-//     "editor.defaultFormatter": "esbenp.prettier-vscode"
-//   },
-//   "[javascript]": {
-//     "editor.defaultFormatter": "esbenp.prettier-vscode"
-//   },
-//   "[json]": {
-//     "editor.defaultFormatter": "esbenp.prettier-vscode"
-//   },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 
-//   "search.exclude": {
-//     "client/.next/**": true,
-//     "client/node_modules/**": true,
-//     "client/.turbo/**": true,
-//     "client/out/**": true,
-//     "server/node_modules/**": true,
-//     "server/dist/**": true,
-//     "**/node_modules/**": true,
-//     "**/.git/**": true,
-//     "**/.DS_Store": true,
-//     "**/.eslintcache": true,
-//     "**/dist/**": true,
-//     "**/build/**": true,
-//     "**/.turbo/**": true,
-//     "**/coverage/**": true
-//   },
+  "search.exclude": {
+    "client/.next/**": true,
+    "client/node_modules/**": true,
+    "client/.turbo/**": true,
+    "client/out/**": true,
+    "server/node_modules/**": true,
+    "server/dist/**": true,
+    "**/node_modules/**": true,
+    "**/.git/**": true,
+    "**/.DS_Store": true,
+    "**/.eslintcache": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.turbo/**": true,
+    "**/coverage/**": true
+  },
 
-//   "files.exclude": {
-//     "client/.next": true,
-//     "client/node_modules": true,
-//     "client/.turbo": true,
-//     "client/out": true,
-//     "server/node_modules": true,
-//     "server/dist": true,
-//     "node_modules": true,
-//     ".git": true,
-//     ".DS_Store": true,
-//     ".eslintcache": true
-//   },
+  "files.exclude": {
+    "client/.next": true,
+    "client/node_modules": true,
+    "client/.turbo": true,
+    "client/out": true,
+    "server/node_modules": true,
+    "server/dist": true,
+    "node_modules": true,
+    ".git": true,
+    ".DS_Store": true,
+    ".eslintcache": true
+  },
 
-//   "files.watcherExclude": {
-//     "client/.next/**": true,
-//     "client/node_modules/**": true,
-//     "client/.turbo/**": true,
-//     "client/out/**": true,
-//     "server/node_modules/**": true,
-//     "server/dist/**": true,
-//     "node_modules/**": true,
-//     ".git/**": true
-//   },
+  "files.watcherExclude": {
+    "client/.next/**": true,
+    "client/node_modules/**": true,
+    "client/.turbo/**": true,
+    "client/out/**": true,
+    "server/node_modules/**": true,
+    "server/dist/**": true,
+    "node_modules/**": true,
+    ".git/**": true
+  },
 
-//   "search.useIgnoreFiles": true,
-//   "search.useGlobalIgnoreFiles": true,
-//   "search.useParentIgnoreFiles": true,
-//   "search.smartCase": true,
-//   "search.maxResults": 5000,
-//   "search.followSymlinks": false,
+  "search.useIgnoreFiles": true,
+  "search.useGlobalIgnoreFiles": true,
+  "search.useParentIgnoreFiles": true,
+  "search.smartCase": true,
+  "search.maxResults": 5000,
+  "search.followSymlinks": false,
 
-//   "typescript.preferences.includePackageJsonAutoImports": "off",
-//   "postman.settings.dotenv-detection-notification-visibility": false
-// }
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "postman.settings.dotenv-detection-notification-visibility": false
+}
