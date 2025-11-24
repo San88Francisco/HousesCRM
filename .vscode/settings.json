@@ -1,7 +1,7 @@
 {
   "prettier.requireConfig": true,
 
-  "eslint.experimental.useFlatConfig": true,
+  "eslint.useFlatConfig": true,
 
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
