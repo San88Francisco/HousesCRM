@@ -6,11 +6,11 @@ export const ButtonComponent = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-start gap-2">
-        <Button size="xs">Button text</Button>
+        {/* <Button size="xs">Button text</Button>
         <Button size="sm">Button text</Button>
         <Button size="md">Button text</Button>
         <Button size="lg">Button text</Button>
-        <Button size="xl">Button text</Button>
+        <Button size="xl">Button text</Button> */}
       </div>
       <div className="flex items-start gap-2">
         <Button size="xs" variant="secondary">
