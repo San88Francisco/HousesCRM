@@ -1,4 +1,5 @@
 import type { Contract } from 'src/contracts/entities/contract.entity'
+import { ContractStatus } from 'src/contracts/entities/contract.entity'
 import { HouseDetailAnalyticDto } from '../house-detail-analytics/dto/house-detail-analytic.dto'
 import { calculateContractRevenue } from './revenue.helpers'
 
@@ -13,11 +14,18 @@ export const aggregateOccupancyReports = (contracts: Contract[]): HouseDetailAna
         lastName: contract.renter.lastName,
         occupied: contract.renter.occupied,
         vacated: contract.renter.vacated,
+        status: contract.status,
         totalIncome: 0,
       }
     }
 
     acc[renterId].totalIncome += calculateContractRevenue(contract)
+
+    if (contract.status === ContractStatus.ACTIVE) {
+      acc[renterId].status = ContractStatus.ACTIVE
+    } else if (!acc[renterId].status) {
+      acc[renterId].status = contract.status ?? ContractStatus.INACTIVE
+    }
 
     return acc
   }, {})
