@@ -10,7 +10,7 @@ const LOGOS = {
 };
 
 export const Logo = () => {
-  const [mounted, setMounted] = useState<boolean>(false);
+  const [mounted, setMounted1] = useState<boolean>(false);
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
