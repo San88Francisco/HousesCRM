@@ -23,7 +23,7 @@ export const aggregateOccupancyReports = (contracts: Contract[]): HouseDetailAna
 
     if (contract.status === ContractStatus.ACTIVE) {
       acc[renterId].status = ContractStatus.ACTIVE
-    } else if (!acc[renterId].status) {
+    } else if (acc[renterId].status !== ContractStatus.ACTIVE) {
       acc[renterId].status = contract.status ?? ContractStatus.INACTIVE
     }
 
