@@ -11,10 +11,11 @@ import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { mockData } from '@/shared/constants/table/dataTable';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
+import { TestGetHouses } from '@/widgets/uikit/test-get-houses';
 
 export default function Page() {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 min-w-screen">
       <ButtonComponent />
       <CardComponent />
       <ControlButtons />
@@ -27,6 +28,7 @@ export default function Page() {
       <TextareaComponent />
       <ToastCopmponent />
       <SelectComponent />
+      <TestGetHouses />
     </div>
   );
 }
