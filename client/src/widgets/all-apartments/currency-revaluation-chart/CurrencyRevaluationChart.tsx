@@ -58,6 +58,10 @@ export const CurrencyRevaluationChart = () => {
       ...chartData.map(item => Math.max(item.purchaseAmount, item.revaluationAmount)),
     );
 
+    if (maxValue === 0) {
+      return MILLION;
+    }
+
     return Math.ceil((maxValue * (1 + Y_AXIS_PADDING)) / MILLION) * MILLION;
   }, [chartData]);
 
