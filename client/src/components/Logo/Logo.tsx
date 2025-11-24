@@ -8,36 +8,11 @@ const LOGOS = {
   light: '/logo/lightLogo.png',
   dark: '/logo/darkLogo.png',
 };
-const LOGOS = {
-  light: '/logo/lightLogo.png',
-  dark: '/logo/darkLogo.png',
-};
 
 export const Logo = () => {
-  const [mounted, setMounted2] = useState<boolean>(false);
+  const [mounted, setMounted] = useState<boolean>(false);
   const { resolvedTheme } = useTheme();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
   useEffect(() => {
     setMounted(true);
   }, []);
