@@ -3,12 +3,12 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { cn } from '@/shared/utils/cn';
 import { useTheme } from 'next-themes';
 import {
   transformCurrencyData,
   truncateText,
 } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
+import { cn } from '@/shared/utils/cn';
 import { CustomTooltip } from './CustomTooltip';
 import { useGetCurrencyRevaluationQuery } from '@/shared/api/currency-revaluation-chart/currency-revaluation-api';
 
