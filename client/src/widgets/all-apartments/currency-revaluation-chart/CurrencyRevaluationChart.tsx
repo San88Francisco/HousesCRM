@@ -3,6 +3,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { cn } from '@/shared/utils/cn';
 import { useTheme } from 'next-themes';
 import {
   transformCurrencyData,
@@ -79,7 +80,7 @@ export const CurrencyRevaluationChart = () => {
       <div className="flex items-center justify-center h-96">
         <div className="flex flex-col items-center gap-3">
           <div
-            className="animate-spin rounded-full h-8 w-8 border-b-2"
+            className={cn('animate-spin rounded-full h-8 w-8 border-b-2')}
             style={{ borderBottomColor: 'var(--text)' }}
           />
           <p style={{ color: 'var(--muted-text)' }}>Завантаження...</p>
@@ -133,12 +134,12 @@ export const CurrencyRevaluationChart = () => {
         backgroundColor: isDark ? 'var(--foreground)' : 'var(--white)',
       }}
     >
-      <h2 className="text-lg font-semibold mb-8" style={{ color: 'var(--text)' }}>
+      <h2 className={cn('text-lg font-semibold mb-8')} style={{ color: 'var(--text)' }}>
         Переоцінка валюти
       </h2>
 
       <div
-        className="w-full no-scrollbar"
+        className={cn('w-full no-scrollbar')}
         style={{
           height: containerHeight,
           overflowY: actualRows > MAX_VISIBLE_ROWS ? 'auto' : 'hidden',
