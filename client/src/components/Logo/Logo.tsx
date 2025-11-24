@@ -16,6 +16,15 @@ export const Logo = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
     return (
