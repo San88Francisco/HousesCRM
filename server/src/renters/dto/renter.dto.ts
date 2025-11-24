@@ -2,17 +2,17 @@ import { Expose } from 'class-transformer'
 
 export class RenterDto {
   @Expose()
-  public id: string
+  id: string
 
   @Expose()
-  public firstName: string
+  firstName: string
 
   @Expose()
-  public lastName: string
+  lastName: string
 
   @Expose()
-  public occupied: Date
+  occupied: Date
 
   @Expose()
-  public vacated?: Date | null
+  vacated?: Date | null
 }

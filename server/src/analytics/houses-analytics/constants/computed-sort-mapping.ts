@@ -15,4 +15,4 @@ export const computedSortMapping: Record<ComputedSortBy, ComputedFieldKey> = {
 }
 
 export const isComputedSort = (value: string): value is ComputedSortBy =>
-  (Object.keys(computedSortMapping) as string[]).includes(value)
+  Object.keys(computedSortMapping).includes(value)

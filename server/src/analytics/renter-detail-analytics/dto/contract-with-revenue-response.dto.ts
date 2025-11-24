@@ -4,9 +4,9 @@ import { ContractWithRevenueDto } from './contract-with-revenue.dto'
 
 export class ContractWithRevenueResponseDto {
   @Expose()
-  public data: ContractWithRevenueDto[]
+  data: ContractWithRevenueDto[]
 
   @Expose()
   @Type(() => PaginationMetaDto)
-  public meta: PaginationMetaDto
+  meta: PaginationMetaDto
 }
