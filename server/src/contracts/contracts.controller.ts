@@ -8,6 +8,7 @@ import { DeleteContractDto } from './dto/delete-contract.dto'
 import { ContractResponseDto } from './dto/contract-response.dto'
 import { QueryDto } from 'src/common/dto/query.dto'
 import { Auth } from 'src/common/decorators/auth.decorator'
+import { ContractPdfFileDto } from './dto/contract-pdf-file.dto'
 
 @Controller(CONTRACTS_ROUTES.ROOT)
 export class ContractsController {
@@ -23,6 +24,12 @@ export class ContractsController {
   @Auth()
   async findById(@Param('id') id: string): Promise<ContractWithRelationsDto> {
     return await this.contractsService.findById(id)
+  }
+
+  @Get(CONTRACTS_ROUTES.PDF_FILE)
+  @Auth()
+  async getPdfFile(@Param('id') id: string): Promise<ContractPdfFileDto> {
+    return this.contractsService.getPdfFileData(id)
   }
 
   @Post()
