@@ -1,8 +1,8 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import useTableSearch from '@/hooks/use-table-search';
-import useDataTable from '@/hooks/use-data-table';
 import TableContent from './TableContent';
+import useDataTable from '@/hooks/table/use-data-table';
+import useTableSearch from '@/hooks/table/use-table-search';
 
 type Props<T> = {
   data: T[];
