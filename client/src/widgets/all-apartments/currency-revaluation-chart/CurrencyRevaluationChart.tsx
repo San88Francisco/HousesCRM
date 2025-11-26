@@ -9,16 +9,19 @@ import {
   truncateText,
 } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 import { cn } from '@/shared/utils/cn';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { CustomTooltip } from './CustomTooltip';
 import { useGetCurrencyRevaluationQuery } from '@/shared/api/currency-revaluation-chart/currency-revaluation-api';
+import {
+  computeChartHeight,
+  computeContainerHeight,
+  computeXAxisMax,
+  getBarColors,
+  MAX_VISIBLE_ROWS,
+  MIN_VISIBLE_ROWS,
+} from './utils';
 
-const ROW_HEIGHT = 45;
-const MIN_VISIBLE_ROWS = 4;
-const MAX_VISIBLE_ROWS = 7;
-const Y_AXIS_PADDING = 0.15;
 const MAX_TEXT_LENGTH_YAXIS = 10;
-const MILLION = 1_000_000;
-const computeChartHeight = (dataLength: number) => dataLength * ROW_HEIGHT + 30;
 
 const formatYAxisTick = (value: string) => {
   return truncateText(value, MAX_TEXT_LENGTH_YAXIS);
@@ -40,7 +43,6 @@ export const CurrencyRevaluationChart = () => {
     return transformed
       .map(item => {
         const rawGrowth = item.revaluationAmount - item.purchaseAmount;
-
         return {
           ...item,
           growthAmount: Math.max(rawGrowth, 0),
@@ -49,21 +51,7 @@ export const CurrencyRevaluationChart = () => {
       .reverse();
   }, [apiData]);
 
-  const xAxisMax = useMemo(() => {
-    if (chartData.length === 0) {
-      return MILLION;
-    }
-
-    const maxValue = Math.max(
-      ...chartData.map(item => Math.max(item.purchaseAmount, item.revaluationAmount)),
-    );
-
-    if (maxValue === 0) {
-      return MILLION;
-    }
-
-    return Math.ceil((maxValue * (1 + Y_AXIS_PADDING)) / MILLION) * MILLION;
-  }, [chartData]);
+  const xAxisMax = useMemo(() => computeXAxisMax(chartData), [chartData]);
 
   useEffect(() => {
     setMounted(true);
@@ -75,21 +63,18 @@ export const CurrencyRevaluationChart = () => {
 
   const currentTheme = theme === 'system' ? systemTheme : theme;
   const isDark = currentTheme === 'dark';
-
-  const purchaseBarFill = isDark ? 'rgba(198, 199, 248, 0.34)' : 'var(--dark)';
-  const growthBarFill = isDark ? 'var(--purple-medium)' : 'var(--dark-light)';
+  const { purchase: purchaseBarFill, growth: growthBarFill } = getBarColors(isDark);
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="flex flex-col items-center gap-3">
-          <div
-            className={cn('animate-spin rounded-full h-8 w-8 border-b-2')}
-            style={{ borderBottomColor: 'var(--text)' }}
-          />
-          <p style={{ color: 'var(--muted-text)' }}>Завантаження...</p>
-        </div>
-      </div>
+      <Card className="max-w-[400px] mx-auto">
+        <CardContent className="flex items-center justify-center h-96">
+          <div className="flex flex-col items-center gap-3">
+            <div className={cn('animate-spin rounded-full h-8 w-8 border-b-2 border-current')} />
+            <p className="text-muted-text">Завантаження...</p>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -98,139 +83,139 @@ export const CurrencyRevaluationChart = () => {
 
     if ('status' in error) {
       errorMessage =
-        typeof error.data === 'string' ? error.data : (error.data as any)?.message || errorMessage;
+        typeof error.data === 'string'
+          ? error.data
+          : (error.data as unknown)?.message || errorMessage;
     } else if ('message' in error) {
       errorMessage = error.message || errorMessage;
     }
+
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center">
-          <p className="mb-2" style={{ color: 'var(--red)' }}>
-            Помилка завантаження даних
-          </p>
-          <p className="text-sm" style={{ color: 'var(--muted-text)' }}>
-            {errorMessage}
-          </p>
-        </div>
-      </div>
+      <Card className="max-w-[400px] mx-auto">
+        <CardContent className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <p className="mb-2 text-red-500">Помилка завантаження даних</p>
+            <p className="text-sm text-muted-text">{errorMessage}</p>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   if (chartData.length === 0) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <p style={{ color: 'var(--muted-text)' }}>Немає даних для відображення</p>
-      </div>
+      <Card className="max-w-[400px] mx-auto">
+        <CardContent className="flex items-center justify-center h-96">
+          <p className="text-muted-text">Немає даних для відображення</p>
+        </CardContent>
+      </Card>
     );
   }
 
   const actualRows = chartData.length;
-  const displayRows = Math.min(Math.max(actualRows, MIN_VISIBLE_ROWS), MAX_VISIBLE_ROWS);
-  const containerHeight = displayRows * ROW_HEIGHT + 30;
+  const containerHeight = computeContainerHeight(actualRows);
   const chartHeight = computeChartHeight(Math.max(actualRows, MIN_VISIBLE_ROWS));
 
   return (
-    <div
-      className="w-full p-6 rounded-2xl shadow-xl"
-      style={{
-        maxWidth: '400px',
-        margin: '0 auto',
-        backgroundColor: isDark ? 'var(--foreground)' : 'var(--white)',
-      }}
-    >
-      <h2 className={cn('text-lg font-semibold mb-8')} style={{ color: 'var(--text)' }}>
-        Переоцінка валюти
-      </h2>
+    <Card className="w-full max-w-[400px] mx-auto shadow-xl">
+      <CardHeader>
+        <CardTitle>Переоцінка валюти</CardTitle>
+      </CardHeader>
 
-      <div
-        className={cn('w-full no-scrollbar')}
-        style={{
-          height: containerHeight,
-          overflowY: actualRows > MAX_VISIBLE_ROWS ? 'auto' : 'hidden',
-        }}
-      >
-        <ResponsiveContainer width="100%" height={chartHeight} minWidth={280}>
-          <BarChart
-            data={chartData}
-            layout="vertical"
-            margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-            onMouseMove={state => {
-              if (state.activeTooltipIndex !== undefined) {
-                setHoveredIndex(state.activeTooltipIndex);
-              }
-            }}
-            onMouseLeave={() => {
-              setHoveredIndex(null);
-            }}
-          >
-            <XAxis type="number" domain={[0, xAxisMax]} hide={true} />
-
-            <YAxis
-              type="category"
-              dataKey="apartmentName"
-              tickFormatter={formatYAxisTick}
-              tick={{
-                fontSize: 13,
-                fill: isDark ? 'var(--dark-light)' : 'var(--dark)',
-                fontWeight: 500,
+      <CardContent>
+        <div
+          className="w-full no-scrollbar"
+          style={{
+            height: containerHeight,
+            overflowY: actualRows > MAX_VISIBLE_ROWS ? 'auto' : 'hidden',
+          }}
+        >
+          <ResponsiveContainer width="100%" height={chartHeight} minWidth={280}>
+            <BarChart
+              data={chartData}
+              layout="vertical"
+              margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+              onMouseMove={state => {
+                if (state.activeTooltipIndex !== undefined) {
+                  setHoveredIndex(state.activeTooltipIndex);
+                }
               }}
-              axisLine={false}
-              tickLine={false}
-              width={110}
-            />
-
-            <Tooltip content={<CustomTooltip isDark={isDark} />} cursor={{ fill: 'transparent' }} />
-
-            <Bar
-              dataKey="purchaseAmount"
-              stackId="a"
-              radius={[4, 0, 0, 4]}
-              barSize={10}
-              fill={purchaseBarFill}
-              isAnimationActive={true}
-              animationBegin={0}
-              animationDuration={350}
-              animationEasing="ease-out"
+              onMouseLeave={() => {
+                setHoveredIndex(null);
+              }}
             >
-              {chartData.map((_, index) => {
-                const isHovered = hoveredIndex === index;
-                return (
-                  <Cell
-                    key={`purchase-${index}`}
-                    fill={purchaseBarFill}
-                    opacity={isHovered ? 1 : 0.85}
-                    style={{ transition: 'opacity 0.2s ease' }}
-                  />
-                );
-              })}
-            </Bar>
+              <XAxis type="number" domain={[0, xAxisMax]} hide={true} />
 
-            <Bar
-              dataKey="growthAmount"
-              stackId="a"
-              radius={[0, 4, 4, 0]}
-              barSize={10}
-              fill={growthBarFill}
-              isAnimationActive={true}
-              animationBegin={300}
-              animationDuration={550}
-              animationEasing="ease-out"
-            >
-              {chartData.map((_, index) => {
-                const isHovered = hoveredIndex === index;
-                return (
-                  <Cell
-                    key={`growth-${index}`}
-                    fill={growthBarFill}
-                    opacity={isHovered ? 1 : isDark ? 0.6 : 0.7}
-                    style={{ transition: 'opacity 0.2s ease' }}
-                  />
-                );
-              })}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
+              <YAxis
+                type="category"
+                dataKey="apartmentName"
+                tickFormatter={formatYAxisTick}
+                tick={{
+                  fontSize: 13,
+                  fill: isDark ? 'var(--dark-light)' : 'var(--dark)',
+                  fontWeight: 500,
+                }}
+                axisLine={false}
+                tickLine={false}
+                width={110}
+              />
+
+              <Tooltip
+                content={<CustomTooltip isDark={isDark} />}
+                cursor={{ fill: 'transparent' }}
+              />
+
+              <Bar
+                dataKey="purchaseAmount"
+                stackId="a"
+                radius={[4, 0, 0, 4]}
+                barSize={10}
+                fill={purchaseBarFill}
+                isAnimationActive={true}
+                animationBegin={0}
+                animationDuration={350}
+                animationEasing="ease-out"
+              >
+                {chartData.map((_, index) => {
+                  const isHovered = hoveredIndex === index;
+                  return (
+                    <Cell
+                      key={`purchase-${index}`}
+                      fill={purchaseBarFill}
+                      opacity={isHovered ? 1 : 0.85}
+                      style={{ transition: 'opacity 0.2s ease' }}
+                    />
+                  );
+                })}
+              </Bar>
+
+              <Bar
+                dataKey="growthAmount"
+                stackId="a"
+                radius={[0, 4, 4, 0]}
+                barSize={10}
+                fill={growthBarFill}
+                isAnimationActive={true}
+                animationBegin={300}
+                animationDuration={550}
+                animationEasing="ease-out"
+              >
+                {chartData.map((_, index) => {
+                  const isHovered = hoveredIndex === index;
+                  return (
+                    <Cell
+                      key={`growth-${index}`}
+                      fill={growthBarFill}
+                      opacity={isHovered ? 1 : isDark ? 0.6 : 0.7}
+                      style={{ transition: 'opacity 0.2s ease' }}
+                    />
+                  );
+                })}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
