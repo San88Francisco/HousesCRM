@@ -3,14 +3,15 @@ export const MIN_VISIBLE_ROWS = 4;
 export const MAX_VISIBLE_ROWS = 7;
 export const Y_AXIS_PADDING = 0.15;
 export const MILLION = 1_000_000;
+export const CHART_PADDING = 30;
 
 export const computeChartHeight = (dataLength: number): number => {
-  return dataLength * ROW_HEIGHT + 30;
+  return dataLength * ROW_HEIGHT + CHART_PADDING;
 };
 
 export const computeContainerHeight = (actualRows: number): number => {
   const displayRows = Math.min(Math.max(actualRows, MIN_VISIBLE_ROWS), MAX_VISIBLE_ROWS);
-  return displayRows * ROW_HEIGHT + 30;
+  return displayRows * ROW_HEIGHT + CHART_PADDING;
 };
 
 export const computeXAxisMax = (
