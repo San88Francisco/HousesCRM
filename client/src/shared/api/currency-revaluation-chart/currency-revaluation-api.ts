@@ -4,7 +4,7 @@ import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/typ
 export const currencyRevaluationApi = rootApi.injectEndpoints({
   endpoints: builder => ({
     getCurrencyRevaluation: builder.query<CurrencyRevaluation[], void>({
-      query: () => '/houses-analytics/currency-revaluation-analytic',
+      query: () => 'api/houses-analytics/currency-revaluation-analytic',
       providesTags: ['Analytics'],
     }),
   }),
