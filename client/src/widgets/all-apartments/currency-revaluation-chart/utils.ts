@@ -21,9 +21,10 @@ export const computeXAxisMax = (
     return MILLION;
   }
 
-  const maxValue = Math.max(
-    ...chartData.map(item => Math.max(item.purchaseAmount, item.revaluationAmount)),
-  );
+  const maxValue = chartData.reduce((max, item) => {
+    const currentMax = Math.max(item.purchaseAmount, item.revaluationAmount);
+    return Math.max(max, currentMax);
+  }, 0);
 
   if (maxValue === 0) {
     return MILLION;

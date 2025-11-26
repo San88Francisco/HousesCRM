@@ -85,7 +85,9 @@ export const CurrencyRevaluationChart = () => {
       errorMessage =
         typeof error.data === 'string'
           ? error.data
-          : (error.data as unknown)?.message || errorMessage;
+          : typeof error.data === 'object' && error.data !== null && 'message' in error.data
+            ? (error.data as { message: string }).message || errorMessage
+            : errorMessage;
     } else if ('message' in error) {
       errorMessage = error.message || errorMessage;
     }
