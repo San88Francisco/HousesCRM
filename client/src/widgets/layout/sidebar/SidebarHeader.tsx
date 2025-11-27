@@ -1,5 +1,4 @@
 'use client';
-/* eslint-disable */
 
 import Image from 'next/image';
 import { cn } from '@/shared/utils/cn';
