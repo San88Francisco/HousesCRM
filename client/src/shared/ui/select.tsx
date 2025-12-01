@@ -26,7 +26,7 @@ const SelectTrigger = forwardRef<ElementRef<typeof SelectPrimitive.Trigger>, Sel
         ref={ref}
         disabled={disabled}
         className={cn(
-          'flex h-10 w-full items-center justify-between rounded-md border border-input bg-bg-input px-2  ring-offset-background placeholder:text-muted focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-colors duration-200',
+          'flex sm:h-10 h-8 w-full items-center justify-between rounded-md border border-input bg-bg-input  px-2  md:[&>span]:text-sm [&>span]:text-xs md:text-[14px] text-12px  ring-offset-background placeholder:text-muted focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-colors duration-200',
           error && 'border-red text-red [&>span]:text-red',
           disabled && 'cursor-not-allowed [&>span]:!text-muted !opacity-50',
           className,

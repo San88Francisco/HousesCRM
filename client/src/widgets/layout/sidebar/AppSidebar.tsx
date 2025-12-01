@@ -9,7 +9,6 @@ import { SidebarTablesGroup } from './SidebarTablesGroup';
 import { Logo } from '@/components/Logo/Logo';
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
 import { useUser } from '@/hooks/use-user';
-
 export const AppSidebar = () => {
   const { email } = useUser();
   const { state } = useSidebar();

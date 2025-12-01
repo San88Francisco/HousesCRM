@@ -1,3 +1,4 @@
+import { mockData } from '@/shared/constants/table/dataTable';
 import { ButtonComponent } from '@/widgets/uikit/button-component';
 import { CalendarComponent } from '@/widgets/uikit/calendar-component';
 import { CardComponent } from '@/widgets/uikit/card-component';
@@ -8,13 +9,18 @@ import { SelectComponent } from '@/widgets/uikit/select-copmponent';
 import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
-import { mockData } from '@/shared/constants/table/dataTable';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
+import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
+import { ApartmentRentalChart } from '@/widgets/uikit/line-chart-component';
 
 export default function Page() {
   return (
     <div className="flex flex-col gap-2">
+      <div className="fixed top-2 right-2  z-10">
+        <ThemeSwitch />
+      </div>
+      <ApartmentRentalChart />
       <ButtonComponent />
       <CardComponent />
       <ControlButtons />
