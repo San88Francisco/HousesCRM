@@ -19,7 +19,7 @@ export class RenterDetailAnalyticsService {
     private readonly contractRepository: Repository<Contract>
   ) {}
 
-  public async getAllRenterAnalytic(id: string): Promise<AllRenterAnalyticDto> {
+  async getAllRenterAnalytic(id: string): Promise<AllRenterAnalyticDto> {
     const [oneRenterReport, allContractsByRenterId] = await Promise.all([
       this.getOneRenterReport(id),
       this.getAllContractsByRenterId(id),
@@ -33,7 +33,7 @@ export class RenterDetailAnalyticsService {
     return plainToInstance(AllRenterAnalyticDto, transformedData, { excludeExtraneousValues: true })
   }
 
-  public async getOneRenterReport(id: string): Promise<RenterDetailAnalyticDto> {
+  async getOneRenterReport(id: string): Promise<RenterDetailAnalyticDto> {
     const contractsByRenterId = await this.contractRepository.find({
       where: { renter: { id } },
       relations: { renter: true },
@@ -44,25 +44,25 @@ export class RenterDetailAnalyticsService {
     })
   }
 
-  public async getAllContractsByRenterId(id: string, dto?: QueryDto): Promise<ContractWithRevenueResponseDto> {
+  async getAllContractsByRenterId(id: string, dto?: QueryDto): Promise<ContractWithRevenueResponseDto> {
     const {
       page = QUERY_DEFAULTS.PAGE,
       limit = QUERY_DEFAULTS.LIMIT,
       order = QUERY_DEFAULTS.ORDER,
       sortBy = QUERY_DEFAULTS.SORT_BY,
     } = dto ?? {}
-  const computedSortFields = new Set(['totalRevenue', 'rentersCount', 'currentPayment'])
+    const computedSortFields = new Set(['totalRevenue', 'rentersCount', 'currentPayment'])
 
-  const orderField = computedSortFields.has(sortBy as string) ? QUERY_DEFAULTS.SORT_BY : sortBy
+    const orderField = computedSortFields.has(sortBy as string) ? QUERY_DEFAULTS.SORT_BY : sortBy
 
-  const [contracts, total] = await this.contractRepository.findAndCount({
-    where: { renter: { id } },
-    skip: (page - 1) * limit,
-    take: limit,
-    order: {
-      [orderField]: order,
-    },
-  })
+    const [contracts, total] = await this.contractRepository.findAndCount({
+      where: { renter: { id } },
+      skip: (page - 1) * limit,
+      take: limit,
+      order: {
+        [orderField]: order,
+      },
+    })
 
     const contractsWithRevenue = contracts.map<ContractWithRevenueDto>((contract) => ({
       ...contract,

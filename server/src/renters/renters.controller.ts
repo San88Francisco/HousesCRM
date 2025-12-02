@@ -26,7 +26,7 @@ export class RentersController {
 
   @Get(RENTERS_ROUTES.BY_ID)
   @Auth()
-  public async findById(@Param('id') id: string): Promise<AllRenterAnalyticDto> {
+  async findById(@Param('id') id: string): Promise<AllRenterAnalyticDto> {
     return await this.rentersAnalyticService.getAllRenterAnalytic(id)
   }
 

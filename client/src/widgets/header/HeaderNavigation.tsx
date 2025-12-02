@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import { Star } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { LIKED_ROUTES_KEY } from '@/constants/breadcrumbs/breadcrumbs';
 import { ROUTES } from '@/shared/routes';
@@ -74,19 +75,20 @@ const HeaderNavigation = () => {
 
   return (
     <div className="flex items-center gap-3">
-      <Button
-        variant="icon"
-        className="w-10 h-10 bg-transparent transition-all"
-        onClick={toggleLike}
-      >
-        <Star
-          className={
-            isLiked
-              ? 'text-[color:gold] fill-[color:gold] drop-shadow-[0_0_6px_rgba(245,197,66,0.55)]'
-              : 'text-text'
-          }
-          fill={isLiked ? 'currentColor' : 'none'}
-        />
+      <Button variant="icon" className="w-10 h-10 bg-transparent" onClick={toggleLike}>
+        <motion.div
+          animate={isLiked ? { scale: [1, 1.3, 0.9, 1] } : { scale: [1, 1.15, 1] }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+        >
+          <Star
+            className={
+              isLiked
+                ? 'text-[color:gold] fill-[color:gold] drop-shadow-[0_0_6px_rgba(245,197,66,0.55)]'
+                : 'text-text'
+            }
+            fill={isLiked ? 'currentColor' : 'none'}
+          />
+        </motion.div>
       </Button>
 
       <Breadcrumb>

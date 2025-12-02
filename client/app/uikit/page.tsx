@@ -11,16 +11,11 @@ import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
-import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
-import { ApartmentRentalChart } from '@/widgets/uikit/line-chart-component';
+import { TestGetHouses } from '@/widgets/uikit/test-get-houses';
 
 export default function Page() {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="fixed top-2 right-2  z-10">
-        <ThemeSwitch />
-      </div>
-      <ApartmentRentalChart />
+    <div className="flex flex-col gap-2 min-w-screen">
       <ButtonComponent />
       <CardComponent />
       <ControlButtons />
@@ -33,6 +28,7 @@ export default function Page() {
       <TextareaComponent />
       <ToastCopmponent />
       <SelectComponent />
+      <TestGetHouses />
     </div>
   );
 }
