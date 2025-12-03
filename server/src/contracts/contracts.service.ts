@@ -9,6 +9,7 @@ import { ContractWithRelationsDto } from './dto/contract-with-relations.dto'
 import { UpdateContractDto } from './dto/update-contract-dto'
 import { ContractResponseDto } from './dto/contract-response.dto'
 import { QueryDto } from 'src/common/dto/query.dto'
+import { ContractPdfFileDto } from './dto/contract-pdf-file.dto'
 
 @Injectable()
 export class ContractsService {
@@ -50,6 +51,26 @@ export class ContractsService {
     })
 
     return plainToInstance(ContractWithRelationsDto, contract, {
+      excludeExtraneousValues: true,
+    })
+  }
+
+  async getPdfFileData(id: string): Promise<ContractPdfFileDto> {
+    const contract = await this.contractsRepository.findOneOrFail({
+      where: { id },
+      relations: { renter: true, house: true },
+    })
+
+    const response: ContractPdfFileDto = {
+      renterFirstName: contract.renter?.firstName ?? '',
+      renterLastName: contract.renter?.lastName ?? '',
+      roomsCount: contract.house?.roomsCount ?? 0,
+      street: contract.house?.street ?? '',
+      commencement: contract.commencement,
+      monthlyPayment: contract.monthlyPayment,
+    }
+
+    return plainToInstance(ContractPdfFileDto, response, {
       excludeExtraneousValues: true,
     })
   }
