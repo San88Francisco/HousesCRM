@@ -137,3 +137,45 @@ export function generateChartData(
     return point;
   });
 }
+
+export function generateOptimalTicks(
+  minDate: number,
+  maxDate: number,
+  containerWidth: number,
+  isMobile: boolean,
+): number[] {
+  const start = new Date(minDate);
+  const end = new Date(maxDate);
+  const totalMonths =
+    (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+
+  const MIN_TICK_WIDTH = isMobile ? 70 : 100;
+  const maxIntervals = Math.floor((containerWidth * 0.9) / MIN_TICK_WIDTH);
+
+  if (maxIntervals < 1 || totalMonths === 0) {
+    return [minDate, maxDate];
+  }
+
+  const intervals =
+    Array.from(
+      { length: Math.min(maxIntervals, totalMonths) },
+      (_, i) => Math.min(maxIntervals, totalMonths) - i,
+    ).find(n => totalMonths % n === 0) ?? 1;
+
+  const stepMonths = totalMonths / intervals;
+
+  return Array.from({ length: intervals + 1 }, (_, i) => {
+    const tickDate = new Date(start);
+    tickDate.setMonth(start.getMonth() + i * stepMonths);
+    return tickDate.getTime();
+  });
+}
+
+export function formatTickDate(value: number): string {
+  return new Date(value)
+    .toLocaleDateString('uk-UA', {
+      month: 'short',
+      year: '2-digit',
+    })
+    .replace(' р.', '');
+}

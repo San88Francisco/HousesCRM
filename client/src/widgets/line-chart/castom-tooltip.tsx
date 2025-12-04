@@ -28,7 +28,7 @@ type Props = {
   lockedApartment: string | null;
   apartmentsData: Apartment[];
   colors: string[];
-  cursorDate: number;
+  cursorDate: string;
 };
 
 export const CustomTooltip = ({
@@ -49,11 +49,13 @@ export const CustomTooltip = ({
     (
       id: string | null,
       apartments: Apartment[],
-      currentDate: number,
+      currentDate: string,
     ): { start: string; end: string } | null => {
       if (!id) return null;
       const apartment = apartments.find(apt => apt.id === id);
       if (!apartment) return null;
+
+      const cursorTimestamp = new Date(currentDate).getTime();
 
       const gap = apartment.contracts
         .map((contract, i, arr) => {
@@ -61,11 +63,11 @@ export const CustomTooltip = ({
           const prev = arr[i - 1];
           const prevEnd = new Date(prev.termination).getTime();
           const currStart = new Date(contract.commencement).getTime();
-          return currentDate > prevEnd && currentDate < currStart
+          return cursorTimestamp > prevEnd && cursorTimestamp < currStart
             ? { start: contract.commencement, end: prev.termination }
             : null;
         })
-        .find(g => g !== null);
+        .find(Boolean); // скорочено find(g => g !== null)
 
       return gap ?? null;
     },
