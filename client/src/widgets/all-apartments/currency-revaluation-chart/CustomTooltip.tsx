@@ -61,11 +61,11 @@ const getTooltipPositionStyle = (
   const transform = shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`;
 
   return {
-    backgroundColor: isDark ? '#1a1a1a' : 'var(--white)',
+    backgroundColor: isDark ? 'var(--tooltip-bg-dark)' : 'var(--white)',
     borderColor: 'var(--border)',
     position: 'relative',
     zIndex: 9999,
-    transform: transform,
+    transform,
   };
 };
 
