@@ -1,51 +1,21 @@
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart/types';
+import { cn } from '@/shared/utils/cn';
 import {
   formatRate,
   formatCurrency,
   truncateText,
 } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 
-interface CustomTooltipProps {
-  active?: boolean;
-  payload?: Array<{ payload: ChartDataItem }>;
-  isDark: boolean;
-}
-
 const MAX_NAME_LENGTH = 20;
+const TOOLTIP_BOUNDARY_Y = 180;
+const TOOLTIP_OFFSET_Y = 10;
 
-const getTooltipStyles = (isDark: boolean) => ({
-  container: {
-    backgroundColor: isDark ? '#1a1a1a' : 'var(--white)',
-    borderColor: isDark ? 'var(--border)' : 'var(--border)',
-  },
-  title: {
-    color: 'var(--text)',
-  },
-  label: {
-    color: 'var(--muted-text)',
-  },
-  value: {
-    color: 'var(--text)',
-  },
-  divider: {
-    backgroundColor: 'var(--border)',
-  },
-});
-
-const TooltipRow = ({
-  label,
-  value,
-  styles,
-}: {
-  label: string;
-  value: string;
-  styles: ReturnType<typeof getTooltipStyles>;
-}) => (
+const TooltipRow = ({ label, value }: { label: string; value: string }) => (
   <div className="flex justify-between gap-4">
-    <span className="text-xs" style={styles.label}>
+    <span className="text-xs" style={{ color: 'var(--muted-text)' }}>
       {label}
     </span>
-    <span className="text-xs" style={styles.value}>
+    <span className="text-xs" style={{ color: 'var(--text)' }}>
       {value}
     </span>
   </div>
@@ -56,41 +26,64 @@ const TooltipSection = ({
   amount,
   rate,
   rateLabel,
-  styles,
 }: {
   title: string;
   amount: number;
   rate: number;
   rateLabel: string;
-  styles: ReturnType<typeof getTooltipStyles>;
 }) => (
   <div>
     <div className="flex justify-between gap-4 mb-1">
-      <span className="text-xs" style={styles.label}>
+      <span className="text-xs" style={{ color: 'var(--muted-text)' }}>
         {title}
       </span>
-      <span className="font-semibold text-xs" style={styles.value}>
+      <span className="font-semibold text-xs" style={{ color: 'var(--text)' }}>
         {formatCurrency(amount)}
       </span>
     </div>
-    <TooltipRow label={rateLabel} value={formatRate(rate)} styles={styles} />
+    <TooltipRow label={rateLabel} value={formatRate(rate)} />
   </div>
 );
 
-export const CustomTooltip = ({ active, payload, isDark }: CustomTooltipProps) => {
-  if (!active || !payload || !payload.length) {
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{ payload: ChartDataItem }>;
+  isDark: boolean;
+  coordinate?: { x: number; y: number };
+}
+
+const getTooltipPositionStyle = (coordinate: CustomTooltipProps['coordinate'], isDark: boolean) => {
+  const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
+  const transform = shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`;
+
+  return {
+    backgroundColor: isDark ? '#1a1a1a' : 'var(--white)',
+    borderColor: 'var(--border)',
+    position: 'relative',
+    zIndex: 9999,
+    transform: transform,
+  };
+};
+
+export const CustomTooltip = ({ active, payload, isDark, coordinate }: CustomTooltipProps) => {
+  if (!active || !payload?.length) {
     return null;
   }
 
   const data = payload[0].payload;
-  const styles = getTooltipStyles(isDark);
+
+  const positionStyle = getTooltipPositionStyle(coordinate, isDark);
 
   return (
     <div
-      className="p-3 rounded-lg shadow-2xl border"
-      style={{ minWidth: '220px', ...styles.container }}
+      className={cn('p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px]')}
+      style={positionStyle}
     >
-      <p className="font-bold mb-3 text-sm" style={styles.title} title={data.apartmentName}>
+      <p
+        className="font-bold mb-3 text-sm"
+        style={{ color: 'var(--text)' }}
+        title={data.apartmentName}
+      >
         {truncateText(data.apartmentName, MAX_NAME_LENGTH)}
       </p>
 
@@ -100,17 +93,15 @@ export const CustomTooltip = ({ active, payload, isDark }: CustomTooltipProps) =
           amount={data.purchaseAmount}
           rate={data.purchaseRate}
           rateLabel="Курс купівлі:"
-          styles={styles}
         />
 
-        <div className="h-px" style={styles.divider} />
+        <div className="h-px" style={{ backgroundColor: 'var(--border)' }} />
 
         <TooltipSection
           title="Поточна:"
           amount={data.revaluationAmount}
           rate={data.currentRate}
           rateLabel="Поточний курс:"
-          styles={styles}
         />
       </div>
     </div>
