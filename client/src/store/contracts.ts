@@ -9,8 +9,11 @@ export const contractsApi = rootApi.injectEndpoints({
         params: { period, renter_id },
       }),
     }),
+    getContractPdf: build.query({
+      query: (id: string) => `/contracts/${id}/pdf-file`,
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllContractsQuery } = contractsApi;
+export const { useGetAllContractsQuery, useLazyGetContractPdfQuery } = contractsApi;
