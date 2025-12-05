@@ -1,3 +1,4 @@
+import React from 'react';
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart/types';
 import { cn } from '@/shared/utils/cn';
 import {
@@ -52,7 +53,10 @@ interface CustomTooltipProps {
   coordinate?: { x: number; y: number };
 }
 
-const getTooltipPositionStyle = (coordinate: CustomTooltipProps['coordinate'], isDark: boolean) => {
+const getTooltipPositionStyle = (
+  coordinate: CustomTooltipProps['coordinate'],
+  isDark: boolean,
+): React.CSSProperties => {
   const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
   const transform = shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`;
 
