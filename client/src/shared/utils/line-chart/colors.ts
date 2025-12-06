@@ -8,7 +8,7 @@ export function getPaletteColors(): string[] {
     '--active-border',
     '--red',
     '--positive',
-    '--dark',
+    '--purple-hard',
     '--purple',
     '--gold',
     '--info',

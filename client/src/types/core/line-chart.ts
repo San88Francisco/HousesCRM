@@ -15,7 +15,7 @@ export interface Contract {
 export interface Apartment {
   id: string;
   apartmentName: string;
-  contracts: Contract[];
+  contract: Contract[];
 }
 
 export type ChartDataPoint = {

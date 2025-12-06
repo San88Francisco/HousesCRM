@@ -1,4 +1,4 @@
-import { Apartment, ChartDataPoint, Contract, TimeRangeEnum } from '@/types/core/apartment';
+import { Apartment, ChartDataPoint, Contract, TimeRangeEnum } from '@/types/core/line-chart';
 
 const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.SIX_MONTHS]: date => {
@@ -35,12 +35,12 @@ const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
 };
 
 export function getPeriodRange(timeRange: TimeRangeEnum, apartments: Apartment[]) {
-  const now = new Date('2025-11-07');
+  const now = new Date();
   const startDate =
     timeRange !== TimeRangeEnum.ALL_DATA
       ? timeRangeMap[timeRange](now)
       : apartments
-          .flatMap(apt => apt.contracts)
+          .flatMap(apt => apt.contract)
           .map(c => new Date(c.commencement))
           .reduce((earliest, curr) => (curr < earliest ? curr : earliest), now);
 
@@ -56,7 +56,7 @@ export function findMinMaxRentWithFivePercent(
   periodEnd: string,
 ) {
   const matchingPayments = apartments
-    .flatMap(apt => apt.contracts)
+    .flatMap(apt => apt.contract)
     .filter(c => c.termination >= periodStart && c.commencement <= periodEnd)
     .map(c => c.monthlyPayment);
 
@@ -75,43 +75,25 @@ export function generateChartData(
   apartments: Apartment[],
   timeRange: TimeRangeEnum,
 ): ChartDataPoint[] {
-  const now = new Date('2025-11-07');
+  const now = new Date();
   const startDate =
     timeRange !== TimeRangeEnum.ALL_DATA
       ? timeRangeMap[timeRange](now)
       : apartments
-          .flatMap(apt => apt.contracts)
+          .flatMap(apt => apt.contract)
           .map(c => new Date(c.commencement))
           .reduce((earliest, curr) => (curr < earliest ? curr : earliest), now);
 
-  const allDates = apartments
-    .flatMap(apt =>
-      apt.contracts.flatMap((contract: Contract) => {
-        const start = new Date(contract.commencement);
-        const end = new Date(contract.termination);
-        return [
-          ...(start >= startDate && start <= now ? [start.getTime()] : []),
-          ...(end >= startDate && end <= now ? [end.getTime()] : []),
-        ];
-      }),
-    )
-    .concat(
-      Array.from(
-        {
-          length:
-            (now.getFullYear() - startDate.getFullYear()) * 12 +
-            now.getMonth() -
-            startDate.getMonth() +
-            1,
-        },
-        (_, i) => {
-          const dt = new Date(startDate);
-          dt.setMonth(dt.getMonth() + i);
-          dt.setDate(1);
-          return dt.getTime();
-        },
-      ),
-    );
+  const monthCount =
+    (now.getFullYear() - startDate.getFullYear()) * 12 + now.getMonth() - startDate.getMonth() + 1;
+
+  const allDates = Array.from({ length: monthCount }).map((_, monthIdx) => {
+    const date = new Date(startDate);
+    date.setMonth(startDate.getMonth() + monthIdx);
+    date.setDate(1);
+    date.setHours(0, 0, 0, 0);
+    return date.getTime();
+  });
 
   const uniqueSortedDates = Array.from(new Set(allDates)).sort((a, b) => a - b);
 
@@ -120,11 +102,12 @@ export function generateChartData(
     const currentDate = new Date(timestamp);
 
     apartments.forEach(apt => {
-      const activeContract = apt.contracts.find(c => {
+      const activeContract = apt.contract.find(c => {
         const start = new Date(c.commencement);
         const end = new Date(c.termination);
         return currentDate >= start && currentDate <= end;
       });
+
       if (activeContract) {
         point[apt.id] = activeContract.monthlyPayment;
         point[`${apt.id}_contract`] = activeContract;
@@ -144,31 +127,42 @@ export function generateOptimalTicks(
   containerWidth: number,
   isMobile: boolean,
 ): number[] {
-  const start = new Date(minDate);
-  const end = new Date(maxDate);
+  const startDate = new Date(minDate);
+  startDate.setDate(1);
+  startDate.setHours(0, 0, 0, 0);
+
+  const endDate = new Date(maxDate);
+  endDate.setDate(1);
+  endDate.setHours(0, 0, 0, 0);
+
   const totalMonths =
-    (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    (endDate.getMonth() - startDate.getMonth());
 
-  const MIN_TICK_WIDTH = isMobile ? 70 : 100;
-  const maxIntervals = Math.floor((containerWidth * 0.9) / MIN_TICK_WIDTH);
-
-  if (maxIntervals < 1 || totalMonths === 0) {
-    return [minDate, maxDate];
+  if (totalMonths <= 0) {
+    return [startDate.getTime()];
   }
 
-  const intervals =
-    Array.from(
-      { length: Math.min(maxIntervals, totalMonths) },
-      (_, i) => Math.min(maxIntervals, totalMonths) - i,
-    ).find(n => totalMonths % n === 0) ?? 1;
+  const MIN_TICK_SPACING = isMobile ? 80 : 120;
+  let maxTicks = Math.floor(containerWidth / MIN_TICK_SPACING);
+  maxTicks = Math.min(maxTicks, 12);
+  maxTicks = Math.max(maxTicks, 3);
 
-  const stepMonths = totalMonths / intervals;
+  const intervals = maxTicks - 1;
+  const stepMonths = Math.ceil(totalMonths / intervals);
 
-  return Array.from({ length: intervals + 1 }, (_, i) => {
-    const tickDate = new Date(start);
-    tickDate.setMonth(start.getMonth() + i * stepMonths);
+  const ticks = Array.from({ length: maxTicks }).map((_, i) => {
+    const monthsBack = i * stepMonths;
+    const tickDate = new Date(endDate);
+    tickDate.setMonth(tickDate.getMonth() - monthsBack);
     return tickDate.getTime();
   });
+
+  if (ticks[0] < startDate.getTime()) {
+    ticks[0] = startDate.getTime();
+  }
+
+  return ticks;
 }
 
 export function formatTickDate(value: number): string {
@@ -179,3 +173,13 @@ export function formatTickDate(value: number): string {
     })
     .replace(' р.', '');
 }
+
+export const isContract = (value: unknown): value is Contract => {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'renter' in value &&
+    'commencement' in value &&
+    'termination' in value
+  );
+};

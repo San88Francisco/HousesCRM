@@ -1,7 +1,7 @@
 /* eslint-disable */
 'use client';
 import { useApartmentRental } from '@/hooks/use-apartment-rental';
-import { apartmentsData } from '@/shared/constants/all-apartments-description-chart/line-chart';
+
 import {
   Card,
   CardAction,
@@ -11,9 +11,11 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { formatTickDate } from '@/shared/utils/apartments/period';
+import { formatTickDate } from '@/shared/utils/line-chart/line-chart';
 import { cn } from '@/shared/utils/cn';
-import { Apartment, TimeRangeEnum } from '@/types/core/apartment';
+import { useGetHousesAnalyticsQuery } from '@/store/all-analitics';
+
+import { Apartment, TimeRangeEnum } from '@/types/core/line-chart';
 import { CustomTooltip } from '@/widgets/line-chart/castom-tooltip';
 import { LegendContent } from '@/widgets/line-chart/legent-content';
 
@@ -30,6 +32,8 @@ import {
 } from 'recharts';
 
 export function ApartmentRentalChart() {
+  const { data, error, isLoading } = useGetHousesAnalyticsQuery();
+
   const {
     timeRange,
     setTimeRange,
@@ -42,10 +46,11 @@ export function ApartmentRentalChart() {
     cursorDate,
     paletteColors,
     optimalTicks,
-    tooltipWrapperStyle,
     chartMouseHandlers,
     isMobile,
-  } = useApartmentRental(apartmentsData);
+    dataMin,
+    dataMax,
+  } = useApartmentRental(data?.housesOverview || []);
 
   const handleApartmentClick = useCallback(
     (id: string) => {
@@ -53,6 +58,36 @@ export function ApartmentRentalChart() {
     },
     [setLockedApartment],
   );
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardContent className="flex items-center justify-center h-[400px]">
+          Завантаження аналітики...
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardContent className="flex items-center justify-center h-[400px] text-red-500">
+          Помилка завантаження даних
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!data?.housesOverview?.length) {
+    return (
+      <Card>
+        <CardContent className="flex items-center justify-center h-[400px]">
+          Немає даних для відображення
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -81,7 +116,7 @@ export function ApartmentRentalChart() {
         <div ref={chartRef} className="w-full h-[330px] relative">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
-              margin={{ top: 30, right: 5, bottom: 0, left: 0 }}
+              margin={{ top: 30, right: 25, bottom: 0, left: 0 }}
               key={timeRange}
               data={chartData}
               {...chartMouseHandlers}
@@ -89,13 +124,12 @@ export function ApartmentRentalChart() {
               <XAxis
                 dataKey="date"
                 type="number"
-                scale="time"
-                domain={['dataMin', 'dataMax']}
-                tickMargin={10}
-                tick={{ fontSize: !isMobile ? 14 : 12 }}
+                domain={[dataMin, dataMax]}
                 ticks={optimalTicks}
-                interval="preserveStartEnd"
+                interval={0}
+                allowDuplicatedCategory={false}
                 tickFormatter={formatTickDate}
+                tick={{ fontSize: isMobile ? 10 : 12 }}
                 tickLine={false}
                 axisLine={{ stroke: 'var(--border)', strokeWidth: 2 }}
                 textAnchor="middle"
@@ -105,7 +139,7 @@ export function ApartmentRentalChart() {
                 domain={yDomain}
                 ticks={yTicks}
                 tickMargin={10}
-                tick={{ fontSize: !isMobile ? 14 : 12, dy: !isMobile ? -20 : undefined }}
+                tick={{ fontSize: !isMobile ? 12 : 10, dy: !isMobile ? -20 : -8 }}
                 tickFormatter={(value: number) => `${value}`}
                 axisLine={false}
                 tickLine={false}
@@ -118,16 +152,19 @@ export function ApartmentRentalChart() {
                 content={
                   <CustomTooltip
                     lockedApartment={lockedApartment}
-                    apartmentsData={apartmentsData}
+                    apartmentsData={data.housesOverview}
                     colors={paletteColors}
                     cursorDate={cursorDate}
                   />
                 }
-                wrapperStyle={tooltipWrapperStyle}
-                cursor={{ stroke: 'var(--border)', strokeWidth: 1, strokeDasharray: '5 5' }}
+                cursor={{
+                  stroke: 'var(--border)',
+                  strokeWidth: 1,
+                }}
+                position={{ y: isMobile ? 200 : 0 }}
               />
 
-              {apartmentsData.map((apt: Apartment, idx: number) => (
+              {data.housesOverview.map((apt: Apartment, idx: number) => (
                 <Line
                   key={apt.id + timeRange}
                   dataKey={apt.id}
@@ -146,7 +183,7 @@ export function ApartmentRentalChart() {
                 align="center"
                 content={() => (
                   <LegendContent
-                    apartmentsData={apartmentsData}
+                    apartmentsData={data.housesOverview}
                     colors={paletteColors}
                     activeApartment={lockedApartment}
                     onApartmentClick={handleApartmentClick}

@@ -1,16 +1,7 @@
 /* eslint-disable */
-import { Apartment, Contract } from '@/types/core/apartment';
+import { isContract } from '@/shared/utils/line-chart/line-chart';
+import { Apartment, Contract } from '@/types/core/line-chart';
 import { useCallback } from 'react';
-
-const isContract = (value: unknown): value is Contract => {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'renter' in value &&
-    'commencement' in value &&
-    'termination' in value
-  );
-};
 
 type PayloadData = {
   [key: string]: Contract | string | null | undefined;
@@ -57,21 +48,38 @@ export const CustomTooltip = ({
 
       const cursorTimestamp = new Date(currentDate).getTime();
 
-      const gap = apartment.contracts
-        .map((contract, i, arr) => {
-          if (i === 0) return null;
+      const gap = apartment.contract.reduce<{ start: string; end: string } | null>(
+        (foundGap, contract, i, arr) => {
+          if (foundGap || i === 0) return foundGap;
+
           const prev = arr[i - 1];
           const prevEnd = new Date(prev.termination).getTime();
           const currStart = new Date(contract.commencement).getTime();
+
           return cursorTimestamp > prevEnd && cursorTimestamp < currStart
             ? { start: contract.commencement, end: prev.termination }
             : null;
-        })
-        .find(Boolean); // скорочено find(g => g !== null)
+        },
+        null,
+      );
 
       return gap ?? null;
     },
     [apartmentsData],
+  );
+
+  const isApartmentAcquired = useCallback(
+    (id: string | null, apartments: Apartment[], currentDate: string): boolean => {
+      if (!id) return false;
+      const apartment = apartments.find(apt => apt.id === id);
+      if (!apartment || apartment.contract.length === 0) return false;
+
+      const cursorTimestamp = new Date(currentDate).getTime();
+      const firstContractStart = new Date(apartment.contract[0].commencement).getTime();
+
+      return cursorTimestamp >= firstContractStart;
+    },
+    [],
   );
 
   if (!active || !payload || payload.length === 0) return null;
@@ -79,6 +87,10 @@ export const CustomTooltip = ({
   const allData = payload[0]?.payload || {};
 
   if (lockedApartment) {
+    if (!isApartmentAcquired(lockedApartment, apartmentsData, cursorDate)) {
+      return null;
+    }
+
     const item = payload.find(p => p.dataKey === lockedApartment);
     const apartmentIndex = apartmentsData.findIndex(apt => apt.id === lockedApartment);
     const color = colors[apartmentIndex % colors.length];
@@ -143,51 +155,57 @@ export const CustomTooltip = ({
 
   return (
     <div className="bg-text border border-gray-200 rounded-lg p-2 shadow-md pointer-events-none max-w-[240px] text-xs flex flex-col gap-2">
-      {apartmentsData.map((apt, idx) => {
-        const contractCandidate = allData[`${apt.id}_contract`];
-        const color = colors[idx % colors.length];
+      {apartmentsData
+        .filter(apt => isApartmentAcquired(apt.id, apartmentsData, cursorDate))
+        .map(apt => {
+          const realIdx = apartmentsData.findIndex(a => a.id === apt.id);
+          const color = colors[realIdx % colors.length];
 
-        const breakInContracts = findGapBetweenContracts(apt.id, apartmentsData, cursorDate);
+          const contractCandidate = allData[`${apt.id}_contract`];
+          const breakInContracts = findGapBetweenContracts(apt.id, apartmentsData, cursorDate);
 
-        if (!isContract(contractCandidate)) {
+          if (!isContract(contractCandidate)) {
+            return (
+              <div key={apt.id} className="mb-1">
+                <div className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
+                  <span className="text-red">Відсутній контракт</span>
+                </div>
+
+                <div className="ml-3 text-red" style={{ fontSize: '10px', lineHeight: '1.1' }}>
+                  {breakInContracts ? (
+                    <>
+                      {truncate(new Date(breakInContracts.end).toLocaleDateString('uk-UA'), 15)} –{' '}
+                      {truncate(new Date(breakInContracts.start).toLocaleDateString('uk-UA'), 15)}
+                    </>
+                  ) : (
+                    'Відсутній у цей період'
+                  )}
+                </div>
+              </div>
+            );
+          }
+
+          const contract = contractCandidate;
+          const renterName = truncate(
+            contract.renter.lastName + ' ' + contract.renter.firstName,
+            15,
+          );
+
           return (
             <div key={apt.id} className="mb-1">
               <div className="flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
-                <span className="text-red">Відсутній контракт</span>
+                <span className="text-background">{`${renterName}: ${contract.monthlyPayment.toLocaleString()}`}</span>
               </div>
 
-              <div className="ml-3 text-red" style={{ fontSize: '10px', lineHeight: '1.1' }}>
-                {breakInContracts ? (
-                  <>
-                    {truncate(new Date(breakInContracts.end).toLocaleDateString('uk-UA'), 15)} –{' '}
-                    {truncate(new Date(breakInContracts.start).toLocaleDateString('uk-UA'), 15)}
-                  </>
-                ) : (
-                  'Відсутній у цей період'
-                )}
+              <div className="ml-3 text-background" style={{ fontSize: '10px', lineHeight: '1.1' }}>
+                {truncate(new Date(contract.commencement).toLocaleDateString('uk-UA'), 15)} –{' '}
+                {truncate(new Date(contract.termination).toLocaleDateString('uk-UA'), 15)}
               </div>
             </div>
           );
-        }
-
-        const contract = contractCandidate;
-        const renterName = truncate(contract.renter.lastName + ' ' + contract.renter.firstName, 15);
-
-        return (
-          <div key={apt.id} className="mb-1">
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
-              <span className="text-background">{`${renterName}: ${contract.monthlyPayment.toLocaleString()}`}</span>
-            </div>
-
-            <div className="ml-3 text-background" style={{ fontSize: '10px', lineHeight: '1.1' }}>
-              {truncate(new Date(contract.commencement).toLocaleDateString('uk-UA'), 15)} –{' '}
-              {truncate(new Date(contract.termination).toLocaleDateString('uk-UA'), 15)}
-            </div>
-          </div>
-        );
-      })}
+        })}
     </div>
   );
 };

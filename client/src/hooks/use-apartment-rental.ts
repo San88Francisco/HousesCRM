@@ -1,50 +1,97 @@
+/* eslint-disable */
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Apartment, ChartDataPoint, TimeRangeEnum } from '@/types/core/line-chart';
 import {
   findMinMaxRentWithFivePercent,
   generateChartData,
   getPeriodRange,
-  generateOptimalTicks,
-} from '@/shared/utils/apartments/period';
-import { Apartment, TimeRangeEnum } from '@/types/core/apartment';
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { getPaletteColors } from '@/shared/utils/apartments/colors';
+} from '@/shared/utils/line-chart/line-chart';
+import { getPaletteColors } from '@/shared/utils/line-chart/colors';
+import {
+  CHART_WIDTH_THRESHOLD,
+  DEFAULT_CHART_WIDTH,
+  DEFAULT_Y_MAX,
+  DEFAULT_Y_MIN,
+  DESKTOP_TICKS,
+  MOBILE_TABLET_TICKS,
+  ONE_YEAR_MS,
+  SMALL_MOBILE_TICKS,
+  Y_DOMAIN_STEP,
+} from '@/constants/line-chart/line-chart';
+
+const getDataRange = (hasData: boolean, chartData: ChartDataPoint[]) => {
+  if (!hasData || chartData.length === 0) {
+    return { min: Date.now() - ONE_YEAR_MS, max: Date.now() };
+  }
+  return {
+    min: Math.min(...chartData.map(d => d.date)),
+    max: Math.max(...chartData.map(d => d.date)),
+  };
+};
+
+const getOptimalTicks = (
+  chartWidth: number,
+  chartData: ChartDataPoint[],
+  dataMin: number,
+  dataMax: number,
+  timeRange: TimeRangeEnum,
+  isMobile: boolean,
+  isTablet: boolean,
+  isSmallMobile: boolean,
+): number[] => {
+  if (chartWidth <= CHART_WIDTH_THRESHOLD || chartData.length <= 1) {
+    return [dataMin, dataMax];
+  }
+
+  let count: number;
+  if (timeRange === TimeRangeEnum.SIX_MONTHS) {
+    count = MOBILE_TABLET_TICKS;
+  } else if (isSmallMobile) {
+    count = SMALL_MOBILE_TICKS;
+  } else if (isMobile || isTablet) {
+    count = MOBILE_TABLET_TICKS;
+  } else {
+    count = DESKTOP_TICKS;
+  }
+
+  const startDate = new Date(dataMin);
+  startDate.setDate(1);
+  startDate.setHours(0, 0, 0, 0);
+
+  const endDate = new Date(dataMax);
+  endDate.setDate(1);
+  endDate.setHours(0, 0, 0, 0);
+
+  const totalMonths =
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    (endDate.getMonth() - startDate.getMonth());
+
+  const stepMonths = Math.ceil(totalMonths / (count - 1));
+
+  const ticks = Array.from({ length: count }).map((_, i) => {
+    const tickDate = new Date(endDate);
+    tickDate.setMonth(endDate.getMonth() - i * stepMonths);
+    return tickDate.getTime();
+  });
+
+  ticks.reverse();
+
+  if (ticks[0] < dataMin) {
+    ticks[0] = dataMin;
+  }
+
+  return ticks;
+};
 
 export function useApartmentRental(apartmentsData: Apartment[]) {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ONE_YEAR);
   const [lockedApartment, setLockedApartment] = useState<string | null>(null);
-
-  const isMobile = useIsMobile();
-
-  const chartData = useMemo(
-    () => generateChartData(apartmentsData, timeRange),
-    [apartmentsData, timeRange],
-  );
-
-  const { periodStart, periodEnd } = useMemo(
-    () => getPeriodRange(timeRange, apartmentsData),
-    [timeRange, apartmentsData],
-  );
-
-  const minMax = useMemo(
-    () => findMinMaxRentWithFivePercent(apartmentsData, periodStart, periodEnd),
-    [apartmentsData, periodStart, periodEnd],
-  );
-
-  const yDomain = useMemo(() => {
-    if (!minMax) return [4000, 8000];
-    return [Math.floor(minMax.min / 100) * 100, Math.ceil(minMax.max / 100) * 100];
-  }, [minMax]);
-
-  const yTicks = useMemo(() => {
-    if (!minMax) return [4000, 6000, 8000];
-    return [yDomain[0], Math.round((yDomain[0] + yDomain[1]) / 2), yDomain[1]];
-  }, [minMax, yDomain]);
-
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartWidth, setChartWidth] = useState(0);
   const [cursorDate, setCursorDate] = useState<string>('');
+  const [chartWidth, setChartWidth] = useState(DEFAULT_CHART_WIDTH);
 
-  const paletteColors = useMemo(() => getPaletteColors(), []);
+  const { isMobile, isTablet, isSmallMobile } = useIsMobile();
+  const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -59,45 +106,49 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
   }, []);
 
   const handleMouseMove = useCallback((e: { activeLabel?: string }) => {
-    if (e?.activeLabel) {
-      setCursorDate(e.activeLabel);
-    }
+    if (e?.activeLabel) setCursorDate(e.activeLabel);
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     setCursorDate('');
   }, []);
 
-  const optimalTicks = useMemo(() => {
-    if (chartWidth === 0 || chartData.length === 0) return [];
+  const hasData = apartmentsData && apartmentsData.length > 0;
+  const chartData = hasData ? generateChartData(apartmentsData, timeRange) : [];
 
-    const minDate = Math.min(...chartData.map(d => d.date));
-    const maxDate = Math.max(...chartData.map(d => d.date));
+  const periodRange = hasData
+    ? getPeriodRange(timeRange, apartmentsData)
+    : { periodStart: '', periodEnd: '' };
+  const minMax = hasData
+    ? findMinMaxRentWithFivePercent(apartmentsData, periodRange.periodStart, periodRange.periodEnd)
+    : null;
 
-    return generateOptimalTicks(minDate, maxDate, chartWidth, isMobile);
-  }, [chartWidth, chartData, isMobile]);
+  const yDomain = !minMax
+    ? [DEFAULT_Y_MIN, DEFAULT_Y_MAX]
+    : [
+        Math.floor(minMax.min / Y_DOMAIN_STEP) * Y_DOMAIN_STEP,
+        Math.ceil(minMax.max / Y_DOMAIN_STEP) * Y_DOMAIN_STEP,
+      ];
 
-  const tooltipWrapperStyle = useMemo(() => {
-    if (!isMobile) return {};
+  const yTicks = !minMax
+    ? [DEFAULT_Y_MIN, (DEFAULT_Y_MIN + DEFAULT_Y_MAX) / 2, DEFAULT_Y_MAX]
+    : [yDomain[0], Math.round((yDomain[0] + yDomain[1]) / 2), yDomain[1]];
 
-    return {
-      position: 'absolute' as const,
-      bottom: 0,
-      left: 0,
-      top: 'unset' as const,
-      right: 'unset' as const,
-      pointerEvents: 'none' as const,
-      zIndex: 1000,
-    };
-  }, [isMobile]);
+  const { min: dataMin, max: dataMax } = getDataRange(hasData, chartData);
 
-  const chartMouseHandlers = useMemo(
-    () => ({
-      onMouseMove: handleMouseMove,
-      onMouseLeave: handleMouseLeave,
-    }),
-    [handleMouseMove, handleMouseLeave],
+  const optimalTicks = getOptimalTicks(
+    chartWidth,
+    chartData,
+    dataMin,
+    dataMax,
+    timeRange,
+    isMobile,
+    isTablet,
+    isSmallMobile,
   );
+
+  const paletteColors = getPaletteColors();
+  const tooltipWrapperStyle = !isMobile ? {} : {};
 
   return {
     timeRange,
@@ -112,8 +163,10 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
     cursorDate,
     paletteColors,
     optimalTicks,
+    dataMin,
+    dataMax,
     tooltipWrapperStyle,
-    chartMouseHandlers,
+    chartMouseHandlers: { onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave },
     isMobile,
   };
 }

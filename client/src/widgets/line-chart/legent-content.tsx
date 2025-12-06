@@ -1,5 +1,5 @@
 import { cn } from '@/shared/utils/cn';
-import { Apartment } from '@/types/core/apartment';
+import { Apartment } from '@/types/core/line-chart';
 import React from 'react';
 
 type Props = {
