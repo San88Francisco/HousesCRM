@@ -12,4 +12,11 @@ export const ROUTES = {
 export type RouteKey = keyof typeof ROUTES;
 export type RoutePath = (typeof ROUTES)[RouteKey];
 
-export const SIDEBAR_PATTERNS = [/^\/$/, /^\/all-apartments/, /^\/uikit/] as const;
+export const SIDEBAR_PATTERNS = [
+  /^\/$/,
+  /^\/all-apartments/,
+  /^\/uikit/,
+  /^\/apartment/,
+  /^\/renter/,
+  /^\/contract/,
+] as const;
