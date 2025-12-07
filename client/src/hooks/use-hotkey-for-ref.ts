@@ -48,5 +48,5 @@ export const useHotkeyForRef = (
 
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [key, ref, action, ctrl, shift, alt, meta, preventDefault]);
+  }, [key, action, ctrl, shift, alt, meta, preventDefault]);
 };
