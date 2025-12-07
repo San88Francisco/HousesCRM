@@ -17,7 +17,7 @@ export const SidebarHeaderComponent = () => {
   return (
     <SidebarHeader
       className={cn(
-        'flex items-center p-4',
+        'flex items-center px-4 pt-4',
         state === 'collapsed' ? 'justify-center p-2' : 'gap-2',
       )}
     >
@@ -40,26 +40,14 @@ export const SidebarHeaderComponent = () => {
                 width={28}
                 height={28}
               />
-              <div
-                className={cn(
-                  'absolute inset-0 flex items-center justify-center',
-                  state === 'collapsed'
-                    ? 'opacity-0 group-hover/avatar:opacity-100 transition-opacity'
-                    : 'hidden',
-                )}
-              >
-                <SidebarTrigger className="h-7 w-7 p-0 " />
-              </div>
             </div>
             <span className="text-sm font-medium whitespace-nowrap group-data-[collapsible=icon]:hidden">
               {email || 'Guest'}
             </span>
           </div>
-          {state === 'expanded' && (
-            <div className="ml-auto">
-              <SidebarTrigger className="h-7 w-7 p-0" />
-            </div>
-          )}
+          <div className="ml-auto">
+            <SidebarTrigger className="h-7 w-7 p-0" />
+          </div>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarHeader>
