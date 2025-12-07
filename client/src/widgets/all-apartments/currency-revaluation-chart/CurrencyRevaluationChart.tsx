@@ -56,10 +56,7 @@ export const CurrencyRevaluationChart = () => {
       </CardHeader>
 
       <CardContent className="pt-0">
-        <div
-          className="w-full no-scrollbar relative"
-          style={{ height: containerHeight, overflow: 'visible' }}
-        >
+        <div className="w-full no-scrollbar relative" style={{ height: containerHeight }}>
           <ResponsiveContainer width="100%" height={chartHeight} minWidth={280}>
             <BarChart
               data={chartData}

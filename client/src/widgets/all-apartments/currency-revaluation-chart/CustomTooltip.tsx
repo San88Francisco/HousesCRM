@@ -61,7 +61,7 @@ const getTooltipPositionStyle = (
   const transform = shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`;
 
   return {
-    backgroundColor: isDark ? 'var(--tooltip-bg-dark)' : 'var(--white)',
+    backgroundColor: isDark ? 'var(--dark)' : 'var(--white)',
     borderColor: 'var(--border)',
     position: 'relative',
     zIndex: 9999,
