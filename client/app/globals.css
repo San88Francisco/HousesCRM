@@ -42,7 +42,7 @@
 
   --yellow: #ffe999;
   --gold: #f5c542;
-  --red: #ff4747;
+  --red: #e24d4d;
 
   --gray: #374151;
   --gray-medium: #4b5563;
@@ -72,10 +72,11 @@
   --chart-pie-13: #8e66c3;
   --chart-pie-14: #4faf68;
   --chart-pie-15: #c8a045;
+  --bg-logo: url('/logo/light-logo.png');
 }
 
 .dark {
-  --background: #1c1c1c;
+  --background: #0f0f0f;
   --foreground: #282828;
   --text: #ffffff;
   --muted-text: #7e7e7e;
@@ -83,7 +84,7 @@
   --border: #333333;
   --bg-button: #7d7d7d;
   --active-bg: #c6c7f8;
-  --bg-input: #4b5563;
+  --bg-input: #1a1a1a;
   --active-border: #60a5fa;
   --bg-dropdown: #484849;
   --drop-down-hover: #515152;
@@ -106,7 +107,7 @@
 
   --yellow: #ffe999;
   --gold: #f5c542;
-  --red: #ff4747;
+  --red: #e24d4d;
 
   --gray: #374151;
   --gray-medium: #4b5563;
@@ -136,6 +137,7 @@
   --chart-pie-13: #ab8fe0;
   --chart-pie-14: #6dd48a;
   --chart-pie-15: #e2bd6b;
+  --bg-logo: url('/logo/dark-logo.png');
 }
 
 html,
@@ -145,9 +147,18 @@ main {
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
   color: var(--text);
   background: var(--background);
-  font-family: 'Inter';
+
   transition:
     background-color 0.3s ease,
     color 0.3s ease;

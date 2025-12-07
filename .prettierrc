@@ -1,7 +1,11 @@
 {
-  "prettier.requireConfig": true,
-  "files.exclude": {
-    "**/client/**": true,
-    "**/server/**": true
-  }
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": true,
+  "printWidth": 100,
+  "jsxSingleQuote": false,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "endOfLine": "auto"
 }

@@ -5,9 +5,9 @@ import { ContractWithRevenueResponseDto } from './contract-with-revenue-response
 export class AllRenterAnalyticDto {
   @Expose()
   @Type(() => RenterDetailAnalyticDto)
-  public oneRenterReport: RenterDetailAnalyticDto
+  oneRenterReport: RenterDetailAnalyticDto
 
   @Expose()
   @Type(() => ContractWithRevenueResponseDto)
-  public allContractsByRenterId: ContractWithRevenueResponseDto
+  allContractsByRenterId: ContractWithRevenueResponseDto
 }
