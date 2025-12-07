@@ -31,10 +31,7 @@ export const SidebarHeaderComponent = () => {
           >
             <div className="relative h-7 w-7 group/avatar flex-shrink-0">
               <Image
-                className={cn(
-                  'rounded-full h-7 w-7 object-cover transition-opacity flex-shrink-0',
-                  state === 'collapsed' && 'group-hover/avatar:opacity-0',
-                )}
+                className={cn('rounded-full h-7 w-7 object-cover transition-opacity flex-shrink-0')}
                 alt="avatar"
                 src="/avatar.png"
                 width={28}
