@@ -1,4 +1,5 @@
 import { Expose } from 'class-transformer'
+import { ContractStatus } from 'src/contracts/entities/contract.entity'
 
 export class RenterDto {
   @Expose()
@@ -15,4 +16,10 @@ export class RenterDto {
 
   @Expose()
   vacated?: Date | null
+
+  @Expose()
+  totalIncome: number
+
+  @Expose()
+  status: ContractStatus
 }

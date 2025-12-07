@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Contract } from 'src/contracts/entities/contract.entity'
 import { Repository } from 'typeorm'
 import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
-import { RenterDetailAnalyticDto } from './dto/renter-detail-analytic.dto'
 import { plainToInstance } from 'class-transformer'
 import { QueryDto } from 'src/common/dto/query.dto'
 import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
@@ -11,6 +10,7 @@ import { calculateContractRevenue } from '../helpers/revenue.helpers'
 import { ContractWithRevenueDto } from './dto/contract-with-revenue.dto'
 import { ContractWithRevenueResponseDto } from './dto/contract-with-revenue-response.dto'
 import { AllRenterAnalyticDto } from './dto/all-renter-analytic-response.dto'
+import { RenterDto } from 'src/renters/dto/renter.dto'
 
 @Injectable()
 export class RenterDetailAnalyticsService {
@@ -33,13 +33,13 @@ export class RenterDetailAnalyticsService {
     return plainToInstance(AllRenterAnalyticDto, transformedData, { excludeExtraneousValues: true })
   }
 
-  async getOneRenterReport(id: string): Promise<RenterDetailAnalyticDto> {
+  async getOneRenterReport(id: string): Promise<RenterDto> {
     const contractsByRenterId = await this.contractRepository.find({
       where: { renter: { id } },
       relations: { renter: true },
     })
 
-    return plainToInstance(RenterDetailAnalyticDto, aggregateOccupancyReports(contractsByRenterId)[0], {
+    return plainToInstance(RenterDto, aggregateOccupancyReports(contractsByRenterId)[0], {
       excludeExtraneousValues: true,
     })
   }

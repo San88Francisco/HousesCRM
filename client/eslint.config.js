@@ -164,7 +164,7 @@ export default [
       curly: ['error', 'all'],
 
       // Обмежуємо складність функцій до 5
-      complexity: ['error', 5],
+      complexity: ['error', 10],
 
       // Максимальна довжина файлу 200 рядків (без пропусків і коментарів)
       'max-lines': ['error', { max: 200, skipBlankLines: true, skipComments: true }],

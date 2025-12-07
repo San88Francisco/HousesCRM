@@ -1,6 +1,5 @@
 'use client';
 
-import { NavItem } from '@/types/navigation';
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
 import {
   SidebarMenuItem,
@@ -11,13 +10,10 @@ import {
   SidebarMenuButton,
 } from '@/shared/ui/sidebar';
 import { CollapsibleMenu } from './ColapsibleMenu';
+import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
 
-type Props = {
-  items: NavItem[];
-};
-
-export const SidebarTablesGroup = ({ items }: Props) => {
-  const tablesItems = items.filter(item => !item.url);
+export const SidebarTablesGroup = () => {
+  const tablesItems = itemsNav.filter(item => !item.url);
 
   return (
     <SidebarGroup className={SIDEBAR_STYLES.sidebarGroup.hidden}>

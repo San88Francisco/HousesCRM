@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 type ErrorWithMessage = {
   message?: unknown;
   error?: unknown;
