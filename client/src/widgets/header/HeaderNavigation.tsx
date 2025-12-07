@@ -22,7 +22,7 @@ const HeaderNavigation = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [likedRoutes, setLikedRoutes] = useState<string[]>([]);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(LIKED_ROUTES_KEY);

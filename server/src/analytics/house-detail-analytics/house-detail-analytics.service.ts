@@ -4,12 +4,12 @@ import { Contract } from 'src/contracts/entities/contract.entity'
 import { Repository } from 'typeorm'
 import { plainToInstance } from 'class-transformer'
 import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
-import { HouseDetailAnalyticDto } from './dto/house-detail-analytic.dto'
 import { HouseOccupancyQueryDto } from 'src/houses/dto/house-occupancy-query.dto'
 import { HouseOccupancyReportResponseDto } from 'src/houses/dto/house-occupancy-report-response.dto'
 import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { SortOrder } from 'src/common/enums/sort-order.enum'
 import { HouseOccupancySortField } from 'src/houses/constants/house-occupancy-sort-field'
+import { RenterDto } from 'src/renters/dto/renter.dto'
 
 @Injectable()
 export class HouseDetailAnalyticsService {
@@ -18,7 +18,7 @@ export class HouseDetailAnalyticsService {
     private readonly contractsRepository: Repository<Contract>
   ) {}
 
-  async getHouseOccupancyReport(id: string): Promise<HouseDetailAnalyticDto[]> {
+  async getHouseOccupancyReport(id: string): Promise<RenterDto[]> {
     return this.buildHouseOccupancyReport(id)
   }
 
@@ -47,18 +47,18 @@ export class HouseDetailAnalyticsService {
     )
   }
 
-  private async buildHouseOccupancyReport(id: string): Promise<HouseDetailAnalyticDto[]> {
+  private async buildHouseOccupancyReport(id: string): Promise<RenterDto[]> {
     const contractsByHouseId = await this.contractsRepository.find({
       where: { house: { id } },
       relations: { renter: true },
     })
 
-    return plainToInstance(HouseDetailAnalyticDto, aggregateOccupancyReports(contractsByHouseId), {
+    return plainToInstance(RenterDto, aggregateOccupancyReports(contractsByHouseId), {
       excludeExtraneousValues: true,
     })
   }
 
-  private applyFilters(report: HouseDetailAnalyticDto[], dto: HouseOccupancyQueryDto): HouseDetailAnalyticDto[] {
+  private applyFilters(report: RenterDto[], dto: HouseOccupancyQueryDto): RenterDto[] {
     const { id, renterName, occupiedFrom, occupiedTo, vacatedFrom, vacatedTo, minTotalIncome, maxTotalIncome, status } =
       dto
 
@@ -99,7 +99,7 @@ export class HouseDetailAnalyticsService {
     })
   }
 
-  private applySorting(report: HouseDetailAnalyticDto[], dto: HouseOccupancyQueryDto): HouseDetailAnalyticDto[] {
+  private applySorting(report: RenterDto[], dto: HouseOccupancyQueryDto): RenterDto[] {
     const sortField = dto.sortBy ?? HouseOccupancySortField.TOTAL_INCOME
     const direction = dto.order === SortOrder.ASC ? 1 : -1
 
@@ -122,11 +122,11 @@ export class HouseDetailAnalyticsService {
         return compare(a as T, b as T)
       }
 
-    let comparator: (a: HouseDetailAnalyticDto, b: HouseDetailAnalyticDto) => number
+    let comparator: (a: RenterDto, b: RenterDto) => number
 
     switch (sortField) {
       case HouseOccupancySortField.RENTER_NAME: {
-        const getValue = (item: HouseDetailAnalyticDto): string | null => {
+        const getValue = (item: RenterDto): string | null => {
           const fullName = `${item.firstName ?? ''} ${item.lastName ?? ''}`.trim()
           return fullName ? fullName.toLowerCase() : null
         }
@@ -139,7 +139,7 @@ export class HouseDetailAnalyticsService {
       case HouseOccupancySortField.FIRST_NAME:
       case HouseOccupancySortField.LAST_NAME:
       case HouseOccupancySortField.ID: {
-        const getValue = (item: HouseDetailAnalyticDto): string | null => {
+        const getValue = (item: RenterDto): string | null => {
           const value = item[sortField]
           return value ? String(value).toLowerCase() : null
         }
@@ -151,7 +151,7 @@ export class HouseDetailAnalyticsService {
 
       case HouseOccupancySortField.OCCUPIED:
       case HouseOccupancySortField.VACATED: {
-        const getValue = (item: HouseDetailAnalyticDto): number | null => {
+        const getValue = (item: RenterDto): number | null => {
           const value = item[sortField]
           if (!value) {
             return null
@@ -173,7 +173,7 @@ export class HouseDetailAnalyticsService {
 
       case HouseOccupancySortField.TOTAL_INCOME:
       default: {
-        const getValue = (item: HouseDetailAnalyticDto): number | null => {
+        const getValue = (item: RenterDto): number | null => {
           const value = item[sortField]
           if (value === null || value === undefined) {
             return null

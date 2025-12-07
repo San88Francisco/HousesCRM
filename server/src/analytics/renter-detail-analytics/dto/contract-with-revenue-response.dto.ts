@@ -4,6 +4,7 @@ import { ContractWithRevenueDto } from './contract-with-revenue.dto'
 
 export class ContractWithRevenueResponseDto {
   @Expose()
+  @Type(() => ContractWithRevenueDto)
   data: ContractWithRevenueDto[]
 
   @Expose()

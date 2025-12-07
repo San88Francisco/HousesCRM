@@ -4,6 +4,7 @@ import { SidebarProvider } from '@/shared/ui/sidebar';
 import { AppSidebar } from '../sidebar/AppSidebar';
 import Header from '@/widgets/header';
 import { ReactNode, Suspense } from 'react';
+import { ModalRoot } from '@/components/modals';
 
 export const LayoutContent = ({ children }: { children: ReactNode }) => {
   return (
@@ -16,6 +17,7 @@ export const LayoutContent = ({ children }: { children: ReactNode }) => {
           <main className="px-2 sm:px-8">{children}</main>
         </div>
       </Suspense>
+      <ModalRoot />
     </SidebarProvider>
   );
 };
