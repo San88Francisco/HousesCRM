@@ -1,10 +1,11 @@
-import { RHFForm } from '../RHF/RHForm';
+'use client';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SearchRequest } from '@/types/services/search';
 import { searchDefaultValues, searchSchema } from '@/validation/search/search';
-import { RHFInput } from '../RHF/RHFInput';
 import { Search } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { RHFForm } from '@/components/RHF/RHForm';
+import { RHFInput } from '@/components/RHF/RHFInput';
 
 const HeaderSearch = () => {
   const form = useForm<SearchRequest>({
