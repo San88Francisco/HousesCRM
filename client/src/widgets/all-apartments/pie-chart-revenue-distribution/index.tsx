@@ -5,18 +5,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './PieChart';
 import { ChartList } from './ChartList';
 
-import { normalizeChartData } from '@/shared/utils/pie-chart/normalizeChartData';
+import { getChartDataFromResponse } from '@/shared/utils/pie-chart/normalizeChartData';
 import { chartHouseConfig } from '@/shared/constants/pie-chart/chartPieConfig';
-import { chartHouseData } from '@/shared/constants/pie-chart/chartPieData';
+import { useGetHousesAnalyticsQuery } from '@/store/houses';
 
 export function ChartPieDonutText() {
-  // TODO: Код тимчасовий, коли будемо отримувати масив з бекенду, це видалимо, адже там є загальна сума
-  const grandApartmentTotalRevenue = chartHouseData.reduce(
-    (acc, curr) => acc + curr.apartmentTotalRevenue,
-    0,
-  );
+  const { data } = useGetHousesAnalyticsQuery();
 
-  const adjustedData = normalizeChartData(chartHouseData);
+  if (!data?.revenueDistribution.data) return null;
+
+  const grandApartmentTotalRevenue = data?.revenueDistribution.grandTotal;
+  // TODO: Код тимчасовий, коли будемо отримувати масив з бекенду, це видалимо, адже там є загальна сума
+
+  const adjustedData = getChartDataFromResponse(data);
 
   return (
     <Card className="max-w-[600px] mx-auto">

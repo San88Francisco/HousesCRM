@@ -38,3 +38,22 @@ export type HouseResponse = {
     vacated: string;
   }[];
 };
+
+export type HousesAllAnalyticsResponse = {
+  revenueDistribution: RevenueDistribution;
+};
+
+type RevenueDistribution = {
+  data: RevenueItem[];
+  grandTotal: number;
+};
+export type RevenueItem = {
+  apartmentTotalRevenue: number;
+  percentage: number;
+  id: string;
+  apartmentName: string;
+};
+
+export type HouseChartDataItem = RevenueItem & {
+  fill: string;
+};
