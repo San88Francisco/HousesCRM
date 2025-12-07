@@ -14,6 +14,7 @@ import { CacheModule } from '@nestjs/cache-manager'
 import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard'
 import { AnalyticsModule } from './analytics/analytics.module'
+import { SearchModule } from './search/search.module'
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { AnalyticsModule } from './analytics/analytics.module'
     ContractsModule,
     RentersModule,
     AnalyticsModule,
+    SearchModule,
     AuthModule,
   ],
   providers: [
