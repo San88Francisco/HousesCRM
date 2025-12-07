@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
-import { Repository } from 'typeorm'
+import { Repository, SelectQueryBuilder } from 'typeorm'
 
 import { House } from 'src/houses/entities/house.entity'
 import { HouseOverviewDto } from './dto/houses-overview/houses-overview.dto'
@@ -63,7 +63,7 @@ export class HousesAnalyticsService {
     })
   }
 
-  private buildHousesOverviewQuery(dto?: HousesOverviewQueryDto) {
+  private buildHousesOverviewQuery(dto?: HousesOverviewQueryDto): SelectQueryBuilder<House> {
     const dateFrom = dto?.dateFrom
     const dateTo = dto?.dateTo
 
@@ -208,9 +208,15 @@ export class HousesAnalyticsService {
       const va = a[sortField] as number | null
       const vb = b[sortField] as number | null
 
-      if (va === null && vb === null) return 0
-      if (va === null) return 1
-      if (vb === null) return -1
+      if (va === null && vb === null) {
+        return 0
+      }
+      if (va === null) {
+        return 1
+      }
+      if (vb === null) {
+        return -1
+      }
 
       return (va - vb) * dir
     })

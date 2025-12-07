@@ -4,8 +4,8 @@ import { HouseDetailAnalyticDto } from 'src/analytics/house-detail-analytics/dto
 
 export class HouseWithOccupancyReports {
   @Expose()
-  public houseDetail: HouseWithPricesDto
+  houseDetail: HouseWithPricesDto
 
   @Expose()
-  public occupancyReports: HouseDetailAnalyticDto[]
+  occupancyReports: HouseDetailAnalyticDto[]
 }

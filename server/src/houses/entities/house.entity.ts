@@ -8,8 +8,7 @@ export enum ApartmentType {
   RESALE = 'resale',
 }
 @Entity()
-// eslint-disable-next-line quotes
-@Check(`"rooms_count" > 0 AND "total_area" > 0 AND "floor" >= 0`)
+@Check('"rooms_count" > 0 AND "total_area" > 0 AND "floor" >= 0')
 export class House {
   @PrimaryGeneratedColumn('uuid')
   id: string
