@@ -61,18 +61,20 @@ export class ContractsService {
       relations: { renter: true, house: true },
     })
 
-    const response: ContractPdfFileDto = {
-      renterFirstName: contract.renter?.firstName ?? '',
-      renterLastName: contract.renter?.lastName ?? '',
-      roomsCount: contract.house?.roomsCount ?? 0,
-      street: contract.house?.street ?? '',
-      commencement: contract.commencement,
-      monthlyPayment: contract.monthlyPayment,
-    }
-
-    return plainToInstance(ContractPdfFileDto, response, {
-      excludeExtraneousValues: true,
-    })
+    return plainToInstance(
+      ContractPdfFileDto,
+      {
+        renterFirstName: contract.renter?.firstName ?? '',
+        renterLastName: contract.renter?.lastName ?? '',
+        roomsCount: contract.house?.roomsCount ?? 0,
+        street: contract.house?.street ?? '',
+        commencement: contract.commencement,
+        monthlyPayment: contract.monthlyPayment,
+      },
+      {
+        excludeExtraneousValues: true,
+      }
+    )
   }
 
   async create(dto: CreateContractDto): Promise<ContractWithRelationsDto> {
