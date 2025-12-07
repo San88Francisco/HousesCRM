@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { Dispatch } from '@reduxjs/toolkit';
+
 import { tokenStorage } from '../utils/auth/token';
 import { toast } from 'sonner';
 import { clearUser } from '@/store/user-slice';
-import store from '@/store/store';
 
 const rawBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '');
 const baseUrl = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl}/api`;
@@ -34,15 +35,15 @@ const handleTokenRefresh = async (): Promise<string | null> => {
 
     return null;
   } catch (error: unknown) {
-    toast.error(`Помилка запиту оновлення токена: ${error}`);
+    toast.error(`Помилка запиту оновлення токена: ${String(error)}`);
     return null;
   }
 };
 
-const handleAuthError = () => {
+const handleAuthError = (dispatch: Dispatch) => {
   tokenStorage.clearTokens();
 
-  store.dispatch(clearUser());
+  dispatch(clearUser());
 
   if (typeof window !== 'undefined') {
     window.location.href = '/login';
@@ -63,7 +64,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
       tokenStorage.setAccessToken(newAccessToken);
       result = await baseQuery(args, api, extraOptions);
     } else {
-      handleAuthError();
+      handleAuthError(api.dispatch);
     }
   }
 
