@@ -27,7 +27,7 @@ export const CustomTooltip = ({ active, payload, isDark }: CustomTooltipProps) =
     <div
       className={cn('p-3 md:p-4 rounded-xl shadow-2xl border-2 min-w-[180px] max-w-[220px]')}
       style={{
-        backgroundColor: isDark ? '#1a1a1a' : 'var(--white)',
+        backgroundColor: isDark ? 'var(--dark)' : 'var(--white)',
         borderColor: data.color,
       }}
     >
