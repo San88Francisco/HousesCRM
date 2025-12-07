@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useEffect, RefObject } from 'react';
 
 type HotkeyAction = 'focus' | 'click';
