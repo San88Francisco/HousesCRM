@@ -1,4 +1,5 @@
-/* eslint-disable */
+'use client';
+
 interface CustomBarProps {
   x?: number;
   y?: number;

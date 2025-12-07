@@ -2,9 +2,9 @@ import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart/
 import { getApartmentColor } from '@/shared/utils/all-apartments/payback-chart/colors';
 
 const FULL_PAYBACK_COEFFICIENT = 1;
-const PERCENTAGE_MULTIPLIER = 100;
 const COEFFICIENT_DECIMAL_PLACES = 2;
-const PERCENTAGE_DECIMAL_PLACES = 0;
+const MILLION = 1_000_000;
+const THOUSAND = 1_000;
 
 export const transformPaybackData = (stats: HousePaybackStats[]): PaybackChartData[] => {
   return stats.map((stat, index) => {
@@ -29,6 +29,8 @@ export const formatPaybackCoefficient = (coefficient: number): string => {
   return `x${coefficient.toFixed(COEFFICIENT_DECIMAL_PLACES)}`;
 };
 
-export const formatPaybackPercentage = (coefficient: number): string => {
-  return `${(coefficient * PERCENTAGE_MULTIPLIER).toFixed(PERCENTAGE_DECIMAL_PLACES)}%`;
+export const formatYAxis = (value: number): string => {
+  if (value >= MILLION) return `${(value / MILLION).toFixed(1)}M`;
+  if (value >= THOUSAND) return `${(value / THOUSAND).toFixed(0)}k`;
+  return value.toString();
 };

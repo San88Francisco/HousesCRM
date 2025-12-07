@@ -1,15 +1,15 @@
+'use client';
+
 interface CustomXAxisTickProps {
   x?: number;
   y?: number;
   payload?: { value: string };
 }
 
-const MAX_TEXT_LENGTH = 12;
+const MAX_TEXT_LENGTH = 10;
 
 export const CustomXAxisTick = ({ x = 0, y = 0, payload }: CustomXAxisTickProps) => {
-  if (!payload) {
-    return null;
-  }
+  if (!payload) return null;
 
   const text = payload.value;
   const displayText =
@@ -23,8 +23,8 @@ export const CustomXAxisTick = ({ x = 0, y = 0, payload }: CustomXAxisTickProps)
         y={0}
         dy={16}
         textAnchor="end"
-        fill="#9ca3af"
-        fontSize={13}
+        fill="var(--muted-text)"
+        fontSize={12}
         fontWeight={400}
         transform="rotate(-45)"
       >
