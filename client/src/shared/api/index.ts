@@ -5,7 +5,9 @@ import { toast } from 'sonner';
 import { clearUser } from '@/store/user-slice';
 import store from '@/store/store';
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const rawBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
+
+const baseUrl = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl.replace(/\/$/, '')}/api`;
 
 const baseQuery = fetchBaseQuery({
   baseUrl,

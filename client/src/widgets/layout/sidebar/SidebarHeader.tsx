@@ -1,14 +1,19 @@
+'use client';
+
 import Image from 'next/image';
 import { cn } from '@/shared/utils/cn';
-import { SidebarTrigger, SidebarHeader, SidebarMenu, SidebarMenuItem } from '@/shared/ui/sidebar';
-/* eslint-disable */
+import {
+  SidebarTrigger,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  useSidebar,
+} from '@/shared/ui/sidebar';
+import { useUser } from '@/hooks/use-user';
 
-type Props = {
-  state: 'collapsed' | 'expanded';
-  label: string;
-};
-
-export const SidebarHeaderComponent = ({ state, label }: Props) => {
+export const SidebarHeaderComponent = () => {
+  const { email } = useUser();
+  const { state } = useSidebar();
   return (
     <SidebarHeader
       className={cn(
@@ -47,7 +52,7 @@ export const SidebarHeaderComponent = ({ state, label }: Props) => {
               </div>
             </div>
             <span className="text-sm font-medium whitespace-nowrap group-data-[collapsible=icon]:hidden">
-              {label}
+              {email || 'Guest'}
             </span>
           </div>
           {state === 'expanded' && (

@@ -12,6 +12,7 @@ import { mockData } from '@/shared/constants/table/dataTable';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 import { TestGetHouses } from '@/widgets/uikit/test-get-houses';
+import { ModalTrigger } from '@/widgets/uikit/modal';
 
 export default function Page() {
   return (
@@ -29,6 +30,7 @@ export default function Page() {
       <ToastCopmponent />
       <SelectComponent />
       <TestGetHouses />
+      <ModalTrigger />
     </div>
   );
 }
