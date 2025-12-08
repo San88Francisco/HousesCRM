@@ -5,12 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './PieChart';
 import { ChartList } from './ChartList';
 
-import {
-  createChartPieConfig,
-  getChartDataFromResponse,
-} from '@/shared/utils/pie-chart/normalize-chart-data';
-// import { chartHouseConfig } from '@/shared/constants/pie-chart/chartPieConfig';
+import { addFillToRevenueItems } from '@/shared/utils/pie-chart/add-fill-pie-revenue-items';
 import { useGetHousesAnalyticsQuery } from '@/store/houses';
+import { createChartPieConfig } from '@/shared/utils/pie-chart/create-chart-pie-config';
 
 export function ChartPieDonutText() {
   const { data } = useGetHousesAnalyticsQuery();
@@ -18,9 +15,8 @@ export function ChartPieDonutText() {
   if (!data?.revenueDistribution.data) return null;
 
   const grandApartmentTotalRevenue = data?.revenueDistribution.grandTotal;
-  // TODO: Код тимчасовий, коли будемо отримувати масив з бекенду, це видалимо, адже там є загальна сума
 
-  const adjustedData = getChartDataFromResponse(data);
+  const adjustedData = addFillToRevenueItems(data);
   const chartConfig = createChartPieConfig(data.revenueDistribution.data);
 
   return (
@@ -44,6 +40,7 @@ export function ChartPieDonutText() {
               outerRadius={100}
               paddingAngle={adjustedData.length > 1 ? 5 : 0}
               cornerRadius={5}
+              minAngle={5}
             >
               <Label
                 className="text"

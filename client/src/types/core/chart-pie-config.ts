@@ -1,4 +1,4 @@
-import { THEMES } from '@/shared/constants/pie-chart/chartThemes';
+import { THEMES } from '@/shared/constants/pie-chart/chart-themes';
 import { ComponentType, ReactNode } from 'react';
 
 export type ChartPieConfig = {

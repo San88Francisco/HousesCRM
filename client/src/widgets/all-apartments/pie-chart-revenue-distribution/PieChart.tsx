@@ -7,7 +7,7 @@ import * as RechartsPrimitive from 'recharts';
 import { cn } from '@/shared/utils/cn';
 import { ChartContext, useChart } from '@/hooks/pie-chart/useChart';
 import { ChartPieConfig } from '@/types/core/chart-pie-config';
-import { THEMES } from '@/shared/constants/pie-chart/chartThemes';
+import { THEMES } from '@/shared/constants/pie-chart/chart-themes';
 
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
