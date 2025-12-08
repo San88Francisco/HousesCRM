@@ -9,6 +9,7 @@ export const housesApi = rootApi.injectEndpoints({
     }),
     getHouseById: build.query<HouseResponse, string>({
       query: id => `/houses/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Houses', id }],
     }),
   }),
 });

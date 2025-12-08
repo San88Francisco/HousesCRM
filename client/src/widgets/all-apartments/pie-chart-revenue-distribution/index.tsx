@@ -14,7 +14,7 @@ export function ChartPieDonutText() {
 
   if (!data?.revenueDistribution.data) return null;
 
-  const grandApartmentTotalRevenue = data?.revenueDistribution.grandTotal;
+  const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;
 
   const adjustedData = addFillToRevenueItems(data);
   const chartConfig = createChartPieConfig(data.revenueDistribution.data);

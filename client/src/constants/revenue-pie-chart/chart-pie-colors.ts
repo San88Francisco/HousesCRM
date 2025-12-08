@@ -14,4 +14,4 @@ export const PIE_COLORS = [
   'var(--chart-pie-13)',
   'var(--chart-pie-14)',
   'var(--chart-pie-15)',
-];
+] as const;
