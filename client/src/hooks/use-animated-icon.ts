@@ -5,14 +5,22 @@ export const useAnimatedIcon = (icon: ReactNode) => {
   const iconRef = useRef<AnimatedIconHandle | null>(null);
 
   const handleMouseEnter = () => {
-    if (iconRef.current) {
-      iconRef.current.startAnimation();
+    const current = iconRef.current as unknown as {
+      startAnimation?: () => void;
+    } | null;
+
+    if (current && typeof current.startAnimation === 'function') {
+      current.startAnimation();
     }
   };
 
   const handleMouseLeave = () => {
-    if (iconRef.current) {
-      iconRef.current.stopAnimation();
+    const current = iconRef.current as unknown as {
+      stopAnimation?: () => void;
+    } | null;
+
+    if (current && typeof current.stopAnimation === 'function') {
+      current.stopAnimation();
     }
   };
 

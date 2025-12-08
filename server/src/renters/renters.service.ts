@@ -9,6 +9,8 @@ import { CreateRenterDto } from './dto/create-renter.dto'
 import { UpdateRenterDto } from './dto/update-renter.dto'
 import { QueryDto } from 'src/common/dto/query.dto'
 import { RenterResponseDto } from './dto/renter-response.dto'
+import { ContractStatus } from 'src/contracts/entities/contract.entity'
+import { calculateContractRevenue } from 'src/analytics/helpers/revenue.helpers'
 
 @Injectable()
 export class RentersService {
@@ -23,9 +25,22 @@ export class RentersService {
     const [renters, total] = await this.rentersRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
+      relations: { contracts: true },
     })
 
-    const rentersDto = plainToInstance(RenterDto, renters, {
+    const rentersWithStats = renters.map((renter) => {
+      const contracts = renter.contracts ?? []
+      const totalIncome = contracts.reduce((sum, contract) => sum + calculateContractRevenue(contract), 0)
+      const hasActiveContract = contracts.some((contract) => contract.status === ContractStatus.ACTIVE)
+
+      return {
+        ...renter,
+        totalIncome,
+        status: hasActiveContract ? ContractStatus.ACTIVE : ContractStatus.INACTIVE,
+      }
+    })
+
+    const rentersDto = plainToInstance(RenterDto, rentersWithStats, {
       excludeExtraneousValues: true,
     })
 

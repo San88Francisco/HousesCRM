@@ -1,10 +1,10 @@
 import type { Contract } from 'src/contracts/entities/contract.entity'
 import { ContractStatus } from 'src/contracts/entities/contract.entity'
-import { HouseDetailAnalyticDto } from '../house-detail-analytics/dto/house-detail-analytic.dto'
 import { calculateContractRevenue } from './revenue.helpers'
+import { RenterDto } from 'src/renters/dto/renter.dto'
 
-export const aggregateOccupancyReports = (contracts: Contract[]): HouseDetailAnalyticDto[] => {
-  const occupancyReport = contracts.reduce<Record<string, HouseDetailAnalyticDto>>((acc, contract) => {
+export const aggregateOccupancyReports = (contracts: Contract[]): RenterDto[] => {
+  const occupancyReport = contracts.reduce<Record<string, RenterDto>>((acc, contract) => {
     const renterId = contract.renter.id
 
     if (!acc[renterId]) {

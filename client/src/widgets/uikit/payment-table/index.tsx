@@ -1,5 +1,5 @@
 'use client';
-import { useTableColumns } from '@/hooks/use-table-columns';
+import { useTableColumns } from '@/hooks/table/use-table-columns';
 import { DataTable } from '@/shared/ui/data-table';
 import { Payment } from '@/types/services/payment';
 
