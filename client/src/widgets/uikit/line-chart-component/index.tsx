@@ -13,7 +13,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { formatTickDate } from '@/shared/utils/line-chart/line-chart';
 import { cn } from '@/shared/utils/cn';
-import { useGetHousesAnalyticsQuery } from '@/store/all-analitics';
+import { useGetHousesAnalyticsQuery } from '@/store/houses';
 
 import { Apartment, TimeRangeEnum } from '@/types/core/line-chart';
 

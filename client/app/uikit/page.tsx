@@ -11,6 +11,7 @@ import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
+import { ModalTrigger } from '@/widgets/uikit/modal';
 
 export default function Page() {
   return (
@@ -27,6 +28,7 @@ export default function Page() {
       <TextareaComponent />
       <ToastCopmponent />
       <SelectComponent />
+      <ModalTrigger />
     </div>
   );
 }
