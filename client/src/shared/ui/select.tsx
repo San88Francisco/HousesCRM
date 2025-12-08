@@ -114,7 +114,7 @@ const SelectLabel = forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn('p-2 text-lg font-semibold text-text', className)}
+    className={cn('p-2 text-md font-semibold text-text', className)}
     {...props}
   />
 ));

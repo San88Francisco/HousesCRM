@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Contract } from 'src/contracts/entities/contract.entity'
 import { Repository } from 'typeorm'
@@ -39,9 +39,11 @@ export class RenterDetailAnalyticsService {
       relations: { renter: true },
     })
 
-    return plainToInstance(RenterDto, aggregateOccupancyReports(contractsByRenterId)[0], {
-      excludeExtraneousValues: true,
-    })
+    const reports = aggregateOccupancyReports(contractsByRenterId)
+    if (reports.length === 0) {
+      throw new NotFoundException(`No contracts found for renter with id ${id}`)
+    }
+    return plainToInstance(RenterDto, reports[0], { excludeExtraneousValues: true })
   }
 
   async getAllContractsByRenterId(id: string, dto?: QueryDto): Promise<ContractWithRevenueResponseDto> {

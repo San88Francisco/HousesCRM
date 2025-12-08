@@ -233,7 +233,7 @@ const Sidebar = forwardRef<
 
             variant === 'floating' || variant === 'inset'
               ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]'
-              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r-[1.5px] group-data-[side=left]:border-dark-lightest group-data-[side=right]:border-l-2 group-data-[side=right]:border-dark-lightest',
+              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r-[1.5px] group-data-[side=left]:border-border group-data-[side=right]:border-l-2 group-data-[side=right]:border-border',
             className,
           )}
           {...props}
@@ -258,7 +258,7 @@ const SidebarTrigger = forwardRef<ElementRef<typeof Button>, ComponentProps<type
     const CurrentIcon = open ? ChevronLeftIcon : ChevronRightIcon;
 
     const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
-      <CurrentIcon key={open ? 'open' : 'closed'} className="h-4 w-4 text-dark" />,
+      <CurrentIcon key={open ? 'open' : 'closed'} className="h-4 w-4 text-text" />,
     );
 
     return (
@@ -266,7 +266,7 @@ const SidebarTrigger = forwardRef<ElementRef<typeof Button>, ComponentProps<type
         ref={ref}
         data-sidebar="trigger"
         className={cn(
-          'absolute h-7 w-7 bg-dark-lightest hover:bg-dark-lightest active:bg-dark-lightest active:border-dark-lightest cursor-pointer rounded-l-none',
+          'absolute h-7 w-7 bg-border hover:bg-border active:bg-border active:border-border cursor-pointer rounded-l-none',
           open ? '-top-[2px] -right-11' : 'top-[6px] -right-9',
           className,
         )}
