@@ -16,8 +16,8 @@ import { cn } from '@/shared/utils/cn';
 import { useGetHousesAnalyticsQuery } from '@/store/all-analitics';
 
 import { Apartment, TimeRangeEnum } from '@/types/core/line-chart';
-import { CustomTooltip } from '@/widgets/line-chart/castom-tooltip';
-import { LegendContent } from '@/widgets/line-chart/legent-content';
+
+import { LegendContent } from '@/widgets/line-chart/legentContent';
 
 import { useCallback } from 'react';
 import {
@@ -30,6 +30,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { CustomTooltip } from '@/widgets/line-chart/custom-tooltip';
+import { getPaletteColors } from '@/shared/utils/line-chart/colors';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function ApartmentRentalChart() {
   const { data, error, isLoading } = useGetHousesAnalyticsQuery();
@@ -44,13 +47,14 @@ export function ApartmentRentalChart() {
     yTicks,
     chartRef,
     cursorDate,
-    paletteColors,
     optimalTicks,
     chartMouseHandlers,
-    isMobile,
     dataMin,
     dataMax,
   } = useApartmentRental(data?.housesOverview || []);
+
+  const paletteColors = getPaletteColors();
+  const { isMobile } = useIsMobile();
 
   const handleApartmentClick = useCallback(
     (id: string) => {
@@ -153,7 +157,6 @@ export function ApartmentRentalChart() {
                   <CustomTooltip
                     lockedApartment={lockedApartment}
                     apartmentsData={data.housesOverview}
-                    colors={paletteColors}
                     cursorDate={cursorDate}
                   />
                 }
@@ -161,7 +164,7 @@ export function ApartmentRentalChart() {
                   stroke: 'var(--border)',
                   strokeWidth: 1,
                 }}
-                position={{ y: isMobile ? 200 : 0 }}
+                position={{ y: isMobile ? 170 : 0 }}
               />
 
               {data.housesOverview.map((apt: Apartment, idx: number) => (
@@ -184,7 +187,6 @@ export function ApartmentRentalChart() {
                 content={() => (
                   <LegendContent
                     apartmentsData={data.housesOverview}
-                    colors={paletteColors}
                     activeApartment={lockedApartment}
                     onApartmentClick={handleApartmentClick}
                   />

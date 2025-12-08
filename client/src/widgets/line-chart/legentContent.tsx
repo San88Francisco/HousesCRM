@@ -1,28 +1,26 @@
+import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
+import { getPaletteColors } from '@/shared/utils/line-chart/colors';
 import { Apartment } from '@/types/core/line-chart';
-import React from 'react';
 
 type Props = {
   apartmentsData: Apartment[];
-  colors: string[];
   activeApartment: string | null;
   onApartmentClick: (id: string) => void;
 };
 
-export const LegendContent = ({
-  apartmentsData,
-  colors,
-  activeApartment,
-  onApartmentClick,
-}: Props) => (
+const colors = getPaletteColors();
+
+export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClick }: Props) => (
   <div className="flex  max-[420px]:flex-col max-[420px]:items-center justify-center  sm:pt-10 pt-4 sm:px-10 px-1 pb-3">
     <div className="w-max mx-auto flex flex-wrap max-[420px]:flex-col items-start justify-center min-[420.5px]:gap-7 gap-3">
       {apartmentsData.map((apt, idx) => (
-        <div
+        <Button
+          variant="icon"
           key={apt.id}
           onClick={() => onApartmentClick(apt.id)}
           className={cn(
-            'flex items-center cursor-pointer transition-opacity duration-200 select-none',
+            'flex items-center cursor-pointer transition-opacity duration-200 select-none p-0',
             activeApartment && activeApartment !== apt.id && 'opacity-30',
           )}
         >
@@ -34,7 +32,7 @@ export const LegendContent = ({
           <span className={cn('text-xs md:text-sm', activeApartment === apt.id && 'font-semibold')}>
             {apt.apartmentName}
           </span>
-        </div>
+        </Button>
       ))}
     </div>
   </div>

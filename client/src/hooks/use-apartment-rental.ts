@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Apartment, ChartDataPoint, TimeRangeEnum } from '@/types/core/line-chart';
@@ -7,7 +6,7 @@ import {
   generateChartData,
   getPeriodRange,
 } from '@/shared/utils/line-chart/line-chart';
-import { getPaletteColors } from '@/shared/utils/line-chart/colors';
+
 import {
   CHART_WIDTH_THRESHOLD,
   DEFAULT_CHART_WIDTH,
@@ -19,6 +18,14 @@ import {
   SMALL_MOBILE_TICKS,
   Y_DOMAIN_STEP,
 } from '@/constants/line-chart/line-chart';
+
+const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: number) => {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), ms);
+  };
+};
 
 const getDataRange = (hasData: boolean, chartData: ChartDataPoint[]) => {
   if (!hasData || chartData.length === 0) {
@@ -100,9 +107,12 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
       }
     };
 
+    const debouncedUpdateWidth = debounce(updateWidth, 150);
+
     updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
+
+    window.addEventListener('resize', debouncedUpdateWidth);
+    return () => window.removeEventListener('resize', debouncedUpdateWidth);
   }, []);
 
   const handleMouseMove = useCallback((e: { activeLabel?: string }) => {
@@ -147,9 +157,6 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
     isSmallMobile,
   );
 
-  const paletteColors = getPaletteColors();
-  const tooltipWrapperStyle = !isMobile ? {} : {};
-
   return {
     timeRange,
     setTimeRange,
@@ -161,12 +168,9 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
     chartRef,
     chartWidth,
     cursorDate,
-    paletteColors,
     optimalTicks,
     dataMin,
     dataMax,
-    tooltipWrapperStyle,
     chartMouseHandlers: { onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave },
-    isMobile,
   };
 }

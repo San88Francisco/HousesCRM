@@ -34,15 +34,22 @@ const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.ALL_DATA]: date => date,
 };
 
+const getEarliestContractDate = (apartments: Apartment[], fallback: Date): Date =>
+  apartments
+    .flatMap(apt => apt.contract)
+    .map(c => new Date(c.commencement))
+    .reduce((earliest, curr) => (curr < earliest ? curr : earliest), fallback);
+
+const getStartDate = (timeRange: TimeRangeEnum, apartments: Apartment[], now: Date): Date => {
+  if (timeRange !== TimeRangeEnum.ALL_DATA) {
+    return timeRangeMap[timeRange](now);
+  }
+  return getEarliestContractDate(apartments, now);
+};
+
 export function getPeriodRange(timeRange: TimeRangeEnum, apartments: Apartment[]) {
   const now = new Date();
-  const startDate =
-    timeRange !== TimeRangeEnum.ALL_DATA
-      ? timeRangeMap[timeRange](now)
-      : apartments
-          .flatMap(apt => apt.contract)
-          .map(c => new Date(c.commencement))
-          .reduce((earliest, curr) => (curr < earliest ? curr : earliest), now);
+  const startDate = getStartDate(timeRange, apartments, now);
 
   return {
     periodStart: startDate.toISOString().slice(0, 10),
@@ -76,13 +83,7 @@ export function generateChartData(
   timeRange: TimeRangeEnum,
 ): ChartDataPoint[] {
   const now = new Date();
-  const startDate =
-    timeRange !== TimeRangeEnum.ALL_DATA
-      ? timeRangeMap[timeRange](now)
-      : apartments
-          .flatMap(apt => apt.contract)
-          .map(c => new Date(c.commencement))
-          .reduce((earliest, curr) => (curr < earliest ? curr : earliest), now);
+  const startDate = getStartDate(timeRange, apartments, now);
 
   const monthCount =
     (now.getFullYear() - startDate.getFullYear()) * 12 + now.getMonth() - startDate.getMonth() + 1;

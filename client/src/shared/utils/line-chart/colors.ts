@@ -1,8 +1,9 @@
 export function getCssVariable(name: string): string {
-  if (typeof window === 'undefined') return '';
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return '';
+  }
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
-
 export function getPaletteColors(): string[] {
   const paletteNames = [
     '--active-border',

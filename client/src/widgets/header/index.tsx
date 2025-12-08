@@ -8,7 +8,7 @@ import { useIsMobile } from '@/hooks';
 
 const Header = () => {
   const pathname = usePathname();
-  const isMobile = useIsMobile();
+  const { isMobile } = useIsMobile();
 
   const isAuthRoute = pathname === ROUTES.LOGIN || pathname === ROUTES.REGISTER;
 

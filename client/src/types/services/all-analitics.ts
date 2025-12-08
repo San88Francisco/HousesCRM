@@ -1,6 +1,6 @@
 import { Apartment } from '../core/line-chart';
 
-export type AllAnaliticsRespond = {
+export type AllAnalyticsResponse = {
   housesOverview: Apartment[];
 
   revenueDistribution: RevenueDistribution;
