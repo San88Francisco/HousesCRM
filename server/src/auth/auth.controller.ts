@@ -16,7 +16,7 @@ import { JwtPayload } from 'types/jwt/jwt.types'
 import { UserDto } from 'src/users/dto/res/user.dto'
 import { LogoutDto } from './dto/res/logout.dto'
 import { Public } from 'src/common/decorators/public.decorator'
-import { Auth } from 'src/common/decorators/auth.decorator'
+// import { Auth } from 'src/common/decorators/auth.decorator'
 
 @Controller(AUTH_ROUTES.ROOT)
 export class AuthController {
@@ -43,7 +43,7 @@ export class AuthController {
 
   @Public()
   @Post(AUTH_ROUTES.REGISTRATION)
-  @Auth()
+  // @Auth()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
     const user = await this.authService.registration(dto)

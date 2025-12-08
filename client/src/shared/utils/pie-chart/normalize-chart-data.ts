@@ -1,6 +1,7 @@
 import { PIE_COLORS } from '@/constants/revenue-pie-chart/chart-pie-colors';
-import { HouseChartDataItem } from '@/types/core/chart-pie-item';
-import { HousesAllAnalyticsResponse, RevenueItem } from '@/types/services/houses';
+import { ChartPieConfig } from '@/types/core/chart-pie-config';
+import { HouseChartDataItem, PieRevenueItem } from '@/types/core/chart-pie-item';
+import { HousesAllAnalyticsResponse } from '@/types/services/houses';
 
 const MIN_PERCENT = 0.02;
 
@@ -14,7 +15,7 @@ export function normalizeChartData(data: HouseChartDataItem[]): HouseChartDataIt
   }));
 }
 
-export function mapRevenueToChartData(items: RevenueItem[]): HouseChartDataItem[] {
+export function mapRevenueToChartData(items: PieRevenueItem[]): HouseChartDataItem[] {
   return items.map((item, index) => ({
     ...item,
     fill: PIE_COLORS[index % PIE_COLORS.length],
@@ -23,7 +24,22 @@ export function mapRevenueToChartData(items: RevenueItem[]): HouseChartDataItem[
 
 export function getChartDataFromResponse(res: HousesAllAnalyticsResponse) {
   const withFill = mapRevenueToChartData(res.revenueDistribution.data);
-  const normalized = normalizeChartData(withFill);
 
-  return normalized;
+  if (withFill.length <= 1) {
+    return withFill;
+  }
+
+  return normalizeChartData(withFill);
+}
+
+export function createChartPieConfig(data: PieRevenueItem[]): ChartPieConfig {
+  return Object.fromEntries(
+    data.map((item, index) => [
+      index,
+      {
+        label: item.apartmentName,
+        color: `var(--chart-pie-${(index % 15) + 1})`, // циклічні кольори як раніше
+      },
+    ]),
+  );
 }

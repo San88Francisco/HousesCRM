@@ -5,8 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './PieChart';
 import { ChartList } from './ChartList';
 
-import { getChartDataFromResponse } from '@/shared/utils/pie-chart/normalizeChartData';
-import { chartHouseConfig } from '@/shared/constants/pie-chart/chartPieConfig';
+import {
+  createChartPieConfig,
+  getChartDataFromResponse,
+} from '@/shared/utils/pie-chart/normalize-chart-data';
+// import { chartHouseConfig } from '@/shared/constants/pie-chart/chartPieConfig';
 import { useGetHousesAnalyticsQuery } from '@/store/houses';
 
 export function ChartPieDonutText() {
@@ -18,6 +21,7 @@ export function ChartPieDonutText() {
   // TODO: Код тимчасовий, коли будемо отримувати масив з бекенду, це видалимо, адже там є загальна сума
 
   const adjustedData = getChartDataFromResponse(data);
+  const chartConfig = createChartPieConfig(data.revenueDistribution.data);
 
   return (
     <Card className="max-w-[600px] mx-auto">
@@ -27,7 +31,7 @@ export function ChartPieDonutText() {
       </CardHeader>
       <CardContent className="flex flex-wrap md:flex-nowrap gap-10 items-center">
         <ChartContainer
-          config={chartHouseConfig}
+          config={chartConfig}
           className="flex-shrink-0 w-full md:w-[40%] max-h-[300px]"
         >
           <PieChart>
@@ -38,7 +42,7 @@ export function ChartPieDonutText() {
               nameKey="apartmentName"
               innerRadius={75}
               outerRadius={100}
-              paddingAngle={5}
+              paddingAngle={adjustedData.length > 1 ? 5 : 0}
               cornerRadius={5}
             >
               <Label

@@ -1,7 +1,10 @@
-export type HouseChartDataItem = {
-  apartmentName: string;
+export type PieRevenueItem = {
   apartmentTotalRevenue: number;
   percentage: number;
-  fill: string;
   id: string;
+  apartmentName: string;
+};
+
+export type HouseChartDataItem = PieRevenueItem & {
+  fill: string;
 };
