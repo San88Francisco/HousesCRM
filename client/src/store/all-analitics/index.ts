@@ -1,10 +1,10 @@
 import { rootApi } from '@/shared/api';
-import { AllAnaliticsRespond } from '@/types/services/all-analitics';
+import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 
 export const AllAnaliticsApi = rootApi.injectEndpoints({
   overrideExisting: false,
   endpoints: build => ({
-    getHousesAnalytics: build.query<AllAnaliticsRespond, void>({
+    getHousesAnalytics: build.query<AllAnalyticsResponse, void>({
       query: () => '/houses-analytics/all-analytics',
       providesTags: ['AllAnalitics'],
     }),
