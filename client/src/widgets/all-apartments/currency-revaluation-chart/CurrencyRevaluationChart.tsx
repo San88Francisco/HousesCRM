@@ -2,39 +2,38 @@
 
 import { useState, useEffect } from 'react';
 import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { useTheme } from 'next-themes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { CustomTooltip } from './CustomTooltip';
 import { useGetCurrencyRevaluationQuery } from '@/shared/api/currency-revaluation-chart/currency-revaluation-api';
+import { LoadingState, ErrorState, EmptyState } from './ChartStates';
+import { formatYAxisTick } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 import {
   useChartData,
   useChartConfig,
-  formatYAxisTick,
-  BAR_SIZE,
-  BAR_RADIUS,
-  OPACITY_DEFAULT,
-  OPACITY_DARK,
-  OPACITY_LIGHT,
-  TOOLTIP_Z_INDEX,
-} from './utils';
-import { renderLoadingState, renderErrorState, renderEmptyState } from './ChartStates';
+} from '@/hooks/all-apartments/currency-revaluation-chart/hooks';
+
+const BAR_RADIUS = 4;
+const BAR_SIZE = 10;
+const OPACITY_DEFAULT = 0.85;
+const OPACITY_DARK = 0.6;
+const OPACITY_LIGHT = 0.7;
+const TOOLTIP_Z_INDEX = 9999;
 
 export const CurrencyRevaluationChart = () => {
-  const { theme, systemTheme } = useTheme();
   const { data: apiData, isLoading, error } = useGetCurrencyRevaluationQuery();
   const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const chartData = useChartData(apiData);
   const { xAxisMax, containerHeight, chartHeight, isDark, purchaseBarFill, growthBarFill } =
-    useChartConfig(chartData, theme, systemTheme);
+    useChartConfig(chartData);
 
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return null;
-  if (isLoading) return renderLoadingState();
-  if (error) return renderErrorState(error);
-  if (chartData.length === 0) return renderEmptyState();
+  if (isLoading) return <LoadingState />;
+  if (error) return <ErrorState error={error} />;
+  if (chartData.length === 0) return <EmptyState />;
 
   const renderCells = (fill: string, customOpacity?: (index: number) => number) =>
     chartData.map((_, index) => (
@@ -42,7 +41,7 @@ export const CurrencyRevaluationChart = () => {
         key={`${fill}-${index}`}
         fill={fill}
         opacity={customOpacity ? customOpacity(index) : 1}
-        style={{ transition: 'opacity 0.2s ease' }}
+        className="transition-opacity duration-200 ease-in-out"
       />
     ));
 

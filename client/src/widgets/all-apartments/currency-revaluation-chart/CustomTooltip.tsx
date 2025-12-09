@@ -11,50 +11,44 @@ const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;
 const TOOLTIP_OFFSET_Y = 10;
 
-const TooltipRow = ({ label, value }: { label: string; value: string }) => (
+type TooltipRowProps = {
+  label: string;
+  value: string;
+};
+
+const TooltipRow = ({ label, value }: TooltipRowProps) => (
   <div className="flex justify-between gap-4">
-    <span className="text-xs" style={{ color: 'var(--muted-text)' }}>
-      {label}
-    </span>
-    <span className="text-xs" style={{ color: 'var(--text)' }}>
-      {value}
-    </span>
+    <span className="text-xs text-[var(--muted-text)]">{label}</span>
+    <span className="text-xs text-[var(--text)]">{value}</span>
   </div>
 );
 
-const TooltipSection = ({
-  title,
-  amount,
-  rate,
-  rateLabel,
-}: {
+type TooltipSectionProps = {
   title: string;
   amount: number;
   rate: number;
   rateLabel: string;
-}) => (
+};
+
+const TooltipSection = ({ title, amount, rate, rateLabel }: TooltipSectionProps) => (
   <div>
     <div className="flex justify-between gap-4 mb-1">
-      <span className="text-xs" style={{ color: 'var(--muted-text)' }}>
-        {title}
-      </span>
-      <span className="font-semibold text-xs" style={{ color: 'var(--text)' }}>
-        {formatCurrency(amount)}
-      </span>
+      <span className="text-xs text-[var(--muted-text)]">{title}</span>
+      <span className="font-semibold text-xs text-[var(--text)]">{formatCurrency(amount)}</span>
     </div>
     <TooltipRow label={rateLabel} value={formatRate(rate)} />
   </div>
 );
 
-interface CustomTooltipProps {
+type Props = {
   active?: boolean;
   payload?: Array<{ payload: ChartDataItem }>;
   isDark: boolean;
   coordinate?: { x: number; y: number };
-}
+};
 
 const getTooltipPositionStyle = (
-  coordinate: CustomTooltipProps['coordinate'],
+  coordinate: Props['coordinate'],
   isDark: boolean,
 ): React.CSSProperties => {
   const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
@@ -69,13 +63,12 @@ const getTooltipPositionStyle = (
   };
 };
 
-export const CustomTooltip = ({ active, payload, isDark, coordinate }: CustomTooltipProps) => {
+export const CustomTooltip = ({ active, payload, isDark, coordinate }: Props) => {
   if (!active || !payload?.length) {
     return null;
   }
 
   const data = payload[0].payload;
-
   const positionStyle = getTooltipPositionStyle(coordinate, isDark);
 
   return (
@@ -83,11 +76,7 @@ export const CustomTooltip = ({ active, payload, isDark, coordinate }: CustomToo
       className={cn('p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px]')}
       style={positionStyle}
     >
-      <p
-        className="font-bold mb-3 text-sm"
-        style={{ color: 'var(--text)' }}
-        title={data.apartmentName}
-      >
+      <p className="font-bold mb-3 text-sm text-[var(--text)]" title={data.apartmentName}>
         {truncateText(data.apartmentName, MAX_NAME_LENGTH)}
       </p>
 
@@ -99,7 +88,7 @@ export const CustomTooltip = ({ active, payload, isDark, coordinate }: CustomToo
           rateLabel="Курс купівлі:"
         />
 
-        <div className="h-px" style={{ backgroundColor: 'var(--border)' }} />
+        <div className="h-px bg-[var(--border)]" />
 
         <TooltipSection
           title="Поточна:"
