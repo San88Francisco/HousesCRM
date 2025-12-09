@@ -6,7 +6,7 @@ import {
 } from '../../../shared/utils/helpers/custom-tooltip-helper';
 import { Apartment, TooltipPayload } from '@/types/core/line-chart';
 import { NoContractTooltip } from './noContractTooltip';
-import { LockedApartmentTooltip } from '../lockedApartmenttToltip';
+import { LockedApartmentTooltip } from '../lockedApartmentTooltip';
 import { ApartmentItem } from './apartmentItem';
 import { getPaletteColors } from '@/shared/utils/line-chart/colors';
 
@@ -66,7 +66,7 @@ export const CustomTooltip = ({
 
   const preparedApartments = acquiredApartments.map(apt => {
     const realIdx = apartmentsData.findIndex(a => a.id === apt.id);
-    const color = colors[realIdx % colors.length];
+    const color = realIdx >= 0 ? colors[realIdx % colors.length] : colors[0];
 
     return { apt, color };
   });

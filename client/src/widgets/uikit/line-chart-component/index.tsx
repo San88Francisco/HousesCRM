@@ -13,7 +13,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { formatTickDate } from '@/shared/utils/line-chart/line-chart';
 import { cn } from '@/shared/utils/cn';
-import { useGetHousesAnalyticsQuery } from '@/store/houses';
+import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 
 import { Apartment, TimeRangeEnum } from '@/types/core/line-chart';
 
@@ -32,7 +32,6 @@ import {
 } from 'recharts';
 import { CustomTooltip } from '@/widgets/line-chart/custom-tooltip';
 import { getPaletteColors } from '@/shared/utils/line-chart/colors';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 export function ApartmentRentalChart() {
   const { data, error, isLoading } = useGetHousesAnalyticsQuery();
@@ -51,10 +50,10 @@ export function ApartmentRentalChart() {
     chartMouseHandlers,
     dataMin,
     dataMax,
+    isMobile,
   } = useApartmentRental(data?.housesOverview || []);
 
   const paletteColors = getPaletteColors();
-  const { isMobile } = useIsMobile();
 
   const handleApartmentClick = useCallback(
     (id: string) => {
@@ -143,8 +142,8 @@ export function ApartmentRentalChart() {
                 domain={yDomain}
                 ticks={yTicks}
                 tickMargin={10}
-                tick={{ fontSize: !isMobile ? 12 : 10, dy: !isMobile ? -20 : -8 }}
-                tickFormatter={(value: number) => `${value}`}
+                tick={{ fontSize: isMobile ? 10 : 12, dy: isMobile ? -8 : -20 }}
+                tickFormatter={(value: number) => String(value)}
                 axisLine={false}
                 tickLine={false}
               />
@@ -177,7 +176,7 @@ export function ApartmentRentalChart() {
                   strokeWidth={lockedApartment === apt.id ? 2.5 : 1.5}
                   strokeOpacity={lockedApartment && lockedApartment !== apt.id ? 0.15 : 1}
                   dot={false}
-                  activeDot={lockedApartment && lockedApartment !== apt.id ? false : true}
+                  activeDot={!lockedApartment || lockedApartment === apt.id}
                 />
               ))}
 

@@ -21,7 +21,7 @@ export const LockedApartmentTooltip = ({ color, apartmentName, contract }: Props
       <div className="text-xs">
         <p className="text-background mb-1">Орендар: {renterName}</p>
         <p className="font-bold text-background mb-1">
-          Оплата: {contract.monthlyPayment.toLocaleString()} грн/міс
+          Оплата: {contract.monthlyPayment.toLocaleString('uk-UA')} грн/міс
         </p>
         <p className="text-background text-[11px]">{dateRange}</p>
       </div>

@@ -1,12 +1,20 @@
 import { Apartment } from '@/types/core/line-chart';
 
 export const truncate = (text: string, maxLen: number): string => {
+  if (maxLen <= 3) return text.slice(0, maxLen);
   return text.length > maxLen ? text.slice(0, maxLen - 3) + '...' : text;
 };
 
 export const formatDateRange = (start: string, end: string): string => {
-  const startStr = truncate(new Date(start).toLocaleDateString('uk-UA'), 15);
-  const endStr = truncate(new Date(end).toLocaleDateString('uk-UA'), 15);
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    return '—';
+  }
+
+  const startStr = truncate(startDate.toLocaleDateString('uk-UA'), 15);
+  const endStr = truncate(endDate.toLocaleDateString('uk-UA'), 15);
   return `${startStr} – ${endStr}`;
 };
 

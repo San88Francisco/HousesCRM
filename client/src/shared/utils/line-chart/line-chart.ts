@@ -181,6 +181,10 @@ export const isContract = (value: unknown): value is Contract => {
     value !== null &&
     'renter' in value &&
     'commencement' in value &&
-    'termination' in value
+    'termination' in value &&
+    typeof (value as Contract).commencement === 'string' &&
+    typeof (value as Contract).termination === 'string' &&
+    'monthlyPayment' in value &&
+    typeof (value as Contract).monthlyPayment === 'number'
   );
 };
