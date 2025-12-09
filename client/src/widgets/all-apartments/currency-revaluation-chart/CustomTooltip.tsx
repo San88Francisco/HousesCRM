@@ -10,6 +10,7 @@ import {
 const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;
 const TOOLTIP_OFFSET_Y = 10;
+const TOOLTIP_Z_INDEX = 9999;
 
 type TooltipRowProps = {
   label: string;
@@ -47,20 +48,15 @@ type Props = {
   coordinate?: { x: number; y: number };
 };
 
-const getTooltipPositionStyle = (
-  coordinate: Props['coordinate'],
-  isDark: boolean,
-): React.CSSProperties => {
-  const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
-  const transform = shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`;
+const getTooltipClasses = (isDark: boolean): string => {
+  const bgColor = isDark ? 'bg-[var(--dark)]' : 'bg-[var(--white)]';
 
-  return {
-    backgroundColor: isDark ? 'var(--dark)' : 'var(--white)',
-    borderColor: 'var(--border)',
-    position: 'relative',
-    zIndex: 9999,
-    transform,
-  };
+  return cn(
+    'p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] relative',
+    'border-[var(--border)]',
+    `z-[${TOOLTIP_Z_INDEX}]`,
+    bgColor,
+  );
 };
 
 export const CustomTooltip = ({ active, payload, isDark, coordinate }: Props) => {
@@ -69,13 +65,16 @@ export const CustomTooltip = ({ active, payload, isDark, coordinate }: Props) =>
   }
 
   const data = payload[0].payload;
-  const positionStyle = getTooltipPositionStyle(coordinate, isDark);
+
+  const classes = getTooltipClasses(isDark);
+
+  const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
+  const transformStyle: React.CSSProperties = {
+    transform: shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`,
+  };
 
   return (
-    <div
-      className={cn('p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px]')}
-      style={positionStyle}
-    >
+    <div className={classes} style={transformStyle}>
       <p className="font-bold mb-3 text-sm text-[var(--text)]" title={data.apartmentName}>
         {truncateText(data.apartmentName, MAX_NAME_LENGTH)}
       </p>
