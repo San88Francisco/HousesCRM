@@ -7,10 +7,7 @@ export const ChartList = ({ chartData }: { chartData: HouseChartDataItem[] }) =>
       {chartData.map(item => (
         <li key={item.id} className="flex items-center justify-between gap-2 pb-1">
           <div className="flex items-center gap-2">
-            <div
-              className="h-2 w-2 shrink-0 rounded-full mt-1"
-              style={{ backgroundColor: item.fill }}
-            />
+            <div className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.fill }} />
             <Tooltip>
               <TooltipTrigger asChild>
                 <span className="max-w-[180px] truncate cursor-default">{item.apartmentName}</span>
