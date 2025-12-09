@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 export interface ContractPdfFileDto {
   renterFirstName: string;
   renterLastName: string;
@@ -11,14 +9,16 @@ export interface ContractPdfFileDto {
 
 export interface ContractViewModel {
   landlord: {
-    fullName: string;
+    firstName: string;
+    lastName: string;
     passportSeries: string;
     passportNumber: string;
     passportIssued: string;
     address: string;
   };
   tenant: {
-    fullName: string;
+    firstName: string;
+    lastName: string;
     passportSeries: string;
     passportNumber: string;
     passportIssued: string;
@@ -48,50 +48,52 @@ export interface ContractViewModel {
   };
 }
 
-const formatField = (value: string | number | undefined | null): string => {
+const fmt = (value: string | number | undefined | null): string => {
   if (value === undefined || value === null) {
     return '_____';
   }
   return String(value);
 };
 
-export const mapContractToPdfView = (data?: ContractPdfFileDto): ContractViewModel => {
+export const contractViewDto = (data: ContractPdfFileDto): ContractViewModel => {
   return {
     landlord: {
-      fullName: formatField(undefined),
-      passportSeries: formatField(undefined),
-      passportNumber: formatField(undefined),
-      passportIssued: formatField(undefined),
-      address: formatField(undefined),
+      firstName: fmt(undefined),
+      lastName: fmt(undefined),
+      passportSeries: fmt(undefined),
+      passportNumber: fmt(undefined),
+      passportIssued: fmt(undefined),
+      address: fmt(undefined),
     },
     tenant: {
-      fullName: `${formatField(data?.renterFirstName)} ${formatField(data?.renterLastName)}`,
-      passportSeries: formatField(undefined),
-      passportNumber: formatField(undefined),
-      passportIssued: formatField(undefined),
-      address: formatField(undefined),
+      firstName: fmt(data.renterFirstName),
+      lastName: fmt(data.renterLastName),
+      passportSeries: fmt(undefined),
+      passportNumber: fmt(undefined),
+      passportIssued: fmt(undefined),
+      address: fmt(undefined),
     },
     property: {
-      ownershipDocument: formatField(undefined),
-      roomCount: formatField(data?.roomsCount),
-      area: formatField(undefined),
-      street: formatField(data?.street),
-      building: formatField(undefined),
-      apartment: formatField(undefined),
+      ownershipDocument: fmt(undefined),
+      roomCount: fmt(data.roomsCount),
+      area: fmt(undefined),
+      street: fmt(data.street),
+      building: fmt(undefined),
+      apartment: fmt(undefined),
     },
     terms: {
-      inspectionCount: formatField(undefined),
-      rentPriceUah: formatField(data?.monthlyPayment),
-      rentPriceUsd: formatField(undefined),
-      initialPayment: formatField(undefined),
-      depositAmount: formatField(undefined),
-      paymentDeadlineDay: formatField(undefined),
+      inspectionCount: fmt(undefined),
+      rentPriceUah: fmt(data.monthlyPayment),
+      rentPriceUsd: fmt(undefined),
+      initialPayment: fmt(undefined),
+      depositAmount: fmt(undefined),
+      paymentDeadlineDay: fmt(undefined),
     },
     meters: {
-      electricity: formatField(undefined),
-      gas: formatField(undefined),
-      coldWater: formatField(undefined),
-      hotWater: formatField(undefined),
+      electricity: fmt(undefined),
+      gas: fmt(undefined),
+      coldWater: fmt(undefined),
+      hotWater: fmt(undefined),
     },
   };
 };
