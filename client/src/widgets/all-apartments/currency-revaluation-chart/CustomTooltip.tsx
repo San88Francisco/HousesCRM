@@ -68,7 +68,7 @@ export const CustomTooltip = ({ active, payload, isDark, coordinate }: Props) =>
 
   const classes = getTooltipClasses(isDark);
 
-  const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
+  const shouldShowAbove = coordinate?.y > TOOLTIP_BOUNDARY_Y;
   const transformStyle: React.CSSProperties = {
     transform: shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`,
   };
