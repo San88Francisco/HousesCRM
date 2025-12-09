@@ -6,7 +6,7 @@ import { tokenStorage } from '../utils/auth/token';
 import { toast } from 'sonner';
 import { clearUser } from '@/store/user-slice';
 
-const rawBaseUrl = (process.env.NEXT_PUBLIC_API_URL1 ?? '').replace(/\/$/, '');
+const rawBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '');
 const baseUrl = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl}/api`;
 
 const baseQuery = fetchBaseQuery({
