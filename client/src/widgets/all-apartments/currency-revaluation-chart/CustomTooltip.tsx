@@ -5,12 +5,12 @@ import {
   formatRate,
   formatCurrency,
   truncateText,
-  TOOLTIP_Z_INDEX,
 } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 
 const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;
 const TOOLTIP_OFFSET_Y = 10;
+const TOOLTIP_Z_INDEX = 9999;
 
 type TooltipRowProps = {
   label: string;
@@ -68,7 +68,7 @@ export const CustomTooltip = ({ active, payload, isDark, coordinate }: Props) =>
 
   const classes = getTooltipClasses(isDark);
 
-  const shouldShowAbove = coordinate?.y > TOOLTIP_BOUNDARY_Y;
+  const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
   const transformStyle: React.CSSProperties = {
     transform: shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`,
   };
