@@ -6,18 +6,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { CustomTooltip } from './CustomTooltip';
 import { useGetCurrencyRevaluationQuery } from '@/shared/api/currency-revaluation-chart/currency-revaluation-api';
 import { LoadingState, ErrorState, EmptyState } from './ChartStates';
-import { formatYAxisTick } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
+import {
+  BAR_RADIUS,
+  BAR_SIZE,
+  OPACITY_DEFAULT,
+  OPACITY_DARK,
+  OPACITY_LIGHT,
+  TOOLTIP_Z_INDEX,
+  formatYAxisTick,
+} from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 import {
   useChartData,
   useChartConfig,
 } from '@/hooks/all-apartments/currency-revaluation-chart/hooks';
-
-const BAR_RADIUS = 4;
-const BAR_SIZE = 10;
-const OPACITY_DEFAULT = 0.85;
-const OPACITY_DARK = 0.6;
-const OPACITY_LIGHT = 0.7;
-const TOOLTIP_Z_INDEX = 9999;
 
 export const CurrencyRevaluationChart = () => {
   const { data: apiData, isLoading, error } = useGetCurrencyRevaluationQuery();

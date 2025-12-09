@@ -7,6 +7,13 @@ const DECIMAL_PLACES_THOUSAND = 0;
 const DECIMAL_PLACES_RATE = 2;
 const DEFAULT_MAX_LENGTH = 15;
 
+export const BAR_RADIUS = 4;
+export const BAR_SIZE = 10;
+export const OPACITY_DEFAULT = 0.85;
+export const OPACITY_DARK = 0.6;
+export const OPACITY_LIGHT = 0.7;
+export const TOOLTIP_Z_INDEX = 9999;
+
 export const MAX_TEXT_LENGTH_YAXIS = 10;
 export const Y_AXIS_PADDING = 0.15;
 export const ROW_HEIGHT = 45;
