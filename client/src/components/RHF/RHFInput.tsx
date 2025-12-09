@@ -54,12 +54,12 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
       control,
       formState: { errors },
     } = useFormContext();
-    const [isFocused, setIsFocused] = useState(false);
 
+    const [isFocused, setIsFocused] = useState(false);
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
 
-    const internalRef = useRef<HTMLInputElement | null>(null);
+    const internalRef = useRef<HTMLInputElement>(null);
 
     useHotkeyForRef(hotkey, internalRef, hotkeyAction, {
       ctrl: !!hotkeyCtrl,
@@ -81,57 +81,65 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
         .join(' + ');
 
     return (
-      <div className={cn('space-y-2', className)}>
-        {label && !error && (
-          <Label htmlFor={name} className="flex items-center gap-1">
-            {label}
-          </Label>
-        )}
-
-        <Controller
-          name={name}
-          control={control}
-          render={({ field }) => (
-            <div
-              className="relative"
-              onFocusCapture={() => setIsFocused(true)}
-              onBlurCapture={() => setIsFocused(false)}
-            >
-              <Input
-                id={name}
-                {...field}
-                value={field.value || ''}
-                type={type}
-                onChange={e => field.onChange(e.target.value)}
-                error={errorMessage}
-                aria-invalid={!!errorMessage}
-                aria-describedby={errorMessage ? `${name}-error` : undefined}
-                icon={icon}
-                iconWithError={iconWithError}
-                {...props}
-                ref={el => {
-                  internalRef.current = el;
-                  if (typeof forwardedRef === 'function') forwardedRef(el);
-                  else if (forwardedRef) {
-                    (forwardedRef as React.MutableRefObject<HTMLInputElement | null>).current = el;
-                  }
-                }}
-              />
-
-              {hotkeyHint && !isFocused && (
-                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-text">
-                  {hotkeyHint}
-                </span>
-              )}
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <div className={cn('flex flex-col gap-2', className)}>
+            {label && (
+              <Label htmlFor={name}>
+                {label}
+                {required && <span className="text-red ml-1">*</span>}
+              </Label>
+            )}
+            <div className="relative">
+              <div
+                onFocusCapture={() => setIsFocused(true)}
+                onBlurCapture={() => setIsFocused(false)}
+              >
+                <Input
+                  id={name}
+                  type={type}
+                  disabled={disabled}
+                  value={field.value}
+                  onChange={e => field.onChange(e.target.value)}
+                  className={cn(
+                    errorMessage && 'border-destructive focus-visible:ring-destructive',
+                  )}
+                  error={errorMessage}
+                  aria-invalid={!!errorMessage}
+                  aria-describedby={errorMessage ? `${name}-error` : undefined}
+                  icon={icon}
+                  iconWithError={iconWithError}
+                  {...props}
+                  ref={el => {
+                    internalRef.current = el;
+                    if (typeof forwardedRef === 'function') forwardedRef(el);
+                    else if (forwardedRef) {
+                      (forwardedRef as React.MutableRefObject<HTMLInputElement | null>).current =
+                        el;
+                    }
+                  }}
+                />
+                {hotkeyHint && !isFocused && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
+                    {hotkeyHint}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        />
-
-        {error && <p className="text-sm text-red !mt-0">{errorMessage}</p>}
-      </div>
+            {error && (
+              <div className="text-sm text-red" id={`${name}-error`}>
+                {errorMessage}
+              </div>
+            )}
+          </div>
+        )}
+      />
     );
   },
 );
 
 RHFInput.displayName = 'RHFInput';
+
 export { RHFInput };

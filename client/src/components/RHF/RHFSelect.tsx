@@ -35,7 +35,6 @@ type Props = {
   className?: string;
   triggerClassName?: string;
   contentClassName?: string;
-
   onValueChange?: (value: string) => void;
 };
 
@@ -43,7 +42,7 @@ const isOptionGroup = (option: SelectOption | SelectOptionGroup): option is Sele
   return 'options' in option;
 };
 
-export const RHFSelect = forwardRef<HTMLButtonElement, Props>(
+export const RHFSelect = forwardRef<HTMLDivElement, Props>(
   (
     {
       name,
@@ -64,15 +63,10 @@ export const RHFSelect = forwardRef<HTMLButtonElement, Props>(
       return opts.map((option, index) => {
         if (isOptionGroup(option)) {
           return (
-            <SelectGroup key={`group-${index}`}>
+            <SelectGroup key={index}>
               <SelectLabel>{option.label}</SelectLabel>
               {option.options.map(opt => (
-                <SelectItem
-                  key={opt.value}
-                  value={opt.value}
-                  disabled={opt.disabled}
-                  icon={opt.icon}
-                >
+                <SelectItem key={opt.value} value={opt.value} disabled={opt.disabled}>
                   {opt.label}
                 </SelectItem>
               ))}
@@ -81,12 +75,7 @@ export const RHFSelect = forwardRef<HTMLButtonElement, Props>(
         }
 
         return (
-          <SelectItem
-            key={option.value}
-            value={option.value}
-            disabled={option.disabled}
-            icon={option.icon}
-          >
+          <SelectItem key={option.value} value={option.value} disabled={option.disabled}>
             {option.label}
           </SelectItem>
         );
@@ -98,7 +87,7 @@ export const RHFSelect = forwardRef<HTMLButtonElement, Props>(
         name={name}
         control={control}
         render={({ field, fieldState: { error } }) => (
-          <div className={cn('space-y-2', className)}>
+          <div className={cn('flex flex-col gap-2', className)} ref={ref}>
             {label && <Label htmlFor={name}>{label}</Label>}
             <Select
               value={field.value}
@@ -109,26 +98,14 @@ export const RHFSelect = forwardRef<HTMLButtonElement, Props>(
               disabled={disabled}
             >
               <SelectTrigger
-                ref={ref}
+                className={cn(error && 'border-destructive', triggerClassName)}
                 id={name}
-                className={triggerClassName}
-                error={!!error}
-                disabled={disabled}
               >
-                {error && (
-                  <p
-                    className={cn(
-                      'mt-1 text-sm transition-colors duration-200',
-                      error ? 'text-red opacity-100' : 'text-muted opacity-0',
-                    )}
-                  >
-                    {error.message}
-                  </p>
-                )}
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent className={contentClassName}>{renderOptions(options)}</SelectContent>
             </Select>
+            {error && <div className="text-sm text-red">{error.message as string}</div>}
           </div>
         )}
       />
