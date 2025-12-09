@@ -7,7 +7,7 @@ export const housesApi = rootApi.injectEndpoints({
   endpoints: build => ({
     getHousesAnalytics: build.query<AllAnalyticsResponse, void>({
       query: () => '/houses-analytics/all-analytics',
-      providesTags: ['AllAnalytics'],
+      providesTags: ['Houses'],
     }),
     getHouseById: build.query<HouseResponse, string>({
       query: id => `/houses/${id}`,

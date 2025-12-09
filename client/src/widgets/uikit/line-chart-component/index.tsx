@@ -31,7 +31,6 @@ import {
   YAxis,
 } from 'recharts';
 import { CustomTooltip } from '@/widgets/line-chart/custom-tooltip';
-import { getPaletteColors } from '@/shared/utils/line-chart/colors';
 
 export function ApartmentRentalChart() {
   const { data, error, isLoading } = useGetHousesAnalyticsQuery();
@@ -51,9 +50,8 @@ export function ApartmentRentalChart() {
     dataMin,
     dataMax,
     isMobile,
+    paletteColors,
   } = useApartmentRental(data?.housesOverview || []);
-
-  const paletteColors = getPaletteColors();
 
   const handleApartmentClick = useCallback(
     (id: string) => {

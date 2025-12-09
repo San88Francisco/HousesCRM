@@ -13,6 +13,7 @@ import {
   Y_DOMAIN_STEP,
 } from '@/constants/line-chart/line-chart';
 import { debounce, getDataRange, getOptimalTicks } from '@/shared/utils/line-chart/chart-math';
+import { getPaletteColors } from '@/shared/utils/line-chart/colors';
 
 export function useApartmentRental(apartmentsData: Apartment[]) {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ONE_YEAR);
@@ -20,6 +21,7 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
   const [cursorDate, setCursorDate] = useState<string>('');
   const [chartWidth, setChartWidth] = useState(DEFAULT_CHART_WIDTH);
 
+  const paletteColors = getPaletteColors();
   const { isMobile, isTablet, isSmallMobile } = useIsMobile();
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -109,6 +111,7 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
     dataMin,
     dataMax,
     isMobile,
+    paletteColors,
     chartMouseHandlers: { onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave },
   };
 }
