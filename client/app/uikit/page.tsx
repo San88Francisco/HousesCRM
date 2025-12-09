@@ -14,6 +14,7 @@ import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 import { TestGetHouses } from '@/widgets/uikit/test-get-houses';
 import PdfViewerDialog from '@/components/pdf-viewer-dialog';
+import { ModalTrigger } from '@/widgets/uikit/modal';
 
 export default function Page() {
   return (
@@ -32,6 +33,7 @@ export default function Page() {
       <SelectComponent />
       <TestGetHouses />
       <PdfViewerDialog id="e9d638de-1872-4ac0-acc5-c4f767e9fa66" />
+      <ModalTrigger />
     </div>
   );
 }

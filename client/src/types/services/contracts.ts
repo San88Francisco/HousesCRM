@@ -1,4 +1,5 @@
 import { UUID } from 'crypto';
+import { ContractStatus } from './statuses';
 
 export enum ContractPeriod {
   OneMonth = '1month',
@@ -10,37 +11,17 @@ export enum ContractPeriod {
   All = 'all',
 }
 
-export enum ContractStatus {
-  Active = 'active',
-  Inactive = 'inactive',
-  Terminated = 'terminated',
-}
-
 export type ContractsForPeriodRequest = {
   period: ContractPeriod;
   renter_id?: UUID;
 };
 
 export type Contract = {
-  _id: string;
-  renter_id: string;
+  id: UUID;
+  commencement: string;
+  termination: string;
   monthlyPayment: number;
   status: ContractStatus;
-  originalStartDate: string;
-  originalEndDate: string;
-  adjustedStartDate: string;
-  adjustedEndDate: string;
-  renter: {
-    _id: string;
-    house_id: string;
-    name: string;
-  };
-  house: {
-    _id: string;
-    apartmentName: string;
-    floor: number;
-    street: string;
-  };
 };
 
 export type Period = {

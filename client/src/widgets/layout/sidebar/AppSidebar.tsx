@@ -1,29 +1,25 @@
 'use client';
 
-import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
-import { Sidebar, SidebarContent, useSidebar } from '@/shared/ui/sidebar';
+import { Sidebar, SidebarContent } from '@/shared/ui/sidebar';
 import { usePathname } from 'next/navigation';
 import { SidebarHeaderComponent } from './SidebarHeader';
 import { SidebarPagesGroup } from './SidebarPagesGroup';
 import { SidebarTablesGroup } from './SidebarTablesGroup';
 
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
-import { useUser } from '@/hooks/use-user';
 import { LogoSidebar } from './LogoSidebar';
 
 export const AppSidebar = () => {
-  const { email } = useUser();
-  const { state } = useSidebar();
   const pathname = usePathname();
 
   if (!shouldShowSidebar(pathname)) return null;
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeaderComponent state={state} label={email || 'Guest'} />
+      <SidebarHeaderComponent />
       <SidebarContent>
-        <SidebarPagesGroup items={itemsNav} />
-        <SidebarTablesGroup items={itemsNav} />
+        <SidebarPagesGroup />
+        <SidebarTablesGroup />
       </SidebarContent>
       <LogoSidebar />
     </Sidebar>

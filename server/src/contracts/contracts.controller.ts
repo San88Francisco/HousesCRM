@@ -29,7 +29,7 @@ export class ContractsController {
   @Get(CONTRACTS_ROUTES.PDF_FILE)
   @Auth()
   async getPdfFile(@Param('id') id: string): Promise<ContractPdfFileDto> {
-    return this.contractsService.getPdfFileData(id)
+    return await this.contractsService.getPdfFileData(id)
   }
 
   @Post()

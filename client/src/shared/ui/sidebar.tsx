@@ -2,7 +2,6 @@
 
 import { Slot } from '@radix-ui/react-slot';
 import { VariantProps, cva } from 'class-variance-authority';
-import { PanelLeft } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
@@ -23,6 +22,10 @@ import {
   useState,
 } from 'react';
 import { cn } from '../utils/cn';
+import { useAnimatedIcon } from '@/hooks';
+import { ChevronLeftIcon } from './chevron-left';
+import { ChevronRightIcon } from './chevron-right';
+// import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 /* eslint-disable */
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
@@ -134,7 +137,7 @@ const SidebarProvider = forwardRef<
               } as CSSProperties
             }
             className={cn(
-              'group/sidebar-wrapper flex min-h-svh w-full overflow-x-hidden overflow-y-auto has-[[data-variant=inset]]:bg-sidebar',
+              'group/sidebar-wrapper flex min-h-svh w-full overflow-y-auto has-[[data-variant=inset]]:bg-sidebar',
               className,
             )}
             ref={ref}
@@ -213,7 +216,7 @@ const Sidebar = forwardRef<
       >
         <div
           className={cn(
-            'duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear overflow-x-hidden overflow-y-hidden',
+            'duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear overflow-y-hidden',
             'group-data-[collapsible=offcanvas]:w-0',
             'group-data-[side=right]:rotate-180',
             variant === 'floating' || variant === 'inset'
@@ -223,21 +226,21 @@ const Sidebar = forwardRef<
         />
         <div
           className={cn(
-            'duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex overflow-x-hidden',
+            'duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex',
             side === 'left'
               ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
               : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
 
             variant === 'floating' || variant === 'inset'
               ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]'
-              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r-2 group-data-[side=left]:border-border group-data-[side=right]:border-l-2 group-data-[side=right]:border-border',
+              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r-[1.5px] group-data-[side=left]:border-border group-data-[side=right]:border-l-2 group-data-[side=right]:border-border',
             className,
           )}
           {...props}
         >
           <div
             data-sidebar="sidebar"
-            className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow overflow-x-hidden"
+            className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
           >
             {children}
           </div>
@@ -250,29 +253,40 @@ Sidebar.displayName = 'Sidebar';
 
 const SidebarTrigger = forwardRef<ElementRef<typeof Button>, ComponentProps<typeof Button>>(
   ({ className, onClick, ...props }, ref) => {
-    const { toggleSidebar } = useSidebar();
+    const { toggleSidebar, open } = useSidebar();
+
+    const CurrentIcon = open ? ChevronLeftIcon : ChevronRightIcon;
+
+    const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
+      <CurrentIcon key={open ? 'open' : 'closed'} className="h-4 w-4 text-text" />,
+    );
 
     return (
       <Button
         ref={ref}
         data-sidebar="trigger"
         className={cn(
-          'h-7 w-7  hover:scale-110 transition-transform duration-300 cursor-pointer',
+          'absolute h-7 w-7 bg-border hover:bg-border active:bg-border active:border-border cursor-pointer rounded-l-none',
+          open ? '-top-[2px] -right-11' : 'top-[6px] -right-9',
           className,
         )}
         onClick={event => {
           onClick?.(event);
           toggleSidebar();
         }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        variant="secondary"
         {...props}
-        variant="icon"
       >
-        <PanelLeft />
+        {animatedIcon}
+
         <span className="sr-only">Toggle Sidebar</span>
       </Button>
     );
   },
 );
+
 SidebarTrigger.displayName = 'SidebarTrigger';
 
 const SidebarRail = forwardRef<HTMLButtonElement, ComponentProps<'button'>>(
@@ -386,7 +400,7 @@ const SidebarContent = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
         ref={ref}
         data-sidebar="content"
         className={cn(
-          'flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto overflow-x-hidden group-data-[collapsible=icon]:overflow-hidden',
+          'relative flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto group-data-[collapsible=icon]:overflow-hidden',
           className,
         )}
         {...props}
