@@ -5,12 +5,12 @@ import {
   formatRate,
   formatCurrency,
   truncateText,
+  TOOLTIP_Z_INDEX,
 } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
 
 const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;
 const TOOLTIP_OFFSET_Y = 10;
-const TOOLTIP_Z_INDEX = 9999;
 
 type TooltipRowProps = {
   label: string;
