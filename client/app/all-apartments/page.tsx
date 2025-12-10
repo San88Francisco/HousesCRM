@@ -1,12 +1,11 @@
-'use client';
-
+import { CurrencyRevaluationChart } from '@/widgets/all-apartments/currency-revaluation-chart/CurrencyRevaluationChart';
 import { ChartPieDonutText } from '@/widgets/all-apartments/pie-chart-revenue-distribution';
-
 const Page = () => {
   return (
-    <div>
+    <>
+      <CurrencyRevaluationChart />
       <ChartPieDonutText />
-    </div>
+    </>
   );
 };
 
