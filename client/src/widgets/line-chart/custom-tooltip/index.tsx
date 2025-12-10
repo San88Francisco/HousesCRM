@@ -4,11 +4,12 @@ import {
   isApartmentAcquired,
   findGapBetweenContracts,
 } from '../../../shared/utils/helpers/custom-tooltip-helper';
-import { Apartment, TooltipPayload } from '@/types/core/revenue-distribution-chart';
+
 import { NoContractTooltip } from './noContractTooltip';
 import { LockedApartmentTooltip } from '../lockedApartmentTooltip';
 import { ApartmentItem } from './apartmentItem';
 import { getPaletteColors } from '@/shared/utils/houses-overview/colors';
+import { Apartment, TooltipPayload } from '@/types/core/houses-overview/types';
 
 type Props = {
   active?: boolean;
