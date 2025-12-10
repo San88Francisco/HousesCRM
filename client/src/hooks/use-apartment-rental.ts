@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Apartment, TimeRangeEnum } from '@/types/core/line-chart';
+import { Apartment, TimeRangeEnum } from '@/types/core/revenue-distribution-chart';
 import {
   findMinMaxRentWithFivePercent,
   generateChartData,

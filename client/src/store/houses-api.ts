@@ -1,6 +1,6 @@
 import { rootApi } from '@/shared/api';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
-import { HouseResponse } from '@/types/services/houses';
+import { HouseByIdResponse } from '@/types/services/houses';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -9,10 +9,12 @@ export const housesApi = rootApi.injectEndpoints({
       query: () => '/houses-analytics/all-analytics',
       providesTags: ['Houses'],
     }),
-    getHouseById: build.query<HouseResponse, string>({
+    getHouseById: build.query<HouseByIdResponse, string>({
       query: id => `/houses/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Houses', id }],
     }),
   }),
 });
 
-export const { useGetHousesAnalyticsQuery, useGetHouseByIdQuery } = housesApi;
+export const { useGetHousesAnalyticsQuery, useLazyGetHousesAnalyticsQuery, useGetHouseByIdQuery } =
+  housesApi;

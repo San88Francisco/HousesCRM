@@ -1,4 +1,4 @@
-import { Apartment } from '@/types/core/line-chart';
+import { Apartment } from '@/types/core/revenue-distribution-chart';
 
 export const truncate = (text: string, maxLen: number): string => {
   if (maxLen <= 3) return text.slice(0, maxLen);

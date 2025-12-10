@@ -4,7 +4,7 @@ import {
   isApartmentAcquired,
   findGapBetweenContracts,
 } from '../../../shared/utils/helpers/custom-tooltip-helper';
-import { Apartment, TooltipPayload } from '@/types/core/line-chart';
+import { Apartment, TooltipPayload } from '@/types/core/revenue-distribution-chart';
 import { NoContractTooltip } from './noContractTooltip';
 import { LockedApartmentTooltip } from '../lockedApartmentTooltip';
 import { ApartmentItem } from './apartmentItem';

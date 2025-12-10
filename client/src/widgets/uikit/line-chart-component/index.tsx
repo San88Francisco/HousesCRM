@@ -15,7 +15,7 @@ import { formatTickDate } from '@/shared/utils/line-chart/line-chart';
 import { cn } from '@/shared/utils/cn';
 import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 
-import { Apartment, TimeRangeEnum } from '@/types/core/line-chart';
+import { Apartment, TimeRangeEnum } from '@/types/core/revenue-distribution-chart';
 
 import { LegendContent } from '@/widgets/line-chart/legentContent';
 

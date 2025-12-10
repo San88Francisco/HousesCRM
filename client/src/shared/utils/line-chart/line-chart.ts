@@ -1,4 +1,9 @@
-import { Apartment, ChartDataPoint, Contract, TimeRangeEnum } from '@/types/core/line-chart';
+import {
+  Apartment,
+  ChartDataPoint,
+  Contract,
+  TimeRangeEnum,
+} from '@/types/core/revenue-distribution-chart';
 
 const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.SIX_MONTHS]: date => {

@@ -1,4 +1,4 @@
-import { Contract } from '@/types/core/line-chart';
+import { Contract } from '@/types/core/revenue-distribution-chart';
 import { formatDateRange, truncate } from '../../shared/utils/helpers/custom-tooltip-helper';
 
 type Props = {

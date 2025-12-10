@@ -5,7 +5,7 @@ import {
   ONE_YEAR_MS,
   SMALL_MOBILE_TICKS,
 } from '@/constants/line-chart/line-chart';
-import { ChartDataPoint, TimeRangeEnum } from '@/types/core/line-chart';
+import { ChartDataPoint, TimeRangeEnum } from '@/types/core/revenue-distribution-chart';
 
 export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: number) => {
   let timeoutId: ReturnType<typeof setTimeout>;

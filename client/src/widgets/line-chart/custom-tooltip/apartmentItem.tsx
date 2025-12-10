@@ -1,4 +1,4 @@
-import { Apartment, PayloadData } from '@/types/core/line-chart';
+import { Apartment, PayloadData } from '@/types/core/revenue-distribution-chart';
 import {
   findGapBetweenContracts,
   formatDateRange,

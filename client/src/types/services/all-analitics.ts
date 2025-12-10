@@ -1,4 +1,11 @@
-import { Apartment } from '../core/line-chart';
+import { RevenueDistribution } from '../core/revenue-distribution/chart-pie-item';
+import { Apartment } from '../core/revenue-distribution-chart';
+import { HousePaybackStat } from '../core/house-payback/house-payback';
+import { CurrencyRevaluationItem } from '../core/currency-revaluation/currency-revaluation';
+import {
+  HousesPerformance,
+  HousesPerformanceMeta,
+} from '../core/houses-performance/houses-performance';
 
 export type AllAnalyticsResponse = {
   housesOverview: Apartment[];
@@ -12,54 +19,3 @@ export type AllAnalyticsResponse = {
   housesPerformance: HousesPerformance;
   meta: HousesPerformanceMeta;
 };
-
-export interface RevenueDistribution {
-  data: RevenueDistributionItem[];
-  grandTotal: number;
-}
-
-export interface RevenueDistributionItem {
-  apartmentTotalRevenue: number;
-  percentage: number;
-  id: string;
-  apartmentName: string;
-}
-
-export interface HousePaybackStat {
-  purchasePriceUSD: number;
-  totalIncomeUSD: number;
-  paybackCoefficient: number;
-  id: string;
-  apartmentName: string;
-  purchaseDate: string;
-}
-
-export interface CurrencyRevaluationItem {
-  purchaseRate: number;
-  currentRate: number;
-  revaluationAmountUah: number;
-  purchaseAmountUah: number;
-  id: string;
-  apartmentName: string;
-}
-
-export interface HousesPerformance {
-  data: HousePerformanceItem[];
-  meta: HousesPerformanceMeta;
-}
-
-export interface HousePerformanceItem {
-  apartmentName: string;
-  rentersCount: number;
-  totalRevenue: number;
-  currentPayment: number;
-}
-
-export interface HousesPerformanceMeta {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-}
