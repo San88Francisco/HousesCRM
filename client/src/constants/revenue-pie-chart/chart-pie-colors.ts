@@ -1,0 +1,17 @@
+export const PIE_COLORS = [
+  'var(--chart-pie-1)',
+  'var(--chart-pie-2)',
+  'var(--chart-pie-3)',
+  'var(--chart-pie-4)',
+  'var(--chart-pie-5)',
+  'var(--chart-pie-6)',
+  'var(--chart-pie-7)',
+  'var(--chart-pie-8)',
+  'var(--chart-pie-9)',
+  'var(--chart-pie-10)',
+  'var(--chart-pie-11)',
+  'var(--chart-pie-12)',
+  'var(--chart-pie-13)',
+  'var(--chart-pie-14)',
+  'var(--chart-pie-15)',
+] as const;
