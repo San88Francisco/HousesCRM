@@ -29,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".storybook/**/*.ts",
-    ".storybook/**/*.tsx"
+    ".storybook/**/*.tsx",
+    "src/store/contracts.apits"
   ],
   "exclude": ["node_modules"]
 }
