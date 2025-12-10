@@ -5,7 +5,7 @@ import {
   ONE_YEAR_MS,
   SMALL_MOBILE_TICKS,
 } from '@/constants/line-chart/line-chart';
-import { ChartDataPoint, TimeRangeEnum } from '@/types/core/revenue-distribution-chart';
+import { ChartDataPoint, TimeRangeEnum } from '@/types/core/houses-overview/types';
 
 export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: number) => {
   let timeoutId: ReturnType<typeof setTimeout>;
@@ -19,10 +19,11 @@ export const getDataRange = (hasData: boolean, chartData: ChartDataPoint[]) => {
   if (!hasData || chartData.length === 0) {
     return { min: Date.now() - ONE_YEAR_MS, max: Date.now() };
   }
-  return {
-    min: Math.min(...chartData.map(d => d.date)),
-    max: Math.max(...chartData.map(d => d.date)),
-  };
+  const dates = chartData.map(d => d.date);
+  const min = dates.reduce((a, b) => Math.min(a, b), dates[0]);
+  const max = dates.reduce((a, b) => Math.max(a, b), dates[0]);
+
+  return { min, max };
 };
 
 export const getOptimalTicks = (
@@ -61,6 +62,10 @@ export const getOptimalTicks = (
   const totalMonths =
     (endDate.getFullYear() - startDate.getFullYear()) * 12 +
     (endDate.getMonth() - startDate.getMonth());
+
+  if (count <= 1) {
+    return [dataMin];
+  }
 
   const stepMonths = Math.ceil(totalMonths / (count - 1));
 

@@ -11,11 +11,9 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { formatTickDate } from '@/shared/utils/line-chart/line-chart';
+import { formatTickDate } from '@/shared/utils/houses-overview/line-chart';
 import { cn } from '@/shared/utils/cn';
 import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
-
-import { Apartment, TimeRangeEnum } from '@/types/core/revenue-distribution-chart';
 
 import { LegendContent } from '@/widgets/line-chart/legentContent';
 
@@ -31,6 +29,10 @@ import {
   YAxis,
 } from 'recharts';
 import { CustomTooltip } from '@/widgets/line-chart/custom-tooltip';
+import { Apartment, TimeRangeEnum } from '@/types/core/houses-overview/types';
+import { LoadingState } from './LoadingState';
+import { ErrorState } from './ErrorState';
+import { NoData } from './NoData';
 
 export function ApartmentRentalChart() {
   const { data, error, isLoading } = useGetHousesAnalyticsQuery();
@@ -60,35 +62,11 @@ export function ApartmentRentalChart() {
     [setLockedApartment],
   );
 
-  if (isLoading) {
-    return (
-      <Card>
-        <CardContent className="flex items-center justify-center h-[400px]">
-          Завантаження аналітики...
-        </CardContent>
-      </Card>
-    );
-  }
+  if (isLoading) return <LoadingState />;
 
-  if (error) {
-    return (
-      <Card>
-        <CardContent className="flex items-center justify-center h-[400px] text-red-500">
-          Помилка завантаження даних
-        </CardContent>
-      </Card>
-    );
-  }
+  if (error) return <ErrorState />;
 
-  if (!data?.housesOverview?.length) {
-    return (
-      <Card>
-        <CardContent className="flex items-center justify-center h-[400px]">
-          Немає даних для відображення
-        </CardContent>
-      </Card>
-    );
-  }
+  if (!data?.housesOverview?.length) return <NoData />;
 
   return (
     <Card>

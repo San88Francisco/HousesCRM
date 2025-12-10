@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
-import { getPaletteColors } from '@/shared/utils/line-chart/colors';
-import { Apartment } from '@/types/core/revenue-distribution-chart';
+import { getPaletteColors } from '@/shared/utils/houses-overview/colors';
+import { Apartment } from '@/types/core/houses-overview/types';
 
 type Props = {
   apartmentsData: Apartment[];

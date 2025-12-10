@@ -1,10 +1,10 @@
-import { Apartment, PayloadData } from '@/types/core/revenue-distribution-chart';
+import { Apartment, PayloadData } from '@/types/core/houses-overview/types';
 import {
   findGapBetweenContracts,
   formatDateRange,
   truncate,
 } from '../../../shared/utils/helpers/custom-tooltip-helper';
-import { isContract } from '@/shared/utils/line-chart/line-chart';
+import { isContract } from '@/shared/utils/houses-overview/line-chart';
 
 type Props = {
   apartment: Apartment;
@@ -44,7 +44,7 @@ export const ApartmentItem = ({ apartment, color, allData, apartmentsData, curso
       <div className="flex items-center gap-1">
         <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
         <span className="text-background">
-          {`${renterName}: ${contract.monthlyPayment.toLocaleString()}`}
+          {renterName}: {contract.monthlyPayment.toLocaleString('uk-UA')} грн/міс
         </span>
       </div>
 

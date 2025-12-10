@@ -1,22 +1,22 @@
-export interface Renter {
+export type Renter = {
   id: string;
   firstName: string;
   lastName: string;
-}
+};
 
-export interface Contract {
+export type Contract = {
   id: string;
   commencement: string;
   termination: string;
   monthlyPayment: number;
   renter: Renter;
-}
+};
 
-export interface Apartment {
+export type Apartment = {
   id: string;
   apartmentName: string;
   contract: Contract[];
-}
+};
 
 export type PayloadData = {
   [key: string]: Contract | string | number | null | undefined;

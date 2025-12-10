@@ -1,19 +1,20 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Apartment, TimeRangeEnum } from '@/types/core/revenue-distribution-chart';
+
 import {
   findMinMaxRentWithFivePercent,
   generateChartData,
   getPeriodRange,
-} from '@/shared/utils/line-chart/line-chart';
+} from '@/shared/utils/houses-overview/line-chart';
 import {
   DEFAULT_CHART_WIDTH,
   DEFAULT_Y_MAX,
   DEFAULT_Y_MIN,
   Y_DOMAIN_STEP,
 } from '@/constants/line-chart/line-chart';
-import { debounce, getDataRange, getOptimalTicks } from '@/shared/utils/line-chart/chart-math';
-import { getPaletteColors } from '@/shared/utils/line-chart/colors';
+import { debounce, getDataRange, getOptimalTicks } from '@/shared/utils/houses-overview/chart-math';
+import { getPaletteColors } from '@/shared/utils/houses-overview/colors';
+import { Apartment, TimeRangeEnum } from '@/types/core/houses-overview/types';
 
 export function useApartmentRental(apartmentsData: Apartment[]) {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ONE_YEAR);

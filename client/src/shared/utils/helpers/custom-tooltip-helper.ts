@@ -1,4 +1,4 @@
-import { Apartment } from '@/types/core/revenue-distribution-chart';
+import { Apartment } from '@/types/core/houses-overview/types';
 
 export const truncate = (text: string, maxLen: number): string => {
   if (maxLen <= 3) return text.slice(0, maxLen);
@@ -37,26 +37,30 @@ export const findGapBetweenContracts = (
   currentDate: string,
 ): { start: string; end: string } | null => {
   const apartment = findApartmentById(apartments, id);
-  if (!apartment) return null;
+  if (!apartment || apartment.contract.length < 2) return null;
+
+  const sortedContracts = [...apartment.contract].sort(
+    (a, b) => new Date(a.commencement).getTime() - new Date(b.commencement).getTime(),
+  );
 
   const cursorTimestamp = new Date(currentDate).getTime();
 
-  for (let i = 1; i < apartment.contract.length; i++) {
-    const prevContract = apartment.contract[i - 1];
-    const currentContract = apartment.contract[i];
+  const gapIndex = sortedContracts.findIndex((currentContract, i) => {
+    if (i === 0) return false;
 
+    const prevContract = sortedContracts[i - 1];
     const prevEnd = new Date(prevContract.termination).getTime();
     const currStart = new Date(currentContract.commencement).getTime();
 
-    if (isCursorInGap(cursorTimestamp, prevEnd, currStart)) {
-      return {
-        start: prevContract.termination,
-        end: currentContract.commencement,
-      };
-    }
-  }
+    return isCursorInGap(cursorTimestamp, prevEnd, currStart);
+  });
 
-  return null;
+  if (gapIndex === -1) return null;
+
+  return {
+    start: sortedContracts[gapIndex - 1].termination,
+    end: sortedContracts[gapIndex].commencement,
+  };
 };
 
 export const isApartmentAcquired = (
@@ -68,7 +72,13 @@ export const isApartmentAcquired = (
   if (!apartment || apartment.contract.length === 0) return false;
 
   const cursorTimestamp = new Date(currentDate).getTime();
-  const firstContractStart = new Date(apartment.contract[0].commencement).getTime();
+  if (isNaN(cursorTimestamp)) return false;
+
+  const firstContractStart = Math.min(
+    ...apartment.contract.map(c => new Date(c.commencement).getTime()),
+  );
+
+  if (isNaN(firstContractStart)) return false;
 
   return cursorTimestamp >= firstContractStart;
 };

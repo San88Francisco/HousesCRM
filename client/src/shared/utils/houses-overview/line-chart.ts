@@ -3,7 +3,7 @@ import {
   ChartDataPoint,
   Contract,
   TimeRangeEnum,
-} from '@/types/core/revenue-distribution-chart';
+} from '@/types/core/houses-overview/types';
 
 const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.SIX_MONTHS]: date => {
@@ -101,7 +101,7 @@ export function generateChartData(
     return date.getTime();
   });
 
-  const uniqueSortedDates = Array.from(new Set(allDates)).sort((a, b) => a - b);
+  const uniqueSortedDates = allDates.sort((a, b) => a - b);
 
   return uniqueSortedDates.map(timestamp => {
     const point: ChartDataPoint = { date: timestamp };

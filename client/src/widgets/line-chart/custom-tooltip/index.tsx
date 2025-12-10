@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { isContract } from '@/shared/utils/line-chart/line-chart';
+import { isContract } from '@/shared/utils/houses-overview/line-chart';
 import {
   isApartmentAcquired,
   findGapBetweenContracts,
@@ -8,7 +8,7 @@ import { Apartment, TooltipPayload } from '@/types/core/revenue-distribution-cha
 import { NoContractTooltip } from './noContractTooltip';
 import { LockedApartmentTooltip } from '../lockedApartmentTooltip';
 import { ApartmentItem } from './apartmentItem';
-import { getPaletteColors } from '@/shared/utils/line-chart/colors';
+import { getPaletteColors } from '@/shared/utils/houses-overview/colors';
 
 type Props = {
   active?: boolean;
