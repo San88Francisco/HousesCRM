@@ -14,8 +14,8 @@ import { LoadingState } from '@/components/chart-states/LoadingState';
 export function ChartPieDonutText() {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();
 
-  if (isLoading) return <LoadingState className="max-w[600px]" />;
-  if (error) return <ErrorState error={error} className="max-w[600px]" />;
+  if (isLoading) return <LoadingState className="max-w-[600px]" />;
+  if (error) return <ErrorState error={error} className="max-w-[600px]" />;
   if (!data?.revenueDistribution.data) return <EmptyState className="max-w-[600px]" />;
 
   const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;
