@@ -5,7 +5,6 @@ import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { CustomTooltip } from './CustomTooltip';
 
-import { LoadingState, ErrorState, EmptyState } from './ChartStates';
 import {
   BAR_RADIUS,
   BAR_SIZE,
@@ -20,6 +19,9 @@ import {
   useChartConfig,
 } from '@/hooks/all-apartments/currency-revaluation-chart/hooks';
 import { useGetCurrencyRevaluationQuery } from '@/store/houses-api';
+import { LoadingState } from '@/components/chart-states/LoadingState';
+import { EmptyState } from '@/components/chart-states/EmptyState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
 
 export const CurrencyRevaluationChart = () => {
   const { data: apiData, isLoading, error } = useGetCurrencyRevaluationQuery();
@@ -33,9 +35,9 @@ export const CurrencyRevaluationChart = () => {
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return null;
-  if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState error={error} />;
-  if (chartData.length === 0) return <EmptyState />;
+  if (isLoading) return <LoadingState className="max-w-[400px]" />;
+  if (error) return <ErrorState className="max-w-[400px]" error={error} />;
+  if (chartData.length === 0) return <EmptyState className="max-w-[400px]" />;
 
   const renderCells = (fill: string, customOpacity?: (index: number) => number) =>
     chartData.map((_, index) => (

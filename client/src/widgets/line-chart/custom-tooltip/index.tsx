@@ -1,15 +1,14 @@
 /* eslint-disable */
 import { isContract } from '@/shared/utils/houses-overview/line-chart';
-import {
-  isApartmentAcquired,
-  findGapBetweenContracts,
-} from '../../../shared/utils/helpers/custom-tooltip-helper';
-
-import { NoContractTooltip } from './noContractTooltip';
-import { LockedApartmentTooltip } from '../lockedApartmentTooltip';
-import { ApartmentItem } from './apartmentItem';
 import { getPaletteColors } from '@/shared/utils/houses-overview/colors';
 import { Apartment, TooltipPayload } from '@/types/core/houses-overview/types';
+import { ApartmentItem } from './ApartmentItem';
+import { NoContractTooltip } from './NoContractTooltip';
+import { LockedApartmentTooltip } from '../LockedApartmentTooltip';
+import {
+  findGapBetweenContracts,
+  isApartmentAcquired,
+} from '@/shared/utils/helpers/custom-tooltip-helper';
 
 type Props = {
   active?: boolean;
@@ -33,6 +32,8 @@ export const CustomTooltip = ({
 
   const colors = getPaletteColors();
 
+  if (colors.length === 0) return null;
+
   if (lockedApartment) {
     if (!isApartmentAcquired(lockedApartment, apartmentsData, cursorDate)) {
       return null;
@@ -40,7 +41,7 @@ export const CustomTooltip = ({
 
     const item = payload.find(p => p.dataKey === lockedApartment);
     const apartmentIndex = apartmentsData.findIndex(apt => apt.id === lockedApartment);
-    const color = colors[apartmentIndex % colors.length];
+    const color = apartmentIndex >= 0 ? colors[apartmentIndex % colors.length] : colors[0];
 
     const contractCandidate = allData[`${lockedApartment}_contract`];
     const apartmentName = String(allData[`${lockedApartment}_apartment`] || '');

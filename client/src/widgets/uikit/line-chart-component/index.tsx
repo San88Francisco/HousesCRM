@@ -15,8 +15,6 @@ import { formatTickDate } from '@/shared/utils/houses-overview/line-chart';
 import { cn } from '@/shared/utils/cn';
 import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 
-import { LegendContent } from '@/widgets/line-chart/legentContent';
-
 import { useCallback } from 'react';
 import {
   Legend,
@@ -30,9 +28,10 @@ import {
 } from 'recharts';
 import { CustomTooltip } from '@/widgets/line-chart/custom-tooltip';
 import { Apartment, TimeRangeEnum } from '@/types/core/houses-overview/types';
-import { LoadingState } from './LoadingState';
-import { ErrorState } from './ErrorState';
-import { NoData } from './NoData';
+import { LegendContent } from '@/widgets/line-chart/LegentContent';
+import { LoadingState } from '@/components/chart-states/LoadingState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
+import { EmptyState } from '@/components/chart-states/EmptyState';
 
 export function ApartmentRentalChart() {
   const { data, error, isLoading } = useGetHousesAnalyticsQuery();
@@ -62,14 +61,14 @@ export function ApartmentRentalChart() {
     [setLockedApartment],
   );
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <LoadingState className="w-full" />;
 
-  if (error) return <ErrorState />;
+  if (error) return <ErrorState className="w-full" error={error} />;
 
-  if (!data?.housesOverview?.length) return <NoData />;
+  if (!data?.housesOverview?.length) return <EmptyState className="w-full" />;
 
   return (
-    <Card>
+    <Card className="shadow-xl">
       <CardHeader>
         <div className="flex flex-col gap-3">
           <CardTitle>Історія оренди квартир</CardTitle>

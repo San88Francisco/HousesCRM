@@ -7,17 +7,22 @@ import { addFillToRevenueItems } from '@/shared/utils/pie-chart/add-fill-pie-rev
 
 import { PieChartRevenue } from './PieChartRevenue';
 import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
+import { EmptyState } from '@/components/chart-states/EmptyState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
+import { LoadingState } from '@/components/chart-states/LoadingState';
 
 export function ChartPieDonutText() {
-  const { data } = useGetHousesAnalyticsQuery();
+  const { data, isLoading, error } = useGetHousesAnalyticsQuery();
 
-  if (!data?.revenueDistribution.data) return null;
+  if (isLoading) return <LoadingState className="max-w[600px]" />;
+  if (error) return <ErrorState error={error} className="max-w[600px]" />;
+  if (!data?.revenueDistribution.data) return <EmptyState className="max-w-[600px]" />;
 
   const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;
   const adjustedData = addFillToRevenueItems(data);
 
   return (
-    <Card className="max-w-[600px] mx-auto">
+    <Card className="max-w-[600px] mx-auto shadow-xl">
       <CardHeader className="items-center pb-0 mb-5">
         <CardTitle>Загальний дохід по всіх квартирах</CardTitle>
         <CardDescription>January - June 2024</CardDescription>

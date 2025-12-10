@@ -1,10 +1,11 @@
 import { Apartment, PayloadData } from '@/types/core/houses-overview/types';
+
+import { isContract } from '@/shared/utils/houses-overview/line-chart';
 import {
   findGapBetweenContracts,
   formatDateRange,
   truncate,
-} from '../../../shared/utils/helpers/custom-tooltip-helper';
-import { isContract } from '@/shared/utils/houses-overview/line-chart';
+} from '@/shared/utils/helpers/custom-tooltip-helper';
 
 type Props = {
   apartment: Apartment;
@@ -16,9 +17,9 @@ type Props = {
 
 export const ApartmentItem = ({ apartment, color, allData, apartmentsData, cursorDate }: Props) => {
   const contractCandidate = allData[`${apartment.id}_contract`];
-  const breakInContracts = findGapBetweenContracts(apartment.id, apartmentsData, cursorDate);
 
   if (!isContract(contractCandidate)) {
+    const breakInContracts = findGapBetweenContracts(apartment.id, apartmentsData, cursorDate);
     return (
       <div className="mb-1">
         <div className="flex items-center gap-1">
