@@ -1,4 +1,3 @@
-import { PieRevenueItem } from '../core/chart-pie-item';
 import { ApartmentType } from '../core/houses';
 
 export type House = {
@@ -12,7 +11,7 @@ export type House = {
   apartmentType: ApartmentType;
 };
 
-export type HouseResponse = {
+export type HouseByIdResponse = {
   houseDetail: {
     prices: {
       id: string;
@@ -38,13 +37,4 @@ export type HouseResponse = {
     occupied: string;
     vacated: string;
   }[];
-};
-
-export type HousesAllAnalyticsResponse = {
-  revenueDistribution: RevenueDistribution;
-};
-
-type RevenueDistribution = {
-  data: PieRevenueItem[];
-  grandTotal: number;
 };

@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { ROUTES } from '@/shared/routes';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';

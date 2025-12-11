@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { CustomTooltip } from './CustomTooltip';
-import { useGetCurrencyRevaluationQuery } from '@/shared/api/currency-revaluation-chart/currency-revaluation-api';
-import { LoadingState, ErrorState, EmptyState } from './ChartStates';
+
 import {
   BAR_RADIUS,
   BAR_SIZE,
@@ -19,6 +18,10 @@ import {
   useChartData,
   useChartConfig,
 } from '@/hooks/all-apartments/currency-revaluation-chart/hooks';
+import { useGetCurrencyRevaluationQuery } from '@/store/houses-api';
+import { LoadingState } from '@/components/chart-states/LoadingState';
+import { EmptyState } from '@/components/chart-states/EmptyState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
 
 export const CurrencyRevaluationChart = () => {
   const { data: apiData, isLoading, error } = useGetCurrencyRevaluationQuery();
@@ -32,9 +35,9 @@ export const CurrencyRevaluationChart = () => {
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return null;
-  if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState error={error} />;
-  if (chartData.length === 0) return <EmptyState />;
+  if (isLoading) return <LoadingState className="max-w-[400px]" />;
+  if (error) return <ErrorState className="max-w-[400px]" error={error} />;
+  if (chartData.length === 0) return <EmptyState className="max-w-[400px]" />;
 
   const renderCells = (fill: string, customOpacity?: (index: number) => number) =>
     chartData.map((_, index) => (
@@ -50,7 +53,7 @@ export const CurrencyRevaluationChart = () => {
     hoveredIndex === index ? 1 : isDark ? OPACITY_DARK : OPACITY_LIGHT;
 
   return (
-    <Card className="w-full max-w-[400px] mx-auto shadow-xl">
+    <Card className="w-full max-w-[400px] mx-auto">
       <CardHeader className="pb-4">
         <CardTitle>Переоцінка валюти</CardTitle>
       </CardHeader>

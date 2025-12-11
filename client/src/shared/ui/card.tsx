@@ -36,7 +36,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('rounded-xl shadow-sm', cardVariants[variant].base, className)}
+      className={cn('rounded-xl shadow-sm ', cardVariants[variant].base, className)}
       {...props}
     />
   ),
@@ -45,7 +45,14 @@ Card.displayName = 'Card';
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('flex flex-col space-y-1.5 p-6', className)} {...props} />
+    <div
+      ref={ref}
+      className={cn(
+        'flex sm:flex-row flex-col sm:gap-5 gap-3  justify-between space-y-1.5 sm:p-6 p-3 ',
+        className,
+      )}
+      {...props}
+    />
   ),
 );
 CardHeader.displayName = 'CardHeader';
@@ -55,7 +62,7 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
     <Component
       ref={ref}
       className={cn(
-        'text-2xl font-semibold leading-none tracking-tight',
+        'md:text-2xl  font-semibold leading-none tracking-tight',
         cardVariants[variant].title,
         className,
       )}
@@ -69,18 +76,32 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, CardDescriptionPr
   ({ className, variant = 'default', ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-sm leading-relaxed', cardVariants[variant].description, className)}
+      className={cn(
+        'md:text-sm text-xs leading-relaxed',
+        cardVariants[variant].description,
+        className,
+      )}
       {...props}
     />
   ),
 );
 CardDescription.displayName = 'CardDescription';
 
+function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="card-action"
+      className={cn('col-start-2 row-span-2 row-start-1 self-start justify-self-end', className)}
+      {...props}
+    />
+  );
+}
+
 const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('p-6 pt-0', cardVariants[variant].content, className)}
+      className={cn('sm:p-6 p-3 pt-0', cardVariants[variant].content, className)}
       {...props}
     />
   ),
@@ -91,11 +112,11 @@ const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
   ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex items-center p-6 pt-0', cardVariants[variant].footer, className)}
+      className={cn('flex items-center sm:p-6 p-3  pt-0', cardVariants[variant].footer, className)}
       {...props}
     />
   ),
 );
 CardFooter.displayName = 'CardFooter';
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, CardAction };

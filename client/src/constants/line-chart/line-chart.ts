@@ -1,0 +1,9 @@
+export const DEFAULT_CHART_WIDTH = 800;
+export const DEFAULT_Y_MIN = 4000;
+export const DEFAULT_Y_MAX = 8000;
+export const Y_DOMAIN_STEP = 100;
+export const CHART_WIDTH_THRESHOLD = 50;
+export const SMALL_MOBILE_TICKS = 4;
+export const MOBILE_TABLET_TICKS = 7;
+export const DESKTOP_TICKS = 13;
+export const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
