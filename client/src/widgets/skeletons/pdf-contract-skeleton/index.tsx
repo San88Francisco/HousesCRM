@@ -1,7 +1,7 @@
 import { DialogTitle } from '@/shared/ui/dialog';
 import { Skeleton } from '@/shared/ui/skeleton';
 
-const PDFSkeleton = () => {
+export const PdfContractSkeleton = () => {
   return (
     <div className="text-text">
       <DialogTitle>
@@ -81,5 +81,3 @@ const PDFSkeleton = () => {
     </div>
   );
 };
-
-export default PDFSkeleton;

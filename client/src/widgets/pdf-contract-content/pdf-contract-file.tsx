@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
-import { ContractViewModel } from './contract-dto';
+import { PdfContractModel } from '@/types/services/contracts';
 
 Font.register({
   family: 'RobotoMedium',
@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  data: ContractViewModel;
+  data: PdfContractModel;
 }
 
-const PDFFile: FC<Props> = ({ data }) => {
+export const PdfContractFile: FC<Props> = ({ data }) => {
   const { landlord, tenant, property, terms, meters } = data;
 
   return (
@@ -181,5 +181,3 @@ const PDFFile: FC<Props> = ({ data }) => {
     </Document>
   );
 };
-
-export default PDFFile;

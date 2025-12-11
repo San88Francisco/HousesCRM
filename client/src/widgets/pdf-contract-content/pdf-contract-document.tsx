@@ -1,12 +1,12 @@
 import { DialogTitle } from '@/shared/ui/dialog';
+import { PdfContractModel } from '@/types/services/contracts';
 import { FC } from 'react';
-import { ContractViewModel } from './contract-dto';
 
 interface Props {
-  data: ContractViewModel;
+  data: PdfContractModel;
 }
 
-const PDFTemplate: FC<Props> = ({ data }) => {
+export const PdfContractDocument: FC<Props> = ({ data }) => {
   const { landlord, tenant, property, terms, meters } = data;
 
   return (
@@ -165,5 +165,3 @@ const PDFTemplate: FC<Props> = ({ data }) => {
     </div>
   );
 };
-
-export default PDFTemplate;

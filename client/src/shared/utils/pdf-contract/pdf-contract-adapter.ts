@@ -1,52 +1,4 @@
-export type ContractPdfFileDto = {
-  renterFirstName: string;
-  renterLastName: string;
-  roomsCount: number;
-  street: string;
-  commencement: string;
-  monthlyPayment: number;
-};
-
-export type ContractViewModel = {
-  landlord: {
-    firstName: string;
-    lastName: string;
-    passportSeries: string;
-    passportNumber: string;
-    passportIssued: string;
-    address: string;
-  };
-  tenant: {
-    firstName: string;
-    lastName: string;
-    passportSeries: string;
-    passportNumber: string;
-    passportIssued: string;
-    address: string;
-  };
-  property: {
-    ownershipDocument: string;
-    roomCount: string;
-    area: string;
-    street: string;
-    building: string;
-    apartment: string;
-  };
-  terms: {
-    inspectionCount: string;
-    rentPriceUah: string;
-    rentPriceUsd: string;
-    initialPayment: string;
-    depositAmount: string;
-    paymentDeadlineDay: string;
-  };
-  meters: {
-    electricity: string;
-    gas: string;
-    coldWater: string;
-    hotWater: string;
-  };
-};
+import { PdfContractModel, PdfContractRaw } from '@/types/services/contracts';
 
 const fmt = (value: string | number | undefined | null): string => {
   if (value === undefined || value === null) {
@@ -55,7 +7,7 @@ const fmt = (value: string | number | undefined | null): string => {
   return String(value);
 };
 
-export const contractViewDto = (data: ContractPdfFileDto): ContractViewModel => {
+export const PdfContractAdapter = (data: PdfContractRaw): PdfContractModel => {
   return {
     landlord: {
       firstName: fmt(undefined),
