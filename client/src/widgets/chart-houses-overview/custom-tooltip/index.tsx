@@ -23,7 +23,6 @@ export const CustomTooltip = ({
   payload,
   lockedApartment,
   apartmentsData,
-
   cursorDate,
 }: Props) => {
   if (!active || !payload || payload.length === 0) return null;
