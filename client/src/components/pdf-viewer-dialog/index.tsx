@@ -1,11 +1,14 @@
 import { useAnimatedIcon } from '@/hooks';
-import { Dialog, DialogContent, DialogTrigger } from '@/shared/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogTrigger } from '@/shared/ui/dialog';
 import { FileTextIcon } from '@/shared/ui/file-text';
-import PDFTemplate from './pdf-template';
-import { FC, useState } from 'react';
+import { FC, Fragment, useState } from 'react';
 import { useLazyGetContractPdfQuery } from '@/store/contracts';
 import { contractViewDto, ContractViewModel } from './contract-dto';
 import PDFSkeleton from './pdf-skeleton';
+import PDFTemplate from './pdf-template';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { Button } from '@/shared/ui/button';
+import PDFFile from './pdf-file';
 
 interface Props {
   id: string;
@@ -47,7 +50,26 @@ const PdfViewerDialog: FC<Props> = ({ id }) => {
           [scrollbar-color:scroll-bar_transparent]
           [&::-webkit-scrollbar-thumb]:rounded-full"
         >
-          {isLoading || !contractData ? <PDFSkeleton /> : <PDFTemplate data={contractData} />}
+          <DialogDescription className="sr-only">
+            Тут відображається PDF договору та надається можливість його завантажити.
+          </DialogDescription>
+          {isLoading || !contractData ? (
+            <PDFSkeleton />
+          ) : (
+            <Fragment>
+              <PDFTemplate data={contractData} />
+              <div className="flex justify-center pt-6">
+                <Button variant="outline">
+                  <PDFDownloadLink
+                    document={<PDFFile data={contractData} />}
+                    fileName="contract.pdf"
+                  >
+                    {({ loading }) => (loading ? 'Генерується PDF...' : 'Скачати PDF')}
+                  </PDFDownloadLink>
+                </Button>
+              </div>
+            </Fragment>
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -1,13 +1,13 @@
-export interface ContractPdfFileDto {
+export type ContractPdfFileDto = {
   renterFirstName: string;
   renterLastName: string;
   roomsCount: number;
   street: string;
   commencement: string;
   monthlyPayment: number;
-}
+};
 
-export interface ContractViewModel {
+export type ContractViewModel = {
   landlord: {
     firstName: string;
     lastName: string;
@@ -46,7 +46,7 @@ export interface ContractViewModel {
     coldWater: string;
     hotWater: string;
   };
-}
+};
 
 const fmt = (value: string | number | undefined | null): string => {
   if (value === undefined || value === null) {

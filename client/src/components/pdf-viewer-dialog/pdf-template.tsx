@@ -36,7 +36,7 @@ const PDFTemplate: FC<Props> = ({ data }) => {
       </ul>
 
       <h4 className="font-semibold mt-6 mb-2">2. ПРАВА ТА ОБОВ’ЯЗКИ ОРЕНДОДАВЦЯ</h4>
-      <ul className=" ml-3 space-y-1">
+      <ul className="ml-3 space-y-1">
         <li>
           2.1. Надати приміщення у розпорядження Орендарю відразу після підписання цього договору.
         </li>
