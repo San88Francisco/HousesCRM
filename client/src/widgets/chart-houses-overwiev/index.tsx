@@ -28,7 +28,7 @@ import {
 } from 'recharts';
 import { CustomTooltip } from '@/widgets/chart-houses-overwiev/custom-tooltip';
 import { Apartment, TimeRangeEnum } from '@/types/core/houses-overview/types';
-import { LegendContent } from '@/widgets/chart-houses-overwiev/Legent-Content';
+import { LegendContent } from '@/widgets/chart-houses-overwiev/LegentContent';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { EmptyState } from '@/components/chart-states/EmptyState';
