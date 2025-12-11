@@ -16,7 +16,7 @@ export const TOOLTIP_Z_INDEX = 9999;
 
 export const MAX_TEXT_LENGTH_YAXIS = 10;
 export const Y_AXIS_PADDING = 0.15;
-export const ROW_HEIGHT = 45;
+export const ROW_HEIGHT = 30;
 export const CHART_PADDING = 30;
 export const MIN_VISIBLE_ROWS = 4;
 export const MAX_VISIBLE_ROWS = 7;
