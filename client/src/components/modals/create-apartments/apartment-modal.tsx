@@ -22,8 +22,8 @@ import {
 } from '@/shared/validation/add-apartments/apartment-schema';
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFSelect } from '@/components/RHF/RHFSelect';
-import { RHFForm } from '@/components/RHF/RHForm';
 import { RHFDatePicker } from '@/components/RHF/RHFDatePicker';
+import { RHFForm } from '@/components/RHF/RHForm';
 /* eslint-disable */
 export const AddApartmentModal = () => {
   const dispatch = useAppDispatch();
@@ -37,7 +37,8 @@ export const AddApartmentModal = () => {
       apartmentName: '',
       roomsCount: 1,
       totalArea: 1,
-      purchaseDate: new Date().toISOString().split('T')[0],
+      // purchaseDate: new Date().toISOString().split('T')[0],
+      purchaseDate: new Date(),
       price: 1,
       floor: 1,
       street: '',
@@ -48,23 +49,14 @@ export const AddApartmentModal = () => {
 
   const { reset } = methods;
 
-  const onSubmit = async (data: ApartmentFormData) => {
+  const onSubmit = async (data: CreateHouseRequest) => {
     try {
-      // Форматуємо дату в ISO формат
-      const formattedData = {
-        ...data,
-        purchaseDate: new Date(data.purchaseDate).toISOString(),
-      };
-
-      console.log('Додавання квартири:', formattedData);
-
-      // Тут буде ваш API виклик
-      // await createApartment(formattedData);
-
-      dispatch(closeModal());
-      reset();
+      const result = await createHouse(data).unwrap();
+      console.log('Квартира створена:', result);
+      // Закрити діалог, показати success toast тощо
     } catch (error) {
-      console.error('Помилка при додаванні квартири:', error);
+      console.error('Помилка:', error);
+      // Показати error toast
     }
   };
 
@@ -96,14 +88,10 @@ export const AddApartmentModal = () => {
               required
             />
 
-            <RHFInput
-              name="roomsCount"
-              label="Кількість кімнат"
-              type="number"
-              placeholder="1"
-              icon={<Hash className="w-4 h-4" />}
-              required
-              min={1}
+            <RHFDatePicker
+              name="purchaseDate"
+              label="Дата покупки"
+              placeholder="Оберіть дату покупки"
             />
 
             <RHFInput
@@ -136,10 +124,14 @@ export const AddApartmentModal = () => {
               required
             />
 
-            <RHFDatePicker
-              name="purchaseDate"
-              label="Дата покупки"
-              placeholder="Оберіть дату покупки"
+            <RHFInput
+              name="roomsCount"
+              label="Кількість кімнат"
+              type="number"
+              placeholder="1"
+              icon={<Hash className="w-4 h-4" />}
+              required
+              min={1}
             />
 
             <RHFInput

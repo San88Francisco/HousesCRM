@@ -11,7 +11,10 @@ export const apartmentSchema = yup.object({
     .number()
     .required("Загальна площа обов'язкова")
     .positive('Площа має бути більше 0'),
-  purchaseDate: yup.string().required("Дата покупки обов'язкова"),
+  purchaseDate: yup
+    .date()
+    .max(new Date(), 'Дата не може бути з майбутнього')
+    .required("Дата покупки обов'язкова"),
   price: yup.number().required("Ціна обов'язкова").positive('Ціна має бути більше 0'),
   floor: yup.number().required("Поверх обов'язковий").integer('Поверх має бути цілим числом'),
   street: yup.string().required("Вулиця обов'язкова"),

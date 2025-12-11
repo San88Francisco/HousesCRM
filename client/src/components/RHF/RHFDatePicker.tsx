@@ -2,7 +2,7 @@
 
 import { forwardRef, useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { format } from 'date-fns';
+import { format, startOfToday } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -39,6 +39,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
     } = useFormContext();
     const [open, setOpen] = useState(false);
     const [tempDate, setTempDate] = useState<Date>(new Date());
+    const today = startOfToday();
 
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
@@ -69,7 +70,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                     type="button"
                     variant="outline"
                     className={cn(
-                      'w-full justify-start text-left font-normal bg-bg-input',
+                      'w-full justify-start text-left font-normal !bg-bg-input',
                       !field.value && 'text-muted-foreground',
                       errorMessage && 'border-red focus-visible:ring-red',
                     )}
@@ -86,15 +87,26 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                   </Button>
                 </PopoverTrigger>
 
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent
+                  className="w-auto p-0"
+                  align="start"
+                  onOpenAutoFocus={e => e.preventDefault()}
+                >
                   <form
                     onSubmit={e => {
                       e.preventDefault();
-                      field.onChange(format(tempDate, 'yyyy-MM-dd'));
+                      e.stopPropagation();
+                      field.onChange(tempDate);
                       setOpen(false);
                     }}
                   >
-                    <Calendar date={tempDate} setDate={setTempDate} lang={uk} mode={calendarMode} />
+                    <Calendar
+                      date={tempDate}
+                      setDate={setTempDate}
+                      lang={uk}
+                      mode={calendarMode}
+                      maxDate={today}
+                    />
                   </form>
                 </PopoverContent>
               </Popover>

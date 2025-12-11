@@ -10,6 +10,8 @@ interface ICalendarProps {
   firstWeekDayNumber?: Day;
   lang: Locale;
   mode?: CalendarMode;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
 const Calendar: FC<ICalendarProps> = ({
@@ -18,6 +20,8 @@ const Calendar: FC<ICalendarProps> = ({
   firstWeekDayNumber = 1,
   lang,
   mode = CalendarMode.YearsMonthsDays,
+  minDate,
+  maxDate,
 }) => {
   const today = startOfToday();
   useEffect(() => {
@@ -36,6 +40,8 @@ const Calendar: FC<ICalendarProps> = ({
         setDate={setDate}
         lang={lang}
         mode={mode}
+        minDate={minDate}
+        maxDate={maxDate}
       />
       <div className="flex gap-2">
         <Button type="submit" variant="default" className="w-full">
