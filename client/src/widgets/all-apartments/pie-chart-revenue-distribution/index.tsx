@@ -16,7 +16,7 @@ export function ChartPieDonutText() {
 
   if (isLoading) return <LoadingState className="max-w-[600px]" />;
   if (error) return <ErrorState error={error} className="max-w-[600px]" />;
-  if (!data?.revenueDistribution.data) return <EmptyState className="max-w-[600px]" />;
+  if (!data?.revenueDistribution.data?.length) return <EmptyState className="max-w-[600px]" />;
 
   const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;
   const adjustedData = addFillToRevenueItems(data);

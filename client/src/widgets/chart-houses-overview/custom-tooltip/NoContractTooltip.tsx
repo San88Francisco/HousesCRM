@@ -1,4 +1,4 @@
-import { formatDateRange } from '../../../shared/utils/helpers/custom-tooltip-helper';
+import { formatDateRange } from '@/shared/utils/helpers/custom-tooltip-helper';
 
 type Props = {
   color: string;

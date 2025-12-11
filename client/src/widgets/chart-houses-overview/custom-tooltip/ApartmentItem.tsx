@@ -37,7 +37,10 @@ export const ApartmentItem = ({ apartment, color, allData, apartmentsData, curso
   }
 
   const contract = contractCandidate;
-  const renterName = truncate(`${contract.renter.lastName} ${contract.renter.firstName}`, 15);
+  const renterName = truncate(
+    `${contract.renter.lastName ?? ''} ${contract.renter.firstName ?? ''}`.trim() || '—',
+    15,
+  );
   const dateRange = formatDateRange(contract.commencement, contract.termination);
 
   return (

@@ -1,5 +1,5 @@
+import { formatDateRange, truncate } from '@/shared/utils/helpers/custom-tooltip-helper';
 import { Contract } from '@/types/core/houses-overview/types';
-import { formatDateRange, truncate } from '../../shared/utils/helpers/custom-tooltip-helper';
 
 type Props = {
   color: string;
@@ -8,7 +8,10 @@ type Props = {
 };
 
 export const LockedApartmentTooltip = ({ color, apartmentName, contract }: Props) => {
-  const renterName = truncate(`${contract.renter.lastName} ${contract.renter.firstName}`, 20);
+  const renterName = truncate(
+    `${contract.renter.lastName ?? ''} ${contract.renter.firstName ?? ''}`.trim() || '—',
+    20,
+  );
   const dateRange = formatDateRange(contract.commencement, contract.termination);
 
   return (
