@@ -1,6 +1,6 @@
 import { Apartment, PayloadData } from '@/types/core/houses-overview/types';
 
-import { isContract } from '@/shared/utils/houses-overview/line-chart';
+import { isContract } from '@/shared/utils/houses-overview/chart-houses-overview';
 import {
   findGapBetweenContracts,
   formatDateRange,

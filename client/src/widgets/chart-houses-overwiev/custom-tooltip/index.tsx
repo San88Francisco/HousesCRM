@@ -1,10 +1,10 @@
 /* eslint-disable */
-import { isContract } from '@/shared/utils/houses-overview/line-chart';
+import { isContract } from '@/shared/utils/houses-overview/chart-houses-overview';
 import { getPaletteColors } from '@/shared/utils/houses-overview/colors';
 import { Apartment, TooltipPayload } from '@/types/core/houses-overview/types';
-import { ApartmentItem } from './ApartmentItem';
-import { NoContractTooltip } from './NoContractTooltip';
-import { LockedApartmentTooltip } from '../LockedApartmentTooltip';
+import { ApartmentItem } from './Apartment-Item';
+import { NoContractTooltip } from './No-Contract-Tooltip';
+import { LockedApartmentTooltip } from '../Locked-Apartment-Tooltip';
 import {
   findGapBetweenContracts,
   isApartmentAcquired,

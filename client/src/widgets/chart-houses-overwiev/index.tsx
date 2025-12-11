@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { formatTickDate } from '@/shared/utils/houses-overview/line-chart';
+import { formatTickDate } from '@/shared/utils/houses-overview/chart-houses-overview';
 import { cn } from '@/shared/utils/cn';
 import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 
@@ -26,9 +26,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { CustomTooltip } from '@/widgets/line-chart/custom-tooltip';
+import { CustomTooltip } from '@/widgets/chart-houses-overwiev/custom-tooltip';
 import { Apartment, TimeRangeEnum } from '@/types/core/houses-overview/types';
-import { LegendContent } from '@/widgets/line-chart/LegentContent';
+import { LegendContent } from '@/widgets/chart-houses-overwiev/Legent-Content';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { EmptyState } from '@/components/chart-states/EmptyState';
@@ -68,7 +68,7 @@ export function ApartmentRentalChart() {
   if (!data?.housesOverview?.length) return <EmptyState className="w-full" />;
 
   return (
-    <Card className="shadow-xl">
+    <Card>
       <CardHeader>
         <div className="flex flex-col gap-3">
           <CardTitle>Історія оренди квартир</CardTitle>

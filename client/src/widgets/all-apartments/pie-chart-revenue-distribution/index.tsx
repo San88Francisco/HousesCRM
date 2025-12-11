@@ -22,7 +22,7 @@ export function ChartPieDonutText() {
   const adjustedData = addFillToRevenueItems(data);
 
   return (
-    <Card className="max-w-[600px] mx-auto shadow-xl">
+    <Card className="max-w-[600px] mx-auto">
       <CardHeader className="items-center pb-0 mb-5">
         <CardTitle>Загальний дохід по всіх квартирах</CardTitle>
         <CardDescription>January - June 2024</CardDescription>

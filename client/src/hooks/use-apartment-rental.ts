@@ -5,7 +5,7 @@ import {
   findMinMaxRentWithFivePercent,
   generateChartData,
   getPeriodRange,
-} from '@/shared/utils/houses-overview/line-chart';
+} from '@/shared/utils/houses-overview/chart-houses-overview';
 import {
   DEFAULT_CHART_WIDTH,
   DEFAULT_Y_MAX,

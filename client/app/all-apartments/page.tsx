@@ -1,6 +1,6 @@
 import { CurrencyRevaluationChart } from '@/widgets/all-apartments/currency-revaluation-chart/CurrencyRevaluationChart';
 import { ChartPieDonutText } from '@/widgets/all-apartments/pie-chart-revenue-distribution';
-import { ApartmentRentalChart } from '@/widgets/uikit/line-chart-component';
+import { ApartmentRentalChart } from '@/widgets/chart-houses-overwiev';
 const Page = () => {
   return (
     <div className="p-6 flex flex-col gap-6">

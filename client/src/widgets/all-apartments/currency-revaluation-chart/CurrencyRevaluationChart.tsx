@@ -53,7 +53,7 @@ export const CurrencyRevaluationChart = () => {
     hoveredIndex === index ? 1 : isDark ? OPACITY_DARK : OPACITY_LIGHT;
 
   return (
-    <Card className="w-full max-w-[400px] mx-auto shadow-xl">
+    <Card className="w-full max-w-[400px] mx-auto">
       <CardHeader className="pb-4">
         <CardTitle>Переоцінка валюти</CardTitle>
       </CardHeader>
