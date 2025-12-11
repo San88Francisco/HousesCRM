@@ -1,5 +1,8 @@
 'use client';
 
+import { CurrencyRevaluationChart } from '@/widgets/all-apartments/currency-revaluation-chart/CurrencyRevaluationChart';
+import { ChartPieDonutText } from '@/widgets/all-apartments/pie-chart-revenue-distribution';
+
 import { AddApartmentModal } from '@/components/modals/create-apartments/apartment-modal';
 import { Button } from '@/shared/ui/button';
 import { useAppDispatch } from '@/store/hooks';
@@ -19,6 +22,8 @@ const Page = () => {
 
       {/* Модалка рендериться тут, але показується тільки коли isOpen === true */}
       <AddApartmentModal />
+      <CurrencyRevaluationChart />
+      <ChartPieDonutText />
     </div>
   );
 };
