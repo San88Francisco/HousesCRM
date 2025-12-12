@@ -2,15 +2,28 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { ChartList } from './ChartList';
-
-import { addFillToRevenueItems } from '@/shared/utils/pie-chart/add-fill-pie-revenue-items';
+import { addFillToRevenueItems } from '@/shared/utils/all-apartments/pie-chart/add-fill-pie-revenue-items';
 import { useGetHousesAnalyticsQuery } from '@/store/houses';
 import { PieChartRevenue } from './PieChartRevenue';
+import { EmptyState, ErrorState, LoadingState } from '../currency-revaluation-chart/ChartStates';
 
 export function ChartPieDonutText() {
-  const { data } = useGetHousesAnalyticsQuery();
+  const { data, isLoading, error } = useGetHousesAnalyticsQuery();
 
-  if (!data?.revenueDistribution.data) return null;
+  // Стан завантаження
+  if (isLoading) {
+    return <LoadingState />;
+  }
+
+  // Стан помилки
+  if (error) {
+    return <ErrorState error={error} />;
+  }
+
+  // Стан відсутності даних
+  if (!data?.revenueDistribution?.data || data.revenueDistribution.data.length === 0) {
+    return <EmptyState />;
+  }
 
   const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;
   const adjustedData = addFillToRevenueItems(data);

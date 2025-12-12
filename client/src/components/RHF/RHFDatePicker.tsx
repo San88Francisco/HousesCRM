@@ -96,7 +96,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                     onSubmit={e => {
                       e.preventDefault();
                       e.stopPropagation();
-                      field.onChange(tempDate);
+                      field.onChange(tempDate.toISOString());
                       setOpen(false);
                     }}
                   >
