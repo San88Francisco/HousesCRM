@@ -1,5 +1,9 @@
 import { rootApi } from '@/shared/api';
-import { ContractsForPeriodRequest, ContractsForPeriodResponse } from '@/types/services/contracts';
+import {
+  ContractsForPeriodRequest,
+  ContractsForPeriodResponse,
+  PdfContractRaw,
+} from '@/types/services/contracts';
 
 export const contractsApi = rootApi.injectEndpoints({
   endpoints: build => ({
@@ -9,7 +13,7 @@ export const contractsApi = rootApi.injectEndpoints({
         params: { period, renter_id },
       }),
     }),
-    getContractPdf: build.query({
+    getContractPdf: build.query<PdfContractRaw, string>({
       query: (id: string) => `/contracts/${id}/pdf-file`,
     }),
   }),

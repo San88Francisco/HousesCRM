@@ -11,7 +11,7 @@ type Props = {
   id: string;
 };
 
-export const PdfContractTriger: FC<Props> = ({ id }) => {
+export const PdfContractTrigger: FC<Props> = ({ id }) => {
   const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(<FileTextIcon />);
 
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ export const PdfContractTriger: FC<Props> = ({ id }) => {
       openModal({
         trigger: ModalTriggers.PDF_CONTRACT,
         payload: {
-          id: id,
+          id,
         },
       }),
     );

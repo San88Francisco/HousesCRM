@@ -1,5 +1,6 @@
 import { DialogTitle } from '@/shared/ui/dialog';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { SkeletonSection } from './pdf-contract-skeleton-section';
 
 export const PdfContractSkeleton = () => {
   return (
@@ -19,65 +20,9 @@ export const PdfContractSkeleton = () => {
         <Skeleton className="h-4 w-[80%]" />
       </div>
 
-      <div className="mb-8">
-        <Skeleton className="h-5 w-48 mb-3 rounded-md" />
-        <div className="pl-3 space-y-3">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-[90%]" />
-          <Skeleton className="h-4 w-[95%]" />
-          <Skeleton className="h-4 w-[60%]" />
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <Skeleton className="h-5 w-48 mb-3 rounded-md" />
-        <div className="pl-3 space-y-3">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-[90%]" />
-          <Skeleton className="h-4 w-[95%]" />
-          <Skeleton className="h-4 w-[60%]" />
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <Skeleton className="h-5 w-48 mb-3 rounded-md" />
-        <div className="pl-3 space-y-3">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-[90%]" />
-          <Skeleton className="h-4 w-[95%]" />
-          <Skeleton className="h-4 w-[60%]" />
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <Skeleton className="h-5 w-48 mb-3 rounded-md" />
-        <div className="pl-3 space-y-3">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-[90%]" />
-          <Skeleton className="h-4 w-[95%]" />
-          <Skeleton className="h-4 w-[60%]" />
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <Skeleton className="h-5 w-48 mb-3 rounded-md" />
-        <div className="pl-3 space-y-3">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-[90%]" />
-          <Skeleton className="h-4 w-[95%]" />
-          <Skeleton className="h-4 w-[60%]" />
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <Skeleton className="h-5 w-48 mb-3 rounded-md" />
-        <div className="pl-3 space-y-3">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-[90%]" />
-          <Skeleton className="h-4 w-[95%]" />
-          <Skeleton className="h-4 w-[60%]" />
-        </div>
-      </div>
+      {Array.from({ length: 6 }).map((_, i) => (
+        <SkeletonSection key={i} />
+      ))}
     </div>
   );
 };

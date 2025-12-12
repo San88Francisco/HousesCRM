@@ -21,16 +21,18 @@ export const PdfContractModal = () => {
   const handleOpen = useCallback(async () => {
     if (!payload?.id) return;
 
-    const res = await fetchTrigger(payload?.id as string);
+    const res = await fetchTrigger(payload.id as string);
 
     if (res.data) {
       setContractData(PdfContractAdapter(res.data));
+    } else if (res.error) {
+      console.error('Failed to fetch contract:', res.error);
     }
   }, [payload?.id, fetchTrigger]);
 
   useEffect(() => {
     if (isOpen && trigger === ModalTriggers.PDF_CONTRACT) {
-      handleOpen();
+      void handleOpen();
     }
 
     if (!isOpen) {

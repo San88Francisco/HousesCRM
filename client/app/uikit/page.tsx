@@ -13,7 +13,7 @@ import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 import { ModalTrigger } from '@/widgets/uikit/modal';
-import { PdfContractTriger } from '@/widgets/pdf-contract-content/pdf-contract-triger';
+import { PdfContractTrigger } from '@/widgets/pdf-contract-content/pdf-contract-trigger';
 
 export default function Page() {
   return (
@@ -30,7 +30,7 @@ export default function Page() {
       <TextareaComponent />
       <ToastCopmponent />
       <SelectComponent />
-      <PdfContractTriger id="e9d638de-1872-4ac0-acc5-c4f767e9fa66" />
+      <PdfContractTrigger id="e9d638de-1872-4ac0-acc5-c4f767e9fa66" />
       <ModalTrigger />
     </div>
   );
