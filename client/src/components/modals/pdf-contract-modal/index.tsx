@@ -9,8 +9,8 @@ import Modal from '../modal-wrapper';
 import { ModalTriggers } from '@/types/model/modals';
 import { useAppSelector } from '@/store/hooks';
 import { PdfContractModel } from '@/types/services/contracts';
-import { useLazyGetContractPdfQuery } from '@/store/contracts';
 import { PdfContractAdapter } from '@/shared/utils/pdf-contract/pdf-contract-adapter';
+import { useLazyGetContractPdfQuery } from '@/store/contracts-api';
 
 export const PdfContractModal = () => {
   const { isOpen, trigger, payload } = useAppSelector(s => s.modal);

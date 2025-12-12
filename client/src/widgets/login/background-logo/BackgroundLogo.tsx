@@ -2,7 +2,7 @@
 import { useIsMobile } from '@/hooks';
 
 export default function BackgroundLogo() {
-  const isMobile = useIsMobile();
+  const { isMobile } = useIsMobile();
 
   if (isMobile) return null;
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useGetHouseByIdQuery } from '@/store/houses';
+import { useGetHouseByIdQuery } from '@/store/houses-api';
 import { MapPin, DoorOpen, Ruler, Building2, PackagePlus } from 'lucide-react';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { APARTMENT_TYPE_MAP } from '@/constants/apartment/apartment-type-map';

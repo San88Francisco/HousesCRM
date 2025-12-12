@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useRefreshMutation } from '@/store/auth';
+import { useRefreshMutation } from '@/store/auth-api';
 import { toast } from 'sonner';
 import { tokenStorage } from '@/shared/utils/auth/token';
 
