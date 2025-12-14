@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'sonner';
-import { useLoginMutation } from '@/store/auth';
+import { useLoginMutation } from '@/store/auth-api';
 import { LoginRequest } from '@/types/services/login';
 import { loginSchema } from '@/shared/validation/login/login';
 import { ROUTES } from '@/shared/routes';

@@ -16,9 +16,7 @@ export const useApartmentModal = () => {
 
   const handleClose = (reset: () => void) => {
     dispatch(closeModal());
-    setTimeout(() => {
-      reset();
-    }, 200);
+    reset();
   };
 
   const modalContent = {

@@ -8,3 +8,8 @@ export type PieRevenueItem = {
 export type HouseChartDataItem = PieRevenueItem & {
   fill: string;
 };
+
+export interface RevenueDistribution {
+  data: PieRevenueItem[];
+  grandTotal: number;
+}

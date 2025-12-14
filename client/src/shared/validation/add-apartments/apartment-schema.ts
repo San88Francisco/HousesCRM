@@ -1,3 +1,4 @@
+import { ApartmentType } from '@/types/core/houses';
 import * as yup from 'yup';
 
 export const apartmentSchema = yup.object({
@@ -26,8 +27,8 @@ export const apartmentSchema = yup.object({
     .integer('Поверх має бути цілим числом'),
   street: yup.string().required("Вулиця обов'язкова"),
   apartmentType: yup
-    .string()
-    .oneOf(['new_build', 'resale'], 'Невірний тип квартири')
+    .mixed<ApartmentType>() // Замість .string()
+    .oneOf(Object.values(ApartmentType), 'Невірний тип квартири')
     .required("Тип квартири обов'язковий"),
   // TODO Для створення помилки та відслідковування поведінки UI компонентів на помилку.
   // contractIds: yup.array().of(yup.string().required()).default([]),

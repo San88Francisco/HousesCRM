@@ -5,7 +5,9 @@ import { ChartList } from './ChartList';
 import { addFillToRevenueItems } from '@/shared/utils/all-apartments/pie-chart/add-fill-pie-revenue-items';
 import { useGetHousesAnalyticsQuery } from '@/store/houses';
 import { PieChartRevenue } from './PieChartRevenue';
-import { EmptyState, ErrorState, LoadingState } from '../currency-revaluation-chart/ChartStates';
+import { LoadingState } from '@/components/chart-states/LoadingState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
+import { EmptyState } from '@/components/chart-states/EmptyState';
 
 export function ChartPieDonutText() {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();

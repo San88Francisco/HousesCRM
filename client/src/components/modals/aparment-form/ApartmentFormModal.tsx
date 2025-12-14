@@ -1,22 +1,17 @@
 'use client';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/shared/ui/dialog';
+import { DialogDescription, DialogFooter, DialogHeader } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
 import { RHFForm } from '@/components/RHF/RHForm';
 import { useApartmentForm } from '@/hooks/useApartmentForm';
 import { useApartmentModal } from '@/hooks/useApartmentModal';
 import { ApartmentFormFields } from './ApartmentFormFields';
+import { ModalTriggers } from '@/types/model/modals';
+import { DialogTitle } from '@radix-ui/react-dialog';
+import Modal from '../modal-wrapper';
 
 export const ApartmentFormModal = () => {
   const {
-    isThisModalOpen,
     isEditMode,
     apartmentToEdit,
     handleClose: getHandleClose,
@@ -32,12 +27,14 @@ export const ApartmentFormModal = () => {
   const handleClose = () => getHandleClose(reset);
 
   return (
-    <Dialog open={isThisModalOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{modalContent.title}</DialogTitle>
-          <DialogDescription>{modalContent.description}</DialogDescription>
-        </DialogHeader>
+    <Modal
+      triggers={isEditMode ? ModalTriggers.EDIT_APARTMENT : ModalTriggers.ADD_APARTMENT}
+      className="max-w-2xl max-h-[90vh] overflow-y-auto"
+    >
+      <DialogDescription className="sr-only">{modalContent.description}</DialogDescription>
+
+      <DialogHeader className="p-6">
+        <DialogTitle className="text-lg font-semibold mb-4">{modalContent.title}</DialogTitle>
 
         <RHFForm form={methods} onSubmit={onSubmit}>
           <ApartmentFormFields isLoading={isLoading} />
@@ -51,7 +48,7 @@ export const ApartmentFormModal = () => {
             </Button>
           </DialogFooter>
         </RHFForm>
-      </DialogContent>
-    </Dialog>
+      </DialogHeader>
+    </Modal>
   );
 };
