@@ -27,7 +27,7 @@ export const apartmentSchema = yup.object({
   street: yup.string().required("Вулиця обов'язкова"),
   apartmentType: yup
     .string()
-    .oneOf(['new_build', 'old_build'], 'Невірний тип квартири')
+    .oneOf(['new_build', 'resale'], 'Невірний тип квартири')
     .required("Тип квартири обов'язковий"),
   // TODO Для створення помилки та відслідковування поведінки UI компонентів на помилку.
   // contractIds: yup.array().of(yup.string().required()).default([]),

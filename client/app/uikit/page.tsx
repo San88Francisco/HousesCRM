@@ -13,6 +13,7 @@ import { ToastCopmponent } from '@/widgets/uikit/toast-component';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 import { TestGetHouses } from '@/widgets/uikit/test-get-houses';
 import { ModalTrigger } from '@/widgets/uikit/modal';
+import UpdateApartment from '@/widgets/uikit/update-apartment';
 
 export default function Page() {
   return (
@@ -31,6 +32,7 @@ export default function Page() {
       <SelectComponent />
       <TestGetHouses />
       <ModalTrigger />
+      <UpdateApartment />
     </div>
   );
 }

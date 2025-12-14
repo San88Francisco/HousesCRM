@@ -1,3 +1,4 @@
+//  eslint-disable
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
@@ -7,21 +8,17 @@ import {
   ApartmentFormData,
   apartmentSchema,
 } from '@/shared/validation/add-apartments/apartment-schema';
-import { ApartmentToEdit } from '@/types/core/apartment';
 import { DEFAULT_APARTMENT_VALUES } from '@/shared/constants/apartment-form';
 import { mapApartmentToFormData } from '@/shared/utils/apartment-form';
+import { ApartmentToEdit } from '@/types/core/apartment';
 
-interface UseApartmentFormProps {
+interface Props {
   isEditMode: boolean;
   apartmentToEdit?: ApartmentToEdit;
   onSuccess: () => void;
 }
 
-export const useApartmentForm = ({
-  isEditMode,
-  apartmentToEdit,
-  onSuccess,
-}: UseApartmentFormProps) => {
+export const useApartmentForm = ({ isEditMode, apartmentToEdit, onSuccess }: Props) => {
   const [createHouse, { isLoading: isCreating }] = useCreateHouseMutation();
   const [updateHouse, { isLoading: isUpdating }] = useUpdateHouseMutation();
 
@@ -32,7 +29,6 @@ export const useApartmentForm = ({
 
   const { reset } = methods;
 
-  // Заповнення форми при зміні режиму або даних
   useEffect(() => {
     const formData =
       isEditMode && apartmentToEdit

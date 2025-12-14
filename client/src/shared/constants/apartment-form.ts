@@ -2,7 +2,7 @@ import { ApartmentFormData } from '@/shared/validation/add-apartments/apartment-
 
 export const APARTMENT_TYPE_OPTIONS = [
   { value: 'new_build', label: 'Новобудова' },
-  { value: 'old_build', label: 'Вторинне житло' },
+  { value: 'resale', label: 'Вторинне житло' },
 ] as const;
 
 export const DEFAULT_APARTMENT_VALUES: ApartmentFormData = {

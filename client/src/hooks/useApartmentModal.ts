@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeModal } from '@/store/modal-slice';
-import { ApartmentModalPayload } from '@/types/core/apartment';
+import { ApartmentModalPayload } from '@/types/model/apartment-modal';
 import { ModalTriggers } from '@/types/model/modals';
 
 export const useApartmentModal = () => {

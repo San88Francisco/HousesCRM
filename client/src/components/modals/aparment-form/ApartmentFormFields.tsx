@@ -1,4 +1,4 @@
-import { Home, Hash, Square, DollarSign, Building, MapPin } from 'lucide-react';
+import { Home, Hash, Square, Building, MapPin, Coins } from 'lucide-react';
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFSelect } from '@/components/RHF/RHFSelect';
 import { RHFDatePicker } from '@/components/RHF/RHFDatePicker';
@@ -41,10 +41,10 @@ export const ApartmentFormFields = ({ isLoading }: Props) => {
 
       <RHFInput
         name="price"
-        label="Ціна"
+        label="Ціна (грн)"
         type="number"
         placeholder="1000000"
-        icon={<DollarSign className="w-4 h-4" />}
+        icon={<Coins className="w-4 h-4" />}
         required
         min={0}
         disabled={isLoading}

@@ -8,13 +8,13 @@ export const mapApartmentToFormData = (apartment?: ApartmentToEdit): ApartmentFo
   }
 
   return {
-    apartmentName: apartment.apartmentName || '',
-    roomsCount: apartment.roomsCount || 1,
-    totalArea: apartment.totalArea || 1,
-    purchaseDate: apartment.purchaseDate ? new Date(apartment.purchaseDate) : new Date(),
-    price: apartment.price || 1,
-    floor: apartment.floor || 1,
-    street: apartment.street || '',
-    apartmentType: apartment.apartmentType || 'new_build',
+    apartmentName: apartment.apartmentName,
+    roomsCount: apartment.roomsCount,
+    totalArea: apartment.totalArea,
+    purchaseDate: new Date(apartment.purchaseDate),
+    price: apartment.prices[0].amount,
+    floor: apartment.floor,
+    street: apartment.street,
+    apartmentType: apartment.apartmentType,
   };
 };

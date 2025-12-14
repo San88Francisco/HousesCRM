@@ -1,18 +1,10 @@
 import { rootApi } from '@/shared/api';
-import { House, HouseResponse, HousesAllAnalyticsResponse } from '@/types/services/houses';
-
-// Тип для створення квартири
-export interface CreateHouseRequest {
-  apartmentName: string;
-  roomsCount: number;
-  totalArea: number;
-  price: number;
-  floor: number;
-  purchaseDate: Date;
-  street: string;
-  apartmentType: string;
-  contractIds?: string[];
-}
+import {
+  CreateHouseRequest,
+  House,
+  HouseResponse,
+  HousesAllAnalyticsResponse,
+} from '@/types/services/houses';
 
 export const housesApi = rootApi.injectEndpoints({
   endpoints: build => ({
