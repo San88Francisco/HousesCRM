@@ -25,7 +25,7 @@ export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClic
             )}
           >
             <div
-              className="w-2.5 h-2.5 rounded-sm mr-1.5 flex-shrink-0"
+              className="w-2 h-2 rounded-sm mr-1.5 flex-shrink-0"
               style={{ backgroundColor: colors[idx % colors.length] }}
             />
 

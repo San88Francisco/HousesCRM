@@ -7,7 +7,7 @@ type Props = {
 
 export const LoadingState = ({ className }: Props) => {
   return (
-    <Card className={cn('mx-auto', className)}>
+    <Card className={cn('mx-auto w-full', className)}>
       <CardContent className="flex items-center justify-center h-96">
         <div className="flex flex-col items-center gap-3">
           <div className={cn('animate-spin rounded-full h-8 w-8 border-b-2 border-current')} />

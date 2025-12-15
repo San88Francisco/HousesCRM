@@ -2,21 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { useTheme } from 'next-themes';
+
 import { cn } from '@/shared/utils/cn';
 import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/card';
 import { CustomBar } from './CustomBar';
-import { CustomTooltip } from './CustomTooltip';
 import { CustomXAxisTick } from './CustomXAxisTick';
 import { mockPaybackStats } from '@/shared/constants/payback-chart/analytics.mock';
 import { usePaybackChartData, useChartDimensions, useChartScroll } from './utils';
 import { renderLoadingState } from './ChartStates';
 import { formatYAxis } from '@/shared/utils/all-apartments/payback-chart/payback';
+import { PaybackChartTooltip } from './PaybackChartTooltip';
 
-const CHART_HEIGHT = 400;
+const CHART_HEIGHT = 250;
 
 export const PaybackChart = () => {
-  const { theme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [loading] = useState(false);
 
@@ -34,9 +33,6 @@ export const PaybackChart = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  const currentTheme = theme === 'system' ? systemTheme : theme;
-  const isDark = currentTheme === 'dark';
 
   if (!mounted) return null;
   if (loading) return renderLoadingState();
@@ -76,7 +72,7 @@ export const PaybackChart = () => {
                 <CartesianGrid stroke="var(--border)" vertical={false} strokeWidth={1} />
                 <XAxis
                   dataKey="apartmentName"
-                  height={100}
+                  height={10}
                   axisLine={false}
                   tickLine={false}
                   tick={<CustomXAxisTick />}
@@ -90,7 +86,7 @@ export const PaybackChart = () => {
                   tickLine={false}
                   width={60}
                 />
-                <Tooltip content={<CustomTooltip isDark={isDark} />} cursor={false} />
+                <Tooltip content={<PaybackChartTooltip />} cursor={false} />
                 <Bar dataKey="purchasePriceUSD" shape={<CustomBar />} />
               </BarChart>
             </ResponsiveContainer>

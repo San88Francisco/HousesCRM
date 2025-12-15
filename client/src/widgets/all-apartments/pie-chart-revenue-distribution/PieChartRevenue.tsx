@@ -12,7 +12,7 @@ export function PieChartRevenue({ adjustedData, grandApartmentTotalRevenue }: Pr
   const chartConfig = createChartPieConfig(adjustedData);
 
   return (
-    <ChartContainer config={chartConfig} className="flex-shrink-0 w-full md:w-[40%] max-h-[300px]">
+    <ChartContainer config={chartConfig} className="flex-shrink-0 w-full lg:w-[50%] max-h-[400px]">
       <PieChart>
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
         <Pie

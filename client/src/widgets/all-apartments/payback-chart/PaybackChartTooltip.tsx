@@ -7,7 +7,6 @@ import { cn } from '@/shared/utils/cn';
 interface CustomTooltipProps {
   active?: boolean;
   payload?: Array<{ payload: PaybackChartData }>;
-  isDark: boolean;
 }
 
 const MAX_NAME_LENGTH = 16;
@@ -18,16 +17,17 @@ const truncateText = (text: string, maxLength: number = MAX_NAME_LENGTH): string
   return text.length <= maxLength ? text : `${text.substring(0, maxLength)}...`;
 };
 
-export const CustomTooltip = ({ active, payload, isDark }: CustomTooltipProps) => {
+export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (!active || !payload || !payload.length) return null;
 
   const data: PaybackChartData = payload[0].payload;
 
   return (
     <div
-      className={cn('p-3 md:p-4 rounded-xl shadow-2xl border-2 min-w-[180px] max-w-[220px]')}
+      className={cn(
+        'p-3 md:p-4 rounded-xl shadow-2xl border-2 min-w-[180px] max-w-[220px]  bg-background',
+      )}
       style={{
-        backgroundColor: isDark ? 'var(--dark)' : 'var(--white)',
         borderColor: data.color,
       }}
     >
@@ -41,33 +41,31 @@ export const CustomTooltip = ({ active, payload, isDark }: CustomTooltipProps) =
         </p>
       </div>
 
-      <div className="space-y-1.5 text-xs sm:text-sm">
-        <div className="flex items-center justify-between gap-2">
-          <span style={{ color: 'var(--text)' }}>Окупність</span>
+      <div className="space-y-1.5 text-xs sm:text-sm ">
+        <div className="flex items-center justify-between gap-2 border-b border-border pb-2">
+          <span>Окупність</span>
           <span className="font-bold" style={{ color: data.color }}>
             {formatPaybackCoefficient(data.paybackCoefficient)}
           </span>
         </div>
 
-        <div className="h-px" style={{ backgroundColor: 'var(--border)' }} />
-
         <div className="flex items-center justify-between gap-2">
-          <span style={{ color: 'var(--text)' }}>Вартість</span>
-          <span className="font-semibold" style={{ color: 'var(--text)' }}>
+          <span>Вартість</span>
+          <span className="font-semibold">
             ${(data.purchasePriceUSD / PRICE_DIVIDER).toFixed(DECIMAL_PLACES)}k
           </span>
         </div>
 
         <div className="flex items-center justify-between gap-2">
-          <span style={{ color: 'var(--text)' }}>Заплачено</span>
-          <span className="font-semibold" style={{ color: 'var(--text)' }}>
+          <span>Заплачено</span>
+          <span className="font-semibold">
             ${(data.totalIncomeUSD / PRICE_DIVIDER).toFixed(DECIMAL_PLACES)}k
           </span>
         </div>
 
         <div className="flex items-center justify-between gap-2">
-          <span style={{ color: 'var(--text)' }}>Дата</span>
-          <span className="text-xs" style={{ color: 'var(--muted-text)' }}>
+          <span>Дата</span>
+          <span className="text-xs text-muted">
             {new Date(data.purchaseDate).toLocaleDateString('uk-UA', {
               year: 'numeric',
               month: 'short',

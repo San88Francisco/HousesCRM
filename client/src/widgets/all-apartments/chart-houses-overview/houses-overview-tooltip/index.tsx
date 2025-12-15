@@ -73,7 +73,7 @@ export const CustomTooltip = ({
   });
 
   return (
-    <div className="bg-text border rounded-lg p-3">
+    <div className="bg-background border border-border rounded-2xl p-3">
       {preparedApartments.map(({ apt, color }) => (
         <ApartmentItem
           key={apt.id}

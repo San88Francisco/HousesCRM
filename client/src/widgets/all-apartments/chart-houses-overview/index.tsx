@@ -26,12 +26,12 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { CustomTooltip } from '@/widgets/chart-houses-overview/custom-tooltip';
 import { Apartment, TimeRangeEnum } from '@/types/core/houses-overview/types';
-import { LegendContent } from '@/widgets/chart-houses-overview/LegendContent';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { EmptyState } from '@/components/chart-states/EmptyState';
+import { CustomTooltip } from './houses-overview-tooltip';
+import { LegendContent } from './LegendContent';
 
 export function ApartmentRentalChart() {
   const { data, error, isLoading } = useGetHousesAnalyticsQuery();

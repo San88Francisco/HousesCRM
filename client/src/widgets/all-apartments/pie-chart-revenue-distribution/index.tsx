@@ -14,19 +14,19 @@ import { LoadingState } from '@/components/chart-states/LoadingState';
 export function ChartPieDonutText() {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();
 
-  if (isLoading) return <LoadingState className="max-w-[600px]" />;
-  if (error) return <ErrorState error={error} className="max-w-[600px]" />;
-  if (!data?.revenueDistribution.data?.length) return <EmptyState className="max-w-[600px]" />;
+  if (isLoading) return <LoadingState />;
+  if (error) return <ErrorState error={error} />;
+  if (!data?.revenueDistribution.data?.length) return <EmptyState />;
 
   const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;
   const adjustedData = addFillToRevenueItems(data);
 
   return (
-    <Card className="max-w-[600px] mx-auto">
+    <Card className="w-full">
       <CardHeader className="items-center pb-0 mb-10">
         <CardTitle>Загальний дохід по всіх квартирах</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-wrap md:flex-nowrap gap-10 items-center">
+      <CardContent className="flex   gap-10 items-center ">
         <PieChartRevenue
           grandApartmentTotalRevenue={grandApartmentTotalRevenue}
           adjustedData={adjustedData}
