@@ -93,39 +93,34 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
               </Label>
             )}
             <div className="relative">
-              <div>
-                <Input
-                  id={name}
-                  type={type}
-                  disabled={disabled}
-                  value={field.value ?? ''}
-                  onChange={e => field.onChange(e.target.value)}
-                  onFocusCapture={() => setIsFocused(true)}
-                  onBlurCapture={() => setIsFocused(false)}
-                  className={cn(
-                    errorMessage && 'border-destructive focus-visible:ring-destructive',
-                  )}
-                  error={errorMessage}
-                  aria-invalid={!!errorMessage}
-                  aria-describedby={errorMessage ? `${name}-error` : undefined}
-                  icon={icon}
-                  iconWithError={iconWithError}
-                  {...props}
-                  ref={el => {
-                    internalRef.current = el;
-                    if (typeof forwardedRef === 'function') forwardedRef(el);
-                    else if (forwardedRef) {
-                      (forwardedRef as React.MutableRefObject<HTMLInputElement | null>).current =
-                        el;
-                    }
-                  }}
-                />
-                {hotkeyHint && !isFocused && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
-                    {hotkeyHint}
-                  </div>
-                )}
-              </div>
+              <Input
+                id={name}
+                type={type}
+                disabled={disabled}
+                value={field.value ?? ''}
+                onChange={e => field.onChange(e.target.value)}
+                onFocusCapture={() => setIsFocused(true)}
+                onBlurCapture={() => setIsFocused(false)}
+                className={cn(errorMessage && 'border-destructive focus-visible:ring-destructive')}
+                error={errorMessage}
+                aria-invalid={!!errorMessage}
+                aria-describedby={errorMessage ? `${name}-error` : undefined}
+                icon={icon}
+                iconWithError={iconWithError}
+                {...props}
+                ref={el => {
+                  internalRef.current = el;
+                  if (typeof forwardedRef === 'function') forwardedRef(el);
+                  else if (forwardedRef) {
+                    (forwardedRef as React.MutableRefObject<HTMLInputElement | null>).current = el;
+                  }
+                }}
+              />
+              {hotkeyHint && !isFocused && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
+                  {hotkeyHint}
+                </div>
+              )}
             </div>
             {error && (
               <div className="text-sm text-red" id={`${name}-error`}>

@@ -1,6 +1,6 @@
 import { ApartmentFormData } from '@/shared/validation/add-apartments/apartment-schema';
 import { ApartmentToEdit } from '@/types/core/apartment';
-import { getDefaultApartmentValues } from './getDefaultApartmentValues';
+import { getDefaultApartmentValues } from './get-default-apartment-values';
 
 export const mapApartmentToFormData = (apartment?: ApartmentToEdit): ApartmentFormData => {
   if (!apartment) {

@@ -29,7 +29,7 @@ export function ChartPieDonutText() {
 
   return (
     <Card className="max-w-[600px] mx-auto">
-      <CardHeader className="items-center pb-0 ">
+      <CardHeader className="items-center pb-0">
         <CardTitle>Загальний дохід по всіх квартирах</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-wrap md:flex-nowrap gap-10 items-center">

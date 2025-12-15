@@ -1,18 +1,5 @@
 import { ApartmentType } from '../core/houses';
 
-// Тип для створення квартири
-export interface CreateHouseRequest {
-  apartmentName: string;
-  roomsCount: number;
-  totalArea: number;
-  price: number;
-  floor: number;
-  purchaseDate: Date;
-  street: string;
-  apartmentType: ApartmentType;
-  contractIds?: string[];
-}
-
 export type House = {
   id: string;
   apartmentName: string;

@@ -2,14 +2,15 @@ import { rootApi } from '@/shared/api';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 import { HouseByIdResponse } from '@/types/services/houses';
 import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
-import { CreateHouseRequest, House } from '@/types/services/houses';
+import { House } from '@/types/services/houses';
+import { CreateApartmentPayload } from '@/types/services/apartments-api';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
   endpoints: build => ({
     getHousesAnalytics: build.query<AllAnalyticsResponse, void>({
       query: () => '/houses-analytics/all-analytics',
-      providesTags: ['Houses'],
+      providesTags: ['Analytics'],
     }),
     getHouseById: build.query<HouseByIdResponse, string>({
       query: id => `/houses/${id}`,
@@ -19,21 +20,21 @@ export const housesApi = rootApi.injectEndpoints({
       query: () => '/houses-analytics/currency-revaluation-analytic',
       providesTags: ['Analytics'],
     }),
-    createHouse: build.mutation<House, CreateHouseRequest>({
+    createHouse: build.mutation<House, CreateApartmentPayload>({
       query: body => ({
         url: '/houses',
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Houses'],
+      invalidatesTags: ['Houses', 'Analytics'],
     }),
-    updateHouse: build.mutation<House, { id: string } & Partial<CreateHouseRequest>>({
+    updateHouse: build.mutation<House, { id: string } & Partial<CreateApartmentPayload>>({
       query: ({ id, ...body }) => ({
         url: `/houses/${id}`,
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses'],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses', 'Analytics'],
     }),
   }),
 });

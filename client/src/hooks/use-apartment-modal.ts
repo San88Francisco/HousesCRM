@@ -12,7 +12,8 @@ export const useApartmentModal = () => {
 
   const isEditMode = trigger === ModalTriggers.EDIT_APARTMENT;
 
-  const apartmentToEdit = (payload as ApartmentModalPayload)?.apartment;
+  const apartmentToEdit =
+    payload && 'apartment' in payload ? (payload as ApartmentModalPayload).apartment : undefined;
 
   const handleClose = (reset: () => void) => {
     dispatch(closeModal());

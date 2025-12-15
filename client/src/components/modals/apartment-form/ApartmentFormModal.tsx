@@ -1,13 +1,12 @@
 'use client';
 
-import { DialogDescription, DialogFooter, DialogHeader } from '@/shared/ui/dialog';
+import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useApartmentForm } from '@/hooks/useApartmentForm';
-import { useApartmentModal } from '@/hooks/useApartmentModal';
+import { useApartmentForm } from '@/hooks/use-apartment-form';
+import { useApartmentModal } from '@/hooks/use-apartment-modal';
 import { ApartmentFormFields } from './ApartmentFormFields';
 import { ModalTriggers } from '@/types/model/modals';
-import { DialogTitle } from '@radix-ui/react-dialog';
 import Modal from '../modal-wrapper';
 
 export const ApartmentFormModal = () => {

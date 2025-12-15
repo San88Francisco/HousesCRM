@@ -8,7 +8,7 @@ import {
 } from '@/shared/validation/add-apartments/apartment-schema';
 import { mapApartmentToFormData } from '@/shared/utils/apartment-form/apartment-form';
 import { ApartmentToEdit } from '@/types/core/apartment';
-import { getDefaultApartmentValues } from '@/shared/utils/apartment-form/getDefaultApartmentValues';
+import { getDefaultApartmentValues } from '@/shared/utils/apartment-form/get-default-apartment-values';
 import { useCreateHouseMutation, useUpdateHouseMutation } from '@/store/houses-api';
 
 interface Props {
@@ -48,7 +48,7 @@ export const useApartmentForm = ({ isEditMode, apartmentToEdit, onSuccess }: Pro
     }
 
     await updateHouse({
-      id: String(apartmentToEdit.id),
+      id: apartmentToEdit.id,
       ...data,
     }).unwrap();
     toast.success('Квартиру успішно оновлено!');
