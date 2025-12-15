@@ -1,6 +1,6 @@
 import { ApartmentType } from '../core/houses';
 
-export interface CreateApartmentPayload {
+export interface CreateHousePayload {
   apartmentName: string;
   roomsCount: number;
   totalArea: number;
@@ -12,6 +12,6 @@ export interface CreateApartmentPayload {
   contractIds?: string[];
 }
 
-export interface UpdateApartmentPayload extends Partial<CreateApartmentPayload> {
+export interface UpdateApartmentPayload extends Partial<CreateHousePayload> {
   id: string;
 }

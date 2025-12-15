@@ -3,7 +3,7 @@ import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 import { HouseByIdResponse } from '@/types/services/houses';
 import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
 import { House } from '@/types/services/houses';
-import { CreateApartmentPayload } from '@/types/services/apartments-api';
+import { CreateHousePayload } from '@/types/services/apartments-api';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -20,7 +20,7 @@ export const housesApi = rootApi.injectEndpoints({
       query: () => '/houses-analytics/currency-revaluation-analytic',
       providesTags: ['Analytics'],
     }),
-    createHouse: build.mutation<House, CreateApartmentPayload>({
+    createHouse: build.mutation<House, CreateHousePayload>({
       query: body => ({
         url: '/houses',
         method: 'POST',
@@ -28,7 +28,7 @@ export const housesApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: ['Houses', 'Analytics'],
     }),
-    updateHouse: build.mutation<House, { id: string } & Partial<CreateApartmentPayload>>({
+    updateHouse: build.mutation<House, { id: string } & Partial<CreateHousePayload>>({
       query: ({ id, ...body }) => ({
         url: `/houses/${id}`,
         method: 'PATCH',
