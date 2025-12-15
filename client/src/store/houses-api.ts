@@ -2,6 +2,7 @@ import { rootApi } from '@/shared/api';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 import { HouseByIdResponse } from '@/types/services/houses';
 import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
+import { CreateHouseRequest, House } from '@/types/services/houses';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -18,6 +19,22 @@ export const housesApi = rootApi.injectEndpoints({
       query: () => '/houses-analytics/currency-revaluation-analytic',
       providesTags: ['Analytics'],
     }),
+    createHouse: build.mutation<House, CreateHouseRequest>({
+      query: body => ({
+        url: '/houses',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Houses'],
+    }),
+    updateHouse: build.mutation<House, { id: string } & Partial<CreateHouseRequest>>({
+      query: ({ id, ...body }) => ({
+        url: `/houses/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses'],
+    }),
   }),
 });
 
@@ -26,4 +43,6 @@ export const {
   useLazyGetHousesAnalyticsQuery,
   useGetHouseByIdQuery,
   useGetCurrencyRevaluationQuery,
+  useCreateHouseMutation,
+  useUpdateHouseMutation,
 } = housesApi;

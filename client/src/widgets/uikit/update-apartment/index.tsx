@@ -4,9 +4,9 @@ import { Button } from '@/shared/ui/button';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
-import { useGetHouseByIdQuery } from '@/store/houses';
 import { toast } from 'sonner';
 import { ApartmentFromAPI } from '@/types/core/apartment';
+import { useGetHouseByIdQuery } from '@/store/houses-api';
 
 // TODO цей файл тимчасовий. Тут приклад як робити функцію редагування данних існуючої квартири.
 const idApartment = 'f021f05c-4cd3-4ac6-a349-faf420d4290b';

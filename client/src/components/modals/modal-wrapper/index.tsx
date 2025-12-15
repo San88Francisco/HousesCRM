@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps, ReactNode, useCallback } from 'react';
+import { ComponentProps, ReactNode, useCallback, useEffect } from 'react';
 import { clsx } from 'clsx';
 import { Dialog, DialogContent } from '@/shared/ui/dialog';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
@@ -21,6 +21,12 @@ export default function Modal({ children, triggers, className, onClose, ...props
 
   const opened = isOpen && activeTrigger === triggers;
 
+  useEffect(() => {
+    if (opened && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }, [opened]);
+
   const handleOpenChange = useCallback(
     (nextOpen: boolean) => {
       if (!nextOpen) {
@@ -34,6 +40,9 @@ export default function Modal({ children, triggers, className, onClose, ...props
   return (
     <Dialog open={opened} onOpenChange={handleOpenChange}>
       <DialogContent
+        onOpenAutoFocus={e => {
+          e.preventDefault(); // Просто блокуємо, без фокусу
+        }}
         className={clsx(
           'max-w-full bottom-0 top-auto sm:bottom-auto sm:top-[50%] translate-y-0 sm:translate-y-[-50%] rounded-b-none sm:rounded-lg border-0 outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 focus-visible:ring-0',
           className,

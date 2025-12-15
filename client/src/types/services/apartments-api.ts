@@ -13,5 +13,5 @@ export interface CreateApartmentPayload {
 }
 
 export interface UpdateApartmentPayload extends Partial<CreateApartmentPayload> {
-  id: string | number;
+  id: string;
 }

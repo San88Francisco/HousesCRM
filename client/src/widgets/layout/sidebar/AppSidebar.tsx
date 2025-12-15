@@ -8,6 +8,7 @@ import { SidebarTablesGroup } from './SidebarTablesGroup';
 
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
 import { LogoSidebar } from './LogoSidebar';
+import { SidebarActionsGroup } from './SidebarActionsGroup';
 
 export const AppSidebar = () => {
   const pathname = usePathname();
@@ -20,6 +21,7 @@ export const AppSidebar = () => {
       <SidebarContent>
         <SidebarPagesGroup />
         <SidebarTablesGroup />
+        <SidebarActionsGroup />
       </SidebarContent>
       <LogoSidebar />
     </Sidebar>

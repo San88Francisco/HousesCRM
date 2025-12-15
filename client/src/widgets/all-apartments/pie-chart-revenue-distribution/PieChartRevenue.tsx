@@ -13,26 +13,15 @@ export function PieChartRevenue({ adjustedData, grandApartmentTotalRevenue }: Pr
   const chartConfig = createChartPieConfig(adjustedData);
   const positiveRevenueCount = adjustedData.filter(d => d.apartmentTotalRevenue > 0).length;
 
-  // Якщо немає доходу взагалі
   if (grandApartmentTotalRevenue === 0 || positiveRevenueCount === 0) {
-    return (
-      <EmptyState />
-      // <div className="flex-shrink-0 w-full md:w-[40%] max-h-[300px] flex items-center justify-center">
-      //   <div className="text-center space-y-3 p-6">
-      //     <div className="mx-auto w-20 h-20 rounded-full bg-[var(--muted)] flex items-center justify-center">
-      //       <TrendingUp className="w-10 h-10 text-[var(--muted-text)]" />
-      //     </div>
-      //     <p className="text-sm text-[var(--muted-text)]">Немає даних про дохід</p>
-      //     <p className="text-xs text-[var(--muted-text)]">
-      //       Додайте договори оренди для відображення статистики
-      //     </p>
-      //   </div>
-      // </div>
-    );
+    return <EmptyState />;
   }
 
   return (
-    <ChartContainer config={chartConfig} className="flex-shrink-0 w-full md:w-[40%] max-h-[300px]">
+    <ChartContainer
+      config={chartConfig}
+      className="flex-shrink-0 w-full md:w-[40%] aspect-square min-h-[240px]"
+    >
       <PieChart>
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
         <Pie

@@ -11,6 +11,8 @@ type HotkeyOptions = {
 };
 
 const isHotkeyEvent = (event: KeyboardEvent, key: string, options: HotkeyOptions): boolean => {
+  if (!event.key || typeof event.key !== 'string') return false;
+
   const { ctrl = false, shift = false, alt = false, meta = false } = options;
 
   return [
@@ -34,6 +36,8 @@ export const useHotkeyForRef = (
     if (!key) return;
 
     const handler = (event: KeyboardEvent) => {
+      if (!event || !event.key) return;
+
       if (!isHotkeyEvent(event, key, { ctrl, shift, alt, meta })) return;
 
       if (preventDefault) event.preventDefault();
@@ -47,5 +51,5 @@ export const useHotkeyForRef = (
 
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [key, action, ctrl, shift, alt, meta, preventDefault]);
+  }, [key, action, ctrl, shift, alt, meta, preventDefault, ref]);
 };

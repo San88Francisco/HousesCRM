@@ -2,7 +2,7 @@ import { Home, Hash, Square, Building, MapPin, Coins } from 'lucide-react';
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFSelect } from '@/components/RHF/RHFSelect';
 import { RHFDatePicker } from '@/components/RHF/RHFDatePicker';
-import { APARTMENT_TYPE_OPTIONS } from '@/shared/constants/apartment-form';
+import { APARTMENT_TYPE_OPTIONS } from '@/shared/constants/apartment-form/apartment-form';
 
 interface Props {
   isLoading: boolean;
@@ -34,7 +34,7 @@ export const ApartmentFormFields = ({ isLoading }: Props) => {
         placeholder="50.5"
         icon={<Square className="w-4 h-4" />}
         required
-        min={0}
+        min={1}
         step="0.01"
         disabled={isLoading}
       />
@@ -46,7 +46,7 @@ export const ApartmentFormFields = ({ isLoading }: Props) => {
         placeholder="1000000"
         icon={<Coins className="w-4 h-4" />}
         required
-        min={0}
+        min={1}
         disabled={isLoading}
       />
 
@@ -57,6 +57,7 @@ export const ApartmentFormFields = ({ isLoading }: Props) => {
         placeholder="5"
         icon={<Building className="w-4 h-4" />}
         required
+        min={0}
         disabled={isLoading}
       />
 

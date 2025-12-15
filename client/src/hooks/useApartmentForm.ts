@@ -2,14 +2,14 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { useCreateHouseMutation, useUpdateHouseMutation } from '@/store/houses';
 import {
   ApartmentFormData,
   apartmentSchema,
 } from '@/shared/validation/add-apartments/apartment-schema';
-import { DEFAULT_APARTMENT_VALUES } from '@/shared/constants/apartment-form';
-import { mapApartmentToFormData } from '@/shared/utils/apartment-form';
+import { mapApartmentToFormData } from '@/shared/utils/apartment-form/apartment-form';
 import { ApartmentToEdit } from '@/types/core/apartment';
+import { getDefaultApartmentValues } from '@/shared/utils/apartment-form/getDefaultApartmentValues';
+import { useCreateHouseMutation, useUpdateHouseMutation } from '@/store/houses-api';
 
 interface Props {
   isEditMode: boolean;
@@ -23,7 +23,7 @@ export const useApartmentForm = ({ isEditMode, apartmentToEdit, onSuccess }: Pro
 
   const methods = useForm<ApartmentFormData>({
     resolver: yupResolver(apartmentSchema),
-    defaultValues: DEFAULT_APARTMENT_VALUES,
+    defaultValues: getDefaultApartmentValues(),
   });
 
   const { reset } = methods;
@@ -32,7 +32,7 @@ export const useApartmentForm = ({ isEditMode, apartmentToEdit, onSuccess }: Pro
     const formData =
       isEditMode && apartmentToEdit
         ? mapApartmentToFormData(apartmentToEdit)
-        : DEFAULT_APARTMENT_VALUES;
+        : getDefaultApartmentValues();
 
     reset(formData);
   }, [isEditMode, apartmentToEdit, reset]);

@@ -39,7 +39,7 @@ export const ApartmentFormModal = () => {
         <RHFForm form={methods} onSubmit={onSubmit}>
           <ApartmentFormFields isLoading={isLoading} />
 
-          <DialogFooter className="mt-6">
+          <DialogFooter className="mt-6 flex gap-2">
             <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
               Скасувати
             </Button>

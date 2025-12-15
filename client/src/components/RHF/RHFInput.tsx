@@ -93,16 +93,15 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
               </Label>
             )}
             <div className="relative">
-              <div
-                onFocusCapture={() => setIsFocused(true)}
-                onBlurCapture={() => setIsFocused(false)}
-              >
+              <div>
                 <Input
                   id={name}
                   type={type}
                   disabled={disabled}
-                  value={field.value}
+                  value={field.value ?? ''}
                   onChange={e => field.onChange(e.target.value)}
+                  onFocusCapture={() => setIsFocused(true)}
+                  onBlurCapture={() => setIsFocused(false)}
                   className={cn(
                     errorMessage && 'border-destructive focus-visible:ring-destructive',
                   )}
