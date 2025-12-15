@@ -13,15 +13,15 @@ export function ChartPieDonutText() {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();
 
   if (isLoading) {
-    return <LoadingState />;
+    return <LoadingState className="max-w-[600px]" />;
   }
 
   if (error) {
-    return <ErrorState error={error} />;
+    return <ErrorState error={error} className="max-w-[600px]" />;
   }
 
   if (!data?.revenueDistribution?.data || data.revenueDistribution.data.length === 0) {
-    return <EmptyState />;
+    return <EmptyState className="max-w-[600px]" />;
   }
 
   const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;

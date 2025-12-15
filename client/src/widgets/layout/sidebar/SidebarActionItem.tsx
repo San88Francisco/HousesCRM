@@ -13,12 +13,17 @@ interface Props {
 
 export const SidebarActionItem = ({ item }: Props) => {
   const dispatch = useAppDispatch();
-  const { trigger } = useAppSelector(s => s.modal);
+  const trigger = useAppSelector(s => s.modal.trigger);
 
   const isActive = trigger === item.modalTrigger;
 
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     e.currentTarget.blur();
+
+    if (isActive) {
+      return;
+    }
+
     dispatch(
       openModal({
         trigger: item.modalTrigger,

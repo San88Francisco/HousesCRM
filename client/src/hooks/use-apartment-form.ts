@@ -44,7 +44,8 @@ export const useApartmentForm = ({ isEditMode, apartmentToEdit, onSuccess }: Pro
 
   const handleUpdate = async (data: ApartmentFormData) => {
     if (!apartmentToEdit?.id) {
-      throw new Error('ID квартири не знайдено');
+      toast.error('ID квартири не знайдено');
+      return;
     }
 
     await updateHouse({

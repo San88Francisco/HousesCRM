@@ -30,24 +30,23 @@ export const ApartmentFormModal = () => {
       triggers={isEditMode ? ModalTriggers.EDIT_APARTMENT : ModalTriggers.ADD_APARTMENT}
       className="max-w-2xl max-h-[90vh] overflow-y-auto"
     >
-      <DialogDescription className="sr-only">{modalContent.description}</DialogDescription>
-
-      <DialogHeader className="p-6">
-        <DialogTitle className="text-lg font-semibold mb-4">{modalContent.title}</DialogTitle>
-
-        <RHFForm form={methods} onSubmit={onSubmit}>
-          <ApartmentFormFields isLoading={isLoading} />
-
-          <DialogFooter className="mt-6 flex gap-2">
-            <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
-              Скасувати
-            </Button>
-            <Button type="submit" disabled={isLoading}>
-              {modalContent.submitText}
-            </Button>
-          </DialogFooter>
-        </RHFForm>
+      <DialogHeader>
+        <DialogTitle className="text-lg font-semibold">{modalContent.title}</DialogTitle>
+        <DialogDescription className="!mt-0">{modalContent.description}</DialogDescription>
       </DialogHeader>
+
+      <RHFForm form={methods} onSubmit={onSubmit}>
+        <ApartmentFormFields isLoading={isLoading} />
+
+        <DialogFooter className="mt-6 px-6 pb-6">
+          <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
+            Скасувати
+          </Button>
+          <Button type="submit" disabled={isLoading}>
+            {modalContent.submitText}
+          </Button>
+        </DialogFooter>
+      </RHFForm>
     </Modal>
   );
 };

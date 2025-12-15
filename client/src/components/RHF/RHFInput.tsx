@@ -59,7 +59,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
 
-    const internalRef = useRef<HTMLInputElement>(null);
+    const internalRef = useRef<HTMLInputElement | null>(null);
 
     useHotkeyForRef(hotkey, internalRef, hotkeyAction, {
       ctrl: !!hotkeyCtrl,
@@ -122,7 +122,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
                 </div>
               )}
             </div>
-            {error && (
+            {errorMessage && (
               <div className="text-sm text-red" id={`${name}-error`}>
                 {errorMessage}
               </div>
