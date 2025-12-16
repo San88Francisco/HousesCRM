@@ -5,7 +5,7 @@ import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
 
 import { cn } from '@/shared/utils/cn';
-import { ChartContext, useChart } from '@/hooks/pie-chart/useChart';
+import { ChartContext, useChart } from '@/hooks/all-apartments/pie-chart/useChart';
 import { ChartPieConfig } from '@/types/core/revenue-distribution/chart-pie-config';
 import { THEMES } from '@/shared/constants/pie-chart/chart-themes';
 

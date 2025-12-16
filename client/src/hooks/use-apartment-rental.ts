@@ -5,24 +5,28 @@ import {
   findMinMaxRentWithFivePercent,
   generateChartData,
   getPeriodRange,
-} from '@/shared/utils/houses-overview/chart-houses-overview';
+} from '@/shared/utils/all-apartments/houses-overview/chart-houses-overview';
 import {
   DEFAULT_CHART_WIDTH,
   DEFAULT_Y_MAX,
   DEFAULT_Y_MIN,
   Y_DOMAIN_STEP,
 } from '@/constants/line-chart/line-chart';
-import { debounce, getDataRange, getOptimalTicks } from '@/shared/utils/houses-overview/chart-math';
-import { getPaletteColors } from '@/shared/utils/houses-overview/colors';
-import { Apartment, TimeRangeEnum } from '@/types/core/houses-overview/types';
+import {
+  debounce,
+  getDataRange,
+  getOptimalTicks,
+} from '@/shared/utils/all-apartments/houses-overview/chart-math';
+import { TimeRangeEnum } from '@/types/core/houses-overview/types';
+import { AllAnalyticsResponse } from '@/types/services/all-analitics';
+import { addFillToChartItems } from '@/shared/utils/all-apartments/add-fill-to-charts-items';
 
-export function useApartmentRental(apartmentsData: Apartment[]) {
+export function useApartmentRental(apartmentsData: AllAnalyticsResponse) {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ONE_YEAR);
   const [lockedApartment, setLockedApartment] = useState<string | null>(null);
   const [cursorDate, setCursorDate] = useState<string>('');
   const [chartWidth, setChartWidth] = useState(DEFAULT_CHART_WIDTH);
 
-  const paletteColors = getPaletteColors();
   const { isMobile, isTablet, isSmallMobile } = useIsMobile();
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -49,15 +53,23 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
     setCursorDate('');
   }, []);
 
-  const hasData = apartmentsData && apartmentsData.length > 0;
+  const hasData = apartmentsData?.housesOverview && apartmentsData.housesOverview.length > 0;
+
+  const apartmentsDataWithFill = useMemo(
+    () => (hasData ? addFillToChartItems(apartmentsData, 'housesOverview') : []),
+    [hasData, apartmentsData],
+  );
+
   const chartData = useMemo(
-    () => (hasData ? generateChartData(apartmentsData, timeRange) : []),
+    () => (hasData ? generateChartData(apartmentsDataWithFill, timeRange) : []),
     [hasData, apartmentsData, timeRange],
   );
 
   const periodRange = useMemo(
     () =>
-      hasData ? getPeriodRange(timeRange, apartmentsData) : { periodStart: '', periodEnd: '' },
+      hasData
+        ? getPeriodRange(timeRange, apartmentsData.housesOverview)
+        : { periodStart: '', periodEnd: '' },
     [hasData, timeRange, apartmentsData],
   );
 
@@ -65,7 +77,7 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
     () =>
       hasData
         ? findMinMaxRentWithFivePercent(
-            apartmentsData,
+            apartmentsData.housesOverview,
             periodRange.periodStart,
             periodRange.periodEnd,
           )
@@ -112,7 +124,7 @@ export function useApartmentRental(apartmentsData: Apartment[]) {
     dataMin,
     dataMax,
     isMobile,
-    paletteColors,
+    apartmentsDataWithFill,
     chartMouseHandlers: { onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave },
   };
 }

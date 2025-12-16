@@ -1,6 +1,6 @@
 import { Label, Pie, PieChart } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './charts';
-import { createChartPieConfig } from '@/shared/utils/pie-chart/create-chart-pie-config';
+import { createChartPieConfig } from '@/shared/utils/all-apartments/pie-chart/create-chart-pie-config';
 import { HouseChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
 
 type Props = {

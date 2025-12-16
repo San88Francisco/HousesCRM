@@ -1,7 +1,4 @@
 /* eslint-disable */
-import { isContract } from '@/shared/utils/houses-overview/chart-houses-overview';
-import { getPaletteColors } from '@/shared/utils/houses-overview/colors';
-import { Apartment, TooltipPayload } from '@/types/core/houses-overview/types';
 import { ApartmentItem } from './ApartmentItem';
 import { NoContractTooltip } from './NoContractTooltip';
 import { LockedApartmentTooltip } from '../LockedApartmentTooltip';
@@ -10,11 +7,14 @@ import {
   isApartmentAcquired,
 } from '@/shared/utils/helpers/custom-tooltip-helper';
 
+import { HouseOverviewChartDataItem, TooltipPayload } from '@/types/core/houses-overview/types';
+import { isContract } from '@/shared/utils/all-apartments/houses-overview/chart-houses-overview';
+
 type Props = {
   active?: boolean;
   payload?: TooltipPayload[];
   lockedApartment: string | null;
-  apartmentsData: Apartment[];
+  apartmentsData: HouseOverviewChartDataItem[];
   cursorDate: string;
 };
 
@@ -27,34 +27,37 @@ export const CustomTooltip = ({
 }: Props) => {
   if (!active || !payload || payload.length === 0) return null;
 
-  const allData = payload[0]?.payload || {};
-
-  const colors = getPaletteColors();
-
-  if (colors.length === 0) return null;
+  const allData = payload[0]?.payload;
+  if (!allData) return null;
 
   if (lockedApartment) {
+    const apartment = apartmentsData.find(apt => apt.id === lockedApartment);
+    if (!apartment) return null;
+
     if (!isApartmentAcquired(lockedApartment, apartmentsData, cursorDate)) {
       return null;
     }
 
-    const item = payload.find(p => p.dataKey === lockedApartment);
-    const apartmentIndex = apartmentsData.findIndex(apt => apt.id === lockedApartment);
-    const color = apartmentIndex >= 0 ? colors[apartmentIndex % colors.length] : colors[0];
+    const tooltipItem = payload.find(p => p.dataKey === lockedApartment);
+    const color = apartment.fill;
 
     const contractCandidate = allData[`${lockedApartment}_contract`];
     const apartmentName = String(allData[`${lockedApartment}_apartment`] || '');
 
     if (!isContract(contractCandidate)) {
       const breakInContracts = findGapBetweenContracts(lockedApartment, apartmentsData, cursorDate);
+
       return (
-        <NoContractTooltip color={item?.stroke || color} breakInContracts={breakInContracts} />
+        <NoContractTooltip
+          color={tooltipItem?.stroke || color}
+          breakInContracts={breakInContracts}
+        />
       );
     }
 
     return (
       <LockedApartmentTooltip
-        color={item?.stroke || color}
+        color={tooltipItem?.stroke || color}
         apartmentName={apartmentName}
         contract={contractCandidate}
       />
@@ -65,20 +68,15 @@ export const CustomTooltip = ({
     isApartmentAcquired(apt.id, apartmentsData, cursorDate),
   );
 
-  const preparedApartments = acquiredApartments.map(apt => {
-    const realIdx = apartmentsData.findIndex(a => a.id === apt.id);
-    const color = realIdx >= 0 ? colors[realIdx % colors.length] : colors[0];
-
-    return { apt, color };
-  });
+  if (acquiredApartments.length === 0) return null;
 
   return (
     <div className="bg-background border border-border rounded-2xl p-3">
-      {preparedApartments.map(({ apt, color }) => (
+      {acquiredApartments.map(apartment => (
         <ApartmentItem
-          key={apt.id}
-          apartment={apt}
-          color={color}
+          key={apartment.id}
+          apartment={apartment}
+          color={apartment.fill}
           allData={allData}
           apartmentsData={apartmentsData}
           cursorDate={cursorDate}

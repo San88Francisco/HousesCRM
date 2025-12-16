@@ -15,3 +15,7 @@ export type ChartDataItem = {
   currentRate: number;
   id: string;
 };
+
+export type CurrencyRevaluationChartDataItem = ChartDataItem & {
+  fill: string;
+};

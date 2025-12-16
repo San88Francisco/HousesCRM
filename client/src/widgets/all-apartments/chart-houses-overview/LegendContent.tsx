@@ -1,20 +1,19 @@
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
-import { getPaletteColors } from '@/shared/utils/houses-overview/colors';
-import { Apartment } from '@/types/core/houses-overview/types';
+
+import { HouseOverviewChartDataItem } from '@/types/core/houses-overview/types';
 
 type Props = {
-  apartmentsData: Apartment[];
+  apartmentsData: HouseOverviewChartDataItem[];
   activeApartment: string | null;
   onApartmentClick: (id: string) => void;
 };
 
 export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClick }: Props) => {
-  const colors = getPaletteColors();
   return (
     <div className="flex  max-[420px]:flex-col max-[420px]:items-center justify-center  sm:pt-10 pt-4 sm:px-10 px-1 pb-3">
       <div className="w-max mx-auto flex flex-wrap max-[420px]:flex-col items-start justify-center min-[420.5px]:gap-7 gap-3">
-        {apartmentsData.map((apt, idx) => (
+        {apartmentsData.map(apt => (
           <Button
             variant="icon"
             key={apt.id}
@@ -26,7 +25,7 @@ export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClic
           >
             <div
               className="w-2 h-2 rounded-sm mr-1.5 flex-shrink-0"
-              style={{ backgroundColor: colors[idx % colors.length] }}
+              style={{ backgroundColor: apt.fill }}
             />
 
             <span

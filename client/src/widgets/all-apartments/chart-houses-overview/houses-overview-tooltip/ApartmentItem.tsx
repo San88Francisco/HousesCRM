@@ -1,6 +1,6 @@
 import { Apartment, PayloadData } from '@/types/core/houses-overview/types';
 
-import { isContract } from '@/shared/utils/houses-overview/chart-houses-overview';
+import { isContract } from '@/shared/utils/all-apartments/houses-overview/chart-houses-overview';
 import {
   findGapBetweenContracts,
   formatDateRange,
@@ -44,7 +44,7 @@ export const ApartmentItem = ({ apartment, color, allData, apartmentsData, curso
   const dateRange = formatDateRange(contract.commencement, contract.termination);
 
   return (
-    <div className="mb-1">
+    <div className="mb-1 border-b border-border pb-1">
       <div className="flex items-center gap-1">
         <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
         <span className="text-text">

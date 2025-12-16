@@ -3,13 +3,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { ChartList } from './ChartList';
 
-import { addFillToRevenueItems } from '@/shared/utils/pie-chart/add-fill-pie-revenue-items';
-
 import { PieChartRevenue } from './PieChartRevenue';
 import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
+import { addFillToChartItems } from '@/shared/utils/all-apartments/add-fill-to-charts-items';
 
 export function ChartPieDonutText() {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();
@@ -19,7 +18,7 @@ export function ChartPieDonutText() {
   if (!data?.revenueDistribution.data?.length) return <EmptyState />;
 
   const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;
-  const adjustedData = addFillToRevenueItems(data);
+  const adjustedData = addFillToChartItems(data, 'revenueDistribution');
 
   return (
     <Card className="w-full">
