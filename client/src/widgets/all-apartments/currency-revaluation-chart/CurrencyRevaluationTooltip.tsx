@@ -46,7 +46,7 @@ type Props = {
   coordinate?: { x: number; y: number };
 };
 
-export const CurrencyRevalutionTooltip = ({ active, payload, coordinate }: Props) => {
+export const CurrencyRevaluationTooltip = ({ active, payload, coordinate }: Props) => {
   if (!active || !payload?.length) {
     return null;
   }
@@ -60,7 +60,7 @@ export const CurrencyRevalutionTooltip = ({ active, payload, coordinate }: Props
 
   return (
     <div
-      className="p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] relative border-border z-<9999> bg-background"
+      className="p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] relative border-border z-[9999] bg-background"
       style={transformStyle}
     >
       <p className="font-bold mb-3 text-sm " title={data.apartmentName}>

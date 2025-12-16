@@ -1,4 +1,7 @@
-import { RevenueDistribution } from '../core/revenue-distribution/chart-pie-item';
+import {
+  HouseDistributionChartDataItem,
+  RevenueDistribution,
+} from '../core/revenue-distribution/chart-pie-item';
 
 import { HousePaybackChartDataItem, HousePaybackStat } from '../core/house-payback/types';
 
@@ -27,5 +30,5 @@ export type HouseChartDataItem = {
     | CurrencyRevaluationChartDataItem
     | HousePaybackChartDataItem
     | HouseOverviewChartDataItem
-    | HouseChartDataItem;
+    | HouseDistributionChartDataItem;
 };

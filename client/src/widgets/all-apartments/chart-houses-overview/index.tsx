@@ -1,6 +1,6 @@
 /* eslint-disable */
 'use client';
-import { useApartmentRental } from '@/hooks/use-apartment-rental';
+import { useApartmentRental } from '@/hooks/all-apartments/houses-overview/use-apartment-rental';
 
 import {
   Card,

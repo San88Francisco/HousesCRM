@@ -62,7 +62,7 @@ export function useApartmentRental(apartmentsData: AllAnalyticsResponse) {
 
   const chartData = useMemo(
     () => (hasData ? generateChartData(apartmentsDataWithFill, timeRange) : []),
-    [hasData, apartmentsData, timeRange],
+    [hasData, apartmentsDataWithFill, timeRange],
   );
 
   const periodRange = useMemo(

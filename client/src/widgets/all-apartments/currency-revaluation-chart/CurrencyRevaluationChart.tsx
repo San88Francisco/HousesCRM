@@ -21,7 +21,7 @@ import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { CurrencyRevalutionTooltip } from './CurrencyRevalutionTooltip';
+import { CurrencyRevaluationTooltip } from './CurrencyRevaluationTooltip';
 
 export const CurrencyRevaluationChart = () => {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();
@@ -53,7 +53,7 @@ export const CurrencyRevaluationChart = () => {
     hoveredIndex === index ? 1 : isDark ? OPACITY_DARK : OPACITY_LIGHT;
 
   return (
-    <Card className="w-full  mx-auto">
+    <Card className="w-full mx-auto">
       <CardHeader className="pb-4">
         <CardTitle>Переоцінка валюти</CardTitle>
       </CardHeader>
@@ -89,7 +89,7 @@ export const CurrencyRevaluationChart = () => {
               />
 
               <Tooltip
-                content={<CurrencyRevalutionTooltip />}
+                content={<CurrencyRevaluationTooltip />}
                 cursor={{ fill: 'transparent' }}
                 wrapperStyle={{ outline: 'none', zIndex: TOOLTIP_Z_INDEX }}
                 allowEscapeViewBox={{ x: true, y: true }}
