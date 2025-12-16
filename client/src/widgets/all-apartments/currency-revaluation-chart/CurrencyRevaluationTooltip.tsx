@@ -19,7 +19,7 @@ type TooltipRowProps = {
 const TooltipRow = ({ label, value }: TooltipRowProps) => (
   <div className="flex justify-between gap-4">
     <span className="text-xs text-muted">{label}</span>
-    <span className="text-xs ">{value}</span>
+    <span className="text-xs">{value}</span>
   </div>
 );
 

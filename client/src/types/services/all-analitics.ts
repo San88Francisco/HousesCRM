@@ -25,10 +25,8 @@ export type AllAnalyticsResponse = {
   meta: HousesPerformanceMeta;
 };
 
-export type HouseChartDataItem = {
-  chartData:
-    | CurrencyRevaluationChartDataItem
-    | HousePaybackChartDataItem
-    | HouseOverviewChartDataItem
-    | HouseDistributionChartDataItem;
-};
+export type HouseChartDataItem =
+  | CurrencyRevaluationChartDataItem
+  | HousePaybackChartDataItem
+  | HouseOverviewChartDataItem
+  | HouseDistributionChartDataItem;
