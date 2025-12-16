@@ -1,7 +1,7 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
-import { HouseChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
+import { HouseDistributionChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
 
-export const ChartList = ({ chartData }: { chartData: HouseChartDataItem[] }) => {
+export const ChartList = ({ chartData }: { chartData: HouseDistributionChartDataItem[] }) => {
   return (
     <ul className="w-full lg:w-[50%] flex flex-col gap-5 max-h-[205px] overflow-y-auto lg:pr-16 xl:pr-0 2xl:pr-16">
       {chartData.map(item => (
