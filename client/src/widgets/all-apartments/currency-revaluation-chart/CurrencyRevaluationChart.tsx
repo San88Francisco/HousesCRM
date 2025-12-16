@@ -89,7 +89,7 @@ export const CurrencyRevaluationChart = () => {
               />
 
               <Tooltip
-                content={<CurrencyRevalutionTooltip isDark={isDark} />}
+                content={<CurrencyRevalutionTooltip />}
                 cursor={{ fill: 'transparent' }}
                 wrapperStyle={{ outline: 'none', zIndex: TOOLTIP_Z_INDEX }}
                 allowEscapeViewBox={{ x: true, y: true }}
