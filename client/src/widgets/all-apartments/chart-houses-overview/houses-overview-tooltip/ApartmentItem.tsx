@@ -46,7 +46,7 @@ export const ApartmentItem = ({ apartment, color, allData, apartmentsData, curso
   return (
     <div className="mb-1 border-b border-border pb-1">
       <div className="flex items-center gap-1">
-        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
+        <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: color }} />
         <span className="text-text">
           {renterName}: {contract.monthlyPayment.toLocaleString('uk-UA')} грн/міс
         </span>
