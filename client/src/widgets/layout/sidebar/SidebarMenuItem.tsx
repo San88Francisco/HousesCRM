@@ -26,7 +26,7 @@ export const SidebarMenuItem = ({ item }: Props) => {
         asChild
         tooltip={{
           children: item.title,
-          className: 'bg-text text-background',
+          className: 'bg-background text-text border-border shadow-lg',
         }}
       >
         <Link href={item.url} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>

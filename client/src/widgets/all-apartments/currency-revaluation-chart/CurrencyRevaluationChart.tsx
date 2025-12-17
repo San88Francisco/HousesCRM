@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { CustomTooltip } from './CustomTooltip';
 
 import {
   BAR_RADIUS,
@@ -18,26 +17,27 @@ import {
   useChartData,
   useChartConfig,
 } from '@/hooks/all-apartments/currency-revaluation-chart/hooks';
-import { useGetCurrencyRevaluationQuery } from '@/store/houses-api';
+import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
+import { CurrencyRevaluationTooltip } from './CurrencyRevaluationTooltip';
 
 export const CurrencyRevaluationChart = () => {
-  const { data: apiData, isLoading, error } = useGetCurrencyRevaluationQuery();
+  const { data, isLoading, error } = useGetHousesAnalyticsQuery();
   const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const chartData = useChartData(apiData);
+  const chartData = useChartData(data?.currencyRevaluation || []);
   const { xAxisMax, containerHeight, chartHeight, isDark, purchaseBarFill, growthBarFill } =
     useChartConfig(chartData);
 
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return null;
-  if (isLoading) return <LoadingState className="max-w-[400px]" />;
-  if (error) return <ErrorState className="max-w-[400px]" error={error} />;
-  if (chartData.length === 0) return <EmptyState className="max-w-[400px]" />;
+  if (isLoading) return <LoadingState />;
+  if (error) return <ErrorState error={error} />;
+  if (chartData.length === 0) return <EmptyState />;
 
   const renderCells = (fill: string, customOpacity?: (index: number) => number) =>
     chartData.map((_, index) => (
@@ -53,7 +53,7 @@ export const CurrencyRevaluationChart = () => {
     hoveredIndex === index ? 1 : isDark ? OPACITY_DARK : OPACITY_LIGHT;
 
   return (
-    <Card className="w-full max-w-[400px] mx-auto">
+    <Card className="w-full mx-auto">
       <CardHeader className="pb-4">
         <CardTitle>Переоцінка валюти</CardTitle>
       </CardHeader>
@@ -89,7 +89,7 @@ export const CurrencyRevaluationChart = () => {
               />
 
               <Tooltip
-                content={<CustomTooltip isDark={isDark} />}
+                content={<CurrencyRevaluationTooltip />}
                 cursor={{ fill: 'transparent' }}
                 wrapperStyle={{ outline: 'none', zIndex: TOOLTIP_Z_INDEX }}
                 allowEscapeViewBox={{ x: true, y: true }}

@@ -1,10 +1,10 @@
 import { Label, Pie, PieChart } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './charts';
-import { createChartPieConfig } from '@/shared/utils/pie-chart/create-chart-pie-config';
-import { HouseChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
+import { createChartPieConfig } from '@/shared/utils/all-apartments/pie-chart/create-chart-pie-config';
+import { HouseDistributionChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
 
 type Props = {
-  adjustedData: HouseChartDataItem[];
+  adjustedData: HouseDistributionChartDataItem[];
   grandApartmentTotalRevenue: number;
 };
 
@@ -12,7 +12,7 @@ export function PieChartRevenue({ adjustedData, grandApartmentTotalRevenue }: Pr
   const chartConfig = createChartPieConfig(adjustedData);
 
   return (
-    <ChartContainer config={chartConfig} className="flex-shrink-0 w-full md:w-[40%] max-h-[300px]">
+    <ChartContainer config={chartConfig} className="flex-shrink-0 w-full lg:w-[50%] max-h-[400px]">
       <PieChart>
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
         <Pie

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart/types';
-import { cn } from '@/shared/utils/cn';
+
 import {
   formatRate,
   formatCurrency,
@@ -10,7 +10,6 @@ import {
 const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;
 const TOOLTIP_OFFSET_Y = 10;
-const TOOLTIP_Z_INDEX = 9999;
 
 type TooltipRowProps = {
   label: string;
@@ -19,8 +18,8 @@ type TooltipRowProps = {
 
 const TooltipRow = ({ label, value }: TooltipRowProps) => (
   <div className="flex justify-between gap-4">
-    <span className="text-xs text-[var(--muted-text)]">{label}</span>
-    <span className="text-xs text-[var(--text)]">{value}</span>
+    <span className="text-xs text-muted">{label}</span>
+    <span className="text-xs">{value}</span>
   </div>
 );
 
@@ -34,8 +33,8 @@ type TooltipSectionProps = {
 const TooltipSection = ({ title, amount, rate, rateLabel }: TooltipSectionProps) => (
   <div>
     <div className="flex justify-between gap-4 mb-1">
-      <span className="text-xs text-[var(--muted-text)]">{title}</span>
-      <span className="font-semibold text-xs text-[var(--text)]">{formatCurrency(amount)}</span>
+      <span className="text-xs text-muted">{title}</span>
+      <span className="font-semibold text-xs">{formatCurrency(amount)}</span>
     </div>
     <TooltipRow label={rateLabel} value={formatRate(rate)} />
   </div>
@@ -44,38 +43,27 @@ const TooltipSection = ({ title, amount, rate, rateLabel }: TooltipSectionProps)
 type Props = {
   active?: boolean;
   payload?: Array<{ payload: ChartDataItem }>;
-  isDark: boolean;
   coordinate?: { x: number; y: number };
 };
 
-const getTooltipClasses = (isDark: boolean): string => {
-  const bgColor = isDark ? 'bg-[var(--dark)]' : 'bg-[var(--white)]';
-
-  return cn(
-    'p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] relative',
-    'border-[var(--border)]',
-    `z-[${TOOLTIP_Z_INDEX}]`,
-    bgColor,
-  );
-};
-
-export const CustomTooltip = ({ active, payload, isDark, coordinate }: Props) => {
+export const CurrencyRevaluationTooltip = ({ active, payload, coordinate }: Props) => {
   if (!active || !payload?.length) {
     return null;
   }
 
   const data = payload[0].payload;
 
-  const classes = getTooltipClasses(isDark);
-
   const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
-  const transformStyle: React.CSSProperties = {
+  const transformStyle: CSSProperties = {
     transform: shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`,
   };
 
   return (
-    <div className={classes} style={transformStyle}>
-      <p className="font-bold mb-3 text-sm text-[var(--text)]" title={data.apartmentName}>
+    <div
+      className="p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] relative border-border z-[9999] bg-background"
+      style={transformStyle}
+    >
+      <p className="font-bold mb-3 text-sm" title={data.apartmentName}>
         {truncateText(data.apartmentName, MAX_NAME_LENGTH)}
       </p>
 
@@ -87,7 +75,7 @@ export const CustomTooltip = ({ active, payload, isDark, coordinate }: Props) =>
           rateLabel="Курс купівлі:"
         />
 
-        <div className="h-px bg-[var(--border)]" />
+        <div className="h-px bg-border" />
 
         <TooltipSection
           title="Поточна:"

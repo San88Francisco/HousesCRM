@@ -6,3 +6,7 @@ export type HousePaybackStat = {
   apartmentName: string;
   purchaseDate: string;
 };
+
+export type HousePaybackChartDataItem = HousePaybackStat & {
+  fill: string;
+};

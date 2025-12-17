@@ -1,6 +1,6 @@
 /* eslint-disable */
 'use client';
-import { useApartmentRental } from '@/hooks/use-apartment-rental';
+import { useApartmentRental } from '@/hooks/all-apartments/houses-overview/use-apartment-rental';
 
 import {
   Card,
@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { formatTickDate } from '@/shared/utils/houses-overview/chart-houses-overview';
+import { formatTickDate } from '@/shared/utils/all-apartments/houses-overview/chart-houses-overview';
 import { cn } from '@/shared/utils/cn';
 import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 
@@ -26,12 +26,12 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { CustomTooltip } from '@/widgets/chart-houses-overview/custom-tooltip';
-import { Apartment, TimeRangeEnum } from '@/types/core/houses-overview/types';
-import { LegendContent } from '@/widgets/chart-houses-overview/LegendContent';
+import { HouseOverviewChartDataItem, TimeRangeEnum } from '@/types/core/houses-overview/types';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { EmptyState } from '@/components/chart-states/EmptyState';
+import { LegendContent } from './LegendContent';
+import { CustomTooltip } from './houses-overview-tooltip';
 
 export function ApartmentRentalChart() {
   const { data, error, isLoading } = useGetHousesAnalyticsQuery();
@@ -51,8 +51,8 @@ export function ApartmentRentalChart() {
     dataMin,
     dataMax,
     isMobile,
-    paletteColors,
-  } = useApartmentRental(data?.housesOverview || []);
+    apartmentsDataWithFill,
+  } = useApartmentRental(data ?? {});
 
   const handleApartmentClick = useCallback(
     (id: string) => {
@@ -130,7 +130,7 @@ export function ApartmentRentalChart() {
                 content={
                   <CustomTooltip
                     lockedApartment={lockedApartment}
-                    apartmentsData={data.housesOverview}
+                    apartmentsData={apartmentsDataWithFill}
                     cursorDate={cursorDate}
                   />
                 }
@@ -141,13 +141,13 @@ export function ApartmentRentalChart() {
                 position={{ y: isMobile ? 170 : 0 }}
               />
 
-              {data.housesOverview.map((apt: Apartment, idx: number) => (
+              {apartmentsDataWithFill.map((apt: HouseOverviewChartDataItem) => (
                 <Line
                   key={apt.id + timeRange}
                   dataKey={apt.id}
                   connectNulls={true}
                   type="basis"
-                  stroke={paletteColors[idx % paletteColors.length]}
+                  stroke={apt.fill}
                   strokeWidth={lockedApartment === apt.id ? 2.5 : 1.5}
                   strokeOpacity={lockedApartment && lockedApartment !== apt.id ? 0.15 : 1}
                   dot={false}
@@ -160,7 +160,7 @@ export function ApartmentRentalChart() {
                 align="center"
                 content={() => (
                   <LegendContent
-                    apartmentsData={data.housesOverview}
+                    apartmentsData={apartmentsDataWithFill}
                     activeApartment={lockedApartment}
                     onApartmentClick={handleApartmentClick}
                   />
