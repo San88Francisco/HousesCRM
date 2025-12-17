@@ -21,7 +21,7 @@ import { TimeRangeEnum } from '@/types/core/houses-overview/types';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 import { addFillToChartItems } from '@/shared/utils/all-apartments/add-fill-to-charts-items';
 
-export function useApartmentRental(apartmentsData: AllAnalyticsResponse) {
+export function useApartmentRental(apartmentsData: Partial<AllAnalyticsResponse>) {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ONE_YEAR);
   const [lockedApartment, setLockedApartment] = useState<string | null>(null);
   const [cursorDate, setCursorDate] = useState<string>('');
@@ -53,10 +53,13 @@ export function useApartmentRental(apartmentsData: AllAnalyticsResponse) {
     setCursorDate('');
   }, []);
 
-  const hasData = apartmentsData?.housesOverview && apartmentsData.housesOverview.length > 0;
+  const hasData: boolean = Boolean(apartmentsData?.housesOverview?.length);
 
   const apartmentsDataWithFill = useMemo(
-    () => (hasData ? addFillToChartItems(apartmentsData, 'housesOverview') : []),
+    () =>
+      hasData && apartmentsData.housesOverview
+        ? addFillToChartItems(apartmentsData as AllAnalyticsResponse, 'housesOverview')
+        : [],
     [hasData, apartmentsData],
   );
 
@@ -67,7 +70,7 @@ export function useApartmentRental(apartmentsData: AllAnalyticsResponse) {
 
   const periodRange = useMemo(
     () =>
-      hasData
+      hasData && apartmentsData.housesOverview
         ? getPeriodRange(timeRange, apartmentsData.housesOverview)
         : { periodStart: '', periodEnd: '' },
     [hasData, timeRange, apartmentsData],
@@ -75,7 +78,7 @@ export function useApartmentRental(apartmentsData: AllAnalyticsResponse) {
 
   const minMax = useMemo(
     () =>
-      hasData
+      hasData && apartmentsData.housesOverview
         ? findMinMaxRentWithFivePercent(
             apartmentsData.housesOverview,
             periodRange.periodStart,
@@ -104,9 +107,9 @@ export function useApartmentRental(apartmentsData: AllAnalyticsResponse) {
     dataMin,
     dataMax,
     timeRange,
-    isMobile,
-    isTablet,
-    isSmallMobile,
+    isMobile ?? false,
+    isTablet ?? false,
+    isSmallMobile ?? false,
   );
 
   return {

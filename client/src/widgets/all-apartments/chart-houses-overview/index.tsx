@@ -52,7 +52,7 @@ export function ApartmentRentalChart() {
     dataMax,
     isMobile,
     apartmentsDataWithFill,
-  } = useApartmentRental(data!);
+  } = useApartmentRental(data || { housesOverview: [] });
 
   const handleApartmentClick = useCallback(
     (id: string) => {
