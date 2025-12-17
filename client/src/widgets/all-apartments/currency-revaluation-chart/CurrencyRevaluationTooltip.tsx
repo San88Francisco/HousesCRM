@@ -34,7 +34,7 @@ const TooltipSection = ({ title, amount, rate, rateLabel }: TooltipSectionProps)
   <div>
     <div className="flex justify-between gap-4 mb-1">
       <span className="text-xs text-muted">{title}</span>
-      <span className="font-semibold text-xs ">{formatCurrency(amount)}</span>
+      <span className="font-semibold text-xs">{formatCurrency(amount)}</span>
     </div>
     <TooltipRow label={rateLabel} value={formatRate(rate)} />
   </div>
@@ -63,7 +63,7 @@ export const CurrencyRevaluationTooltip = ({ active, payload, coordinate }: Prop
       className="p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] relative border-border z-[9999] bg-background"
       style={transformStyle}
     >
-      <p className="font-bold mb-3 text-sm " title={data.apartmentName}>
+      <p className="font-bold mb-3 text-sm" title={data.apartmentName}>
         {truncateText(data.apartmentName, MAX_NAME_LENGTH)}
       </p>
 

@@ -13,17 +13,24 @@ type ChartMap = {
 };
 
 export function addFillToChartItems<K extends ChartKey>(
-  res: AllAnalyticsResponse,
+  res: Partial<AllAnalyticsResponse>,
   chart: K,
 ): WithFill<ChartMap[K][number]>[] {
-  const dataMap: Record<ChartKey, readonly unknown[]> = {
-    revenueDistribution: res.revenueDistribution.data,
-    housesOverview: res.housesOverview,
-    currencyRevaluation: res.currencyRevaluation,
-    housesPayback: res.housesPaybackStats,
+  const dataExtractors: Record<
+    ChartKey,
+    (r: Partial<AllAnalyticsResponse>) => readonly unknown[] | undefined
+  > = {
+    revenueDistribution: r => r.revenueDistribution?.data,
+    housesOverview: r => r.housesOverview,
+    currencyRevaluation: r => r.currencyRevaluation,
+    housesPayback: r => r.housesPaybackStats,
   };
 
-  return (dataMap[chart] as ChartMap[K]).map((item, index) => ({
+  const data = dataExtractors[chart](res);
+
+  if (!data) return [];
+
+  return (data as ChartMap[K]).map((item, index) => ({
     ...item,
     fill: PIE_COLORS[index % PIE_COLORS.length],
   }));

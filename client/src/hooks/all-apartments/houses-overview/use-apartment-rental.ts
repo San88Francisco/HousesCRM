@@ -58,7 +58,7 @@ export function useApartmentRental(apartmentsData: Partial<AllAnalyticsResponse>
   const apartmentsDataWithFill = useMemo(
     () =>
       hasData && apartmentsData.housesOverview
-        ? addFillToChartItems(apartmentsData as AllAnalyticsResponse, 'housesOverview')
+        ? addFillToChartItems(apartmentsData, 'housesOverview')
         : [],
     [hasData, apartmentsData],
   );
