@@ -107,9 +107,9 @@ export function useApartmentRental(apartmentsData: Partial<AllAnalyticsResponse>
     dataMin,
     dataMax,
     timeRange,
-    isMobile ?? false,
-    isTablet ?? false,
-    isSmallMobile ?? false,
+    isMobile,
+    isTablet,
+    isSmallMobile,
   );
 
   return {
