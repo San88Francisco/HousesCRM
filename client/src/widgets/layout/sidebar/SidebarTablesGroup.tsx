@@ -10,23 +10,30 @@ import {
   SidebarMenuButton,
 } from '@/shared/ui/sidebar';
 import { CollapsibleMenu } from './ColapsibleMenu';
-import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
+import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 
 export const SidebarTablesGroup = () => {
-  const tablesItems = itemsNav.filter(item => !item.url);
+  const { data, error, isLoading } = useGetHousesAnalyticsQuery();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Щось пішло не так</div>;
+
+  const colapsibleMenuItems =
+    data?.housesOverview?.map(house => ({
+      title: house.apartmentName,
+      url: `/apartment/${house.id}`,
+    })) || [];
 
   return (
     <SidebarGroup className={SIDEBAR_STYLES.sidebarGroup.hidden}>
       <SidebarGroupLabel>Таблиці</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          {tablesItems.map(item => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <CollapsibleMenu title={item.title} icon={item.icon} items={item.items} />
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip="Квартири">
+              <CollapsibleMenu title="Квартири" items={colapsibleMenuItems} />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

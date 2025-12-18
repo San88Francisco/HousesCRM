@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useState } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, MapPinHouse } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { SubNavItem } from '@/types/navigation';
@@ -11,17 +11,20 @@ import {
   getCollapsibleHeaderClasses,
 } from '@/shared/constants/styles';
 import { Button } from '@/shared/ui/button';
+import { cn } from '@/shared/utils/cn';
 
 type Props = {
   title: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   items?: SubNavItem[];
 };
 
-export const CollapsibleMenu = ({ title, icon, items }: Props) => {
+export const CollapsibleMenu = ({ title, items }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleOpen = () => setIsOpen(prev => !prev);
+
+  const itemsIcons = { icon1: MapPinHouse };
 
   return (
     <div className={SIDEBAR_STYLES.collapsible.container}>
@@ -31,7 +34,6 @@ export const CollapsibleMenu = ({ title, icon, items }: Props) => {
         </Button>
 
         <div className={SIDEBAR_STYLES.collapsible.iconContainer}>
-          {icon}
           <span>{title}</span>
         </div>
       </div>
@@ -49,9 +51,10 @@ export const CollapsibleMenu = ({ title, icon, items }: Props) => {
             <Link
               key={`${item.title}-${index}`}
               href={item.url}
-              className={SIDEBAR_STYLES.collapsible.link}
+              className={cn(SIDEBAR_STYLES.collapsible.link, 'flex items-center gap-2')}
             >
-              {item.title}
+              {title === 'Квартири' && <itemsIcons.icon1 className="h-4 w-4" />}
+              <span>{item.title}</span>
             </Link>
           ))}
         </div>
