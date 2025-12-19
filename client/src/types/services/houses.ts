@@ -28,13 +28,15 @@ export type HouseByIdResponse = {
     street: string;
     apartmentType: ApartmentType;
   };
-  occupancyReports: {
-    totalIncome: number;
-    status: string;
-    id: string;
-    firstName: string;
-    lastName: string;
-    occupied: string;
-    vacated: string;
-  }[];
+  occupancyReports: occupanncyResponse[];
+};
+
+export type occupanncyResponse = {
+  totalIncome: number;
+  status: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  occupied: string;
+  vacated: string;
 };
