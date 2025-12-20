@@ -39,10 +39,10 @@ export class HousesController {
 
   @Get(HOUSES_ROUTES.BY_ID)
   @Auth()
-  async findById(@Param('id') id: string): Promise<HouseWithOccupancyReports> {
+  async findById(@Param('id') id: string, @Query() dto: HouseOccupancyQueryDto): Promise<HouseWithOccupancyReports> {
     const [houseDetail, occupancyReports] = await Promise.all([
       this.housesService.findById(id),
-      this.houseDetailAnalytics.getHouseOccupancyReport(id),
+      this.houseDetailAnalytics.getHouseOccupancyReportList(id, dto),
     ])
 
     return { houseDetail, occupancyReports }
