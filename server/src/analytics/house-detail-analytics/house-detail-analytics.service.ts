@@ -22,6 +22,32 @@ export class HouseDetailAnalyticsService {
     return this.buildHouseOccupancyReport(id)
   }
 
+  async getHouseOccupancyReportPaginated(
+    id: string,
+    page?: number,
+    limit?: number
+  ): Promise<HouseOccupancyReportResponseDto> {
+    const report = await this.buildHouseOccupancyReport(id)
+    const pageNum = page ?? QUERY_DEFAULTS.PAGE
+    const limitNum = limit ?? QUERY_DEFAULTS.LIMIT
+    const total = report.length
+    const start = (pageNum - 1) * limitNum
+    const data = report.slice(start, start + limitNum)
+
+    return plainToInstance(
+      HouseOccupancyReportResponseDto,
+      {
+        data,
+        meta: {
+          total,
+          page: pageNum,
+          limit: limitNum,
+        },
+      },
+      { excludeExtraneousValues: true }
+    )
+  }
+
   async getHouseOccupancyReportList(id: string, dto: HouseOccupancyQueryDto): Promise<HouseOccupancyReportResponseDto> {
     const report = await this.buildHouseOccupancyReport(id)
     const filtered = this.applyFilters(report, dto)
