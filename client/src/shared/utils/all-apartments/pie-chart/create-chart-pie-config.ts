@@ -1,7 +1,7 @@
 import { ChartPieConfig } from '@/types/core/revenue-distribution/chart-pie-config';
-import { HouseChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
+import { HouseDistributionChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
 
-export function createChartPieConfig(data: HouseChartDataItem[]): ChartPieConfig {
+export function createChartPieConfig(data: HouseDistributionChartDataItem[]): ChartPieConfig {
   const entries = data.map((item, index) => [
     index,
     {

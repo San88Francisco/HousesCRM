@@ -84,7 +84,7 @@ export function findMinMaxRentWithFivePercent(
 }
 
 export function generateChartData(
-  apartments: Apartment[],
+  apartments: (Apartment & { fill: string })[],
   timeRange: TimeRangeEnum,
 ): ChartDataPoint[] {
   const now = new Date();

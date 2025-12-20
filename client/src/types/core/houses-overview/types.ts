@@ -18,6 +18,10 @@ export type Apartment = {
   contract: Contract[];
 };
 
+export type HouseOverviewChartDataItem = Apartment & {
+  fill: string;
+};
+
 export type PayloadData = {
   [key: string]: Contract | string | number | null | undefined;
 };
