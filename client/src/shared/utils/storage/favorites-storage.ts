@@ -35,6 +35,8 @@ export const getFavoriteItems = (): FavoriteItem[] => {
 export const setFavoriteItems = (items: FavoriteItem[]) => {
   if (!isBrowser()) return;
   localStorage.setItem(LIKED_ROUTES_KEY, JSON.stringify(items));
+  // Dispatch custom event to notify components about favorites change
+  window.dispatchEvent(new CustomEvent('favorites-changed', { detail: items }));
 };
 
 export const isPathFavorite = (path: string): boolean => {
