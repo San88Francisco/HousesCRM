@@ -70,7 +70,24 @@ export default {
 
         gray: 'var(--gray)',
         'gray-medium': 'var(--gray-medium)',
+
+        'chart-pie-1': 'var(--chart-pie-1)',
+        'chart-pie-2': 'var(--chart-pie-2)',
+        'chart-pie-3': 'var(--chart-pie-3)',
+        'chart-pie-4': 'var(--chart-pie-4)',
+        'chart-pie-5': 'var(--chart-pie-5)',
+        'chart-pie-6': 'var(--chart-pie-6)',
+        'chart-pie-7': 'var(--chart-pie-7)',
+        'chart-pie-8': 'var(--chart-pie-8)',
+        'chart-pie-9': 'var(--chart-pie-9)',
+        'chart-pie-10': 'var(--chart-pie-10)',
+        'chart-pie-11': 'var(--chart-pie-11)',
+        'chart-pie-12': 'var(--chart-pie-12)',
+        'chart-pie-13': 'var(--chart-pie-13)',
+        'chart-pie-14': 'var(--chart-pie-14)',
+        'chart-pie-15': 'var(--chart-pie-15)',
       },
+
       fontSize: {
         xs: '12px',
         sm: '14px',

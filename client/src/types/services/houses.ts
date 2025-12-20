@@ -11,7 +11,7 @@ export type House = {
   apartmentType: ApartmentType;
 };
 
-export type HouseResponse = {
+export type HouseByIdResponse = {
   houseDetail: {
     prices: {
       id: string;

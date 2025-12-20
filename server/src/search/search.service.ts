@@ -133,7 +133,6 @@ export class SearchService {
       return value.toISOString().toLowerCase().includes(term)
     }
 
-    // тут ESLint вже НЕ свариться
     return String(value).toLowerCase().includes(term)
   }
 

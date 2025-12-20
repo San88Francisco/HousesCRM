@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { ROUTES } from '@/shared/routes';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
@@ -7,6 +5,12 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('access_token')?.value ?? null;
   const pathname = request.nextUrl.pathname;
+
+  const PUBLIC_PATHS = [ROUTES.ALL_APARTMENTS];
+
+  if (PUBLIC_PATHS.includes(pathname)) {
+    return NextResponse.next();
+  }
 
   if (token && pathname === ROUTES.LOGIN) {
     return NextResponse.redirect(new URL(ROUTES.ALL_APARTMENTS, request.url));
@@ -20,5 +24,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\..*|login).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'],
 };

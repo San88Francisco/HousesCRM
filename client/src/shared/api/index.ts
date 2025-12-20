@@ -6,9 +6,8 @@ import { tokenStorage } from '../utils/auth/token';
 import { toast } from 'sonner';
 import { clearUser } from '@/store/user-slice';
 
-const rawBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-
-const baseUrl = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl.replace(/\/$/, '')}/api`;
+const rawBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '');
+const baseUrl = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl}/api`;
 
 const baseQuery = fetchBaseQuery({
   baseUrl,
@@ -75,6 +74,6 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const rootApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Auth', 'Houses'],
+  tagTypes: ['Auth', 'Houses', 'Analytics'],
   endpoints: () => ({}),
 });
