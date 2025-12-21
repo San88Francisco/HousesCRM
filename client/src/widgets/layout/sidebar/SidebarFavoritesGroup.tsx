@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
+import { useMemo } from 'react';
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
 import {
   SidebarMenu,
@@ -10,28 +9,27 @@ import {
   SidebarGroupLabel,
 } from '@/shared/ui/sidebar';
 import { SidebarMenuItem } from './SidebarMenuItem';
-import { FavoriteItem, getFavoriteItems } from '@/shared/utils/storage/favorites-storage';
 import { NavItem } from '@/types/navigation';
 import { BookmarkIcon } from '@/shared/ui/bookmark';
+import { useFavoriteStart } from '@/hooks/use-favorite-star';
+import { makeTitle } from '@/shared/utils/favorite-start/formate-title';
+
+const bookmarkIcon = <BookmarkIcon size={16} />;
 
 export const SidebarFavoritesGroup = () => {
-  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
+  const favorites = useFavoriteStart();
 
-  useEffect(() => {
-    const items = getFavoriteItems();
-    setFavorites(items);
-  }, []);
+  const favoriteNavItems: NavItem[] = useMemo(
+    () =>
+      favorites.map(fav => ({
+        title: makeTitle(fav),
+        url: fav.path,
+        icon: bookmarkIcon,
+      })),
+    [favorites],
+  );
 
-  if (!favorites.length) return null;
-
-  const favoriteNavItems: NavItem[] = favorites.map(fav => ({
-    title:
-      fav.type === 'apartment'
-        ? `Квартира ${fav.id.slice(0, 6)}...`
-        : `${fav.type} ${fav.id.slice(0, 6)}...`,
-    url: fav.path,
-    icon: <BookmarkIcon size={16} />,
-  }));
+  if (favoriteNavItems.length === 0) return null;
 
   return (
     <SidebarGroup className={SIDEBAR_STYLES.sidebarGroup.base}>

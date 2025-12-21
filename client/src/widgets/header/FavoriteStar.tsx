@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 
@@ -12,26 +12,33 @@ import {
   toggleFavoriteItem,
 } from '@/shared/utils/storage/favorites-storage';
 import { ROUTES } from '@/shared/routes';
+import { useGetHouseByIdQuery } from '@/store/houses-api';
 
 const FavoriteStar = () => {
   const pathname = usePathname();
+  const { id } = useParams<{ id: string }>();
 
+  const { data } = useGetHouseByIdQuery(id, {
+    skip: !id,
+  });
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   const favoriteItem: FavoriteItem | null = useMemo(() => {
     if (!pathname) return null;
+    if (!data) return null;
 
-    const segments = pathname.split('/').filter(Boolean);
-    const isApartmentPage = segments[0] === ROUTES.APARTMENT && Boolean(segments[1]);
-
+    const isApartmentPage = pathname.startsWith(`${ROUTES.APARTMENT}/`);
     if (!isApartmentPage) return null;
+
+    const segments = pathname.split(ROUTES.ROOT).filter(Boolean);
 
     return {
       id: segments[1],
       path: pathname,
       type: 'apartment',
+      name: data?.houseDetail.apartmentName,
     };
-  }, [pathname]);
+  }, [pathname, data]);
 
   useEffect(() => {
     if (!favoriteItem) {

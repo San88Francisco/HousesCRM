@@ -5,9 +5,9 @@ export const isActiveItem = (currentPathname: string, itemUrl?: string) => {
     return false;
   }
 
-  const currentSegment = currentPathname.split(ROUTES.HOME).pop() || '';
+  const currentSegment = currentPathname.split(ROUTES.ROOT).pop() || '';
 
-  const itemSegment = itemUrl.split(ROUTES.HOME).pop() || '';
+  const itemSegment = itemUrl.split(ROUTES.ROOT).pop() || '';
 
   return currentSegment === itemSegment;
 };

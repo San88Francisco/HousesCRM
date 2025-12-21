@@ -13,18 +13,16 @@ import {
   BreadcrumbPage,
 } from '@/shared/ui/breadcrumb';
 
-import FavoriteStar from './FavoriteStar';
-
 const HeaderNavigation = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
   const breadcrumbItems = (() => {
     const pathSegments = pathname.split('/').filter(Boolean);
-    const items = [{ label: 'Home', href: ROUTES.HOME }];
+    const items = [{ label: 'Home', href: ROUTES.ROOT }];
 
     pathSegments.forEach((segment, index) => {
-      const href = ROUTES.HOME + pathSegments.slice(0, index + 1).join('/');
+      const href = ROUTES.ROOT + pathSegments.slice(0, index + 1).join('/');
       const label = segment
         .split('-')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -46,9 +44,7 @@ const HeaderNavigation = () => {
   })();
 
   return (
-    <div className="flex items-center gap-3">
-      <FavoriteStar />
-
+    <div className="flex ml-2 items-end  gap-3">
       <Breadcrumb>
         <BreadcrumbList>
           {breadcrumbItems.map((item, index) => (

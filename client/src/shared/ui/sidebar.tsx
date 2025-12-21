@@ -25,7 +25,6 @@ import { cn } from '../utils/cn';
 import { useAnimatedIcon } from '@/hooks';
 import { ChevronLeftIcon } from './chevron-left';
 import { ChevronRightIcon } from './chevron-right';
-// import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 /* eslint-disable */
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
