@@ -44,7 +44,7 @@ const HeaderNavigation = () => {
   })();
 
   return (
-    <div className="flex ml-2 items-end  gap-3">
+    <div className="flex ml-2 items-end gap-3">
       <Breadcrumb>
         <BreadcrumbList>
           {breadcrumbItems.map((item, index) => (

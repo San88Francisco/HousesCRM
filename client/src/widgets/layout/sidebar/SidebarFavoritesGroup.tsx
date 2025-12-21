@@ -11,13 +11,13 @@ import {
 import { SidebarMenuItem } from './SidebarMenuItem';
 import { NavItem } from '@/types/navigation';
 import { BookmarkIcon } from '@/shared/ui/bookmark';
-import { useFavoriteStart } from '@/hooks/use-favorite-star';
+import { useFavoriteStar } from '@/hooks/use-favorite-star';
 import { makeTitle } from '@/shared/utils/favorite-start/formate-title';
 
 const bookmarkIcon = <BookmarkIcon size={16} />;
 
 export const SidebarFavoritesGroup = () => {
-  const favorites = useFavoriteStart();
+  const favorites = useFavoriteStar();
 
   const favoriteNavItems: NavItem[] = useMemo(
     () =>

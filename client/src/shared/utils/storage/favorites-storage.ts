@@ -35,8 +35,13 @@ export const getFavoriteItems = (): FavoriteItem[] => {
 
 export const setFavoriteItems = (items: FavoriteItem[]) => {
   if (!isBrowser()) return;
-  localStorage.setItem(LIKED_ROUTES_KEY, JSON.stringify(items));
-  window.dispatchEvent(new CustomEvent('favorites-changed', { detail: items }));
+
+  try {
+    localStorage.setItem(LIKED_ROUTES_KEY, JSON.stringify(items));
+    window.dispatchEvent(new CustomEvent('favorites-changed', { detail: items }));
+  } catch (e) {
+    console.error('Failed to save favorite items to localStorage:', e);
+  }
 };
 
 export const isPathFavorite = (path: string): boolean => {

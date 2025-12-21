@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { FavoriteItem, getFavoriteItems } from '@/shared/utils/storage/favorites-storage';
 
-export const useFavoriteStart = () => {
+export const useFavoriteStar = () => {
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
 
   const refresh = useCallback(() => {

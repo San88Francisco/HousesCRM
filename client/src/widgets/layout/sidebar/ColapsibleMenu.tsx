@@ -36,7 +36,12 @@ export const CollapsibleMenu = ({ title, icon, items }: Props) => {
   };
 
   const header = (
-    <div className={getCollapsibleHeaderClasses()} onClick={toggleOpen}>
+    <button
+      type="button"
+      className={getCollapsibleHeaderClasses()}
+      onClick={toggleOpen}
+      aria-expanded={isOpen}
+    >
       {!isCollapsed && (
         <Button
           variant="icon"
@@ -46,12 +51,11 @@ export const CollapsibleMenu = ({ title, icon, items }: Props) => {
           <ChevronRight className={getChevronClasses(isOpen)} />
         </Button>
       )}
-
       <div className={SIDEBAR_STYLES.collapsible.iconContainer}>
         {icon}
         {!isCollapsed && <span>{title}</span>}
       </div>
-    </div>
+    </button>
   );
 
   return (
