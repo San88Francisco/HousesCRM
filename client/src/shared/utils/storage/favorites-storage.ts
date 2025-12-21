@@ -25,7 +25,8 @@ export const getFavoriteItems = (): FavoriteItem[] => {
         item &&
         typeof item.id === 'string' &&
         typeof item.path === 'string' &&
-        typeof item.type === 'string',
+        typeof item.type === 'string' &&
+        typeof item.name === 'string',
     );
   } catch (e) {
     console.error('Failed to parse favorite items from localStorage:', e);

@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseEvent, ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { NavItem } from '@/types/navigation';
@@ -9,7 +9,6 @@ import {
   SIDEBAR_STYLES,
   getCollapsibleHeaderClasses,
 } from '@/shared/constants/styles';
-import { Button } from '@/shared/ui/button';
 import { SidebarMenu, useSidebar } from '@/shared/ui/sidebar';
 import { SidebarMenuItem } from './SidebarMenuItem';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
@@ -30,11 +29,6 @@ export const CollapsibleMenu = ({ title, icon, items }: Props) => {
 
   const toggleOpen = () => setIsOpen(prev => !prev);
 
-  const handleClickChevron = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    toggleOpen();
-  };
-
   const header = (
     <button
       type="button"
@@ -42,15 +36,7 @@ export const CollapsibleMenu = ({ title, icon, items }: Props) => {
       onClick={toggleOpen}
       aria-expanded={isOpen}
     >
-      {!isCollapsed && (
-        <Button
-          variant="icon"
-          className={SIDEBAR_STYLES.collapsible.button}
-          onClick={handleClickChevron}
-        >
-          <ChevronRight className={getChevronClasses(isOpen)} />
-        </Button>
-      )}
+      {!isCollapsed && <ChevronRight className={getChevronClasses(isOpen)} />}
       <div className={SIDEBAR_STYLES.collapsible.iconContainer}>
         {icon}
         {!isCollapsed && <span>{title}</span>}
