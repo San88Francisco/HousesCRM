@@ -18,3 +18,22 @@ export type HousesPerformanceMeta = {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 };
+
+export type HousesPerformanceRequest = {
+  page: number;
+  limit: number;
+  sortBy?: 'totalRevenue' | 'rentersCount' | 'currentPayment';
+  order?: 'ASC' | 'DESC';
+};
+
+export type HousesPerformanceResponse = {
+  data: HousePerformanceItem[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+};
