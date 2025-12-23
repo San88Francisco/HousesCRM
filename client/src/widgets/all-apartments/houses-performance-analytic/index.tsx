@@ -1,71 +1,55 @@
 'use client';
-import { useState } from 'react';
-import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useGetHousesPerformanceQuery } from '@/store/houses-api';
-import { HousePerformanceItem } from '@/types/core/houses-performance/types';
+import { useEffect, useState } from 'react';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { HousesPerformanceTable } from './houses-performance-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
+import { HousesPerformanceTableColumns } from '@/constants/apartment/houses-performance-analytic';
+import { useHousesPerformance } from '@/hooks/all-apartments/houses-performance-analytic/use-houses-performance';
 
-const PAGE_SIZE = 1;
-
-const columns: ColumnDef<HousePerformanceItem>[] = [
-  {
-    accessorKey: 'apartmentName',
-    header: 'Квартира',
-  },
-  {
-    accessorKey: 'rentersCount',
-    header: 'Орендарі',
-  },
-  {
-    accessorKey: 'totalRevenue',
-    header: 'Дохід',
-    cell: ctx => `${ctx.getValue<number>().toLocaleString()}₴`,
-  },
-  {
-    accessorKey: 'currentPayment',
-    header: 'Поточний платіж',
-    cell: ctx => `${ctx.getValue<number>().toLocaleString()}₴`,
-  },
-];
+const PAGE_SIZE = 10;
 
 export const HousesPerformanceAnalytic = () => {
-  const [pageIndex, setPageIndex] = useState(0);
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [limit, setLimit] = useState<number>(PAGE_SIZE);
 
-  const {
-    data: response,
-    isFetching,
-    isError,
-    error,
-  } = useGetHousesPerformanceQuery({
-    page: pageIndex + 1,
-    limit: PAGE_SIZE,
-    sortBy: 'totalRevenue',
-    order: 'DESC',
-  });
+  const { data, trigger, pageCount, isFetching, isError, error, isEmpty } = useHousesPerformance();
+
+  useEffect(() => {
+    setPageIndex(0);
+
+    trigger({
+      pageIndex: 0,
+      pageSize: limit,
+    });
+  }, [limit]);
 
   const table = useReactTable({
-    data: response?.data ?? [],
-    columns,
+    data: data ?? [],
+    columns: HousesPerformanceTableColumns,
 
     manualPagination: true,
-    pageCount: response?.meta.totalPages ?? 0,
+    pageCount: pageCount ?? 1,
 
     state: {
       pagination: {
         pageIndex,
-        pageSize: PAGE_SIZE,
+        pageSize: limit,
       },
     },
 
     onPaginationChange: updater => {
       const next =
-        typeof updater === 'function' ? updater({ pageIndex, pageSize: PAGE_SIZE }) : updater;
+        typeof updater === 'function' ? updater({ pageIndex, pageSize: limit }) : updater;
 
       setPageIndex(next.pageIndex);
+
+      trigger({
+        pageIndex: next.pageIndex,
+        pageSize: limit,
+      });
     },
 
     getCoreRowModel: getCoreRowModel(),
@@ -75,7 +59,7 @@ export const HousesPerformanceAnalytic = () => {
 
   if (isError) return <ErrorState className="w-full" error={error} />;
 
-  if (response?.data.length === 0) return <EmptyState className="w-full" />;
+  if (isEmpty) return <EmptyState className="w-full" />;
 
   return (
     <Card>
@@ -84,7 +68,7 @@ export const HousesPerformanceAnalytic = () => {
       </CardHeader>
 
       <CardContent>
-        <HousesPerformanceTable table={table} />
+        <HousesPerformanceTable table={table} limit={limit} setLimit={setLimit} />
       </CardContent>
     </Card>
   );
