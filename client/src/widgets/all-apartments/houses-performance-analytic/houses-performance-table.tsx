@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import TablePagination from '@/shared/ui/data-table/TablePagination';
 import { Fragment } from 'react';
 import { HousesPerformanceSelect } from './houses-performance-select';
+import { cn } from '@/shared/utils/cn';
 
 type Props<T> = {
   table: TableType<T>;
@@ -11,20 +12,15 @@ type Props<T> = {
   setLimit: (limit: number) => void;
 };
 
+const tableGrid =
+  'grid grid-cols-4 [&>*]:flex [&>*]:items-center [&>*:first-child]:justify-start [&>*:not(:first-child):not(:last-child)]:justify-center [&>*:last-child]:justify-end';
+
 export const HousesPerformanceTable = <T,>({ table, limit, setLimit }: Props<T>) => {
   return (
     <Fragment>
       <Table>
         <TableHeader>
-          <TableRow
-            className="
-              grid grid-cols-4
-              [&>*]:flex [&>*]:items-center
-              [&>*:first-child]:justify-start
-              [&>*:not(:first-child):not(:last-child)]:justify-center
-              [&>*:last-child]:justify-end
-            "
-          >
+          <TableRow className={cn(tableGrid)}>
             {table.getFlatHeaders().map(header => (
               <TableHead key={header.id}>
                 {flexRender(header.column.columnDef.header, header.getContext())}
@@ -34,16 +30,7 @@ export const HousesPerformanceTable = <T,>({ table, limit, setLimit }: Props<T>)
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.map(row => (
-            <TableRow
-              key={row.id}
-              className="
-                grid grid-cols-4
-                [&>*]:flex [&>*]:items-center
-                [&>*:first-child]:justify-start
-                [&>*:not(:first-child):not(:last-child)]:justify-center
-                [&>*:last-child]:justify-end
-              "
-            >
+            <TableRow key={row.id} className={cn(tableGrid)}>
               {row.getVisibleCells().map(cell => (
                 <TableCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
