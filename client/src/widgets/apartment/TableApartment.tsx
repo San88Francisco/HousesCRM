@@ -10,10 +10,10 @@ import { formatDate } from '@/shared/utils/format/format-date';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { EmptyState } from '@/components/chart-states/EmptyState';
-import { PdfContractTrigger } from '../pdf-contract-content/pdf-contract-trigger';
 import { ApartmentPagination } from './ApartmentPagination';
 import { OccupancyPaginatedResponse, occupanncyApartmentResponse } from '@/types/services/houses';
 import { apartmentColumns } from '@/shared/constants/current-apartment';
+import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
 
 export const TableApartment = () => {
   const { id } = useParams<{ id: string }>();
@@ -93,7 +93,7 @@ export const TableApartment = () => {
                     style={{ gridTemplateColumns: '60px repeat(4, 1fr) 100px' }}
                   >
                     <TableCell className="font-medium text-center">
-                      <PdfContractTrigger id={item.id} />
+                      <ContractModalTrigger id={item.id} />
                     </TableCell>
                     <TableCell className="font-medium text-center">
                       {item.firstName} {item.lastName}

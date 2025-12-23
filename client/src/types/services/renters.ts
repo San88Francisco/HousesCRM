@@ -9,3 +9,23 @@ export type Renter = {
   totalIncome: number;
   status: ContractStatus;
 };
+
+export type ContractResponse = {
+  id: string;
+  commencement: string;
+  termination: string;
+  status: string;
+  monthlyPayment: number;
+};
+
+export type RenterReportResponse = {
+  firstName: string;
+  lastName: string;
+};
+
+export type AllContractsByRenterIdResponse = {
+  oneRenterReport: RenterReportResponse;
+  allContractsByRenterId: {
+    data: ContractResponse[];
+  };
+};

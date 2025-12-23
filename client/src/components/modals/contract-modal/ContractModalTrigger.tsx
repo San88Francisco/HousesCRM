@@ -1,39 +1,32 @@
 'use client';
-
-import { useEffect } from 'react';
 import { useAnimatedIcon } from '@/hooks';
 import { Button } from '@/shared/ui/button';
-import { FileTextIcon } from '@/shared/ui/file-text';
+import { FileChartLineIcon } from '@/shared/ui/file-chart-line-icon-handle';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
 
 type Props = {
   id: string;
-
-  isHovered?: boolean;
 };
 
-export const PdfContractTrigger = ({ id, isHovered }: Props) => {
-  const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(<FileTextIcon />);
+export const ContractModalTrigger = ({ id }: Props) => {
+  const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(
+    <FileChartLineIcon />,
+  );
 
   const dispatch = useAppDispatch();
 
-  const openPdf = () => {
+  const handleOpenModal = () => {
     dispatch(
       openModal({
-        trigger: ModalTriggers.PDF_CONTRACT,
-        payload: { id },
+        trigger: ModalTriggers.OPEN_CONTRACTS_LIST,
+        payload: {
+          id,
+        },
       }),
     );
   };
-
-  useEffect(() => {
-    if (isHovered === undefined) return;
-
-    if (isHovered) handleMouseEnter();
-    else handleMouseLeave();
-  }, [isHovered, handleMouseEnter, handleMouseLeave]);
 
   return (
     <Button
@@ -41,7 +34,7 @@ export const PdfContractTrigger = ({ id, isHovered }: Props) => {
       className="p-0 text-text rounded-md [&_svg]:size-6 w-[24px]"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={openPdf}
+      onClick={handleOpenModal}
     >
       {animatedIcon}
     </Button>
