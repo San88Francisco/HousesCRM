@@ -14,6 +14,7 @@ import { ApartmentPagination } from './ApartmentPagination';
 import { OccupancyPaginatedResponse, occupanncyApartmentResponse } from '@/types/services/houses';
 import { apartmentColumns } from '@/shared/constants/current-apartment';
 import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
+import Link from 'next/link';
 
 export const TableApartment = () => {
   const { id } = useParams<{ id: string }>();
@@ -92,11 +93,13 @@ export const TableApartment = () => {
                     key={item.id}
                     style={{ gridTemplateColumns: '60px repeat(4, 1fr) 100px' }}
                   >
-                    <TableCell className="font-medium text-center">
+                    <TableCell className="font-medium text-center cursor-pointer">
                       <ContractModalTrigger id={item.id} />
                     </TableCell>
-                    <TableCell className="font-medium text-center">
-                      {item.firstName} {item.lastName}
+                    <TableCell className="font-medium text-center cursor-pointer">
+                      <Link href={`/renter/${item.id}`}>
+                        {item.firstName} {item.lastName}
+                      </Link>
                     </TableCell>
                     <TableCell className="text-center">{formatDate(item.occupied)}</TableCell>
                     <TableCell className="text-center">{formatDate(item.vacated)}</TableCell>

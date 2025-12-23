@@ -1,14 +1,15 @@
-import { ReactNode } from 'react';
+import { ComponentType, ReactNode } from 'react';
 
 export interface AnimatedIconHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }
 
-export interface SubNavItem {
+export type SubNavItem = {
   title: string;
   url: string;
-}
+  icon?: ComponentType<{ className?: string }>;
+};
 
 export interface NavItem {
   title: string;
