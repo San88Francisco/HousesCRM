@@ -23,7 +23,7 @@ export const SidebarTablesGroup = () => {
           {tablesItems.map(item => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <CollapsibleMenu title={item.title} icon={item.icon} items={item.items} />
+                <CollapsibleMenu title={item.title} icon={item.icon} />
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

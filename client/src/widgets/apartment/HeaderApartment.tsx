@@ -16,9 +16,8 @@ export const HeaderApartment = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error || !data) return <div>Щось пішло не так</div>;
 
-  const detail = data.houseDetail;
   const { street, roomsCount, totalArea, floor, apartmentName, purchaseDate, apartmentType } =
-    detail;
+    data.houseDetail;
 
   const { label, icon: TypeIcon } = APARTMENT_TYPE_MAP[apartmentType];
 
