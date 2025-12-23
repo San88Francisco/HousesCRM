@@ -5,7 +5,7 @@ import {
 
 import { HousePaybackChartDataItem, HousePaybackStat } from '../core/house-payback/types';
 
-import { HousesPerformanceMeta, HousesPerformanceResponse } from '../core/houses-performance/types';
+import { HousesPerformanceResponse } from '../core/houses-performance/types';
 import { Apartment, HouseOverviewChartDataItem } from '../core/houses-overview/types';
 import {
   CurrencyRevaluation,
@@ -22,7 +22,6 @@ export type AllAnalyticsResponse = {
   currencyRevaluation: CurrencyRevaluation[];
 
   housesPerformance: HousesPerformanceResponse;
-  meta: HousesPerformanceMeta;
 };
 
 export type HouseChartDataItem =
