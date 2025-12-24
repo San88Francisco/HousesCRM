@@ -4,6 +4,7 @@ import { HouseByIdResponse } from '@/types/services/houses';
 import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
 import { House } from '@/types/services/houses';
 import { CreateHousePayload } from '@/types/services/apartments-api';
+import { CreateRenterPayload, RenterResponse } from '@/types/model/renter';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -36,6 +37,27 @@ export const housesApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses', 'Analytics'],
     }),
+    createRenter: build.mutation<RenterResponse, CreateRenterPayload>({
+      query: body => ({
+        url: '/renters',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Renters', 'Analytics'],
+    }),
+
+    updateRenter: build.mutation<RenterResponse, { id: string } & Partial<CreateRenterPayload>>({
+      query: ({ id, ...body }) => ({
+        url: `/renters/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Renters', id },
+        'Renters',
+        'Analytics',
+      ],
+    }),
   }),
 });
 
@@ -46,4 +68,6 @@ export const {
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,
+  useCreateRenterMutation,
+  useUpdateRenterMutation,
 } = housesApi;
