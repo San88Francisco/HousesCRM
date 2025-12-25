@@ -5,11 +5,12 @@ import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
 import { CreateRenterDto } from './dto/create-renter.dto'
 import { UpdateRenterDto } from './dto/update-renter.dto'
 import { DeleteRenterDto } from './dto/delete-renter.dto'
-import { QueryDto } from 'src/common/dto/query.dto'
+import { RenterQueryDto } from './dto/renter-query.dto'
 import { RenterResponseDto } from './dto/renter-response.dto'
 import { RenterDetailAnalyticsService } from 'src/analytics/renter-detail-analytics/renter-detail-analytics.service'
 import { AllRenterAnalyticDto } from 'src/analytics/renter-detail-analytics/dto/all-renter-analytic-response.dto'
 import { Auth } from 'src/common/decorators/auth.decorator'
+import { ContractQueryDto } from 'src/analytics/renter-detail-analytics/dto/contract-query.dto'
 
 @Controller(RENTERS_ROUTES.ROOT)
 export class RentersController {
@@ -20,14 +21,14 @@ export class RentersController {
 
   @Get()
   @Auth()
-  async findAll(@Query() dto: QueryDto): Promise<RenterResponseDto> {
+  async findAll(@Query() dto: RenterQueryDto): Promise<RenterResponseDto> {
     return this.rentersService.findAll(dto)
   }
 
   @Get(RENTERS_ROUTES.BY_ID)
   @Auth()
-  async findById(@Param('id') id: string): Promise<AllRenterAnalyticDto> {
-    return await this.rentersAnalyticService.getAllRenterAnalytic(id)
+  async findById(@Param('id') id: string, @Query() dto: ContractQueryDto): Promise<AllRenterAnalyticDto> {
+    return await this.rentersAnalyticService.getAllRenterAnalytic(id, dto)
   }
 
   @Post()
