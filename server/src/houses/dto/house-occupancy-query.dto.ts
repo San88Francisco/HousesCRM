@@ -1,18 +1,35 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsDate, IsEnum, IsInt, IsNumber, IsOptional, IsPositive, IsString, IsUUID, Min } from 'class-validator'
+import { IsEnum, IsIn, IsInt, IsOptional, IsPositive, Min } from 'class-validator'
 import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { SortOrder } from 'src/common/enums/sort-order.enum'
-import { HouseOccupancySortField } from '../constants/house-occupancy-sort-field'
-import { ContractStatus } from 'src/contracts/entities/contract.entity'
+import { RenterDto } from 'src/renters/dto/renter.dto'
+
+export type HouseOccupancySortBy = Exclude<keyof RenterDto, 'id'>
+
+export const HOUSE_OCCUPANCY_SORT_BY_FIELDS: HouseOccupancySortBy[] = [
+  'firstName',
+  'lastName',
+  'occupied',
+  'vacated',
+  'totalIncome',
+  'status',
+]
 
 export class HouseOccupancyQueryDto {
-  @ApiPropertyOptional({ enum: HouseOccupancySortField })
+  @ApiPropertyOptional({
+    enum: HOUSE_OCCUPANCY_SORT_BY_FIELDS,
+    example: 'totalIncome',
+    description: 'Field to sort by (fields from RenterDto except id)',
+  })
   @IsOptional()
-  @IsEnum(HouseOccupancySortField)
-  sortBy?: HouseOccupancySortField = HouseOccupancySortField.TOTAL_INCOME
+  @IsIn(HOUSE_OCCUPANCY_SORT_BY_FIELDS)
+  sortBy?: HouseOccupancySortBy = 'totalIncome'
 
-  @ApiPropertyOptional({ enum: SortOrder })
+  @ApiPropertyOptional({
+    enum: SortOrder,
+    example: SortOrder.DESC,
+  })
   @IsOptional()
   @IsEnum(SortOrder)
   order?: SortOrder = SortOrder.DESC
@@ -30,55 +47,4 @@ export class HouseOccupancyQueryDto {
   @IsInt()
   @IsPositive()
   limit?: number = QUERY_DEFAULTS.LIMIT
-
-  @ApiPropertyOptional({ format: 'uuid' })
-  @IsOptional()
-  @IsUUID('4')
-  id?: string
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsString()
-  renterName?: string
-
-  @ApiPropertyOptional({ type: Date })
-  @IsOptional()
-  @Type(() => Date)
-  @IsDate()
-  occupiedFrom?: Date
-
-  @ApiPropertyOptional({ type: Date })
-  @IsOptional()
-  @Type(() => Date)
-  @IsDate()
-  occupiedTo?: Date
-
-  @ApiPropertyOptional({ type: Date })
-  @IsOptional()
-  @Type(() => Date)
-  @IsDate()
-  vacatedFrom?: Date
-
-  @ApiPropertyOptional({ type: Date })
-  @IsOptional()
-  @Type(() => Date)
-  @IsDate()
-  vacatedTo?: Date
-
-  @ApiPropertyOptional({ enum: ContractStatus })
-  @IsOptional()
-  @IsEnum(ContractStatus)
-  status?: ContractStatus
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  minTotalIncome?: number
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  maxTotalIncome?: number
 }

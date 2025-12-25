@@ -1,14 +1,22 @@
 // @ts-check
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import eslint from '@eslint/js'
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import configPrettier from 'eslint-config-prettier'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
+import unusedImports from 'eslint-plugin-unused-imports'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export default tseslint.config(
   {
     ignores: ['eslint.config.mjs', 'src/db/migrations/*', 'dist/db/migrations/*'],
   },
+
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
 
@@ -25,13 +33,26 @@ export default tseslint.config(
       sourceType: 'module',
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: import.meta.dirname,
+        tsconfigRootDir: __dirname,
       },
     },
-  },
-  {
+    plugins: {
+      'unused-imports': unusedImports,
+    },
     rules: {
       indent: 'off',
+
+      'unused-imports/no-unused-imports': 'error',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
 
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
@@ -49,7 +70,11 @@ export default tseslint.config(
 
       '@typescript-eslint/explicit-function-return-type': [
         'error',
-        { allowExpressions: true, allowHigherOrderFunctions: true, allowTypedFunctionExpressions: true },
+        {
+          allowExpressions: true,
+          allowHigherOrderFunctions: true,
+          allowTypedFunctionExpressions: true,
+        },
       ],
 
       '@typescript-eslint/explicit-member-accessibility': [

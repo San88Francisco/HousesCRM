@@ -7,7 +7,6 @@ import { DeleteHouseDto } from './dto/delete-house.dto'
 import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
 import { HouseResponseDto } from './dto/houses-response.dto'
 import { HouseQueryDto } from './dto/house-query.dto'
-import { HousesAnalyticsService } from 'src/analytics/houses-analytics/houses-analytics.service'
 import { HouseDetailAnalyticsService } from 'src/analytics/house-detail-analytics/house-detail-analytics.service'
 import { HouseWithOccupancyReports } from './dto/house-with-occupancy-reports.dto'
 import { Auth } from 'src/common/decorators/auth.decorator'
@@ -19,7 +18,6 @@ import { PaginationQueryDto } from './dto/pagination-query.dto'
 export class HousesController {
   constructor(
     private readonly housesService: HousesService,
-    private readonly housesAnalyticsService: HousesAnalyticsService,
     private readonly houseDetailAnalytics: HouseDetailAnalyticsService
   ) {}
 
@@ -41,9 +39,14 @@ export class HousesController {
   @Get(HOUSES_ROUTES.BY_ID)
   @Auth()
   async findById(@Param('id') id: string, @Query() dto: PaginationQueryDto): Promise<HouseWithOccupancyReports> {
+    const occupancyDto: HouseOccupancyQueryDto = {
+      page: dto.page,
+      limit: dto.limit,
+    }
+
     const [houseDetail, occupancyReports] = await Promise.all([
       this.housesService.findById(id),
-      this.houseDetailAnalytics.getHouseOccupancyReportPaginated(id, dto.page, dto.limit),
+      this.houseDetailAnalytics.getHouseOccupancyReportList(id, occupancyDto),
     ])
 
     return { houseDetail, occupancyReports }
