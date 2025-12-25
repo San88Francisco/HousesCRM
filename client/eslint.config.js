@@ -2,16 +2,16 @@
 import storybook from 'eslint-plugin-storybook';
 
 import js from '@eslint/js';
-import globals from 'globals';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import react from 'eslint-plugin-react';
-import prettier from 'eslint-plugin-prettier';
-import unusedImports from 'eslint-plugin-unused-imports';
-import importPlugin from 'eslint-plugin-import';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import importPlugin from 'eslint-plugin-import';
+import prettier from 'eslint-plugin-prettier';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import unusedImports from 'eslint-plugin-unused-imports';
+import globals from 'globals';
 
 // Функція для очищення пробілів з ключів об'єкта globals
 function cleanGlobals(obj) {
@@ -211,7 +211,7 @@ export default [
       'no-empty-function': 'warn',
       'no-unreachable': 'error',
       'spaced-comment': ['error', 'always'],
-      'no-magic-numbers': ['warn', { ignore: [0, 1], ignoreArrayIndexes: true }],
+      // 'no-magic-numbers': ['warn', { ignore: [0, 1], ignoreArrayIndexes: true }],
     },
   },
 
@@ -236,7 +236,7 @@ export default [
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
-      'no-magic-numbers': 'off',
+      // 'no-magic-numbers': 'off',
       'max-lines': 'off',
       complexity: 'off',
       'prettier/prettier': [

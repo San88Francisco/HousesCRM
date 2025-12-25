@@ -20,6 +20,8 @@ client/.turbo/
 client/.eslintcache
 server/.eslintcache
 .cache/
+*.tsbuildinfo
+tsconfig.tsbuildinfo
 
 # Environment variables
 .env
