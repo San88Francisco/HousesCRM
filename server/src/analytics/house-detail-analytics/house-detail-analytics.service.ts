@@ -57,19 +57,33 @@ export class HouseDetailAnalyticsService {
 
     const subQuery = this.rentersRepository
       .createQueryBuilder('sub')
-      .select('DISTINCT sub.id')
+      .select('sub.id', 'id')
+      .addSelect(`sub.${orderField}`, 'orderField')
       .innerJoin('sub.contracts', 'contract')
       .where('contract.houseId = :id', { id })
+      .groupBy('sub.id')
+      .addGroupBy(`sub.${orderField}`)
       .orderBy(`sub.${orderField}`, order)
       .limit(limit)
       .offset((page - 1) * limit)
 
+    const renterIds = await subQuery.getRawMany<{ id: string }>()
+    const ids = renterIds.map((r) => r.id)
+
+    if (ids.length === 0) {
+      return plainToInstance(
+        HouseOccupancyReportResponseDto,
+        { data: [], meta: { total, page, limit } },
+        { excludeExtraneousValues: true }
+      )
+    }
+
     const contracts = await this.contractsRepository
       .createQueryBuilder('contract')
       .innerJoinAndSelect('contract.renter', 'renter')
-      .where(`contract.renterId IN (${subQuery.getQuery()})`)
+      .where('contract.renterId IN (:...ids)', { ids })
       .andWhere('contract.houseId = :id', { id })
-      .setParameters(subQuery.getParameters())
+      .orderBy(`renter.${orderField}`, order)
       .getMany()
 
     const rentersData = aggregateOccupancyReports(contracts)
