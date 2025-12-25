@@ -88,9 +88,7 @@ export default tseslint.config(
       'no-var': 'error',
       eqeqeq: 'error',
       curly: 'error',
-      'no-multi-spaces': 'error',
-      'no-trailing-spaces': 'error',
-      quotes: ['error', 'single'],
+
       'no-console': 'error',
       'no-debugger': 'error',
       'no-promise-executor-return': 'error',

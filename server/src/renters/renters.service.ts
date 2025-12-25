@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Renter } from './entities/renter.entity'
-import { EntityNotFoundError, Repository } from 'typeorm'
 import { plainToInstance } from 'class-transformer'
-import { RenterDto } from './dto/renter.dto'
-import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
-import { CreateRenterDto } from './dto/create-renter.dto'
-import { UpdateRenterDto } from './dto/update-renter.dto'
-import { RenterQueryDto } from './dto/renter-query.dto'
-import { RenterResponseDto } from './dto/renter-response.dto'
-import { ContractStatus } from 'src/contracts/entities/contract.entity'
 import { calculateContractRevenue } from 'src/analytics/helpers/revenue.helpers'
 import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
+import { ContractStatus } from 'src/contracts/entities/contract.entity'
+import { EntityNotFoundError, Repository } from 'typeorm'
+import { CreateRenterDto } from './dto/create-renter.dto'
+import { RenterQueryDto } from './dto/renter-query.dto'
+import { RenterResponseDto } from './dto/renter-response.dto'
+import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
+import { RenterDto } from './dto/renter.dto'
+import { UpdateRenterDto } from './dto/update-renter.dto'
+import { Renter } from './entities/renter.entity'
 
 @Injectable()
 export class RentersService {
@@ -53,6 +53,7 @@ export class RentersService {
       .createQueryBuilder('renter')
       .leftJoinAndSelect('renter.contracts', 'contracts')
       .where(`renter.id IN (${subQuery.getQuery()})`)
+      .setParameters(subQuery.getParameters())
       .orderBy(`renter.${orderField}`, order)
       .getMany()
 

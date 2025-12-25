@@ -1,17 +1,21 @@
 #!/bin/sh
 echo "🔍 Running pre-commit checks..."
-npx lint-staged
+npx lint-staged || exit 1
 
-echo "\n📦 Checking TypeScript compilation..."
+echo ""
+echo "📦 Checking TypeScript compilation..."
 
-cd server
-echo "Checking server..."
-npx tsc --noEmit || exit 1
-cd ..
+(
+  cd server || exit 1
+  echo "Checking server..."
+  npx tsc --noEmit || exit 1
+)
 
-cd client
-echo "Checking client..."
-npx tsc --noEmit || exit 1
-cd ..
+(
+  cd client || exit 1
+  echo "Checking client..."
+  npx tsc --noEmit || exit 1
+)
 
-echo "\n✅ All pre-commit checks passed!"
+echo ""
+echo "✅ All pre-commit checks passed!"

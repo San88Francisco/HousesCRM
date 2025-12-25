@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Contract } from 'src/contracts/entities/contract.entity'
-import { Repository } from 'typeorm'
 import { plainToInstance } from 'class-transformer'
-import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
+import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
+import { Contract } from 'src/contracts/entities/contract.entity'
 import { HouseOccupancyQueryDto } from 'src/houses/dto/house-occupancy-query.dto'
 import { HouseOccupancyReportResponseDto } from 'src/houses/dto/house-occupancy-report-response.dto'
-import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { RenterDto } from 'src/renters/dto/renter.dto'
 import { Renter } from 'src/renters/entities/renter.entity'
+import { Repository } from 'typeorm'
+import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
 
 @Injectable()
 export class HouseDetailAnalyticsService {
@@ -74,17 +74,17 @@ export class HouseDetailAnalyticsService {
 
     const rentersData = aggregateOccupancyReports(contracts)
 
-    const renterIdOrder = await this.rentersRepository
-      .createQueryBuilder('sub')
-      .select('DISTINCT sub.id')
-      .innerJoin('sub.contracts', 'contract')
-      .where('contract.houseId = :id', { id })
-      .andWhere(`sub.id IN (${subQuery.getQuery()})`)
-      .orderBy(`sub.${orderField}`, order)
-      .setParameters(subQuery.getParameters())
-      .getRawMany<{ sub_id: string }>()
+    const orderedIds = contracts.map((c) => c.renter.id)
+    const seen = new Set<string>()
+    const uniqueOrderedIds = orderedIds.filter((id) => {
+      if (seen.has(id)) {
+        return false
+      }
+      seen.add(id)
+      return true
+    })
 
-    const orderMap = new Map(renterIdOrder.map((row, index) => [row.sub_id, index]))
+    const orderMap = new Map(uniqueOrderedIds.map((id, index) => [id, index]))
     rentersData.sort((a, b) => (orderMap.get(a.id) ?? 0) - (orderMap.get(b.id) ?? 0))
 
     const data = plainToInstance(RenterDto, rentersData, { excludeExtraneousValues: true })

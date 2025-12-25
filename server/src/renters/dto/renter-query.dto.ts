@@ -13,7 +13,7 @@ export const RENTER_SORT_BY_FIELDS: RenterSortBy[] = [
   'vacated',
   'totalIncome',
   'status',
-] as const
+]
 
 export class RenterQueryDto {
   @ApiPropertyOptional({
@@ -32,6 +32,7 @@ export class RenterQueryDto {
   @IsEnum(SortOrder)
   order?: SortOrder = SortOrder.DESC
 
+  @ApiPropertyOptional({ example: 1 })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
