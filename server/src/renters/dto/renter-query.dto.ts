@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsEnum, IsIn, IsInt, IsOptional, IsPositive, Min } from 'class-validator'
+import { IsEnum, IsIn, IsInt, IsOptional, IsPositive, Max, Min } from 'class-validator'
 import { SortOrder } from 'src/common/enums/sort-order.enum'
 import { RenterDto } from './renter.dto'
 
@@ -44,5 +44,6 @@ export class RenterQueryDto {
   @Type(() => Number)
   @IsInt()
   @IsPositive()
+  @Max(100)
   limit?: number = 10
 }
