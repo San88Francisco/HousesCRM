@@ -2,7 +2,7 @@
 'use client';
 import { useState } from 'react';
 import { useGetHouseByIdQuery, useGetHouseByIdOccupancyQuery } from '@/store/houses-api';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { CardTitle, Card, CardContent, CardHeader } from '@/shared/ui/card';
 import { TableRow, Table, TableBody, TableCell, TableHead, TableHeader } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
@@ -14,11 +14,12 @@ import { ApartmentPagination } from './ApartmentPagination';
 import { OccupancyPaginatedResponse, occupanncyApartmentResponse } from '@/types/services/houses';
 import { apartmentColumns } from '@/shared/constants/current-apartment';
 import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
-import Link from 'next/link';
+import { ROUTES } from '@/shared/routes';
 
 export const TableApartment = () => {
   const { id } = useParams<{ id: string }>();
   const [currentPage, setCurrentPage] = useState<number | null>(null);
+  const { push } = useRouter();
 
   const {
     data: initialData,
@@ -44,8 +45,8 @@ export const TableApartment = () => {
   const isLoading = currentPage === null ? initialLoading : paginatedLoading;
   const error = currentPage === null ? initialError : paginatedError;
 
-  if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState error={error} />;
+  if (isLoading) return <LoadingState className="min-h-[550px]" />;
+  if (error) return <ErrorState className="min-h-[550px]" error={error} />;
 
   const tableData: occupanncyApartmentResponse[] =
     currentPage === null
@@ -57,7 +58,11 @@ export const TableApartment = () => {
       ? initialData?.occupancyReports?.meta
       : (paginatedData as OccupancyPaginatedResponse)?.meta;
 
-  if (!tableData.length) return <EmptyState />;
+  if (!tableData.length) return <EmptyState className="min-h-[550px] w-full" />;
+
+  const handleRouteToRenter = (id: string) => {
+    push(`${ROUTES.RENTER}/${id}`);
+  };
 
   return (
     <div>
@@ -65,8 +70,7 @@ export const TableApartment = () => {
         <CardHeader>
           <CardTitle>Table Title</CardTitle>
         </CardHeader>
-
-        <CardContent>
+        <CardContent className="min-h-[550px]">
           <Table>
             <TableHeader>
               <TableRow style={{ gridTemplateColumns: '60px repeat(4, 1fr) 100px' }}>
@@ -92,19 +96,37 @@ export const TableApartment = () => {
                   <TableRow
                     key={item.id}
                     style={{ gridTemplateColumns: '60px repeat(4, 1fr) 100px' }}
+                    className="hover:bg-muted-foreground duration-300 cursor-pointer "
                   >
-                    <TableCell className="font-medium text-center cursor-pointer">
+                    <TableCell className="font-medium text-center  text-text">
                       <ContractModalTrigger id={item.id} />
                     </TableCell>
-                    <TableCell className="font-medium text-center cursor-pointer">
-                      <Link href={`/renter/${item.id}`}>
-                        {item.firstName} {item.lastName}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-center">{formatDate(item.occupied)}</TableCell>
-                    <TableCell className="text-center">{formatDate(item.vacated)}</TableCell>
-                    <TableCell className="text-center font-medium">{item.totalIncome} ₴</TableCell>
                     <TableCell
+                      onClick={() => handleRouteToRenter(item.id)}
+                      className="font-medium text-center text-text"
+                    >
+                      {item.firstName} {item.lastName}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => handleRouteToRenter(item.id)}
+                      className="text-center text-text"
+                    >
+                      {formatDate(item.occupied)}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => handleRouteToRenter(item.id)}
+                      className="text-center text-text"
+                    >
+                      {formatDate(item.vacated)}
+                    </TableCell>
+                    <TableCell
+                      onClick={() => handleRouteToRenter(item.id)}
+                      className="text-center font-medium text-text"
+                    >
+                      {item.totalIncome} ₴
+                    </TableCell>
+                    <TableCell
+                      onClick={() => handleRouteToRenter(item.id)}
                       className={cn(
                         'font-medium text-right',
                         item.status !== 'active' && 'text-purple',
