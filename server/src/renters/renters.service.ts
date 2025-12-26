@@ -1,61 +1,95 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Renter } from './entities/renter.entity'
-import { EntityNotFoundError, Repository } from 'typeorm'
 import { plainToInstance } from 'class-transformer'
-import { RenterDto } from './dto/renter.dto'
-import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
-import { CreateRenterDto } from './dto/create-renter.dto'
-import { UpdateRenterDto } from './dto/update-renter.dto'
-import { QueryDto } from 'src/common/dto/query.dto'
-import { RenterResponseDto } from './dto/renter-response.dto'
-import { ContractStatus } from 'src/contracts/entities/contract.entity'
 import { calculateContractRevenue } from 'src/analytics/helpers/revenue.helpers'
+import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
+import { ContractStatus } from 'src/contracts/entities/contract.entity'
+import { EntityNotFoundError, Repository } from 'typeorm'
+import { CreateRenterDto } from './dto/create-renter.dto'
+import { RenterQueryDto } from './dto/renter-query.dto'
+import { RenterResponseDto } from './dto/renter-response.dto'
+import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
+import { RenterDto } from './dto/renter.dto'
+import { UpdateRenterDto } from './dto/update-renter.dto'
+import { Renter } from './entities/renter.entity'
 
 @Injectable()
 export class RentersService {
+  private readonly validSortableFields: string[] = ['id', 'firstName', 'lastName', 'occupied', 'vacated']
+
   constructor(
     @InjectRepository(Renter)
     private readonly rentersRepository: Repository<Renter>
   ) {}
 
-  async findAll(dto: QueryDto): Promise<RenterResponseDto> {
-    const { page = 1, limit = 10 } = dto
+  async findAll(dto: RenterQueryDto): Promise<RenterResponseDto> {
+    const {
+      page = QUERY_DEFAULTS.PAGE,
+      limit = QUERY_DEFAULTS.LIMIT,
+      order = QUERY_DEFAULTS.ORDER,
+      sortBy = 'occupied',
+    } = dto
 
-    const [renters, total] = await this.rentersRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-      relations: { contracts: true },
-    })
+    const orderField = this.validSortableFields.includes(sortBy) ? sortBy : 'occupied'
 
-    const rentersWithStats = renters.map((renter) => {
-      const contracts = renter.contracts ?? []
-      const totalIncome = contracts.reduce((sum, contract) => sum + calculateContractRevenue(contract), 0)
-      const hasActiveContract = contracts.some((contract) => contract.status === ContractStatus.ACTIVE)
+    const total = await this.rentersRepository.count()
 
-      return {
-        ...renter,
-        totalIncome,
-        status: hasActiveContract ? ContractStatus.ACTIVE : ContractStatus.INACTIVE,
-      }
-    })
-
-    const rentersDto = plainToInstance(RenterDto, rentersWithStats, {
-      excludeExtraneousValues: true,
-    })
-
-    const rawData = {
-      data: rentersDto,
-      meta: {
-        total,
-        page,
-        limit,
-      },
+    if (total === 0) {
+      return plainToInstance(
+        RenterResponseDto,
+        { data: [], meta: { total: 0, page, limit } },
+        { excludeExtraneousValues: true }
+      )
     }
 
-    return plainToInstance(RenterResponseDto, rawData, {
-      excludeExtraneousValues: true,
-    })
+    const subQuery = this.rentersRepository
+      .createQueryBuilder('sub')
+      .select('sub.id')
+      .orderBy(`sub.${orderField}`, order)
+      .limit(limit)
+      .offset((page - 1) * limit)
+
+    const rentersWithContracts = await this.rentersRepository
+      .createQueryBuilder('renter')
+      .leftJoinAndSelect('renter.contracts', 'contracts')
+      .where(`renter.id IN (${subQuery.getQuery()})`)
+      .setParameters(subQuery.getParameters())
+      .orderBy(`renter.${orderField}`, order)
+      .getMany()
+
+    const rentersDto = plainToInstance(
+      RenterDto,
+      rentersWithContracts.map((renter) => {
+        const contracts = renter.contracts ?? []
+        const totalIncome = contracts.reduce((sum, c) => sum + calculateContractRevenue(c), 0)
+
+        return {
+          id: renter.id,
+          firstName: renter.firstName,
+          lastName: renter.lastName,
+          occupied: renter.occupied,
+          vacated: renter.vacated,
+          totalIncome,
+          status: contracts.some((c) => c.status === ContractStatus.ACTIVE)
+            ? ContractStatus.ACTIVE
+            : ContractStatus.INACTIVE,
+        }
+      }),
+      { excludeExtraneousValues: true }
+    )
+
+    return plainToInstance(
+      RenterResponseDto,
+      {
+        data: rentersDto,
+        meta: {
+          total,
+          page,
+          limit,
+        },
+      },
+      { excludeExtraneousValues: true }
+    )
   }
 
   async findById(id: string): Promise<RenterWithContractDto> {
@@ -77,6 +111,9 @@ export class RentersService {
 
     const savedRenter = await this.rentersRepository.save(renterToSave)
 
+    // Обчислюємо occupied і vacated на основі контрактів
+    await this.updateRenterDates(savedRenter.id)
+
     const renterWithContracts = await this.findById(savedRenter.id)
 
     return plainToInstance(RenterWithContractDto, renterWithContracts, {
@@ -97,6 +134,9 @@ export class RentersService {
 
     const savedRenter = await this.rentersRepository.save(renterToUpdate)
 
+    // Обчислюємо occupied і vacated на основі контрактів
+    await this.updateRenterDates(savedRenter.id)
+
     const renterWithContracts = await this.findById(savedRenter.id)
 
     return plainToInstance(RenterWithContractDto, renterWithContracts, {
@@ -110,5 +150,59 @@ export class RentersService {
     if (res.affected === 0) {
       throw new EntityNotFoundError(Renter, id)
     }
+  }
+
+  /**
+   * Оновлює дати occupied і vacated для рентаря на основі його контрактів
+   * occupied = найменша дата commencement
+   * vacated = найбільша дата termination (може бути null)
+   */
+  async updateRenterDates(renterId: string): Promise<void> {
+    const renter = await this.rentersRepository.findOne({
+      where: { id: renterId },
+      relations: { contracts: true },
+    })
+
+    if (!renter || !renter.contracts || renter.contracts.length === 0) {
+      // Якщо немає контрактів, встановлюємо null для обох дат
+      await this.rentersRepository.update(renterId, {
+        occupied: null,
+        vacated: null,
+      })
+      return
+    }
+
+    // Знаходимо найменшу дату commencement
+    const occupied = renter.contracts.reduce(
+      (minDate, contract) => {
+        if (!contract.commencement) {
+          return minDate
+        }
+        if (!minDate) {
+          return contract.commencement
+        }
+        return contract.commencement < minDate ? contract.commencement : minDate
+      },
+      null as Date | null
+    )
+
+    // Знаходимо найбільшу дату termination
+    const vacated = renter.contracts.reduce(
+      (maxDate, contract) => {
+        if (!contract.termination) {
+          return maxDate
+        }
+        if (!maxDate) {
+          return contract.termination
+        }
+        return contract.termination > maxDate ? contract.termination : maxDate
+      },
+      null as Date | null
+    )
+
+    await this.rentersRepository.update(renterId, {
+      occupied,
+      vacated,
+    })
   }
 }

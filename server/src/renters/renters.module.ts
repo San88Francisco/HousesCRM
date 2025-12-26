@@ -9,5 +9,6 @@ import { AnalyticsModule } from 'src/analytics/analytics.module'
   imports: [TypeOrmModule.forFeature([Renter]), AnalyticsModule],
   controllers: [RentersController],
   providers: [RentersService],
+  exports: [RentersService],
 })
 export class RentersModule {}

@@ -1,10 +1,13 @@
 import { rootApi } from '@/shared/api';
-import { AllAnalyticsResponse } from '@/types/services/all-analitics';
-import { HouseByIdResponse } from '@/types/services/houses';
 import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
-import { House } from '@/types/services/houses';
-import { CreateHousePayload } from '@/types/services/apartments-api';
+import {
+  HousesPerformanceRequest,
+  HousesPerformanceResponse,
+} from '@/types/core/houses-performance/types';
 import { CreateRenterPayload, RenterResponse } from '@/types/model/renter';
+import { AllAnalyticsResponse } from '@/types/services/all-analitics';
+import { CreateHousePayload } from '@/types/services/apartments-api';
+import { House, HouseByIdResponse } from '@/types/services/houses';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -13,14 +16,17 @@ export const housesApi = rootApi.injectEndpoints({
       query: () => '/houses-analytics/all-analytics',
       providesTags: ['Analytics'],
     }),
+
     getHouseById: build.query<HouseByIdResponse, string>({
       query: id => `/houses/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Houses', id }],
     }),
+
     getCurrencyRevaluation: build.query<CurrencyRevaluation[], void>({
       query: () => '/houses-analytics/currency-revaluation-analytic',
       providesTags: ['Analytics'],
     }),
+
     createHouse: build.mutation<House, CreateHousePayload>({
       query: body => ({
         url: '/houses',
@@ -29,6 +35,7 @@ export const housesApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: ['Houses', 'Analytics'],
     }),
+
     updateHouse: build.mutation<House, { id: string } & Partial<CreateHousePayload>>({
       query: ({ id, ...body }) => ({
         url: `/houses/${id}`,
@@ -37,6 +44,7 @@ export const housesApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses', 'Analytics'],
     }),
+
     createRenter: build.mutation<RenterResponse, CreateRenterPayload>({
       query: body => ({
         url: '/renters',
@@ -58,6 +66,19 @@ export const housesApi = rootApi.injectEndpoints({
         'Analytics',
       ],
     }),
+
+    getHousesPerformance: build.query<HousesPerformanceResponse, HousesPerformanceRequest>({
+      query: ({ page, limit, sortBy, order }) => ({
+        url: '/houses-analytics/houses-performance-analytic',
+        params: {
+          page,
+          limit,
+          sortBy,
+          order,
+        },
+      }),
+      providesTags: ['Houses'],
+    }),
   }),
 });
 
@@ -70,4 +91,6 @@ export const {
   useUpdateHouseMutation,
   useCreateRenterMutation,
   useUpdateRenterMutation,
+  useGetHousesPerformanceQuery,
+  useLazyGetHousesPerformanceQuery,
 } = housesApi;

@@ -42,6 +42,7 @@ const PaginationLink = ({ className, isActive, size = 'lg', ...props }: Paginati
         size,
       }),
       className,
+      'w-[10px] h-[10px] p-4',
     )}
     {...props}
   />
