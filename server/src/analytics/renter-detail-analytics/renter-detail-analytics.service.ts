@@ -2,8 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
-import { Contract } from 'src/contracts/entities/contract.entity'
+import { Contract, ContractStatus } from 'src/contracts/entities/contract.entity'
 import { RenterDto } from 'src/renters/dto/renter.dto'
+import { Renter } from 'src/renters/entities/renter.entity'
 import { Repository } from 'typeorm'
 import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
 import { calculateContractRevenue } from '../helpers/revenue.helpers'
@@ -17,7 +18,9 @@ export class RenterDetailAnalyticsService {
 
   constructor(
     @InjectRepository(Contract)
-    private readonly contractRepository: Repository<Contract>
+    private readonly contractRepository: Repository<Contract>,
+    @InjectRepository(Renter)
+    private readonly renterRepository: Repository<Renter>
   ) {}
 
   async getAllRenterAnalytic(id: string, dto?: ContractQueryDto): Promise<AllRenterAnalyticDto> {
@@ -42,7 +45,21 @@ export class RenterDetailAnalyticsService {
 
     const reports = aggregateOccupancyReports(contractsByRenterId)
     if (reports.length === 0) {
-      throw new NotFoundException(`No contracts found for renter with id ${id}`)
+      const renter = await this.renterRepository.findOne({
+        where: { id },
+      })
+
+      if (!renter) {
+        throw new NotFoundException(`Renter with id ${id} not found`)
+      }
+
+      const renterData = {
+        ...renter,
+        totalIncome: 0,
+        status: ContractStatus.INACTIVE,
+      }
+
+      return plainToInstance(RenterDto, renterData, { excludeExtraneousValues: true })
     }
     return plainToInstance(RenterDto, reports[0], { excludeExtraneousValues: true })
   }
