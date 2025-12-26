@@ -77,6 +77,9 @@ export class RentersService {
 
     const savedRenter = await this.rentersRepository.save(renterToSave)
 
+    // Обчислюємо occupied і vacated на основі контрактів
+    await this.updateRenterDates(savedRenter.id)
+
     const renterWithContracts = await this.findById(savedRenter.id)
 
     return plainToInstance(RenterWithContractDto, renterWithContracts, {
@@ -97,6 +100,9 @@ export class RentersService {
 
     const savedRenter = await this.rentersRepository.save(renterToUpdate)
 
+    // Обчислюємо occupied і vacated на основі контрактів
+    await this.updateRenterDates(savedRenter.id)
+
     const renterWithContracts = await this.findById(savedRenter.id)
 
     return plainToInstance(RenterWithContractDto, renterWithContracts, {
@@ -110,5 +116,59 @@ export class RentersService {
     if (res.affected === 0) {
       throw new EntityNotFoundError(Renter, id)
     }
+  }
+
+  /**
+   * Оновлює дати occupied і vacated для рентаря на основі його контрактів
+   * occupied = найменша дата commencement
+   * vacated = найбільша дата termination (може бути null)
+   */
+  async updateRenterDates(renterId: string): Promise<void> {
+    const renter = await this.rentersRepository.findOne({
+      where: { id: renterId },
+      relations: { contracts: true },
+    })
+
+    if (!renter || !renter.contracts || renter.contracts.length === 0) {
+      // Якщо немає контрактів, встановлюємо null для обох дат
+      await this.rentersRepository.update(renterId, {
+        occupied: null,
+        vacated: null,
+      })
+      return
+    }
+
+    // Знаходимо найменшу дату commencement
+    const occupied = renter.contracts.reduce(
+      (minDate, contract) => {
+        if (!contract.commencement) {
+          return minDate
+        }
+        if (!minDate) {
+          return contract.commencement
+        }
+        return contract.commencement < minDate ? contract.commencement : minDate
+      },
+      null as Date | null
+    )
+
+    // Знаходимо найбільшу дату termination
+    const vacated = renter.contracts.reduce(
+      (maxDate, contract) => {
+        if (!contract.termination) {
+          return maxDate
+        }
+        if (!maxDate) {
+          return contract.termination
+        }
+        return contract.termination > maxDate ? contract.termination : maxDate
+      },
+      null as Date | null
+    )
+
+    await this.rentersRepository.update(renterId, {
+      occupied,
+      vacated,
+    })
   }
 }

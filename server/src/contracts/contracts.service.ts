@@ -10,12 +10,14 @@ import { UpdateContractDto } from './dto/update-contract-dto'
 import { ContractResponseDto } from './dto/contract-response.dto'
 import { QueryDto } from 'src/common/dto/query.dto'
 import { ContractPdfFileDto } from './dto/contract-pdf-file.dto'
+import { RentersService } from 'src/renters/renters.service'
 
 @Injectable()
 export class ContractsService {
   constructor(
     @InjectRepository(Contract)
-    private contractsRepository: Repository<Contract>
+    private contractsRepository: Repository<Contract>,
+    private rentersService: RentersService
   ) {}
 
   async findAll(dto: QueryDto): Promise<ContractResponseDto> {
@@ -86,6 +88,11 @@ export class ContractsService {
 
     const savedContract = await this.contractsRepository.save(contractToSave)
 
+    // Оновлюємо дати рентаря після створення контракту
+    if (dto.renterId) {
+      await this.rentersService.updateRenterDates(dto.renterId)
+    }
+
     const contractWithRelations = await this.findById(savedContract.id)
 
     return plainToInstance(ContractWithRelationsDto, contractWithRelations, {
@@ -94,6 +101,9 @@ export class ContractsService {
   }
 
   async update(dto: UpdateContractDto, id: string): Promise<ContractWithRelationsDto> {
+    // Отримуємо старий контракт для збереження старого renterId
+    const oldContract = await this.contractsRepository.findOne({ where: { id } })
+
     const contractToUpdate = await this.contractsRepository.preload({
       id,
       house: { id: dto.houseId },
@@ -107,6 +117,17 @@ export class ContractsService {
 
     const savedContract = await this.contractsRepository.save(contractToUpdate)
 
+    // Оновлюємо дати для нового рентаря (якщо він вказаний)
+    const newRenterId = dto.renterId || savedContract.renterId
+    if (newRenterId) {
+      await this.rentersService.updateRenterDates(newRenterId)
+    }
+
+    // Якщо рентар змінився, оновлюємо дати і для старого рентаря
+    if (oldContract && oldContract.renterId && dto.renterId && oldContract.renterId !== dto.renterId) {
+      await this.rentersService.updateRenterDates(oldContract.renterId)
+    }
+
     const contractWithRelations = await this.findById(savedContract.id)
 
     return plainToInstance(ContractWithRelationsDto, contractWithRelations, {
@@ -115,10 +136,18 @@ export class ContractsService {
   }
 
   async remove(id: string): Promise<void> {
+    // Отримуємо контракт перед видаленням для збереження renterId
+    const contract = await this.contractsRepository.findOne({ where: { id } })
+
     const res = await this.contractsRepository.delete(id)
 
     if (res.affected === 0) {
       throw new EntityNotFoundError(Contract, id)
+    }
+
+    // Оновлюємо дати рентаря після видалення контракту
+    if (contract?.renterId) {
+      await this.rentersService.updateRenterDates(contract.renterId)
     }
   }
 }

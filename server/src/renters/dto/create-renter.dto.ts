@@ -1,15 +1,4 @@
-import { Type } from 'class-transformer'
-import {
-  ArrayNotEmpty,
-  IsArray,
-  IsDate,
-  IsDefined,
-  IsOptional,
-  IsString,
-  IsUUID,
-  MaxLength,
-  MinLength,
-} from 'class-validator'
+import { ArrayNotEmpty, IsArray, IsDefined, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator'
 
 export class CreateRenterDto {
   @IsDefined({ message: 'FirstName is required' })
@@ -24,15 +13,11 @@ export class CreateRenterDto {
   @MaxLength(30)
   lastName: string
 
-  @IsDefined({ message: 'Occupied is required' })
-  @IsDate({ message: 'Occupied must be a valid date' })
-  @Type(() => Date)
-  occupied: Date
-
-  @IsOptional()
-  @IsDate({ message: 'Vacated must be a valid date' })
-  @Type(() => Date)
-  vacated?: Date
+  @IsDefined({ message: 'Age is required' })
+  @IsString({ message: 'Age must be a string' })
+  @MinLength(0)
+  @MaxLength(100)
+  age: string
 
   @IsOptional()
   @IsArray({ message: 'contractIds must be an array' })
