@@ -29,3 +29,11 @@ export type AllContractsByRenterIdResponse = {
     data: ContractResponse[];
   };
 };
+
+export type RentersPaginatedRequest = {
+  renter_id: string;
+  sortBy?: string;
+  order?: string;
+  page?: number;
+  limit?: number;
+};

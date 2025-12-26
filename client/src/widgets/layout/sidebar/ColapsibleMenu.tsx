@@ -1,17 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { SubNavItem } from '@/types/navigation';
 import {
   getChevronClasses,
-  SIDEBAR_STYLES,
   getCollapsibleHeaderClasses,
+  SIDEBAR_STYLES,
 } from '@/shared/constants/styles';
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
+import { SubNavItem } from '@/types/navigation';
+import { motion } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 type Props = {
   title: string;

@@ -1,4 +1,21 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
+echo "🔍 Running pre-commit checks..."
+npx lint-staged || exit 1
 
-npx lint-staged
+echo ""
+echo "📦 Checking TypeScript compilation..."
+
+(
+  cd server || exit 1
+  echo "Checking server..."
+  npx tsc --noEmit || exit 1
+)
+
+(
+  cd client || exit 1
+  echo "Checking client..."
+  npx tsc --noEmit || exit 1
+)
+
+echo ""
+echo "✅ All pre-commit checks passed!"

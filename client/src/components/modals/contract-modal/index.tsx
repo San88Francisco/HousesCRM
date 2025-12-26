@@ -1,17 +1,21 @@
 'use client';
 
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useAppSelector } from '@/store/hooks';
-import Modal from '../modal-wrapper';
-import { ModalTriggers } from '@/types/model/modals';
 import { DialogDescription, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
+import { useAppSelector } from '@/store/hooks';
 import { useGetAllContractsByRenterIdQuery } from '@/store/renters-api';
+import { ModalTriggers } from '@/types/model/modals';
+import Modal from '../modal-wrapper';
 import { ContractItem } from './ContractItem';
 
 export const ContractModal = () => {
-  const renterId = useAppSelector(state => state.modal.payload?.id as string | undefined);
+  const renterId = useAppSelector(state => state.modal.payload?.id as string | '');
 
-  const { data } = useGetAllContractsByRenterIdQuery(renterId ?? skipToken);
+  const { data } = useGetAllContractsByRenterIdQuery(
+    { renter_id: renterId, page: 1, limit: 5, sortBy: 'commencement', order: 'desc' },
+    {
+      skip: !renterId,
+    },
+  );
 
   if (!data) return null;
 

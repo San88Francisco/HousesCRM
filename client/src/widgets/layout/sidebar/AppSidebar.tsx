@@ -4,10 +4,11 @@ import { Sidebar, SidebarContent } from '@/shared/ui/sidebar';
 import { usePathname } from 'next/navigation';
 import { SidebarHeaderComponent } from './SidebarHeader';
 import { SidebarPagesGroup } from './SidebarPagesGroup';
-import { SidebarTablesGroup } from './SidebarTablesGroup';
 
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
 import { LogoSidebar } from './LogoSidebar';
+import { SidebarFavoritesGroup } from './SidebarFavoritesGroup';
+import { SidebarTablesGroup } from './SidebarTablesGroup';
 
 export const AppSidebar = () => {
   const pathname = usePathname();
@@ -20,6 +21,7 @@ export const AppSidebar = () => {
       <SidebarContent>
         <SidebarPagesGroup />
         <SidebarTablesGroup />
+        <SidebarFavoritesGroup />
       </SidebarContent>
       <LogoSidebar />
     </Sidebar>

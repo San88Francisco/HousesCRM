@@ -1,28 +1,29 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { plainToInstance } from 'class-transformer'
+import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { Contract } from 'src/contracts/entities/contract.entity'
+import { RenterDto } from 'src/renters/dto/renter.dto'
 import { Repository } from 'typeorm'
 import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
-import { plainToInstance } from 'class-transformer'
-import { QueryDto } from 'src/common/dto/query.dto'
-import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { calculateContractRevenue } from '../helpers/revenue.helpers'
-import { ContractWithRevenueDto } from './dto/contract-with-revenue.dto'
-import { ContractWithRevenueResponseDto } from './dto/contract-with-revenue-response.dto'
 import { AllRenterAnalyticDto } from './dto/all-renter-analytic-response.dto'
-import { RenterDto } from 'src/renters/dto/renter.dto'
-
+import { ContractQueryDto } from './dto/contract-query.dto'
+import { ContractWithRevenueResponseDto } from './dto/contract-with-revenue-response.dto'
+import { ContractWithRevenueDto } from './dto/contract-with-revenue.dto'
 @Injectable()
 export class RenterDetailAnalyticsService {
+  private readonly validSortableFields: string[] = ['commencement', 'termination', 'monthlyPayment', 'status']
+
   constructor(
     @InjectRepository(Contract)
     private readonly contractRepository: Repository<Contract>
   ) {}
 
-  async getAllRenterAnalytic(id: string): Promise<AllRenterAnalyticDto> {
+  async getAllRenterAnalytic(id: string, dto?: ContractQueryDto): Promise<AllRenterAnalyticDto> {
     const [oneRenterReport, allContractsByRenterId] = await Promise.all([
       this.getOneRenterReport(id),
-      this.getAllContractsByRenterId(id),
+      this.getAllContractsByRenterId(id, dto),
     ])
 
     const transformedData = {
@@ -46,25 +47,28 @@ export class RenterDetailAnalyticsService {
     return plainToInstance(RenterDto, reports[0], { excludeExtraneousValues: true })
   }
 
-  async getAllContractsByRenterId(id: string, dto?: QueryDto): Promise<ContractWithRevenueResponseDto> {
+  async getAllContractsByRenterId(id: string, dto?: ContractQueryDto): Promise<ContractWithRevenueResponseDto> {
     const {
       page = QUERY_DEFAULTS.PAGE,
       limit = QUERY_DEFAULTS.LIMIT,
       order = QUERY_DEFAULTS.ORDER,
-      sortBy = QUERY_DEFAULTS.SORT_BY,
+      sortBy = 'commencement',
     } = dto ?? {}
-    const computedSortFields = new Set(['totalRevenue', 'rentersCount', 'currentPayment'])
 
-    const orderField = computedSortFields.has(sortBy as string) ? QUERY_DEFAULTS.SORT_BY : sortBy
+    if (sortBy === 'totalRevenue') {
+      return this.getAllContractsSortedByRevenue(id, page, limit, order)
+    }
 
-    const [contracts, total] = await this.contractRepository.findAndCount({
-      where: { renter: { id } },
-      skip: (page - 1) * limit,
-      take: limit,
-      order: {
-        [orderField]: order,
-      },
-    })
+    const orderField = this.validSortableFields.includes(sortBy) ? sortBy : 'commencement'
+
+    const [contracts, total] = await this.contractRepository
+      .createQueryBuilder('contract')
+      .leftJoin('contract.renter', 'renter')
+      .where('renter.id = :id', { id })
+      .orderBy(`contract.${orderField}`, order)
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount()
 
     const contractsWithRevenue = contracts.map<ContractWithRevenueDto>((contract) => ({
       ...contract,
@@ -73,6 +77,43 @@ export class RenterDetailAnalyticsService {
 
     const rawData = {
       data: contractsWithRevenue,
+      meta: {
+        total,
+        page,
+        limit,
+      },
+    }
+
+    return plainToInstance(ContractWithRevenueResponseDto, rawData, { excludeExtraneousValues: true })
+  }
+
+  private async getAllContractsSortedByRevenue(
+    id: string,
+    page: number,
+    limit: number,
+    order: string
+  ): Promise<ContractWithRevenueResponseDto> {
+    const [contracts, total] = await this.contractRepository
+      .createQueryBuilder('contract')
+      .leftJoin('contract.renter', 'renter')
+      .where('renter.id = :id', { id })
+      .getManyAndCount()
+
+    const contractsWithRevenue = contracts.map<ContractWithRevenueDto>((contract) => ({
+      ...contract,
+      totalRevenue: calculateContractRevenue(contract),
+    }))
+
+    contractsWithRevenue.sort((a, b) => {
+      const diff = a.totalRevenue - b.totalRevenue
+      return order === 'ASC' ? diff : -diff
+    })
+
+    const startIndex = (page - 1) * limit
+    const paginatedContracts = contractsWithRevenue.slice(startIndex, startIndex + limit)
+
+    const rawData = {
+      data: paginatedContracts,
       meta: {
         total,
         page,

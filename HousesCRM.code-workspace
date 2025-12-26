@@ -1,0 +1,37 @@
+{
+  "folders": [
+    {
+      "name": "Root",
+      "path": "."
+    },
+    {
+      "name": "Client",
+      "path": "./client"
+    },
+    {
+      "name": "Server",
+      "path": "./server"
+    }
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      { "directory": "./server", "changeProcessCWD": true },
+      { "directory": "./client", "changeProcessCWD": true }
+    ],
+    "eslint.useFlatConfig": true,
+    "typescript.tsdk": "client/node_modules/typescript/lib",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "christian-kohler.path-intellisense",
+      "streetsidesoftware.code-spell-checker"
+    ]
+  }
+}
+

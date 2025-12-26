@@ -2,16 +2,16 @@
 
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
 import {
-  SidebarMenuItem,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
+  SidebarMenuItem,
 } from '@/shared/ui/sidebar';
-import { CollapsibleMenu } from './ColapsibleMenu';
 import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 import { MapPinHouse } from 'lucide-react';
+import { CollapsibleMenu } from './ColapsibleMenu';
 
 export const SidebarTablesGroup = () => {
   const { data, error, isLoading } = useGetHousesAnalyticsQuery();

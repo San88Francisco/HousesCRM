@@ -1,14 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-
-import { Star } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { LIKED_ROUTES_KEY } from '@/constants/breadcrumbs/breadcrumbs';
+
 import { ROUTES } from '@/shared/routes';
-import { Button } from '@/shared/ui/button';
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -21,28 +16,13 @@ import {
 const HeaderNavigation = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const [likedRoutes, setLikedRoutes] = useState<string[]>([]);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem(LIKED_ROUTES_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        setLikedRoutes(parsed);
-        setIsLiked(parsed.includes(pathname));
-      } catch (error) {
-        console.error('Failed to parse liked routes:', error);
-      }
-    }
-  }, [pathname]);
 
   const breadcrumbItems = (() => {
     const pathSegments = pathname.split('/').filter(Boolean);
-    const items = [{ label: 'Home', href: ROUTES.HOME }];
+    const items = [{ label: 'Home', href: ROUTES.ROOT }];
 
     pathSegments.forEach((segment, index) => {
-      const href = ROUTES.HOME + pathSegments.slice(0, index + 1).join('/');
+      const href = ROUTES.ROOT + pathSegments.slice(0, index + 1).join('/');
       const label = segment
         .split('-')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -63,34 +43,8 @@ const HeaderNavigation = () => {
     return items;
   })();
 
-  const toggleLike = () => {
-    const newLikedRoutes = isLiked
-      ? likedRoutes.filter(route => route !== pathname)
-      : [...likedRoutes, pathname];
-
-    setLikedRoutes(newLikedRoutes);
-    setIsLiked(!isLiked);
-    localStorage.setItem(LIKED_ROUTES_KEY, JSON.stringify(newLikedRoutes));
-  };
-
   return (
-    <div className="flex items-center gap-3">
-      <Button variant="icon" className="w-10 h-10 bg-transparent" onClick={toggleLike}>
-        <motion.div
-          animate={isLiked ? { scale: [1, 1.3, 0.9, 1] } : { scale: [1, 1.15, 1] }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-        >
-          <Star
-            className={
-              isLiked
-                ? 'text-[color:gold] fill-[color:gold] drop-shadow-[0_0_6px_rgba(245,197,66,0.55)]'
-                : 'text-text'
-            }
-            fill={isLiked ? 'currentColor' : 'none'}
-          />
-        </motion.div>
-      </Button>
-
+    <div className="flex ml-2 items-end gap-3">
       <Breadcrumb>
         <BreadcrumbList>
           {breadcrumbItems.map((item, index) => (
