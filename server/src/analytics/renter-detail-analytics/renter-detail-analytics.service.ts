@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Contract } from 'src/contracts/entities/contract.entity'
+import { Contract, ContractStatus } from 'src/contracts/entities/contract.entity'
 import { Repository } from 'typeorm'
 import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
 import { plainToInstance } from 'class-transformer'
@@ -11,12 +11,15 @@ import { ContractWithRevenueDto } from './dto/contract-with-revenue.dto'
 import { ContractWithRevenueResponseDto } from './dto/contract-with-revenue-response.dto'
 import { AllRenterAnalyticDto } from './dto/all-renter-analytic-response.dto'
 import { RenterDto } from 'src/renters/dto/renter.dto'
+import { Renter } from 'src/renters/entities/renter.entity'
 
 @Injectable()
 export class RenterDetailAnalyticsService {
   constructor(
     @InjectRepository(Contract)
-    private readonly contractRepository: Repository<Contract>
+    private readonly contractRepository: Repository<Contract>,
+    @InjectRepository(Renter)
+    private readonly renterRepository: Repository<Renter>
   ) {}
 
   async getAllRenterAnalytic(id: string): Promise<AllRenterAnalyticDto> {
@@ -41,7 +44,22 @@ export class RenterDetailAnalyticsService {
 
     const reports = aggregateOccupancyReports(contractsByRenterId)
     if (reports.length === 0) {
-      throw new NotFoundException(`No contracts found for renter with id ${id}`)
+      // Якщо немає контрактів, повертаємо дані рентера напряму
+      const renter = await this.renterRepository.findOne({
+        where: { id },
+      })
+
+      if (!renter) {
+        throw new NotFoundException(`Renter with id ${id} not found`)
+      }
+
+      const renterData = {
+        ...renter,
+        totalIncome: 0,
+        status: ContractStatus.INACTIVE,
+      }
+
+      return plainToInstance(RenterDto, renterData, { excludeExtraneousValues: true })
     }
     return plainToInstance(RenterDto, reports[0], { excludeExtraneousValues: true })
   }
