@@ -1,6 +1,6 @@
 import { Contract } from 'src/contracts/entities/contract.entity'
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 @Entity()
 export class Renter {
@@ -13,11 +13,14 @@ export class Renter {
   @Column({ name: 'last_name', length: 20 })
   lastName: string
 
-  @Column()
-  occupied: Date
+  @Column({ length: 100 })
+  age: string
 
-  @Column({ nullable: true })
-  vacated: Date
+  @Column({ type: 'timestamp', nullable: true })
+  occupied: Date | null
+
+  @Column({ type: 'timestamp', nullable: true })
+  vacated: Date | null
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date

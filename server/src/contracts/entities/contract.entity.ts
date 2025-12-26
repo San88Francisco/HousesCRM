@@ -31,8 +31,14 @@ export class Contract {
   @Column({ name: 'monthly_payment' })
   monthlyPayment: number
 
+  @Column({ name: 'houseId' })
+  houseId: string
+
   @ManyToOne(() => House, (house) => house.contracts, { onDelete: 'CASCADE' })
   house: Relation<House>
+
+  @Column({ name: 'renterId' })
+  renterId: string
 
   @ManyToOne(() => Renter, (renter) => renter.contracts)
   renter: Relation<Renter>

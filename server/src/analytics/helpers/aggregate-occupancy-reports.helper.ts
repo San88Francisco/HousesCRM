@@ -1,7 +1,7 @@
 import type { Contract } from 'src/contracts/entities/contract.entity'
 import { ContractStatus } from 'src/contracts/entities/contract.entity'
-import { calculateContractRevenue } from './revenue.helpers'
 import { RenterDto } from 'src/renters/dto/renter.dto'
+import { calculateContractRevenue } from './revenue.helpers'
 
 export const aggregateOccupancyReports = (contracts: Contract[]): RenterDto[] => {
   const occupancyReport = contracts.reduce<Record<string, RenterDto>>((acc, contract) => {
@@ -12,6 +12,7 @@ export const aggregateOccupancyReports = (contracts: Contract[]): RenterDto[] =>
         id: renterId,
         firstName: contract.renter.firstName,
         lastName: contract.renter.lastName,
+        age: contract.renter.age,
         occupied: contract.renter.occupied,
         vacated: contract.renter.vacated,
         status: contract.status,
