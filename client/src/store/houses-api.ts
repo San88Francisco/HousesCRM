@@ -8,6 +8,7 @@ import { CreateRenterPayload, RenterResponse } from '@/types/model/renter';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 import { CreateHousePayload } from '@/types/services/apartments-api';
 import { House, HouseByIdResponse } from '@/types/services/houses';
+import { RenterByIdResponse } from '@/types/services/renters';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -43,6 +44,11 @@ export const housesApi = rootApi.injectEndpoints({
         body,
       }),
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses', 'Analytics'],
+    }),
+
+    getRenterById: build.query<RenterByIdResponse, string>({
+      query: id => `/renters/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Renters', id }],
     }),
 
     createRenter: build.mutation<RenterResponse, CreateRenterPayload>({
@@ -89,6 +95,7 @@ export const {
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,
+  useGetRenterByIdQuery,
   useCreateRenterMutation,
   useUpdateRenterMutation,
   useGetHousesPerformanceQuery,

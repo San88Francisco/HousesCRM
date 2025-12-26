@@ -1,12 +1,12 @@
-import { useForm } from 'react-hook-form';
+import { getDefaultRenterValues } from '@/shared/utils/renter-form/get-default-renter-values';
+import { mapRenterToFormData } from '@/shared/utils/renter-form/renter-form';
+import { RenterFormData, renterSchema } from '@/shared/validation/renter/renter-schema';
+import { useCreateRenterMutation, useUpdateRenterMutation } from '@/store/houses-api';
+import { RenterResponse } from '@/types/model/renter';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { RenterResponse } from '@/types/model/renter';
-import { useCreateRenterMutation, useUpdateRenterMutation } from '@/store/houses-api';
-import { RenterFormData, renterSchema } from '@/shared/validation/renter/renter-schema';
-import { mapRenterToFormData } from '@/shared/utils/renter-form/renter-form';
-import { getDefaultRenterValues } from '@/shared/utils/renter-form/get-default-renter-values';
 
 interface Props {
   isEditMode: boolean;
@@ -36,8 +36,7 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
     await createRenter({
       firstName: data.firstName,
       lastName: data.lastName,
-      occupied: data.occupied.toISOString(),
-      vacated: data.vacated.toISOString(),
+      age: data.age,
     }).unwrap();
     toast.success('Орендаря успішно додано!');
   };
@@ -52,8 +51,7 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
       id: renterToEdit.id,
       firstName: data.firstName,
       lastName: data.lastName,
-      occupied: data.occupied.toISOString(),
-      vacated: data.vacated.toISOString(),
+      age: data.age,
     }).unwrap();
     toast.success('Орендаря успішно оновлено!');
   };

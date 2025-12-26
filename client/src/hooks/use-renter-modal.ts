@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeModal } from '@/store/modal-slice';
-import { RenterModalPayload } from '@/types/model/renter-modal';
 import { ModalTriggers } from '@/types/model/modals';
+import { RenterModalPayload } from '@/types/model/renter-modal';
 
 export const useRenterModal = () => {
   const dispatch = useAppDispatch();
@@ -21,10 +21,10 @@ export const useRenterModal = () => {
   };
 
   const modalContent = {
-    title: isEditMode ? 'Редагувати орендаря' : 'Створити новий контракт',
+    title: isEditMode ? 'Редагувати орендаря' : 'Створити нового орендаря',
     description: isEditMode
       ? 'Внесіть зміни до інформації про орендаря'
-      : 'Заповніть форму для створення нового контракту',
+      : 'Заповніть форму для створення нового орендаря',
     submitText: isEditMode ? 'Зберегти зміни' : 'Додати орендаря',
   };
 

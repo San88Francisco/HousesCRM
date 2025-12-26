@@ -111,7 +111,6 @@ export class RentersService {
 
     const savedRenter = await this.rentersRepository.save(renterToSave)
 
-    // Обчислюємо occupied і vacated на основі контрактів
     await this.updateRenterDates(savedRenter.id)
 
     const renterWithContracts = await this.findById(savedRenter.id)
@@ -134,7 +133,6 @@ export class RentersService {
 
     const savedRenter = await this.rentersRepository.save(renterToUpdate)
 
-    // Обчислюємо occupied і vacated на основі контрактів
     await this.updateRenterDates(savedRenter.id)
 
     const renterWithContracts = await this.findById(savedRenter.id)
@@ -164,7 +162,6 @@ export class RentersService {
     })
 
     if (!renter || !renter.contracts || renter.contracts.length === 0) {
-      // Якщо немає контрактів, встановлюємо null для обох дат
       await this.rentersRepository.update(renterId, {
         occupied: null,
         vacated: null,
@@ -172,7 +169,6 @@ export class RentersService {
       return
     }
 
-    // Знаходимо найменшу дату commencement
     const occupied = renter.contracts.reduce(
       (minDate, contract) => {
         if (!contract.commencement) {
@@ -186,7 +182,6 @@ export class RentersService {
       null as Date | null
     )
 
-    // Знаходимо найбільшу дату termination
     const vacated = renter.contracts.reduce(
       (maxDate, contract) => {
         if (!contract.termination) {

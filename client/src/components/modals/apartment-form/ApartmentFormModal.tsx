@@ -1,13 +1,13 @@
 'use client';
 
-import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
-import { Button } from '@/shared/ui/button';
 import { RHFForm } from '@/components/RHF/RHForm';
 import { useApartmentForm } from '@/hooks/use-apartment-form';
 import { useApartmentModal } from '@/hooks/use-apartment-modal';
-import { ApartmentFormFields } from './ApartmentFormFields';
+import { Button } from '@/shared/ui/button';
+import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';
 import Modal from '../modal-wrapper';
+import { ApartmentFormFields } from './ApartmentFormFields';
 
 export const ApartmentFormModal = () => {
   const {
@@ -38,7 +38,7 @@ export const ApartmentFormModal = () => {
       <RHFForm form={methods} onSubmit={onSubmit}>
         <ApartmentFormFields isLoading={isLoading} />
 
-        <DialogFooter className="mt-6 px-6 pb-6">
+        <DialogFooter className="!mt-6 pb-6">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
             Скасувати
           </Button>

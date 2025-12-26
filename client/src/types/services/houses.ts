@@ -36,5 +36,6 @@ export type HouseByIdResponse = {
     lastName: string;
     occupied: string;
     vacated: string;
+    age: number;
   }[];
 };

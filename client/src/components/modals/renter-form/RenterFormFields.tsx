@@ -1,6 +1,5 @@
-import { User } from 'lucide-react';
 import { RHFInput } from '@/components/RHF/RHFInput';
-import { RHFDateRangePicker } from '@/components/RHF/RHFDateRangePicker';
+import { User } from 'lucide-react';
 
 interface Props {
   isLoading: boolean;
@@ -27,19 +26,16 @@ export const RenterFormFields = ({ isLoading }: Props) => {
           required
           disabled={isLoading}
         />
+        <RHFInput
+          name="age"
+          type="number"
+          label="Вік"
+          placeholder="25"
+          icon={<User className="w-4 h-4" />}
+          required
+          disabled={isLoading}
+        />
       </div>
-
-      <RHFDateRangePicker
-        nameFrom="occupied"
-        nameTo="vacated"
-        labelFrom="Дата заселення орендаря"
-        labelTo="Дата виселення орендаря"
-        placeholderFrom="Оберіть дату заселення"
-        placeholderTo="Оберіть дату виселення"
-        disabled={isLoading}
-      />
-
-      {/* <RHFCalendarRange name="rentPeriod" label="Період оренди" /> */}
     </div>
   );
 };

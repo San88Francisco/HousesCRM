@@ -13,8 +13,8 @@ export class Renter {
   @Column({ name: 'last_name', length: 20 })
   lastName: string
 
-  @Column({ length: 100 })
-  age: string
+  @Column({ type: 'int', default: 25 })
+  age: number
 
   @Column({ type: 'timestamp', nullable: true })
   occupied: Date | null
