@@ -1,7 +1,18 @@
 import { HouseFormData } from '@/shared/validation/add-houses/house-schema';
-import { ApartmentType } from './houses';
 
-export type ApartmentFromAPI = {
+type Price = {
+  id: string;
+  amount: number;
+  code: string;
+  exchangeRate: number;
+};
+
+export enum ApartmentType {
+  NEW_BUILD = 'new_build',
+  RESALE = 'resale',
+}
+
+export type HouseFromAPI = {
   id: string;
   apartmentName: string;
   roomsCount: number;
@@ -10,22 +21,11 @@ export type ApartmentFromAPI = {
   floor: number;
   street: string;
   apartmentType: ApartmentType;
-  prices?: Array<{
-    id: string;
-    amount: number;
-    code: string;
-    exchangeRate: number;
-  }>;
+  prices?: Price[];
 };
 
 export type HouseToEdit = Omit<HouseFormData, 'price' | 'purchaseDate'> & {
   id: string;
-  price: number;
-  prices: Array<{
-    id: string;
-    amount: number;
-    code: string;
-    exchangeRate: number;
-  }>;
-  purchaseDate: string | Date;
+  prices: Price[];
+  purchaseDate: string;
 };

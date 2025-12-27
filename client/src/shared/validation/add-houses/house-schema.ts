@@ -1,4 +1,4 @@
-import { ApartmentType } from '@/types/core/houses';
+import { ApartmentType } from '@/types/core/house';
 import * as yup from 'yup';
 
 export const houseSchema = yup.object({
