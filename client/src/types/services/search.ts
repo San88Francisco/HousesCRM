@@ -1,5 +1,5 @@
 import { Contract } from './contracts';
-import { House } from './houses';
+import { HousePayload } from './houses';
 import { Renter } from './renters';
 
 export type SearchRequest = {
@@ -8,6 +8,6 @@ export type SearchRequest = {
 
 export type SearchResponse = {
   renters: Renter[];
-  houses: House[];
+  houses: HousePayload[];
   contracts: Contract[];
 };

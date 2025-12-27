@@ -80,7 +80,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {field.value ? (
-                      format(new Date(field.value), 'dd MMMM yyyy', { locale: uk })
+                      format(field.value, 'dd MMMM yyyy', { locale: uk })
                     ) : (
                       <span>{placeholder}</span>
                     )}
@@ -96,7 +96,8 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                     onSubmit={e => {
                       e.preventDefault();
                       e.stopPropagation();
-                      field.onChange(tempDate.toISOString());
+                      // field.onChange(tempDate.toISOString());
+                      field.onChange(tempDate);
                       setOpen(false);
                     }}
                   >

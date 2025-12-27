@@ -8,7 +8,7 @@ import {
   SidebarGroupLabel,
 } from '@/shared/ui/sidebar';
 import { SidebarActionItem } from './SidebarActionItem';
-import { actionItems } from '@/shared/constants/sidebar/sidebarActionItems';
+import { actionItems } from '@/shared/constants/sidebar/sidebar-action-items';
 
 export const SidebarActionsGroup = () => {
   return (

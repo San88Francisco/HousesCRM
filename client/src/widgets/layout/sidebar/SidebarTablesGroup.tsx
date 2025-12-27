@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
 } from '@/shared/ui/sidebar';
 import { CollapsibleMenu } from './ColapsibleMenu';
-import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
+import { itemsNav } from '@/shared/constants/sidebar/sidebar-nav-items';
 
 export const SidebarTablesGroup = () => {
   const tablesItems = itemsNav.filter(item => !item.url);

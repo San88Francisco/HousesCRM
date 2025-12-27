@@ -8,7 +8,7 @@ import {
   SidebarGroupLabel,
 } from '@/shared/ui/sidebar';
 import { SidebarMenuItem } from './SidebarMenuItem';
-import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
+import { itemsNav } from '@/shared/constants/sidebar/sidebar-nav-items';
 
 export const SidebarPagesGroup = () => {
   const pagesItems = itemsNav.filter(item => item.url);

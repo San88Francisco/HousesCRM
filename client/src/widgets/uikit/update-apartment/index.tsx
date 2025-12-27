@@ -5,7 +5,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
 import { toast } from 'sonner';
-import { ApartmentFromAPI } from '@/types/core/apartment';
+import { ApartmentFromAPI } from '@/types/core/house';
 import { useGetHouseByIdQuery } from '@/store/houses-api';
 import { MouseEvent } from 'react';
 
@@ -25,7 +25,7 @@ const UpdateApartment = () => {
 
     dispatch(
       openModal({
-        trigger: ModalTriggers.EDIT_APARTMENT,
+        trigger: ModalTriggers.EDIT_HOUSE,
         payload: { apartment },
       }),
     );

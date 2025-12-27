@@ -1,14 +1,16 @@
 import { ApartmentType } from '../core/houses';
 
-export type House = {
-  id: string;
+export type HousePayload = {
+  id?: string;
   apartmentName: string;
   roomsCount: number;
   totalArea: number;
+  price: number;
   purchaseDate: string;
   floor: number;
   street: string;
   apartmentType: ApartmentType;
+  contractIds?: string[];
 };
 
 export type HouseByIdResponse = {
@@ -38,3 +40,7 @@ export type HouseByIdResponse = {
     vacated: string;
   }[];
 };
+
+export type CreateHousePayload = HousePayload;
+
+export type UpdateHousePayload = HousePayload;

@@ -1,4 +1,4 @@
-import { ApartmentFormModal } from './apartment-form/ApartmentFormModal';
+import { ApartmentFormModal } from './create-house-form/HouseFormModal';
 import { ConfirmDeleteModal } from './confirm-delete-modal/ConfirmDeleteModal';
 import { PdfContractModal } from './pdf-contract-modal';
 
