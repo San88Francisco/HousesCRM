@@ -1,12 +1,12 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { useGetHouseByIdQuery } from '@/store/houses-api';
-import { MapPin, DoorOpen, Ruler, Building2, PackagePlus } from 'lucide-react';
-import { formatDate } from '@/shared/utils/format/format-date';
 import { APARTMENT_TYPE_MAP } from '@/constants/apartment/apartment-type-map';
+import { formatDate } from '@/shared/utils/format/format-date';
+import { useGetHouseByIdQuery } from '@/store/houses-api';
+import { Building2, DoorOpen, MapPin, PackagePlus, Ruler } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
-export const HeaderApartment = () => {
+export const HeaderHouse = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading, error } = useGetHouseByIdQuery(id, {

@@ -10,7 +10,7 @@ export const mapHouseToFormData = (apartment?: ApartmentToEdit): ApartmentFormDa
     roomsCount: apartment.roomsCount,
     totalArea: apartment.totalArea,
     purchaseDate: new Date(apartment.purchaseDate),
-    price: apartment.prices[0].amount,
+    price: apartment.prices[0]?.amount ?? 0,
     floor: apartment.floor,
     street: apartment.street,
     apartmentType: apartment.apartmentType,

@@ -11,8 +11,6 @@ type HotkeyOptions = {
 };
 
 const isHotkeyEvent = (event: KeyboardEvent, key: string, options: HotkeyOptions): boolean => {
-  if (!event.key || typeof event.key !== 'string') return false;
-
   const { ctrl = false, shift = false, alt = false, meta = false } = options;
 
   return [

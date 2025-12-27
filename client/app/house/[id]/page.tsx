@@ -1,5 +1,5 @@
-import { HeaderApartment } from '@/widgets/house/HeaderApartment';
+import { HeaderHouse } from '@/widgets/house/HeaderHouse';
 
 export default function Page() {
-  return <HeaderApartment />;
+  return <HeaderHouse />;
 }

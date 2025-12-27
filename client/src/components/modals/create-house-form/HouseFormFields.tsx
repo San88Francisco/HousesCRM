@@ -84,7 +84,7 @@ export const ApartmentFormFields = ({ isLoading }: Props) => {
       <RHFSelect
         name="apartmentType"
         label="Тип квартири"
-        options={[...HOUSE_TYPE_OPTIONS]}
+        options={HOUSE_TYPE_OPTIONS}
         placeholder="Виберіть тип"
         disabled={isLoading}
       />
