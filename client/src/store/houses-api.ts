@@ -1,4 +1,9 @@
 import { rootApi } from '@/shared/api';
+import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
+import {
+  HousesPerformanceRequest,
+  HousesPerformanceResponse,
+} from '@/types/core/houses-performance/types';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 import {
   CreateHousePayload,
@@ -6,7 +11,6 @@ import {
   HousePayload,
   UpdateHousePayload,
 } from '@/types/services/houses';
-import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -43,6 +47,19 @@ export const housesApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses', 'Analytics'],
     }),
+
+    getHousesPerformance: build.query<HousesPerformanceResponse, HousesPerformanceRequest>({
+      query: ({ page, limit, sortBy, order }) => ({
+        url: '/houses-analytics/houses-performance-analytic',
+        params: {
+          page,
+          limit,
+          sortBy,
+          order,
+        },
+      }),
+      providesTags: ['Houses'],
+    }),
   }),
 });
 
@@ -53,4 +70,6 @@ export const {
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,
+  useGetHousesPerformanceQuery,
+  useLazyGetHousesPerformanceQuery,
 } = housesApi;

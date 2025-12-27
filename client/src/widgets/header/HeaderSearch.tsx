@@ -43,7 +43,7 @@ const HeaderSearch = () => {
 
   return (
     <div className="relative w-full max-w-md">
-      <RHFForm form={form} onSubmit={() => {}}>
+      <RHFForm form={form} onSubmit={() => undefined}>
         <RHFInput
           name="query"
           type="text"

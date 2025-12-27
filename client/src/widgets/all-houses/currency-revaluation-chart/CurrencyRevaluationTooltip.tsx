@@ -1,9 +1,9 @@
-import React, { CSSProperties } from 'react';
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart/types';
+import { CSSProperties } from 'react';
 
 import {
-  formatRate,
   formatCurrency,
+  formatRate,
   truncateText,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 

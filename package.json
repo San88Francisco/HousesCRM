@@ -8,7 +8,9 @@
     "prepare": "husky",
     "lint:client": "echo \"\\n🔍 Linting CLIENT...\\n\" && npm run lint --prefix client",
     "lint:server": "echo \"\\n🔍 Linting SERVER...\\n\" && npm run lint --prefix server",
-    "lint:all": "echo \"\\n🚀 Starting lint for entire project...\\n\" && npm run lint:client && npm run lint:server && echo \"\\n✅ All linting completed successfully!\\n\""
+    "lint:all": "echo \"\\n🚀 Starting lint for entire project...\\n\" && npm run lint:client && npm run lint:server && echo \"\\n✅ All linting completed successfully!\\n\"",
+    "lint:client:staged": "cd client && eslint --max-warnings 0 --fix",
+    "lint:server:staged": "cd server && eslint --max-warnings 0 --fix"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -27,12 +29,15 @@
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "client/**/*.{js,jsx,ts,tsx,css,scss}": [
+    "client/**/*.{js,jsx,ts,tsx}": [
       "npm run lint:fix --prefix client",
       "prettier --write --config client/.prettierrc --ignore-path client/.prettierignore"
     ],
+    "client/**/*.{css,scss}": [
+      "prettier --write --config client/.prettierrc --ignore-path client/.prettierignore"
+    ],
     "server/**/*.{js,ts}": [
-      "npm run lint --prefix server",
+      "npm run lint --prefix server -- --fix",
       "prettier --write --config server/.prettierrc --ignore-path server/.prettierignore"
     ],
     "*.{json,md}": [
