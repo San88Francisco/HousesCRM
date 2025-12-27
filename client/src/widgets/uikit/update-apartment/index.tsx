@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/shared/ui/button';
 import { useAppDispatch } from '@/store/hooks';
 import { useGetHouseByIdQuery } from '@/store/houses-api';
@@ -15,10 +13,10 @@ const idHouse = '2188f8c5-2528-49c2-b252-b5dc02e8da13';
 const UpdateApartment = () => {
   const dispatch = useAppDispatch();
 
-  const handleEdit = (e: MouseEvent<HTMLButtonElement>, House?: HouseFromAPI) => {
+  const handleEdit = (e: MouseEvent<HTMLButtonElement>, house?: HouseFromAPI) => {
     e.currentTarget.blur();
 
-    if (!House) {
+    if (!house) {
       toast.error('Не вдалося завантажити дані квартири');
       return;
     }
@@ -26,7 +24,7 @@ const UpdateApartment = () => {
     dispatch(
       openModal({
         trigger: ModalTriggers.EDIT_HOUSE,
-        payload: { House },
+        payload: { house },
       }),
     );
   };

@@ -38,7 +38,6 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
       ...data,
       purchaseDate: format(data.purchaseDate, 'yyyy-MM-dd'),
     }).unwrap();
-    toast.success('Квартиру успішно додано!');
   };
 
   const handleUpdate = async (data: HouseFormData) => {
@@ -51,7 +50,6 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
       ...data,
       purchaseDate: format(data.purchaseDate, 'yyyy-MM-dd'),
     }).unwrap();
-    toast.success('Квартиру успішно оновлено!');
   };
 
   const onSubmit = async (data: HouseFormData) => {
@@ -60,11 +58,12 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
     try {
       if (isEditMode) {
         await handleUpdate(data);
+        toast.success('Квартиру успішно оновлено!', { id: toastId });
       } else {
         await handleCreate(data);
+        toast.success('Квартиру успішно додано!', { id: toastId });
       }
 
-      toast.dismiss(toastId);
       onSuccess();
     } catch (error) {
       console.error('Помилка:', error);

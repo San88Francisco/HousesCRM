@@ -1,5 +1,5 @@
 import { HouseFormData } from '@/shared/validation/add-houses/house-schema';
-import { ApartmentType } from '@/types/core/houses';
+import { ApartmentType } from '@/types/core/house';
 
 export const getDefaultHouseValues = (): HouseFormData => ({
   apartmentName: '',
