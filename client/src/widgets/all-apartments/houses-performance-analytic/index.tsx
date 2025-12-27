@@ -1,7 +1,6 @@
 'use client';
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-// import { LoadingState } from '@/components/chart-states/LoadingState';
 import { HousesPerformanceTableColumns } from '@/constants/apartment/houses-performance-analytic';
 import { useHousesPerformance } from '@/hooks/all-apartments/houses-performance-analytic/use-houses-performance';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
