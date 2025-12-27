@@ -1,22 +1,21 @@
-import { Controller, Post, UseGuards, HttpCode, HttpStatus, Req, Res, Body, Get } from '@nestjs/common'
-import type { Response } from 'express'
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { AuthGuard } from '@nestjs/passport'
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
+import type { Response } from 'express'
+import { Public } from 'src/common/decorators/public.decorator'
+import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
+import { CreateUserResponseDto } from 'src/users/dto/res/create-user-response.dto'
+import { LoginUserResponseDto } from 'src/users/dto/res/login-user-res.dto'
+import { UserDto } from 'src/users/dto/res/user.dto'
+import { JwtPayload } from 'types/jwt/jwt.types'
 import { AuthService } from './auth.service'
 import { AUTH_ROUTES } from './constants/auth.routes'
 import { LoginRequestDto } from './dto/req/login-req.dto'
-import { type AuthenticatedRequest } from './types'
-import { ConfigService } from '@nestjs/config'
-import { LoginUserResponseDto } from 'src/users/dto/res/login-user-res.dto'
-import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
-import { CreateUserResponseDto } from 'src/users/dto/res/create-user-response.dto'
+import { LogoutDto } from './dto/res/logout.dto'
 import { RefreshTokenResponseDto } from './dto/res/refresh-token.dto'
 import { GoogleAuthGuard } from './guard/google-auth.guard'
-import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
-import { JwtPayload } from 'types/jwt/jwt.types'
-import { UserDto } from 'src/users/dto/res/user.dto'
-import { LogoutDto } from './dto/res/logout.dto'
-import { Public } from 'src/common/decorators/public.decorator'
-import { Auth } from 'src/common/decorators/auth.decorator'
+import { type AuthenticatedRequest } from './types'
 
 @Controller(AUTH_ROUTES.ROOT)
 export class AuthController {
@@ -43,7 +42,7 @@ export class AuthController {
 
   @Public()
   @Post(AUTH_ROUTES.REGISTRATION)
-  @Auth()
+  // @Auth()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
     const user = await this.authService.registration(dto)

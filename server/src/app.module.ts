@@ -15,6 +15,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard'
 import { AnalyticsModule } from './analytics/analytics.module'
 import { SearchModule } from './search/search.module'
+import { ExchangeRatesModule } from './exchange-rates/exchange-rates.module'
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { SearchModule } from './search/search.module'
     }),
     UsersModule,
     TokensModule,
+    ExchangeRatesModule,
     HousesModule,
     ContractsModule,
     RentersModule,

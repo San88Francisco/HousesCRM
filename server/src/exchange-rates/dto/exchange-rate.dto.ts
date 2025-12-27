@@ -1,16 +1,16 @@
 import { Expose } from 'class-transformer'
-import { CurrencyCode } from '../entities/house-price.entity'
+import { CurrencyCode } from '../entities/exchange-rate.entity'
 
-export class HousePriceDto {
+export class ExchangeRateDto {
   @Expose()
   id: string
 
   @Expose()
-  amount: number
+  date: Date
 
   @Expose()
   code: CurrencyCode
 
   @Expose()
-  exchangeRate: number
+  rate: number
 }

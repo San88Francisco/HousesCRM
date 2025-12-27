@@ -18,6 +18,9 @@ export class HouseDto {
   purchaseDate: Date
 
   @Expose()
+  price: number
+
+  @Expose()
   floor: number
 
   @Expose()

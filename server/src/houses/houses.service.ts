@@ -1,27 +1,27 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { House } from './entities/house.entity'
-import { Between, EntityNotFoundError, Repository } from 'typeorm'
-import { CreateHouseDto } from './dto/create-house.dto'
 import { plainToInstance } from 'class-transformer'
-import { UpdateHouseDto } from './dto/update-house.dto'
-import { HousePriceService } from 'src/house-prices/house-price.service'
-import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
-import { HousePricesConverterService } from 'src/house-prices/house-prices.converter.service'
+import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { Contract } from 'src/contracts/entities/contract.entity'
-import { HouseResponseDto } from './dto/houses-response.dto'
+import { AmountInCurrencyDto } from 'src/exchange-rates/dto/amount-with-currencies.dto'
+import { CurrencyCode } from 'src/exchange-rates/entities/exchange-rate.entity'
+import { ExchangeRatesService } from 'src/exchange-rates/exchange-rates.service'
+import { Between, EntityNotFoundError, Repository } from 'typeorm'
+import { HOUSE_QUERY_DEFAULTS } from './constants/house-query.constant'
+import { CreateHouseDto } from './dto/create-house.dto'
 import { HouseQueryDto } from './dto/house-query.dto'
 import { HouseWithPricesDto } from './dto/house-with-prices.dto'
-import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
-import { HOUSE_QUERY_DEFAULTS } from './constants/house-query.constant'
+import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
+import { HouseResponseDto } from './dto/houses-response.dto'
+import { UpdateHouseDto } from './dto/update-house.dto'
+import { House } from './entities/house.entity'
 
 @Injectable()
 export class HousesService {
   constructor(
     @InjectRepository(House)
     private houseRepository: Repository<House>,
-    private housePriceService: HousePriceService,
-    private housePricesConverterService: HousePricesConverterService
+    private exchangeRatesService: ExchangeRatesService
   ) {}
 
   async findAll(dto: HouseQueryDto): Promise<HouseResponseDto> {
@@ -37,11 +37,18 @@ export class HousesService {
     } = dto
 
     const computedSortFields = new Set(['totalRevenue', 'rentersCount', 'currentPayment'])
-
     const orderField = computedSortFields.has(sortBy as string) ? QUERY_DEFAULTS.SORT_BY : sortBy
 
-    const [houses, total] = await this.houseRepository.findAndCount({
-      relations: { prices: true },
+    // Фільтрація по ціні: конвертуємо діапазон в UAH якщо потрібно
+    let priceFilter = {}
+    if (currency === CurrencyCode.UAH) {
+      priceFilter = { price: Between(minPrice, maxPrice) }
+    } else {
+      // Якщо фільтрація по іншій валюті - треба конвертувати
+      // Поки що простий варіант - завантажуємо всі і фільтруємо в пам'яті
+    }
+
+    const [houses] = await this.houseRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
       order: {
@@ -49,21 +56,33 @@ export class HousesService {
       },
       where: {
         ...filters,
-        prices: {
-          amount: Between(minPrice, maxPrice),
-          code: currency,
-        },
+        ...priceFilter,
       },
     })
 
-    const housesDto = plainToInstance(HouseWithPricesDto, houses, {
+    const housesWithPrices = await Promise.all(
+      houses.map(async (house) => {
+        const prices = await this.calculatePricesForHouse(house)
+        return { ...house, prices }
+      })
+    )
+
+    let filteredHouses = housesWithPrices
+    if (currency !== CurrencyCode.UAH) {
+      filteredHouses = housesWithPrices.filter((house) => {
+        const priceInCurrency = house.prices.find((p) => p.code === currency)
+        return priceInCurrency && priceInCurrency.amount >= minPrice && priceInCurrency.amount <= maxPrice
+      })
+    }
+
+    const housesDto = plainToInstance(HouseWithPricesDto, filteredHouses, {
       excludeExtraneousValues: true,
     })
 
     const rawData = {
       data: housesDto,
       meta: {
-        total,
+        total: filteredHouses.length,
         page,
         limit,
       },
@@ -77,12 +96,12 @@ export class HousesService {
   async findById(id: string): Promise<HouseWithRelationsDto> {
     const house = await this.houseRepository.findOneOrFail({
       where: { id },
-      relations: {
-        prices: true,
-      },
     })
 
-    return plainToInstance(HouseWithRelationsDto, house, {
+    const prices = await this.calculatePricesForHouse(house)
+    const houseWithPrices = { ...house, prices }
+
+    return plainToInstance(HouseWithRelationsDto, houseWithPrices, {
       excludeExtraneousValues: true,
     })
   }
@@ -93,21 +112,15 @@ export class HousesService {
       contracts: dto.contractIds?.map((id) => ({ id })),
     })
 
-    houseToSave.prices = await this.housePricesConverterService.convert(dto.price, houseToSave)
-
     const savedHouse = await this.houseRepository.save(houseToSave)
 
-    const houseWithRelations = await this.findById(savedHouse.id)
-
-    return plainToInstance(HouseWithRelationsDto, houseWithRelations, {
-      excludeExtraneousValues: true,
-    })
+    return this.findById(savedHouse.id)
   }
 
   async update(dto: UpdateHouseDto, id: string): Promise<HouseWithRelationsDto> {
     const house = await this.houseRepository.findOneOrFail({
       where: { id },
-      relations: { contracts: true, prices: true },
+      relations: { contracts: true },
     })
 
     Object.assign(house, dto)
@@ -116,19 +129,9 @@ export class HousesService {
       house.contracts = dto.contractIds.map((id) => ({ id }) as Contract)
     }
 
-    if (dto.price) {
-      await this.housePriceService.deleteByHouseId(id)
+    await this.houseRepository.save(house)
 
-      house.prices = await this.housePricesConverterService.convert(dto.price, house)
-    }
-
-    const updatedHouse = await this.houseRepository.save(house)
-
-    const houseWithRelations = await this.findById(updatedHouse.id)
-
-    return plainToInstance(HouseWithRelationsDto, houseWithRelations, {
-      excludeExtraneousValues: true,
-    })
+    return this.findById(id)
   }
 
   async remove(id: string): Promise<void> {
@@ -137,5 +140,17 @@ export class HousesService {
     if (res.affected === 0) {
       throw new EntityNotFoundError(House, id)
     }
+  }
+
+  private async calculatePricesForHouse(house: House): Promise<AmountInCurrencyDto[]> {
+    // Отримуємо курси за датою покупки (з кешуванням)
+    const rates = await this.exchangeRatesService.getExchangeRatesForDate(house.purchaseDate)
+
+    // Конвертуємо ціну в усі валюти з округленням до сотих
+    return Object.entries(rates).map(([code, rate]) => ({
+      code: code as CurrencyCode,
+      amount: Number((house.price / rate).toFixed(2)), // Округлення до сотих
+      exchangeRate: Number(rate.toFixed(4)), // Курс з точністю НБУ (4 знаки)
+    }))
   }
 }

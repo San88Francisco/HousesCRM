@@ -9,9 +9,11 @@ import { CreateRenterDto } from './dto/create-renter.dto'
 import { RenterQueryDto } from './dto/renter-query.dto'
 import { RenterResponseDto } from './dto/renter-response.dto'
 import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
-import { RenterDto } from './dto/renter.dto'
 import { UpdateRenterDto } from './dto/update-renter.dto'
 import { Renter } from './entities/renter.entity'
+import { ExchangeRatesService } from 'src/exchange-rates/exchange-rates.service'
+import { CurrencyCode } from 'src/exchange-rates/entities/exchange-rate.entity'
+import { RenterWithCurrenciesDto } from './dto/renter-with-currencies.dto'
 
 @Injectable()
 export class RentersService {
@@ -19,7 +21,8 @@ export class RentersService {
 
   constructor(
     @InjectRepository(Renter)
-    private readonly rentersRepository: Repository<Renter>
+    private readonly rentersRepository: Repository<Renter>,
+    private readonly exchangeRatesService: ExchangeRatesService
   ) {}
 
   async findAll(dto: RenterQueryDto): Promise<RenterResponseDto> {
@@ -57,26 +60,75 @@ export class RentersService {
       .orderBy(`renter.${orderField}`, order)
       .getMany()
 
-    const rentersDto = plainToInstance(
-      RenterDto,
-      rentersWithContracts.map((renter) => {
+    // Розраховуємо доходи з середнім курсом для кожного орендаря
+    const rentersWithCalculatedIncome = await Promise.all(
+      rentersWithContracts.map(async (renter) => {
         const contracts = renter.contracts ?? []
         const totalIncome = contracts.reduce((sum, c) => sum + calculateContractRevenue(c), 0)
+
+        if (contracts.length === 0) {
+          // Якщо немає контрактів - використовуємо поточні курси
+          const rates = await this.exchangeRatesService.getExchangeRatesForDate(new Date())
+          const totalIncomeInCurrencies = Object.entries(rates).map(([code, rate]) => ({
+            code: code as CurrencyCode,
+            amount: Number((totalIncome / rate).toFixed(2)),
+            exchangeRate: Number(rate.toFixed(4)),
+          }))
+
+          return {
+            id: renter.id,
+            firstName: renter.firstName,
+            lastName: renter.lastName,
+            age: renter.age,
+            occupied: renter.occupied,
+            vacated: renter.vacated,
+            totalIncome,
+            totalIncomeInCurrencies,
+            status: ContractStatus.INACTIVE,
+          }
+        }
+
+        // Отримуємо курси на початок кожного контракту
+        const contractRates = await Promise.all(
+          contracts.map((contract) => this.exchangeRatesService.getExchangeRatesForDate(contract.commencement))
+        )
+
+        // Рахуємо середній курс для кожної валюти
+        const averageRates: Record<CurrencyCode, number> = {} as Record<CurrencyCode, number>
+
+        // Ініціалізуємо об'єкт для середніх курсів
+        Object.values(CurrencyCode).forEach((code) => {
+          const rates = contractRates.map((r) => r[code])
+          const average = rates.reduce((sum, rate) => sum + rate, 0) / rates.length
+          averageRates[code] = Number(average.toFixed(4))
+        })
+
+        // Конвертуємо totalIncome за середніми курсами
+        const totalIncomeInCurrencies = Object.entries(averageRates).map(([code, rate]) => ({
+          code: code as CurrencyCode,
+          amount: Number((totalIncome / rate).toFixed(2)),
+          exchangeRate: Number(rate.toFixed(4)),
+        }))
 
         return {
           id: renter.id,
           firstName: renter.firstName,
           lastName: renter.lastName,
+          age: renter.age,
           occupied: renter.occupied,
           vacated: renter.vacated,
           totalIncome,
+          totalIncomeInCurrencies,
           status: contracts.some((c) => c.status === ContractStatus.ACTIVE)
             ? ContractStatus.ACTIVE
             : ContractStatus.INACTIVE,
         }
-      }),
-      { excludeExtraneousValues: true }
+      })
     )
+
+    const rentersDto = plainToInstance(RenterWithCurrenciesDto, rentersWithCalculatedIncome, {
+      excludeExtraneousValues: true,
+    })
 
     return plainToInstance(
       RenterResponseDto,

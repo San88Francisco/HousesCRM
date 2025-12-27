@@ -7,9 +7,10 @@ import { Contract } from 'src/contracts/entities/contract.entity'
 import { RenterDetailAnalyticsService } from './renter-detail-analytics/renter-detail-analytics.service'
 import { HousesAnalyticsController } from './houses-analytics/houses-analytics.controller'
 import { Renter } from 'src/renters/entities/renter.entity'
+import { ExchangeRatesModule } from 'src/exchange-rates/exchange-rates.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([House, Contract, Renter])],
+  imports: [TypeOrmModule.forFeature([House, Contract, Renter]), ExchangeRatesModule],
   providers: [HousesAnalyticsService, HouseDetailAnalyticsService, RenterDetailAnalyticsService],
   controllers: [HousesAnalyticsController],
   exports: [HousesAnalyticsService, HouseDetailAnalyticsService, RenterDetailAnalyticsService],

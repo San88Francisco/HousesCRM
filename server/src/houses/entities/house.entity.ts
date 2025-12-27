@@ -1,7 +1,6 @@
 import { Contract } from 'src/contracts/entities/contract.entity'
 import { Check, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
-import { HousePrice } from 'src/house-prices/entities/house-price.entity'
 
 export enum ApartmentType {
   NEW_BUILD = 'new_build',
@@ -25,6 +24,9 @@ export class House {
   @Column({ name: 'purchase_date' })
   purchaseDate: Date
 
+  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: false })
+  price: number
+
   @Column()
   floor: number
 
@@ -39,9 +41,6 @@ export class House {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date
-
-  @OneToMany(() => HousePrice, (price) => price.house, { cascade: true })
-  prices: Relation<HousePrice>[]
 
   @OneToMany(() => Contract, (contract) => contract.house)
   contracts: Relation<Contract>[]

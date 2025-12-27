@@ -3,31 +3,42 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import { Repository, SelectQueryBuilder } from 'typeorm'
 
+import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
+import { QueryDto } from 'src/common/dto/query.dto'
+import { SortOrder } from 'src/common/enums/sort-order.enum'
+import { CurrencyCode } from 'src/exchange-rates/entities/exchange-rate.entity'
+import { ExchangeRatesService } from 'src/exchange-rates/exchange-rates.service'
+import { convertAmountToAllCurrencies } from 'src/exchange-rates/helpers/convert-amount.helper'
+import { splitContractIntoPeriods } from 'src/exchange-rates/helpers/split-contract-periods.helper'
 import { House } from 'src/houses/entities/house.entity'
+import { PaginatedResult } from 'types'
+import { calculateAverageRatesFromContracts } from '../helpers/average-rates.helper'
+import { housesPerformance } from '../helpers/houses-performance.helper'
+import { calculatePaybackStatsForHouses } from '../helpers/payback-stats.helpers'
+import { calculateHouseRevenue, calculateRevenuePercentages } from '../helpers/revenue.helpers'
+import { HouseWithContractArray } from '../types'
+import { HousePerformanceBase, RevenueDistributionItemBase } from '../types/analytics.types'
+import {
+  ComputedFieldKey,
+  ComputedSortBy,
+  computedSortMapping,
+  isComputedSort,
+} from './constants/computed-sort-mapping'
+import { AllHousesAnalyticsDto } from './dto/all-houses-analytics.dto'
+import { CurrencyRevaluationDto } from './dto/currency-revaluation/currency-revaluation.dto'
+import { HousePaybackStatsDto } from './dto/house-payback-stats/house-payback-stats.dto'
+import { HousePerformanceResponseDto } from './dto/house-performance/house-performance-response.dto'
+import { HousePerformanceDto } from './dto/house-performance/house-performance.dto'
+import { HousesOverviewQueryDto } from './dto/houses-overview/houses-overview-query.dto'
 import { HouseOverviewDto } from './dto/houses-overview/houses-overview.dto'
 import { RevenueDistributionDto } from './dto/revenue-distribution/revenue-distribution.dto'
-import { AllHousesAnalyticsDto } from './dto/all-houses-analytics.dto'
-import { calculateHouseRevenue, calculateRevenuePercentages } from '../helpers/revenue.helpers'
-import { calculatePaybackStatsForHouses } from '../helpers/payback-stats.helpers'
-import { HousePaybackStatsDto } from './dto/house-payback-stats/house-payback-stats.dto'
-import { getExchangeRates } from 'src/utils/exchange-rates.util'
-import { CurrencyRevaluationDto } from './dto/currency-revaluation/currency-revaluation.dto'
-import { QueryDto } from 'src/common/dto/query.dto'
-import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
-import { HousePerformanceResponseDto } from './dto/house-performance/house-performance-response.dto'
-import { housesPerformance } from '../helpers/houses-performance.helper'
-import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
-import { HousesOverviewQueryDto } from './dto/houses-overview/houses-overview-query.dto'
-import { SortOrder } from 'src/common/enums/sort-order.enum'
-import { HousePerformanceDto } from './dto/house-performance/house-performance.dto'
-import { ComputedSortBy, computedSortMapping, isComputedSort } from './constants/computed-sort-mapping'
-import { PaginatedResult } from 'types'
 
 @Injectable()
 export class HousesAnalyticsService {
   constructor(
     @InjectRepository(House)
-    private readonly houseRepository: Repository<House>
+    private readonly houseRepository: Repository<House>,
+    private readonly exchangeRatesService: ExchangeRatesService
   ) {}
 
   async getAllHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
@@ -55,10 +66,39 @@ export class HousesAnalyticsService {
 
   async getHousesOverview(dto?: HousesOverviewQueryDto): Promise<HouseOverviewDto[]> {
     const qb = this.buildHousesOverviewQuery(dto)
-
     const houses = await qb.getMany()
 
-    return plainToInstance(HouseOverviewDto, houses, {
+    const housesWithCurrencies = await Promise.all(
+      (houses as HouseWithContractArray[]).map(async (house) => ({
+        ...house,
+        contract: await Promise.all(
+          (house.contract || []).map(async (contract) => {
+            const periods = splitContractIntoPeriods(contract.commencement, contract.termination)
+
+            const monthlyPaymentInCurrencies = await Promise.all(
+              periods.map(async (period) => {
+                const rates = await this.exchangeRatesService.getExchangeRatesForDate(period.from)
+
+                return {
+                  period: {
+                    from: period.from,
+                    to: period.to,
+                  },
+                  currencies: convertAmountToAllCurrencies(contract.monthlyPayment, rates),
+                }
+              })
+            )
+
+            return {
+              ...contract,
+              monthlyPaymentInCurrencies,
+            }
+          })
+        ),
+      }))
+    )
+
+    return plainToInstance(HouseOverviewDto, housesWithCurrencies, {
       excludeExtraneousValues: true,
     })
   }
@@ -78,6 +118,7 @@ export class HousesAnalyticsService {
         'contract.commencement',
         'contract.termination',
         'contract.monthlyPayment',
+        'contract.paymentCurrency',
         'renter.id',
         'renter.firstName',
         'renter.lastName',
@@ -105,52 +146,98 @@ export class HousesAnalyticsService {
     const housesRevenue = houses.map(calculateHouseRevenue)
     const revenueData = calculateRevenuePercentages(housesRevenue)
 
-    return plainToInstance(RevenueDistributionDto, revenueData, {
+    const dataWithCurrencies = await Promise.all(
+      revenueData.data.map(async (item: RevenueDistributionItemBase & { percentage: number }) => {
+        const house = houses.find((h) => h.apartmentName === item.apartmentName)
+        if (!house) {
+          return item
+        }
+
+        const averageRates = await calculateAverageRatesFromContracts(house.contracts, this.exchangeRatesService)
+
+        return {
+          ...item,
+          apartmentTotalRevenueInCurrencies: convertAmountToAllCurrencies(item.apartmentTotalRevenue, averageRates),
+        }
+      })
+    )
+
+    const allContracts = houses.flatMap((h) => h.contracts)
+    const grandAverageRates = await calculateAverageRatesFromContracts(allContracts, this.exchangeRatesService)
+
+    const resultData = {
+      data: dataWithCurrencies,
+      grandTotal: revenueData.grandTotal,
+      grandTotalInCurrencies: convertAmountToAllCurrencies(revenueData.grandTotal, grandAverageRates),
+    }
+
+    return plainToInstance(RevenueDistributionDto, resultData, {
       excludeExtraneousValues: true,
     })
   }
 
   async getHousePaybackStats(): Promise<HousePaybackStatsDto[]> {
     const houses = await this.houseRepository.find({
-      relations: { contracts: true, prices: true },
+      relations: { contracts: true },
     })
 
     const paybackStats = calculatePaybackStatsForHouses(houses)
 
-    return plainToInstance(HousePaybackStatsDto, paybackStats, {
+    const statsWithCurrencies = await Promise.all(
+      paybackStats.map(async (stat) => {
+        const house = houses.find((h) => h.id === stat.id)
+        if (!house) {
+          return stat
+        }
+
+        const purchaseRates = await this.exchangeRatesService.getExchangeRatesForDate(house.purchaseDate)
+
+        const averageRates = await calculateAverageRatesFromContracts(house.contracts, this.exchangeRatesService)
+
+        return {
+          ...stat,
+          purchasePriceInCurrencies: convertAmountToAllCurrencies(stat.purchasePrice, purchaseRates),
+          totalIncomeInCurrencies: convertAmountToAllCurrencies(stat.totalIncome, averageRates),
+        }
+      })
+    )
+
+    return plainToInstance(HousePaybackStatsDto, statsWithCurrencies, {
       excludeExtraneousValues: true,
     })
   }
 
   async getCurrencyRevaluation(): Promise<CurrencyRevaluationDto[]> {
-    const [houses, exchangeRates] = await Promise.all([
-      this.houseRepository.find({
-        relations: { prices: true },
-      }),
-      getExchangeRates(new Date()),
+    const [houses, currentRates] = await Promise.all([
+      this.houseRepository.find(),
+      this.exchangeRatesService.getExchangeRatesForDate(new Date()),
     ])
 
-    const { USD } = exchangeRates
+    const { USD } = currentRates
 
-    const currencyRevaluation = houses
-      .map(({ apartmentName, id, prices }): CurrencyRevaluationDto | null => {
-        const usdPrice = prices.find((price) => price.code === CurrencyCode.USD)
-        const uahPrice = prices.find((price) => price.code === CurrencyCode.UAH)
+    const currencyRevaluation = await Promise.all(
+      houses.map(async ({ apartmentName, id, price, purchaseDate }) => {
+        const purchaseRates = await this.exchangeRatesService.getExchangeRatesForDate(purchaseDate)
 
-        if (!usdPrice || !uahPrice) {
-          return null
-        }
+        const usdPurchaseRate = purchaseRates[CurrencyCode.USD]
+
+        const purchaseAmount = price
+
+        const priceInUSD = Number((price / usdPurchaseRate).toFixed(2))
+        const revaluationAmount = Number((priceInUSD * USD).toFixed(2))
 
         return {
           id,
           apartmentName,
-          purchaseRate: usdPrice.exchangeRate,
-          currentRate: USD,
-          revaluationAmountUah: usdPrice.amount * USD,
-          purchaseAmountUah: uahPrice.amount,
+          purchaseRate: Number(usdPurchaseRate.toFixed(4)),
+          currentRate: Number(USD.toFixed(4)),
+          revaluationAmount,
+          revaluationAmountInCurrencies: convertAmountToAllCurrencies(revaluationAmount, currentRates),
+          purchaseAmount,
+          purchaseAmountInCurrencies: convertAmountToAllCurrencies(purchaseAmount, purchaseRates),
         }
       })
-      .filter((item): item is CurrencyRevaluationDto => item !== null)
+    )
 
     return plainToInstance(CurrencyRevaluationDto, currencyRevaluation, {
       excludeExtraneousValues: true,
@@ -201,29 +288,53 @@ export class HousesAnalyticsService {
 
     const computed = housesPerformance(houses)
 
+    const computedWithCurrencies = await Promise.all(
+      computed.map(async (item: HousePerformanceBase) => {
+        const house = houses.find((h) => h.apartmentName === item.apartmentName)
+        if (!house) {
+          return item
+        }
+
+        const averageRates = await calculateAverageRatesFromContracts(house.contracts, this.exchangeRatesService)
+
+        const currentRates = await this.exchangeRatesService.getExchangeRatesForDate(new Date())
+
+        return {
+          ...item,
+          totalRevenueInCurrencies: convertAmountToAllCurrencies(item.totalRevenue, averageRates),
+          currentPaymentInCurrencies: convertAmountToAllCurrencies(item.currentPayment, currentRates),
+        }
+      })
+    )
+
     const dir = order === SortOrder.ASC ? 1 : -1
     const sortField = computedSortMapping[sortBy]
 
-    computed.sort((a, b) => {
-      const va = a[sortField] as number | null
-      const vb = b[sortField] as number | null
+    computedWithCurrencies.sort(
+      (
+        a: HousePerformanceBase & { totalRevenueInCurrencies?: unknown; currentPaymentInCurrencies?: unknown },
+        b: HousePerformanceBase & { totalRevenueInCurrencies?: unknown; currentPaymentInCurrencies?: unknown }
+      ) => {
+        const va = (a as unknown as Record<ComputedFieldKey, number | null>)[sortField]
+        const vb = (b as unknown as Record<ComputedFieldKey, number | null>)[sortField]
 
-      if (va === null && vb === null) {
-        return 0
-      }
-      if (va === null) {
-        return 1
-      }
-      if (vb === null) {
-        return -1
-      }
+        if (va === null && vb === null) {
+          return 0
+        }
+        if (va === null) {
+          return 1
+        }
+        if (vb === null) {
+          return -1
+        }
 
-      return (va - vb) * dir
-    })
+        return (va - vb) * dir
+      }
+    )
 
-    const total = computed.length
+    const total = computedWithCurrencies.length
     const start = (page - 1) * limit
-    const data = computed.slice(start, start + limit)
+    const data = computedWithCurrencies.slice(start, start + limit) as HousePerformanceDto[]
 
     return { data, total }
   }
@@ -245,7 +356,26 @@ export class HousesAnalyticsService {
       .take(limit)
 
     const [houses, count] = await qb.getManyAndCount()
-    const data = housesPerformance(houses)
+    const computed = housesPerformance(houses)
+
+    const data = (await Promise.all(
+      computed.map(async (item: HousePerformanceBase) => {
+        const house = houses.find((h) => h.apartmentName === item.apartmentName)
+        if (!house) {
+          return item
+        }
+
+        const averageRates = await calculateAverageRatesFromContracts(house.contracts, this.exchangeRatesService)
+
+        const currentRates = await this.exchangeRatesService.getExchangeRatesForDate(new Date())
+
+        return {
+          ...item,
+          totalRevenueInCurrencies: convertAmountToAllCurrencies(item.totalRevenue, averageRates),
+          currentPaymentInCurrencies: convertAmountToAllCurrencies(item.currentPayment, currentRates),
+        }
+      })
+    )) as HousePerformanceDto[]
 
     return { data, total: count }
   }

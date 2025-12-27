@@ -1,9 +1,9 @@
-import { QueryDto } from 'src/common/dto/query.dto'
-import { HouseDto } from './house.dto'
 import { IntersectionType, PartialType, PickType } from '@nestjs/swagger'
-import { IsEnum, IsOptional, Min } from 'class-validator'
 import { Type } from 'class-transformer'
-import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
+import { IsEnum, IsOptional, Min } from 'class-validator'
+import { QueryDto } from 'src/common/dto/query.dto'
+import { CurrencyCode } from 'src/exchange-rates/entities/exchange-rate.entity'
+import { HouseDto } from './house.dto'
 
 export class HouseQueryDto extends IntersectionType(
   PartialType(PickType(HouseDto, ['apartmentType', 'roomsCount', 'floor'] as const)),
