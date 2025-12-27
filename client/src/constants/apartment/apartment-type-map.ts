@@ -1,4 +1,4 @@
-import { ApartmentType } from '@/types/core/houses';
+import { ApartmentType } from '@/types/core/house';
 import type { LucideIcon } from 'lucide-react';
 import { Building } from 'lucide-react';
 
