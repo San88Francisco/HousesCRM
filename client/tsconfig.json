@@ -33,8 +33,7 @@
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx",
     "src/store/contracts.apits",
-    ".next/dev/types/**/*.ts",
-    "src/widgets/skeletons/table-skeleton/index.tsx"
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

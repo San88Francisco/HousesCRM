@@ -29,7 +29,7 @@ export const HousesPerformanceSelect: FC<Props> = ({ limit, setLimit }) => {
   return (
     <Select value={`${limit}`} onValueChange={handleOnValueChange}>
       <SelectTrigger className="w-auto border-[1px] border-solid rounded-[8px] max-h-[38px] flex gap-1">
-        <SelectValue placeholder={`${limit}`} className="pl-10" />
+        <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
