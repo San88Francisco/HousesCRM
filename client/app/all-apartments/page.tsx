@@ -4,7 +4,6 @@ import { HousesPerformanceAnalytic } from '@/widgets/all-apartments/houses-perfo
 import { PaybackChart } from '@/widgets/all-apartments/payback-chart/PaybackChart';
 import { ChartPieDonutText } from '@/widgets/all-apartments/pie-chart-revenue-distribution';
 
-import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 const Page = () => {
   return (
     <div className="flex flex-col gap-7 w-full mb-7">
@@ -14,12 +13,8 @@ const Page = () => {
         <PaybackChart />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-[4fr_1fr] gap-5 w-full">
-        <TableComponent />
-        <CurrencyRevaluationChart />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-[4fr_1fr] gap-5 w-full">
         <HousesPerformanceAnalytic />
+        <CurrencyRevaluationChart />
       </div>
     </div>
   );

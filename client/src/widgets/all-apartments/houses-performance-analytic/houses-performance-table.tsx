@@ -42,7 +42,7 @@ export const HousesPerformanceTable = <T,>({ table, limit, setLimit }: Props<T>)
       </Table>
 
       <div className="mt-4 w-full flex justify-end">
-        <div className="ml-auto flex">
+        <div className="ml-auto flex gap-1">
           <HousesPerformanceSelect limit={limit} setLimit={setLimit} />
           <TablePagination table={table} />
         </div>

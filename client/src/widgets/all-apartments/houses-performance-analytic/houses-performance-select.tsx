@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import {
   Select,
   SelectContent,
@@ -8,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/select';
+import { FC } from 'react';
 
 type Props = {
   limit: number;
@@ -28,8 +28,8 @@ export const HousesPerformanceSelect: FC<Props> = ({ limit, setLimit }) => {
 
   return (
     <Select value={`${limit}`} onValueChange={handleOnValueChange}>
-      <SelectTrigger className="w-auto">
-        <SelectValue placeholder="10" className="pl-4" />
+      <SelectTrigger className="w-auto border-[1px] border-solid rounded-[8px] max-h-[38px] flex gap-1">
+        <SelectValue placeholder={`${limit}`} className="pl-10" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
