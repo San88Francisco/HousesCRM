@@ -43,8 +43,7 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
 
   const handleUpdate = async (data: HouseFormData) => {
     if (!houseToEdit?.id) {
-      toast.error('ID квартири не знайдено');
-      return;
+      throw new Error('ID квартири не знайдено');
     }
 
     await updateHouse({

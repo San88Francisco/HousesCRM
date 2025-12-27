@@ -20,7 +20,7 @@ export type ApartmentFromAPI = {
 
 export type HouseToEdit = Omit<HouseFormData, 'price' | 'purchaseDate'> & {
   id: string;
-  price?: number;
+  price: number;
   prices: Array<{
     id: string;
     amount: number;
