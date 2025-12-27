@@ -3,21 +3,21 @@
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useApartmentForm } from '@/hooks/use-house-form';
-import { useApartmentModal } from '@/hooks/use-house-modal';
+import { useHouseForm } from '@/hooks/use-house-form';
+import { useHouseModal } from '@/hooks/use-house-modal';
 import { ApartmentFormFields } from './HouseFormFields';
 import { ModalTriggers } from '@/types/model/modals';
 import Modal from '../modal-wrapper';
 
-export const ApartmentFormModal = () => {
+export const HouseFormModal = () => {
   const {
     isEditMode,
     apartmentToEdit,
     handleClose: getHandleClose,
     modalContent,
-  } = useApartmentModal();
+  } = useHouseModal();
 
-  const { methods, onSubmit, isLoading, reset } = useApartmentForm({
+  const { methods, onSubmit, isLoading, reset } = useHouseForm({
     isEditMode,
     apartmentToEdit,
     onSuccess: () => getHandleClose(reset),
@@ -27,7 +27,7 @@ export const ApartmentFormModal = () => {
 
   return (
     <Modal
-      triggers={isEditMode ? ModalTriggers.EDIT_APARTMENT : ModalTriggers.ADD_APARTMENT}
+      triggers={isEditMode ? ModalTriggers.EDIT_HOUSE : ModalTriggers.ADD_HOUSE}
       className="max-w-2xl max-h-[90vh] overflow-y-auto"
     >
       <DialogHeader>

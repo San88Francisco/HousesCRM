@@ -1,17 +1,17 @@
-import { Home, FileText, UserPlus } from 'lucide-react';
 import { ModalTriggers } from '@/types/model/modals';
 import { ActionItem } from '@/types/model/sidebar-action-item';
+import { FileText, Home, UserPlus } from 'lucide-react';
 
 export const actionItems: ActionItem[] = [
   {
     title: 'Додати квартиру',
-    modalTrigger: ModalTriggers.ADD_APARTMENT,
+    modalTrigger: ModalTriggers.ADD_HOUSE,
     icon: <Home className="h-4 w-4" />,
     description: 'Створити нову квартиру',
   },
   {
     title: 'Додати орендаря',
-    modalTrigger: ModalTriggers.ADD_TENANT,
+    modalTrigger: ModalTriggers.ADD_RENTER,
     icon: <UserPlus className="h-4 w-4" />,
     description: 'Додати нового орендаря',
   },

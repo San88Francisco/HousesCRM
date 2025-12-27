@@ -7,8 +7,8 @@ import {
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 import {
   CreateHousePayload,
+  House,
   HouseByIdResponse,
-  HousePayload,
   UpdateHousePayload,
 } from '@/types/services/houses';
 
@@ -30,7 +30,7 @@ export const housesApi = rootApi.injectEndpoints({
       providesTags: ['Analytics'],
     }),
 
-    createHouse: build.mutation<HousePayload, CreateHousePayload>({
+    createHouse: build.mutation<House, CreateHousePayload>({
       query: body => ({
         url: '/houses',
         method: 'POST',
@@ -39,7 +39,7 @@ export const housesApi = rootApi.injectEndpoints({
       invalidatesTags: ['Houses', 'Analytics'],
     }),
 
-    updateHouse: build.mutation<HousePayload, Partial<UpdateHousePayload>>({
+    updateHouse: build.mutation<House, Partial<UpdateHousePayload>>({
       query: ({ id, ...body }) => ({
         url: `/houses/${id}`,
         method: 'PATCH',

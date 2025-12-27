@@ -1,8 +1,8 @@
-import { Home, Hash, Square, Building, MapPin, Coins } from 'lucide-react';
+import { RHFDatePicker } from '@/components/RHF/RHFDatePicker';
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFSelect } from '@/components/RHF/RHFSelect';
-import { RHFDatePicker } from '@/components/RHF/RHFDatePicker';
-import { APARTMENT_TYPE_OPTIONS } from '@/shared/constants/apartment-form/apartment-form';
+import { HOUSE_TYPE_OPTIONS } from '@/shared/constants/house-form/house-form';
+import { Building, Coins, Hash, Home, MapPin, Square } from 'lucide-react';
 
 type Props = {
   isLoading: boolean;
@@ -84,7 +84,7 @@ export const ApartmentFormFields = ({ isLoading }: Props) => {
       <RHFSelect
         name="apartmentType"
         label="Тип квартири"
-        options={[...APARTMENT_TYPE_OPTIONS]}
+        options={[...HOUSE_TYPE_OPTIONS]}
         placeholder="Виберіть тип"
         disabled={isLoading}
       />

@@ -2,15 +2,15 @@
 
 import { Button } from '@/shared/ui/button';
 import { useAppDispatch } from '@/store/hooks';
-import { openModal } from '@/store/modal-slice';
-import { ModalTriggers } from '@/types/model/modals';
-import { toast } from 'sonner';
-import { ApartmentFromAPI } from '@/types/core/house';
 import { useGetHouseByIdQuery } from '@/store/houses-api';
+import { openModal } from '@/store/modal-slice';
+import { ApartmentFromAPI } from '@/types/core/house';
+import { ModalTriggers } from '@/types/model/modals';
 import { MouseEvent } from 'react';
+import { toast } from 'sonner';
 
 // TODO цей файл тимчасовий. Тут приклад як робити функцію редагування данних існуючої квартири.
-const idApartment = 'f021f05c-4cd3-4ac6-a349-faf420d4290b';
+const idApartment = '2188f8c5-2528-49c2-b252-b5dc02e8da13';
 
 const UpdateApartment = () => {
   const dispatch = useAppDispatch();
