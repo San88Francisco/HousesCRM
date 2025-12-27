@@ -1,7 +1,7 @@
 import { ApartmentType } from '@/types/core/houses';
 import * as yup from 'yup';
 
-export const apartmentSchema = yup.object({
+export const houseSchema = yup.object({
   apartmentName: yup.string().required("Назва квартири обов'язкова"),
 
   roomsCount: yup
@@ -43,4 +43,4 @@ export const apartmentSchema = yup.object({
     .required("Тип квартири обов'язковий"),
 });
 
-export type ApartmentFormData = yup.InferType<typeof apartmentSchema>;
+export type HouseFormData = yup.InferType<typeof houseSchema>;

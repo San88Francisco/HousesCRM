@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeModal } from '@/store/modal-slice';
-import { ApartmentModalPayload } from '@/types/model/apartment-modal';
+import { HouseModalPayload } from '@/types/model/house-modal';
 import { ModalTriggers } from '@/types/model/modals';
 
 export const useHouseModal = () => {
@@ -12,8 +12,8 @@ export const useHouseModal = () => {
 
   const isEditMode = trigger === ModalTriggers.EDIT_HOUSE;
 
-  const apartmentToEdit =
-    payload && 'apartment' in payload ? (payload as ApartmentModalPayload).apartment : undefined;
+  const houseToEdit =
+    payload && 'house' in payload ? (payload as HouseModalPayload).house : undefined;
 
   const handleClose = (reset: () => void) => {
     dispatch(closeModal());
@@ -31,7 +31,7 @@ export const useHouseModal = () => {
   return {
     isThisModalOpen,
     isEditMode,
-    apartmentToEdit,
+    houseToEdit,
     handleClose,
     modalContent,
   };

@@ -1,6 +1,6 @@
 'use client';
 
-import { APARTMENT_TYPE_MAP } from '@/constants/apartment/apartment-type-map';
+import { PROPERTY_TYPE_MAP } from '@/constants/apartment/apartment-type-map';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { useGetHouseByIdQuery } from '@/store/houses-api';
 import { Building2, DoorOpen, MapPin, PackagePlus, Ruler } from 'lucide-react';
@@ -19,7 +19,7 @@ export const HeaderHouse = () => {
   const { street, roomsCount, totalArea, floor, apartmentName, purchaseDate, apartmentType } =
     data.houseDetail;
 
-  const { label, icon: TypeIcon } = APARTMENT_TYPE_MAP[apartmentType];
+  const { label, icon: TypeIcon } = PROPERTY_TYPE_MAP[apartmentType];
 
   const items = [
     { Icon: DoorOpen, text: `${roomsCount} кімн.` },

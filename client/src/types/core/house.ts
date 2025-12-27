@@ -1,4 +1,4 @@
-import { ApartmentFormData } from '@/shared/validation/add-houses/house-schema';
+import { HouseFormData } from '@/shared/validation/add-houses/house-schema';
 import { ApartmentType } from './houses';
 
 export type ApartmentFromAPI = {
@@ -18,7 +18,7 @@ export type ApartmentFromAPI = {
   }>;
 };
 
-export type ApartmentToEdit = Omit<ApartmentFormData, 'price' | 'purchaseDate'> & {
+export type HouseToEdit = Omit<HouseFormData, 'price' | 'purchaseDate'> & {
   id: string;
   price?: number;
   prices: Array<{
