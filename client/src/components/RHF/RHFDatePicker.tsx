@@ -1,16 +1,16 @@
 'use client';
 
-import { forwardRef, useState } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import { Button } from '@/shared/ui/button';
+import { Calendar } from '@/shared/ui/calendar';
+import { Label } from '@/shared/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
+import { cn } from '@/shared/utils/cn';
+import { CalendarMode } from '@/types/core/calendar';
 import { format, startOfToday } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { cn } from '@/shared/utils/cn';
-import { Button } from '@/shared/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
-import { Label } from '@/shared/ui/label';
-import { CalendarMode } from '@/types/core/calendar';
-import { Calendar } from '@/shared/ui/calendar';
+import { forwardRef, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 interface Props {
   name: string;
@@ -38,7 +38,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
       formState: { errors },
     } = useFormContext();
     const [open, setOpen] = useState(false);
-    const [tempDate, setTempDate] = useState<Date>(new Date());
+    const [tempDate, setTempDate] = useState<Date>(() => new Date());
     const today = startOfToday();
 
     const error = errors[name];
@@ -80,7 +80,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {field.value ? (
-                      format(new Date(field.value), 'dd MMMM yyyy', { locale: uk })
+                      format(field.value, 'dd MMMM yyyy', { locale: uk })
                     ) : (
                       <span>{placeholder}</span>
                     )}
@@ -96,7 +96,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                     onSubmit={e => {
                       e.preventDefault();
                       e.stopPropagation();
-                      field.onChange(tempDate.toISOString());
+                      field.onChange(tempDate);
                       setOpen(false);
                     }}
                   >

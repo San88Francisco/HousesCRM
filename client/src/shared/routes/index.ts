@@ -2,7 +2,7 @@ export const ROUTES = {
   ROOT: '/',
   LOGIN: '/login',
   REGISTER: '/register',
-  ALL_APARTMENTS: '/all-apartments',
+  ALL_HOUSES: '/all-houses',
   APARTMENT: '/apartment',
   RENTER: '/renter',
   CONTRACT: '/contract',
@@ -14,7 +14,7 @@ export type RoutePath = (typeof ROUTES)[RouteKey];
 
 export const SIDEBAR_PATTERNS = [
   /^\/$/,
-  /^\/all-apartments/,
+  /^\/all-houses/,
   /^\/uikit/,
   /^\/apartment/,
   /^\/renter/,

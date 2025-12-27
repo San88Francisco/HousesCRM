@@ -6,8 +6,12 @@ import {
 } from '@/types/core/houses-performance/types';
 import { CreateRenterPayload, RenterResponse } from '@/types/model/renter';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
-import { CreateHousePayload } from '@/types/services/apartments-api';
-import { House, HouseByIdResponse } from '@/types/services/houses';
+import {
+  CreateHousePayload,
+  House,
+  HouseByIdResponse,
+  UpdateHousePayload,
+} from '@/types/services/houses';
 import { RenterByIdResponse } from '@/types/services/renters';
 
 export const housesApi = rootApi.injectEndpoints({
@@ -37,7 +41,7 @@ export const housesApi = rootApi.injectEndpoints({
       invalidatesTags: ['Houses', 'Analytics'],
     }),
 
-    updateHouse: build.mutation<House, { id: string } & Partial<CreateHousePayload>>({
+    updateHouse: build.mutation<House, Partial<UpdateHousePayload>>({
       query: ({ id, ...body }) => ({
         url: `/houses/${id}`,
         method: 'PATCH',

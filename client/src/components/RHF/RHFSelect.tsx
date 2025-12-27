@@ -66,7 +66,12 @@ export const RHFSelect = forwardRef<HTMLDivElement, Props>(
             <SelectGroup key={index}>
               <SelectLabel>{option.label}</SelectLabel>
               {option.options.map(opt => (
-                <SelectItem key={opt.value} value={opt.value} disabled={opt.disabled}>
+                <SelectItem
+                  key={opt.value}
+                  value={opt.value}
+                  disabled={opt.disabled}
+                  icon={opt.icon}
+                >
                   {opt.label}
                 </SelectItem>
               ))}
@@ -75,7 +80,12 @@ export const RHFSelect = forwardRef<HTMLDivElement, Props>(
         }
 
         return (
-          <SelectItem key={option.value} value={option.value} disabled={option.disabled}>
+          <SelectItem
+            key={option.value}
+            value={option.value}
+            disabled={option.disabled}
+            icon={option.icon}
+          >
             {option.label}
           </SelectItem>
         );

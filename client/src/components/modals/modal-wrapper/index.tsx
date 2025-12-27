@@ -34,9 +34,7 @@ export default function Modal({ children, triggers, className, onClose, ...props
   return (
     <Dialog open={opened} onOpenChange={handleOpenChange}>
       <DialogContent
-        onOpenAutoFocus={e => {
-          e.preventDefault();
-        }}
+        onOpenAutoFocus={e => e.preventDefault()}
         className={clsx(
           'max-w-full bottom-0 top-auto sm:bottom-auto sm:top-[50%] translate-y-0 sm:translate-y-[-50%] rounded-b-none sm:rounded-lg border-0 outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 focus-visible:ring-0',
           className,

@@ -7,9 +7,9 @@ import { getSidebarMenuItemClasses } from '@/shared/constants/styles';
 import { ActionItem } from '@/types/model/sidebar-action-item';
 import { MouseEvent } from 'react';
 
-interface Props {
+type Props = {
   item: ActionItem;
-}
+};
 
 export const SidebarActionItem = ({ item }: Props) => {
   const dispatch = useAppDispatch();
@@ -20,9 +20,7 @@ export const SidebarActionItem = ({ item }: Props) => {
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     e.currentTarget.blur();
 
-    if (isActive) {
-      return;
-    }
+    if (isActive) return;
 
     dispatch(
       openModal({
