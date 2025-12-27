@@ -5,15 +5,13 @@ import TablePagination from '@/shared/ui/data-table/TablePagination';
 import { Fragment } from 'react';
 import { HousesPerformanceSelect } from './houses-performance-select';
 import { cn } from '@/shared/utils/cn';
+import { tableGrid } from '@/shared/constants/styles/houses-performance-table';
 
 type Props<T> = {
   table: TableType<T>;
   limit: number;
   setLimit: (limit: number) => void;
 };
-
-const tableGrid =
-  'grid grid-cols-4 [&>*]:flex [&>*]:items-center [&>*:first-child]:justify-start [&>*:not(:first-child):not(:last-child)]:justify-center [&>*:last-child]:justify-end';
 
 export const HousesPerformanceTable = <T,>({ table, limit, setLimit }: Props<T>) => {
   return (

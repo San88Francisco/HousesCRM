@@ -1,3 +1,4 @@
+import { tableGrid } from '@/shared/constants/styles/houses-performance-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
@@ -6,9 +7,6 @@ import { cn } from '@/shared/utils/cn';
 type Props = {
   rows?: number;
 };
-
-const tableGrid =
-  'grid grid-cols-4 [&>*]:flex [&>*]:items-center [&>*:first-child]:justify-start [&>*:not(:first-child):not(:last-child)]:justify-center [&>*:last-child]:justify-end';
 
 export const HousesPerformanceTableSkeleton = ({ rows = 10 }: Props) => {
   return (

@@ -4,7 +4,7 @@ import { ErrorState } from '@/components/chart-states/ErrorState';
 import { HousesPerformanceTableColumns } from '@/constants/apartment/houses-performance-analytic';
 import { useHousesPerformance } from '@/hooks/all-apartments/houses-performance-analytic/use-houses-performance';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/table-skeleton';
+import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useEffect, useState } from 'react';
 import { HousesPerformanceTable } from './houses-performance-table';
