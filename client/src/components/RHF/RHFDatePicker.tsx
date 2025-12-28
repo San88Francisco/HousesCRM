@@ -51,7 +51,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
         render={({ field }) => {
           const handleOpenChange = (isOpen: boolean) => {
             if (isOpen && field.value) {
-              setTempDate(new Date(field.value));
+              setTempDate(field.value);
             } else if (isOpen) {
               setTempDate(new Date());
             }

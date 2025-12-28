@@ -15,10 +15,10 @@ const idApartment = '2188f8c5-2528-49c2-b252-b5dc02e8da13';
 const UpdateApartment = () => {
   const dispatch = useAppDispatch();
 
-  const handleEdit = (e: MouseEvent<HTMLButtonElement>, apartment?: HouseFromAPI) => {
+  const handleEdit = (e: MouseEvent<HTMLButtonElement>, house?: HouseFromAPI) => {
     e.currentTarget.blur();
 
-    if (!apartment) {
+    if (!house) {
       toast.error('Не вдалося завантажити дані квартири');
       return;
     }
@@ -26,7 +26,7 @@ const UpdateApartment = () => {
     dispatch(
       openModal({
         trigger: ModalTriggers.EDIT_HOUSE,
-        payload: { apartment },
+        payload: { house },
       }),
     );
   };
@@ -35,10 +35,7 @@ const UpdateApartment = () => {
 
   return (
     <div className="w-[150px] mb-5">
-      <Button
-        onClick={e => data?.houseDetail && handleEdit(e, data?.houseDetail)}
-        disabled={!data?.houseDetail}
-      >
+      <Button onClick={e => handleEdit(e, data?.houseDetail)} disabled={!data?.houseDetail}>
         Відредагувати квартиру
       </Button>
     </div>
