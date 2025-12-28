@@ -33,7 +33,7 @@ export interface RenterByIdResponse {
     id: string;
     firstName: string;
     lastName: string;
-    age: number | null;
+    age: number;
     occupied: string;
     vacated?: string;
     status: string;
