@@ -1,5 +1,5 @@
 import { ConfirmDeleteModal } from './confirm-delete-modal/ConfirmDeleteModal';
-import { HouseFormModal } from './house-create-update-modal';
+import { HouseCreateUpdateModal } from './house-create-update-modal';
 import { PdfContractModal } from './pdf-contract-modal';
 import { RenterFormModal } from './renter-form/RenterFormModal';
 
@@ -8,7 +8,7 @@ export const ModalRoot = () => {
     <>
       <ConfirmDeleteModal />
       <RenterFormModal />
-      <HouseFormModal />
+      <HouseCreateUpdateModal />
       <PdfContractModal />
     </>
   );
