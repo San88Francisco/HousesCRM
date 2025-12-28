@@ -28,7 +28,7 @@ const PaginationItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li'
     <li
       ref={ref}
       className={cn(
-        'border-[1px] border-solid rounded-[8px] w-[38px] h-[38px] dark:bg-bg-input',
+        'border-[1px] border-solid rounded-[8px] w-[38px] h-[38px] dark:bg-bg-input flex items-center justify-center',
         className,
       )}
       {...props}

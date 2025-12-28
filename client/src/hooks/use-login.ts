@@ -25,7 +25,7 @@ export const useLogin = () => {
       }).unwrap();
 
       toast.success('Увійшли успішно');
-      router.push(ROUTES.ALL_APARTMENTS);
+      router.push(ROUTES.ALL_HOUSES);
     } catch {
       toast.error('Невірні облікові дані або помилка авторизації');
     }

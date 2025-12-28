@@ -1,4 +1,10 @@
 export enum ModalTriggers {
   CONFIRM_DELETE,
   PDF_CONTRACT,
+  ADD_HOUSE,
+  EDIT_HOUSE,
+  ADD_RENTER,
+  EDIT_RENTER,
+  ADD_CONTRACT,
+  EDIT_CONTRACT,
 }

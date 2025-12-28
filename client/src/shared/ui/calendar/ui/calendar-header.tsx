@@ -29,6 +29,7 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
   return (
     <div className="flex items-center justify-between mb-4">
       <button
+        type="button"
         onClick={handlePrevPage}
         className="p-1 hover:bg-dark-lightest rounded dark:hover:text-dark"
       >
@@ -38,21 +39,22 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
       <h2 className="text-lg font-bold font-medium text-gray-900 flex gap-2">
         {level === 'days' && (
           <Fragment>
-            <button onClick={() => setLevel('months')}>
+            <button type="button" onClick={() => setLevel('months')}>
               {format(firstDayCurrentMonth, 'MMMM', { locale: lang })}
             </button>
-            <button onClick={() => setLevel('years')}>
+            <button type="button" onClick={() => setLevel('years')}>
               {format(firstDayCurrentMonth, 'yyyy', { locale: lang })}
             </button>
           </Fragment>
         )}
         {level === 'months' && (
-          <button onClick={() => setLevel('years')}>
+          <button type="button" onClick={() => setLevel('years')}>
             {format(currentYear, 'yyyy', { locale: lang })}
           </button>
         )}
         {level === 'years' && (
           <button
+            type="button"
             onClick={() =>
               setLevel(
                 mode === CalendarMode.YearsMonthsDays
@@ -68,6 +70,7 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
         )}
       </h2>
       <button
+        type="button"
         onClick={handleNextPage}
         className="p-1 hover:bg-dark-lightest rounded dark:hover:text-dark"
       >
