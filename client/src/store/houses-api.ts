@@ -41,7 +41,7 @@ export const housesApi = rootApi.injectEndpoints({
       invalidatesTags: ['Houses', 'Analytics'],
     }),
 
-    updateHouse: build.mutation<House, Partial<UpdateHousePayload>>({
+    updateHouse: build.mutation<House, { id: string } & Partial<Omit<UpdateHousePayload, 'id'>>>({
       query: ({ id, ...body }) => ({
         url: `/houses/${id}`,
         method: 'PATCH',

@@ -34,7 +34,7 @@ export const useHotkeyForRef = (
     if (!key) return;
 
     const handler = (event: KeyboardEvent) => {
-      if (!event || !event.key) return;
+      if (!event) return;
 
       if (!isHotkeyEvent(event, key, { ctrl, shift, alt, meta })) return;
 

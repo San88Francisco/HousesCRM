@@ -12,13 +12,13 @@ import { HouseFormFields } from './HouseFormFields';
 export const HouseFormModal = () => {
   const { isEditMode, houseToEdit, handleClose: getHandleClose, modalContent } = useHouseModal();
 
+  const handleClose = () => getHandleClose(reset);
+
   const { methods, onSubmit, isLoading, reset } = useHouseForm({
     isEditMode,
     houseToEdit,
-    onSuccess: () => getHandleClose(reset),
+    onSuccess: () => handleClose(),
   });
-
-  const handleClose = () => getHandleClose(reset);
 
   return (
     <Modal

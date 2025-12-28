@@ -14,7 +14,7 @@ import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
-import UpdateApartment from '@/widgets/uikit/update-apartment';
+import UpdateApartment from '@/widgets/uikit/update-house';
 import UpdateRenter from '@/widgets/uikit/update-renter';
 
 export default function Page() {

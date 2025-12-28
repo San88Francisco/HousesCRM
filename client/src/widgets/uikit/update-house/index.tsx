@@ -33,10 +33,7 @@ const UpdateApartment = () => {
 
   return (
     <div className="w-[150px] mb-5">
-      <Button
-        onClick={e => data?.houseDetail && handleEdit(e, data?.houseDetail)}
-        disabled={!data?.houseDetail}
-      >
+      <Button onClick={e => handleEdit(e, data?.houseDetail)} disabled={!data?.houseDetail}>
         Відредагувати квартиру
       </Button>
     </div>
