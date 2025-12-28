@@ -12,13 +12,13 @@ import Modal from '../modal-wrapper';
 export const HouseCreateUpdateModal = () => {
   const { isEditMode, houseToEdit, handleClose: getHandleClose, modalContent } = useHouseModal();
 
-  const handleClose = () => getHandleClose(reset);
-
   const { methods, onSubmit, isLoading, reset } = useHouseForm({
     isEditMode,
     houseToEdit,
     onSuccess: () => handleClose(),
   });
+
+  const handleClose = () => getHandleClose(reset);
 
   return (
     <Modal
