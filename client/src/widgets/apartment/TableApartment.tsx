@@ -5,8 +5,9 @@ import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
-import { apartmentColumns } from '@/shared/constants/current-apartment';
+import { apartmentColumns, PAGE_LIMIT } from '@/shared/constants/current-apartment';
 import { ROUTES } from '@/shared/routes';
+import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
@@ -15,7 +16,7 @@ import { useGetHouseByIdOccupancyQuery, useGetHouseByIdQuery } from '@/store/hou
 import { occupancyApartmentResponse } from '@/types/services/houses';
 import { ApartmentPagination } from '@/widgets/apartment/ApartmentPagination';
 import { useParams, useRouter } from 'next/navigation';
-import { KeyboardEvent, useState } from 'react';
+import { useState } from 'react';
 
 export const TableApartment = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,7 +36,7 @@ export const TableApartment = () => {
     isLoading: paginatedLoading,
     error: paginatedError,
   } = useGetHouseByIdOccupancyQuery(
-    { id, page: currentPage!, limit: 10 },
+    { id, page: currentPage!, limit: PAGE_LIMIT },
     { skip: !id || currentPage === null },
   );
 
@@ -58,13 +59,6 @@ export const TableApartment = () => {
 
   const handleRouteToRenter = (renterId: string) => {
     push(`${ROUTES.RENTER}/${renterId}`);
-  };
-
-  const handleCellKeyDown = (e: KeyboardEvent, renterId: string) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleRouteToRenter(renterId);
-    }
   };
 
   return (
@@ -107,59 +101,54 @@ export const TableApartment = () => {
                       <TableCell className="font-medium text-center  text-text">
                         <ContractModalTrigger id={item.id} />
                       </TableCell>
-
-                      <TableCell
-                        onClick={() => handleRouteToRenter(item.id)}
-                        onKeyDown={e => handleCellKeyDown(e, item.id)}
-                        role="button"
-                        tabIndex={0}
-                        className="font-medium text-center text-text"
-                      >
-                        {item.firstName} {item.lastName}
+                      <TableCell className="font-medium text-center text-text">
+                        <Button
+                          variant="icon"
+                          onClick={() => handleRouteToRenter(item.id)}
+                          className="w-full text-center"
+                        >
+                          {item.firstName} {item.lastName}
+                        </Button>
                       </TableCell>
-
-                      <TableCell
-                        onClick={() => handleRouteToRenter(item.id)}
-                        onKeyDown={e => handleCellKeyDown(e, item.id)}
-                        role="button"
-                        tabIndex={0}
-                        className="text-center text-text"
-                      >
-                        {formatDate(item.occupied)}
+                      <TableCell className="font-medium text-center text-text">
+                        <Button
+                          variant="icon"
+                          onClick={() => handleRouteToRenter(item.id)}
+                          className="w-full text-center font-normal"
+                        >
+                          {formatDate(item.occupied)}
+                        </Button>
                       </TableCell>
-
-                      <TableCell
-                        onClick={() => handleRouteToRenter(item.id)}
-                        onKeyDown={e => handleCellKeyDown(e, item.id)}
-                        role="button"
-                        tabIndex={0}
-                        className="text-center text-text"
-                      >
-                        {formatDate(item.vacated)}
+                      <TableCell className="font-medium text-center text-text">
+                        <Button
+                          variant="icon"
+                          onClick={() => handleRouteToRenter(item.id)}
+                          className="w-full text-center font-normal"
+                        >
+                          {formatDate(item.vacated)}
+                        </Button>
                       </TableCell>
-
-                      <TableCell
-                        onClick={() => handleRouteToRenter(item.id)}
-                        onKeyDown={e => handleCellKeyDown(e, item.id)}
-                        role="button"
-                        tabIndex={0}
-                        className="text-center font-medium text-text"
-                      >
-                        {item.totalIncome} ₴
+                      <TableCell className="font-medium text-center text-text">
+                        <Button
+                          variant="icon"
+                          onClick={() => handleRouteToRenter(item.id)}
+                          className="w-full text-center"
+                        >
+                          {item.totalIncome} ₴
+                        </Button>
                       </TableCell>
-
-                      <TableCell
-                        onClick={() => handleRouteToRenter(item.id)}
-                        onKeyDown={e => handleCellKeyDown(e, item.id)}
-                        role="button"
-                        tabIndex={0}
-                        className={cn(
-                          'font-medium text-right',
-                          item.status !== 'active' && 'text-purple',
-                          item.status === 'active' && 'text-yellow',
-                        )}
-                      >
-                        {item.status === 'active' ? 'Активний' : 'Не активний'}
+                      <TableCell tabIndex={0}>
+                        <Button
+                          variant="icon"
+                          onClick={() => handleRouteToRenter(item.id)}
+                          className={cn(
+                            'font-medium text-right  w-full',
+                            item.status !== 'active' && 'text-purple',
+                            item.status === 'active' && 'text-yellow',
+                          )}
+                        >
+                          {item.status === 'active' ? 'Активний' : 'Не активний'}
+                        </Button>
                       </TableCell>
                     </TableRow>
                   );
