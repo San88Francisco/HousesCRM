@@ -9,7 +9,7 @@ import { CalendarMode } from '@/types/core/calendar';
 import { format, startOfToday } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { forwardRef, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useMemo, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 interface Props {
@@ -49,14 +49,17 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
         name={name}
         control={control}
         render={({ field }) => {
-          const handleOpenChange = (isOpen: boolean) => {
-            if (isOpen && field.value) {
-              setTempDate(field.value);
-            } else if (isOpen) {
-              setTempDate(new Date());
-            }
-            setOpen(isOpen);
-          };
+          const handleOpenChange = useCallback(
+            (isOpen: boolean) => {
+              if (isOpen && field.value) {
+                setTempDate(field.value);
+              } else if (isOpen) {
+                setTempDate(new Date());
+              }
+              setOpen(isOpen);
+            },
+            [field.value],
+          );
 
           return (
             <div className={cn('flex flex-col gap-2', className)}>
@@ -78,7 +81,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                     aria-invalid={!!errorMessage}
                     aria-describedby={errorMessage ? `${name}-error` : undefined}
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    <CalendarIcon className="mr-2 h-4 w-4 " aria-hidden="true" />
                     {field.value ? (
                       format(field.value, 'dd MMMM yyyy', { locale: uk })
                     ) : (
