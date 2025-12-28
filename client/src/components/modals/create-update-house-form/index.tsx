@@ -6,8 +6,8 @@ import { useHouseModal } from '@/hooks/use-house-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';
+import { HouseFormFields } from '@/widgets/house-create-update-modal/HouseFormFields';
 import Modal from '../modal-wrapper';
-import { HouseFormFields } from './HouseFormFields';
 
 export const HouseFormModal = () => {
   const { isEditMode, houseToEdit, handleClose: getHandleClose, modalContent } = useHouseModal();
