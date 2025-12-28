@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useAnimatedIcon } from '@/hooks';
 import { Button } from '@/shared/ui/button';
 import { FileTextIcon } from '@/shared/ui/file-text';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
+import { MouseEvent, useEffect } from 'react';
 
 type Props = {
   id: string;
@@ -19,7 +19,8 @@ export const PdfContractTrigger = ({ id, isHovered }: Props) => {
 
   const dispatch = useAppDispatch();
 
-  const openPdf = () => {
+  const openPdf = (e: MouseEvent) => {
+    e.stopPropagation();
     dispatch(
       openModal({
         trigger: ModalTriggers.PDF_CONTRACT,

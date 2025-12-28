@@ -27,6 +27,14 @@ export type AllContractsByRenterIdResponse = {
   oneRenterReport: RenterReportResponse;
   allContractsByRenterId: {
     data: ContractResponse[];
+    meta: {
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
   };
 };
 

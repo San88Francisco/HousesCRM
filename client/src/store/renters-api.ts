@@ -14,6 +14,23 @@ export const rentersApi = rootApi.injectEndpoints({
             order,
           },
         }),
+
+        serializeQueryArgs: ({ endpointName, queryArgs }) => {
+          return `${endpointName}-${queryArgs.renter_id}`;
+        },
+
+        merge: (currentCache, newData, { arg }) => {
+          if (arg.page === 1) {
+            return newData;
+          }
+
+          currentCache.allContractsByRenterId.data.push(...newData.allContractsByRenterId.data);
+        },
+
+        forceRefetch({ currentArg, previousArg }) {
+          return currentArg?.page !== previousArg?.page;
+        },
+
         providesTags: (_result, _error, { renter_id }) => [{ type: 'Renters', id: renter_id }],
       },
     ),

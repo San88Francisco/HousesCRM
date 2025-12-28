@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 
+import { cn } from '@/shared/utils/cn';
+import { formatDate } from '@/shared/utils/format/format-date';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
-import { formatDate } from '@/shared/utils/format/format-date';
-import { PdfContractTrigger } from '@/widgets/pdf-contract-content/pdf-contract-trigger';
 import { ContractResponse } from '@/types/services/renters';
+import { PdfContractTrigger } from '@/widgets/pdf-contract-content/pdf-contract-trigger';
 
 type Props = {
   contract: ContractResponse;
@@ -19,7 +20,7 @@ export const ContractItem = ({ contract }: Props) => {
 
   return (
     <li
-      className="mb-4 flex gap-4 rounded-md border p-4 cursor-pointer hover:bg-muted-foreground transition-colors duration-300"
+      className="mb-4 flex gap-4 rounded-md border p-4 cursor-pointer hover:bg-muted-foreground transition-colors duration-300 relative"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() =>
@@ -39,6 +40,14 @@ export const ContractItem = ({ contract }: Props) => {
         </span>
         <span className="text-muted">Місячна оплата: {contract.monthlyPayment} грн.</span>
       </div>
+      <span
+        className={cn(
+          'absolute right-0 top-0 p-1 text-purple text-xs',
+          contract.status === 'active' && 'text-yellow',
+        )}
+      >
+        {contract.status === 'active' ? 'Активний' : 'Не активний'}
+      </span>
     </li>
   );
 };

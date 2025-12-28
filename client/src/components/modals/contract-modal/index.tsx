@@ -1,38 +1,65 @@
 'use client';
 
+import { useContractsModal } from '@/hooks/use-contract-modal';
 import { DialogDescription, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { useAppSelector } from '@/store/hooks';
-import { useGetAllContractsByRenterIdQuery } from '@/store/renters-api';
 import { ModalTriggers } from '@/types/model/modals';
+import { useEffect, useState } from 'react';
 import Modal from '../modal-wrapper';
-import { ContractItem } from './ContractItem';
+import { ContractListContent } from './ContractListContent';
 
 export const ContractModal = () => {
-  const renterId = useAppSelector(state => state.modal.payload?.id as string | '');
+  const { isOpen, trigger, payload } = useAppSelector(state => state.modal);
+  const [renterId, setRenterId] = useState<string>('');
+  const [observerResetKey, setObserverResetKey] = useState<number>(0);
 
-  const { data } = useGetAllContractsByRenterIdQuery(
-    { renter_id: renterId, page: 1, limit: 5, sortBy: 'commencement', order: 'desc' },
-    {
-      skip: !renterId,
-    },
+  const isThisModalActive = isOpen && trigger === ModalTriggers.OPEN_CONTRACTS_LIST;
+  const isPdfModalOpen = isOpen && trigger === ModalTriggers.PDF_CONTRACT;
+
+  useEffect(() => {
+    if (isThisModalActive && payload?.id) {
+      setRenterId(payload.id as string);
+    }
+  }, [isThisModalActive, payload?.id]);
+
+  useEffect(() => {
+    let timeoutId: number;
+
+    if (!isPdfModalOpen && isThisModalActive) {
+      timeoutId = setTimeout(() => {
+        setObserverResetKey(prev => prev + 1);
+      }, 100) as unknown as number;
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [isPdfModalOpen, isThisModalActive]);
+
+  const { contracts, renterInfo, isFetching, hasMore, loadMoreRef } = useContractsModal(
+    renterId,
+    isThisModalActive,
+    observerResetKey,
   );
 
-  if (!data) return null;
+  const shouldRender = renterInfo || contracts.length > 0 || isFetching;
+  if (!shouldRender) return null;
 
   return (
-    <Modal triggers={ModalTriggers.OPEN_CONTRACTS_LIST} className="max-w-2xl ">
+    <Modal triggers={ModalTriggers.OPEN_CONTRACTS_LIST} className="max-w-2xl">
       <DialogHeader>
         <DialogTitle className="text-lg font-semibold">
-          Всі договори орендаря {data.oneRenterReport.firstName} {data.oneRenterReport.lastName}
+          Всі договори орендаря {renterInfo?.firstName} {renterInfo?.lastName}
         </DialogTitle>
         <DialogDescription>Тут відображається список всіх договорів орендаря</DialogDescription>
       </DialogHeader>
 
-      <ul className="mt-4 max-h-[60vh] overflow-y-auto px-2">
-        {data.allContractsByRenterId.data.map(contract => {
-          return <ContractItem key={contract.id} contract={contract} />;
-        })}
-      </ul>
+      <ContractListContent
+        contracts={contracts}
+        isFetching={isFetching}
+        hasMore={hasMore}
+        loadMoreRef={loadMoreRef}
+      />
     </Modal>
   );
 };
