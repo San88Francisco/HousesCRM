@@ -34,8 +34,8 @@ const handleTokenRefresh = async (): Promise<string | null> => {
     }
 
     return null;
-  } catch (error: unknown) {
-    toast.error(`Помилка запиту оновлення токена: ${String(error)}`);
+  } catch {
+    toast.error('Помилка оновлення сесії. Спробуйте увійти знову.');
     return null;
   }
 };

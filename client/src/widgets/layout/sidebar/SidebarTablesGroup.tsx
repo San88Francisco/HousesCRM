@@ -27,7 +27,7 @@ export const SidebarTablesGroup = () => {
       <SidebarGroupLabel>Таблиці</SidebarGroupLabel>
       <SidebarGroupContent>
         {isLoading && <div>Loading...</div>}
-        {error && colapsibleMenuItems.length === 0 && <div>Щось пішло не так</div>}
+        {error && <div>Щось пішло не так</div>}
         {!isLoading && !error && (
           <SidebarMenu>
             <SidebarMenuItem>

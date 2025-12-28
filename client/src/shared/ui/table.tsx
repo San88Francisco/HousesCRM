@@ -3,9 +3,7 @@ import { cn } from '../utils/cn';
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
-    <div className="relative w-full overflow-auto">
-      <table ref={ref} className={cn('w-full caption-bottom text-sm', className)} {...props} />
-    </div>
+    <table ref={ref} className={cn('w-full caption-bottom text-sm', className)} {...props} />
   ),
 );
 Table.displayName = 'Table';
@@ -41,18 +39,18 @@ interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 }
 
 const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
-  ({ className, children, variant = 'default', ...props }, ref) => {
-    const count = React.Children.count(children);
+  ({ className, children, variant = 'default', style, ...props }, ref) => {
+    const useGrid = style && 'gridTemplateColumns' in style;
 
     return (
       <tr
         ref={ref}
         className={cn(
-          'grid items-center overflow-hidden',
+          useGrid && 'grid items-center overflow-hidden',
           variant === 'withData' && 'hover:bg-foreground rounded-lg',
           className,
         )}
-        style={{ gridTemplateColumns: `repeat(${count}, 1fr)` }}
+        style={useGrid ? style : undefined}
         {...props}
       >
         {children}
@@ -62,6 +60,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
 );
 
 TableRow.displayName = 'TableRow';
+
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
@@ -86,4 +85,4 @@ const TableCaption = React.forwardRef<
 ));
 TableCaption.displayName = 'TableCaption';
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };

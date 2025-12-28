@@ -1,9 +1,5 @@
 import { ComponentType, ReactNode } from 'react';
-
-export interface AnimatedIconHandle {
-  startAnimation: () => void;
-  stopAnimation: () => void;
-}
+export type { FileChartLineIconHandle as AnimatedIconHandle } from '@/shared/ui/file-chart-line-icon-handle';
 
 export type SubNavItem = {
   title: string;

@@ -24,7 +24,19 @@ export const CollapsibleMenu = ({ title, items }: Props) => {
 
   return (
     <div className={SIDEBAR_STYLES.collapsible.container}>
-      <div className={getCollapsibleHeaderClasses()} onClick={toggleOpen}>
+      <div
+        className={getCollapsibleHeaderClasses()}
+        onClick={toggleOpen}
+        onKeyDown={e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleOpen();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-expanded={isOpen}
+      >
         <Button variant="icon" size="xs" className={SIDEBAR_STYLES.collapsible.button}>
           <ChevronRight className={getChevronClasses(isOpen)} />
         </Button>

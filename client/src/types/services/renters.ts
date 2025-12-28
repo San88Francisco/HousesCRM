@@ -14,7 +14,7 @@ export type ContractResponse = {
   id: string;
   commencement: string;
   termination: string;
-  status: string;
+  status: ContractStatus;
   monthlyPayment: number;
 };
 
@@ -39,7 +39,7 @@ export type AllContractsByRenterIdResponse = {
 };
 
 export type RentersPaginatedRequest = {
-  renter_id: string;
+  renterId: string;
   sortBy?: string;
   order?: string;
   page?: number;

@@ -13,7 +13,7 @@ export const useContractsModal = (
 
   const { data, isFetching } = useGetAllContractsByRenterIdQuery(
     {
-      renter_id: renterId,
+      renterId: renterId,
       page,
       limit: PAGE_LIMIT,
       sortBy: 'commencement',
@@ -26,8 +26,7 @@ export const useContractsModal = (
 
   const contracts = data?.allContractsByRenterId.data ?? [];
   const renterInfo = data?.oneRenterReport;
-  const total = data?.allContractsByRenterId.meta?.total ?? 0;
-  const hasMore = contracts.length < total;
+  const hasMore = data?.allContractsByRenterId.meta?.hasNextPage ?? false;
 
   const loadMore = useCallback(() => {
     if (hasMore && !isFetching) {

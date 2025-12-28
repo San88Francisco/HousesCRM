@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
@@ -18,19 +18,31 @@ export const ContractItem = ({ contract }: Props) => {
   const [hovered, setHovered] = useState(false);
   const dispatch = useAppDispatch();
 
+  const handleClick = () => {
+    dispatch(
+      openModal({
+        trigger: ModalTriggers.PDF_CONTRACT,
+        payload: { id: contract.id },
+      }),
+    );
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   return (
     <li
       className="mb-4 flex gap-4 rounded-md border p-4 cursor-pointer hover:bg-muted-foreground transition-colors duration-300 relative"
+      role="button"
+      tabIndex={0}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() =>
-        dispatch(
-          openModal({
-            trigger: ModalTriggers.PDF_CONTRACT,
-            payload: { id: contract.id },
-          }),
-        )
-      }
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
     >
       <PdfContractTrigger id={contract.id} isHovered={hovered} />
 

@@ -1,3 +1,4 @@
+import useVisiblePages from '@/hooks/use-visible-pages';
 import {
   Pagination,
   PaginationContent,
@@ -8,11 +9,10 @@ import {
   PaginationPrevious,
 } from '@/shared/ui/pagination';
 import { cn } from '@/shared/utils/cn';
-import { metadataResponse } from '@/types/services/houses';
-import useVisiblePages from '@/hooks/use-visible-pages';
+import { MetadataResponse } from '@/types/services/houses';
 
 type Props = {
-  meta?: metadataResponse;
+  meta?: MetadataResponse;
   onPageChange: (page: number) => void;
 };
 

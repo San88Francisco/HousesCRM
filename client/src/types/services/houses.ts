@@ -28,15 +28,10 @@ export type HouseByIdResponse = {
     street: string;
     apartmentType: ApartmentType;
   };
-  occupancyReports: occupanncyResponseData;
+  occupancyReports: OccupancyPaginatedResponse;
 };
 
-export type occupanncyResponseData = {
-  data: occupanncyApartmentResponse[];
-  meta: metadataResponse;
-};
-
-export type metadataResponse = {
+export type MetadataResponse = {
   total: number;
   page: number;
   limit: number;
@@ -45,7 +40,7 @@ export type metadataResponse = {
   hasPreviousPage: boolean;
 };
 
-export type occupanncyApartmentResponse = {
+export type occupancyApartmentResponse = {
   totalIncome: number;
   status: string;
   id: string;
@@ -56,8 +51,8 @@ export type occupanncyApartmentResponse = {
 };
 
 export type OccupancyPaginatedResponse = {
-  data: occupanncyApartmentResponse[];
-  meta: metadataResponse;
+  data: occupancyApartmentResponse[];
+  meta: MetadataResponse;
 };
 
 export type OccupancyQueryParams = {

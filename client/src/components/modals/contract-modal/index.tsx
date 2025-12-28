@@ -23,16 +23,18 @@ export const ContractModal = () => {
   }, [isThisModalActive, payload?.id]);
 
   useEffect(() => {
-    let timeoutId: number;
+    let timeoutId: number | undefined;
 
     if (!isPdfModalOpen && isThisModalActive) {
-      timeoutId = setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
         setObserverResetKey(prev => prev + 1);
-      }, 100) as unknown as number;
+      }, 100);
     }
 
     return () => {
-      if (timeoutId) clearTimeout(timeoutId);
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
     };
   }, [isPdfModalOpen, isThisModalActive]);
 
@@ -49,7 +51,9 @@ export const ContractModal = () => {
     <Modal triggers={ModalTriggers.OPEN_CONTRACTS_LIST} className="max-w-2xl">
       <DialogHeader>
         <DialogTitle className="text-lg font-semibold">
-          Всі договори орендаря {renterInfo?.firstName} {renterInfo?.lastName}
+          {renterInfo
+            ? `Всі договори орендаря ${renterInfo.firstName} ${renterInfo.lastName}`
+            : 'Завантаження...'}
         </DialogTitle>
         <DialogDescription>Тут відображається список всіх договорів орендаря</DialogDescription>
       </DialogHeader>
