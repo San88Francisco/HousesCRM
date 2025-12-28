@@ -37,6 +37,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
       control,
       formState: { errors },
     } = useFormContext();
+
     const [open, setOpen] = useState(false);
     const [tempDate, setTempDate] = useState<Date>(new Date());
     const today = startOfToday();
@@ -44,84 +45,80 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
 
+    // ✅ useCallback на рівні компонента
+    const handleOpenChange = useCallback((isOpen: boolean, value?: Date | null) => {
+      if (isOpen && value) {
+        setTempDate(value);
+      } else if (isOpen) {
+        setTempDate(new Date());
+      }
+      setOpen(isOpen);
+    }, []);
+
     return (
       <Controller
         name={name}
         control={control}
-        render={({ field }) => {
-          const handleOpenChange = useCallback(
-            (isOpen: boolean) => {
-              if (isOpen && field.value) {
-                setTempDate(field.value);
-              } else if (isOpen) {
-                setTempDate(new Date());
-              }
-              setOpen(isOpen);
-            },
-            [field.value],
-          );
+        render={({ field }) => (
+          <div className={cn('flex flex-col gap-2', className)}>
+            {label && <Label htmlFor={name}>{label}</Label>}
 
-          return (
-            <div className={cn('flex flex-col gap-2', className)}>
-              {label && <Label htmlFor={name}>{label}</Label>}
-
-              <Popover open={open} onOpenChange={handleOpenChange}>
-                <PopoverTrigger asChild>
-                  <Button
-                    ref={ref}
-                    id={name}
-                    type="button"
-                    variant="outline"
-                    className={cn(
-                      'w-full justify-start text-left font-normal !bg-bg-input',
-                      !field.value && 'text-muted-foreground',
-                      errorMessage && 'border-red focus-visible:ring-red',
-                    )}
-                    disabled={disabled}
-                    aria-invalid={!!errorMessage}
-                    aria-describedby={errorMessage ? `${name}-error` : undefined}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" aria-hidden="true" />
-                    {field.value ? (
-                      format(field.value, 'dd MMMM yyyy', { locale: uk })
-                    ) : (
-                      <span>{placeholder}</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-
-                <PopoverContent
-                  className="w-auto p-0"
-                  align="start"
-                  onOpenAutoFocus={e => e.preventDefault()}
+            <Popover open={open} onOpenChange={isOpen => handleOpenChange(isOpen, field.value)}>
+              <PopoverTrigger asChild>
+                <Button
+                  ref={ref}
+                  id={name}
+                  type="button"
+                  variant="outline"
+                  className={cn(
+                    'w-full justify-start text-left font-normal !bg-bg-input',
+                    !field.value && 'text-muted-foreground',
+                    errorMessage && 'border-red focus-visible:ring-red',
+                  )}
+                  disabled={disabled}
+                  aria-invalid={!!errorMessage}
+                  aria-describedby={errorMessage ? `${name}-error` : undefined}
                 >
-                  <form
-                    onSubmit={e => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      field.onChange(tempDate);
-                      setOpen(false);
-                    }}
-                  >
-                    <Calendar
-                      date={tempDate}
-                      setDate={setTempDate}
-                      lang={uk}
-                      mode={calendarMode}
-                      maxDate={today}
-                    />
-                  </form>
-                </PopoverContent>
-              </Popover>
+                  <CalendarIcon className="mr-2 h-4 w-4" aria-hidden="true" />
+                  {field.value ? (
+                    format(field.value, 'dd MMMM yyyy', { locale: uk })
+                  ) : (
+                    <span>{placeholder}</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
 
-              {errorMessage && (
-                <div className="text-sm text-red" id={`${name}-error`}>
-                  {errorMessage}
-                </div>
-              )}
-            </div>
-          );
-        }}
+              <PopoverContent
+                className="w-auto p-0"
+                align="start"
+                onOpenAutoFocus={e => e.preventDefault()}
+              >
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    field.onChange(tempDate);
+                    setOpen(false);
+                  }}
+                >
+                  <Calendar
+                    date={tempDate}
+                    setDate={setTempDate}
+                    lang={uk}
+                    mode={calendarMode}
+                    maxDate={today}
+                  />
+                </form>
+              </PopoverContent>
+            </Popover>
+
+            {errorMessage && (
+              <div className="text-sm text-red" id={`${name}-error`}>
+                {errorMessage}
+              </div>
+            )}
+          </div>
+        )}
       />
     );
   },
