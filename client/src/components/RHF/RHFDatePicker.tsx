@@ -9,7 +9,7 @@ import { CalendarMode } from '@/types/core/calendar';
 import { format, startOfToday } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { forwardRef, useCallback, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 interface Props {
@@ -39,20 +39,20 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
     } = useFormContext();
 
     const [open, setOpen] = useState(false);
-    const [tempDate, setTempDate] = useState<Date>(new Date());
+    const [tempDate, setTempDate] = useState<Date>(() => new Date());
     const today = startOfToday();
 
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
 
-    const handleOpenChange = useCallback((isOpen: boolean, value?: Date | null) => {
+    const handleOpenChange = (isOpen: boolean, value?: Date | null) => {
       if (isOpen && value) {
         setTempDate(value);
       } else if (isOpen) {
         setTempDate(new Date());
       }
       setOpen(isOpen);
-    }, []);
+    };
 
     return (
       <Controller
