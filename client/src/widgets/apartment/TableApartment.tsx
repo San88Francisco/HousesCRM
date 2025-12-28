@@ -68,7 +68,7 @@ export const TableApartment = () => {
           <CardTitle>Історія оренди</CardTitle>
         </CardHeader>
 
-        <CardContent className=" p-0">
+        <CardContent className="p-0">
           <div className="w-full overflow-x-auto sm:px-6 px-3 pb-6">
             <Table className="min-h-[550px] min-w-[800px]">
               <TableHeader>
@@ -96,9 +96,9 @@ export const TableApartment = () => {
                     <TableRow
                       key={item.id}
                       style={{ gridTemplateColumns: '60px repeat(4, 1fr) 100px' }}
-                      className="hover:bg-muted-foreground duration-300 cursor-pointer "
+                      className="hover:bg-muted-foreground duration-300 cursor-pointer"
                     >
-                      <TableCell className="font-medium text-center  text-text">
+                      <TableCell className="font-medium text-center text-text">
                         <ContractModalTrigger id={item.id} />
                       </TableCell>
                       <TableCell className="font-medium text-center text-text">
@@ -137,14 +137,13 @@ export const TableApartment = () => {
                           {item.totalIncome} ₴
                         </Button>
                       </TableCell>
-                      <TableCell tabIndex={0}>
+                      <TableCell>
                         <Button
                           variant="icon"
                           onClick={() => handleRouteToRenter(item.id)}
                           className={cn(
-                            'font-medium text-right  w-full',
-                            item.status !== 'active' && 'text-purple',
-                            item.status === 'active' && 'text-yellow',
+                            'font-medium text-right w-full',
+                            item.status === 'active' ? 'text-yellow' : 'text-purple',
                           )}
                         >
                           {item.status === 'active' ? 'Активний' : 'Не активний'}
