@@ -15,7 +15,7 @@ export const RenterFormModal = () => {
   const { methods, onSubmit, isLoading, reset } = useRenterForm({
     isEditMode,
     renterToEdit,
-    onSuccess: () => getHandleClose(reset),
+    onSuccess: () => handleClose(),
   });
 
   const handleClose = () => getHandleClose(reset);

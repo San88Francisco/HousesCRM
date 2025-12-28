@@ -1,5 +1,5 @@
 import { RHFInput } from '@/components/RHF/RHFInput';
-import { User } from 'lucide-react';
+import { Cake, User } from 'lucide-react';
 
 interface Props {
   isLoading: boolean;
@@ -21,7 +21,7 @@ export const RenterFormFields = ({ isLoading }: Props) => {
         <RHFInput
           name="lastName"
           label="Прізвище"
-          placeholder="Щур"
+          placeholder="Порошенко"
           icon={<User className="w-4 h-4" />}
           required
           disabled={isLoading}
@@ -31,7 +31,7 @@ export const RenterFormFields = ({ isLoading }: Props) => {
           type="number"
           label="Вік"
           placeholder="25"
-          icon={<User className="w-4 h-4" />}
+          icon={<Cake className="w-4 h-4" />}
           required
           disabled={isLoading}
         />

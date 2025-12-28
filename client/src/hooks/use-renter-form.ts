@@ -1,6 +1,9 @@
-import { getDefaultRenterValues } from '@/shared/utils/renter-form/get-default-renter-values';
-import { mapRenterToFormData } from '@/shared/utils/renter-form/renter-form';
-import { RenterFormData, renterSchema } from '@/shared/validation/renter/renter-schema';
+import { getDefaultRenterValues } from '@/shared/utils/create-update-renter-form/get-default-renter-values';
+import { mapRenterToFormData } from '@/shared/utils/create-update-renter-form/renter-form';
+import {
+  RenterFormData,
+  renterSchema,
+} from '@/shared/validation/create-update-renter/renter-schema';
 import { useCreateRenterMutation, useUpdateRenterMutation } from '@/store/houses-api';
 import { RenterResponse } from '@/types/model/renter';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -38,7 +41,6 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
       lastName: data.lastName,
       age: data.age,
     }).unwrap();
-    toast.success('Орендаря успішно додано!');
   };
 
   const handleUpdate = async (data: RenterFormData) => {
@@ -53,7 +55,6 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
       lastName: data.lastName,
       age: data.age,
     }).unwrap();
-    toast.success('Орендаря успішно оновлено!');
   };
 
   const handleFormSubmit = async (data: RenterFormData) => {
@@ -66,7 +67,9 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
         await handleCreate(data);
       }
 
-      toast.dismiss(toastId);
+      toast.success(isEditMode ? 'Орендаря успішно оновлено!' : 'Орендаря успішно додано!', {
+        id: toastId,
+      });
       onSuccess();
     } catch (error) {
       console.error('Помилка:', error);

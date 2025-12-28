@@ -1,21 +1,22 @@
-export interface RenterBase {
+export type RenterBase = {
   firstName: string;
   lastName: string;
-  age: number | null;
-}
+  age: number;
+};
 
-// Повний рентер, як приходить із бекенду
-export interface RenterResponse extends RenterBase {
+// Повний рентер, який приходить із бекенду
+export type RenterResponse = RenterBase & {
   id: string;
   occupied: string;
   vacated?: string;
   status: string;
   totalIncome?: number;
-}
+};
+
 // Payload модалки
-export interface RenterModalPayload {
+export type RenterModalPayload = {
   renter: RenterResponse;
-}
+};
 
 export type CreateRenterPayload = RenterBase;
 // Для створення нового рентера

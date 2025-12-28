@@ -7,18 +7,15 @@ export const actionItems: ActionItem[] = [
     title: 'Створити нову квартиру',
     modalTrigger: ModalTriggers.ADD_HOUSE,
     icon: <Home className="h-4 w-4" />,
-    description: 'Створити нову квартиру',
   },
   {
     title: 'Створити нового орендаря',
     modalTrigger: ModalTriggers.ADD_RENTER,
     icon: <UserPlus className="h-4 w-4" />,
-    description: 'Створити нового орендаря',
   },
   {
     title: 'Створити новий договір',
     modalTrigger: ModalTriggers.ADD_CONTRACT,
     icon: <FileText className="h-4 w-4" />,
-    description: 'Створити новий договір',
   },
 ];

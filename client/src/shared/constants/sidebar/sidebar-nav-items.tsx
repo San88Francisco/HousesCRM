@@ -1,7 +1,6 @@
 import { ROUTES } from '@/shared/routes';
-import { NavItem } from '@/types/navigation';
-// import { KeySquareIcon } from '@/shared/ui/key';
 import { HomeIcon } from '@/shared/ui/home';
+import { NavItem } from '@/types/navigation';
 import { Cookie } from 'lucide-react';
 
 export const itemsNav: NavItem[] = [

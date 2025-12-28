@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeModal } from '@/store/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
-import { RenterModalPayload } from '@/types/model/renter-modal';
+import { RenterModalPayload } from '@/types/model/renter';
 
 export const useRenterModal = () => {
   const dispatch = useAppDispatch();

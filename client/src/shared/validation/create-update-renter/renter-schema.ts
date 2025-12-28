@@ -6,7 +6,7 @@ export const renterSchema = yup.object({
   age: yup
     .number()
     .required("Вік обов'язковий")
-    .nullable()
+    // .nullable()
     .integer('Вік має бути цілим числом')
     .min(18, 'Мінімальний вік — 18 років')
     .max(125, 'Максимальний вік — 125 років'),

@@ -1,8 +1,8 @@
-import { Label, Pie, PieChart } from 'recharts';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from './charts';
+import { EmptyState } from '@/components/chart-states/EmptyState';
 import { createChartPieConfig } from '@/shared/utils/all-house/pie-chart/create-chart-pie-config';
 import { HouseDistributionChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
-import { EmptyState } from '@/components/chart-states/EmptyState';
+import { Label, Pie, PieChart } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from './charts';
 
 type Props = {
   adjustedData: HouseDistributionChartDataItem[];
@@ -10,10 +10,11 @@ type Props = {
 };
 
 export function PieChartRevenue({ adjustedData, grandApartmentTotalRevenue }: Props) {
-  const chartConfig = createChartPieConfig(adjustedData);
   const positiveRevenueCount = adjustedData.filter(d => d.apartmentTotalRevenue > 0).length;
 
   if (grandApartmentTotalRevenue === 0 || positiveRevenueCount === 0) return <EmptyState />;
+
+  const chartConfig = createChartPieConfig(adjustedData);
 
   return (
     <ChartContainer config={chartConfig} className="flex-shrink-0 w-full lg:w-[50%] max-h-[400px]">

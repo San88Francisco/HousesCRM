@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 // TODO цей файл тимчасовий. Тут приклад як робити функцію редагування данних існуючої квартири.
 const idHouse = '2188f8c5-2528-49c2-b252-b5dc02e8da13';
 
-const UpdateApartment = () => {
+const UpdateHouse = () => {
   const dispatch = useAppDispatch();
 
   const handleEdit = (e: MouseEvent<HTMLButtonElement>, house?: HouseFromAPI) => {
@@ -40,4 +40,4 @@ const UpdateApartment = () => {
   );
 };
 
-export default UpdateApartment;
+export default UpdateHouse;
