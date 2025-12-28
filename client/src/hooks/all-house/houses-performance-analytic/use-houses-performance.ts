@@ -31,7 +31,7 @@ export const useHousesPerformance = () => {
     return analyticsQuery.data?.housesPerformance.meta?.totalPages ?? 1;
   }, [usePagination, performanceQuery.data, analyticsQuery.data]);
 
-  const isEmpty = data.length === 0 && !activeQuery.isFetching && !activeQuery.isError;
+  const isEmpty = data.length === 0 && !activeQuery.isLoading && !activeQuery.isError;
 
   const trigger = ({ pageIndex, pageSize }: TriggerArgs) => {
     setUsePagination(true);
