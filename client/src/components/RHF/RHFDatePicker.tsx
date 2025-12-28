@@ -9,7 +9,7 @@ import { CalendarMode } from '@/types/core/calendar';
 import { format, startOfToday } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { forwardRef, useCallback, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 interface Props {
@@ -38,8 +38,8 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
       formState: { errors },
     } = useFormContext();
     const [open, setOpen] = useState(false);
-    const [tempDate, setTempDate] = useState<Date>(() => new Date());
-    const today = useMemo(() => startOfToday(), []);
+    const [tempDate, setTempDate] = useState<Date>(new Date());
+    const today = startOfToday();
 
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
