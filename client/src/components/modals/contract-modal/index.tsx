@@ -1,5 +1,6 @@
 'use client';
 
+import { OBSERVER_RESET_DELAY } from '@/constants/renter';
 import { useContractsModal } from '@/hooks/use-contract-modal';
 import { DialogDescription, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { useAppSelector } from '@/store/hooks';
@@ -28,7 +29,7 @@ export const ContractModal = () => {
     if (!isPdfModalOpen && isThisModalActive) {
       timeoutId = window.setTimeout(() => {
         setObserverResetKey(prev => prev + 1);
-      }, 100);
+      }, OBSERVER_RESET_DELAY);
     }
 
     return () => {

@@ -15,7 +15,7 @@ import { useGetHouseByIdOccupancyQuery, useGetHouseByIdQuery } from '@/store/hou
 import { occupancyApartmentResponse } from '@/types/services/houses';
 import { ApartmentPagination } from '@/widgets/apartment/ApartmentPagination';
 import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 
 export const TableApartment = () => {
   const { id } = useParams<{ id: string }>();
@@ -58,6 +58,13 @@ export const TableApartment = () => {
 
   const handleRouteToRenter = (renterId: string) => {
     push(`${ROUTES.RENTER}/${renterId}`);
+  };
+
+  const handleCellKeyDown = (e: KeyboardEvent, renterId: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleRouteToRenter(renterId);
+    }
   };
 
   return (
@@ -103,6 +110,9 @@ export const TableApartment = () => {
 
                       <TableCell
                         onClick={() => handleRouteToRenter(item.id)}
+                        onKeyDown={e => handleCellKeyDown(e, item.id)}
+                        role="button"
+                        tabIndex={0}
                         className="font-medium text-center text-text"
                       >
                         {item.firstName} {item.lastName}
@@ -110,6 +120,9 @@ export const TableApartment = () => {
 
                       <TableCell
                         onClick={() => handleRouteToRenter(item.id)}
+                        onKeyDown={e => handleCellKeyDown(e, item.id)}
+                        role="button"
+                        tabIndex={0}
                         className="text-center text-text"
                       >
                         {formatDate(item.occupied)}
@@ -117,6 +130,9 @@ export const TableApartment = () => {
 
                       <TableCell
                         onClick={() => handleRouteToRenter(item.id)}
+                        onKeyDown={e => handleCellKeyDown(e, item.id)}
+                        role="button"
+                        tabIndex={0}
                         className="text-center text-text"
                       >
                         {formatDate(item.vacated)}
@@ -124,6 +140,9 @@ export const TableApartment = () => {
 
                       <TableCell
                         onClick={() => handleRouteToRenter(item.id)}
+                        onKeyDown={e => handleCellKeyDown(e, item.id)}
+                        role="button"
+                        tabIndex={0}
                         className="text-center font-medium text-text"
                       >
                         {item.totalIncome} ₴
@@ -131,6 +150,9 @@ export const TableApartment = () => {
 
                       <TableCell
                         onClick={() => handleRouteToRenter(item.id)}
+                        onKeyDown={e => handleCellKeyDown(e, item.id)}
+                        role="button"
+                        tabIndex={0}
                         className={cn(
                           'font-medium text-right',
                           item.status !== 'active' && 'text-purple',
