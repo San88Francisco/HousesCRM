@@ -81,7 +81,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                     aria-invalid={!!errorMessage}
                     aria-describedby={errorMessage ? `${name}-error` : undefined}
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4 " aria-hidden="true" />
+                    <CalendarIcon className="mr-2 h-4 w-4" aria-hidden="true" />
                     {field.value ? (
                       format(field.value, 'dd MMMM yyyy', { locale: uk })
                     ) : (
