@@ -15,9 +15,9 @@ export const useHouseModal = () => {
   const houseToEdit =
     payload && 'house' in payload ? (payload as HouseModalPayload).house : undefined;
 
-  const handleClose = (reset: () => void) => {
+  const handleClose = (reset?: () => void) => {
     dispatch(closeModal());
-    reset();
+    reset?.();
   };
 
   const modalContent = {
