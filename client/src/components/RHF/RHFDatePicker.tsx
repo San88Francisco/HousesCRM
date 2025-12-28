@@ -45,7 +45,6 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
 
-    // ✅ useCallback на рівні компонента
     const handleOpenChange = useCallback((isOpen: boolean, value?: Date | null) => {
       if (isOpen && value) {
         setTempDate(value);
