@@ -1,18 +1,18 @@
-import { ApartmentFormData } from '@/shared/validation/add-houses/house-schema';
-import { ApartmentToEdit } from '@/types/core/house';
+import { HouseFormData } from '@/shared/validation/add-houses/house-schema';
+import { HouseToEdit } from '@/types/core/house';
 import { getDefaultHouseValues } from './get-default-house-values';
 
-export const mapHouseToFormData = (apartment?: ApartmentToEdit): ApartmentFormData => {
-  if (!apartment) return getDefaultHouseValues();
+export const mapHouseToFormData = (house?: HouseToEdit): HouseFormData => {
+  if (!house) return getDefaultHouseValues();
 
   return {
-    apartmentName: apartment.apartmentName,
-    roomsCount: apartment.roomsCount,
-    totalArea: apartment.totalArea,
-    purchaseDate: new Date(apartment.purchaseDate),
-    price: apartment.prices[0].amount,
-    floor: apartment.floor,
-    street: apartment.street,
-    apartmentType: apartment.apartmentType,
+    apartmentName: house.apartmentName,
+    roomsCount: house.roomsCount,
+    totalArea: house.totalArea,
+    purchaseDate: new Date(house.purchaseDate),
+    price: house.prices[0]?.amount,
+    floor: house.floor,
+    street: house.street,
+    apartmentType: house.apartmentType,
   };
 };

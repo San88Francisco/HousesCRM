@@ -1,10 +1,10 @@
 'use client';
-import { flexRender, Table as TableType } from '@tanstack/react-table';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import { tableGrid } from '@/shared/constants/styles/houses-performance-table';
 import TablePagination from '@/shared/ui/data-table/TablePagination';
-import { Fragment } from 'react';
-import { HousesPerformanceSelect } from './houses-performance-select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
+import { flexRender, Table as TableType } from '@tanstack/react-table';
+import { HousesPerformanceSelect } from './HousesPerformanceSelect';
 
 type Props<T> = {
   table: TableType<T>;
@@ -12,12 +12,9 @@ type Props<T> = {
   setLimit: (limit: number) => void;
 };
 
-const tableGrid =
-  'grid grid-cols-4 [&>*]:flex [&>*]:items-center [&>*:first-child]:justify-start [&>*:not(:first-child):not(:last-child)]:justify-center [&>*:last-child]:justify-end';
-
 export const HousesPerformanceTable = <T,>({ table, limit, setLimit }: Props<T>) => {
   return (
-    <Fragment>
+    <div className="flex flex-col justify-between h-full">
       <Table>
         <TableHeader>
           <TableRow className={cn(tableGrid)}>
@@ -41,12 +38,12 @@ export const HousesPerformanceTable = <T,>({ table, limit, setLimit }: Props<T>)
         </TableBody>
       </Table>
 
-      <div className="mt-4 w-full flex justify-end">
-        <div className="ml-auto flex">
+      <div className="mt-4 flex justify-end">
+        <div className="flex gap-3">
           <HousesPerformanceSelect limit={limit} setLimit={setLimit} />
           <TablePagination table={table} />
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };

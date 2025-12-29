@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {
+  CardContentProps,
+  CardDescriptionProps,
+  CardFooterProps,
   CardProps,
   CardTitleProps,
-  CardDescriptionProps,
-  CardContentProps,
-  CardFooterProps,
 } from '../../types/core/card';
 import { cn } from '../utils/cn';
 
@@ -48,7 +48,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
     <div
       ref={ref}
       className={cn(
-        'flex sm:flex-row flex-col sm:gap-5 gap-3  justify-between space-y-1.5 sm:p-6 p-3 ',
+        'flex sm:flex-row flex-col sm:gap-5 gap-3  justify-between space-y-1.5 sm:p-6 p-3',
         className,
       )}
       {...props}
@@ -101,7 +101,7 @@ const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('sm:p-6 p-3 pt-0', cardVariants[variant].content, className)}
+      className={cn('sm:p-6 p-3 pt-0 flex-1', cardVariants[variant].content, className)}
       {...props}
     />
   ),
@@ -119,4 +119,4 @@ const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
 );
 CardFooter.displayName = 'CardFooter';
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, CardAction };
+export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle };

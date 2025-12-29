@@ -1,6 +1,6 @@
 import { DialogTitle } from '@/shared/ui/dialog';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { SkeletonSection } from './pdf-contract-skeleton-section';
+import { PdfContractSkeletonSection } from './PdfContractSkeletonSection';
 
 export const PdfContractSkeleton = () => {
   return (
@@ -21,7 +21,7 @@ export const PdfContractSkeleton = () => {
       </div>
 
       {Array.from({ length: 6 }).map((_, i) => (
-        <SkeletonSection key={i} />
+        <PdfContractSkeletonSection key={i} />
       ))}
     </div>
   );

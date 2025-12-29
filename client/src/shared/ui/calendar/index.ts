@@ -1,4 +1,4 @@
-import Calendar from './ui/calendar';
-import CalendarRange from './ui/calendar-range';
+import Calendar from './Calendar';
+import CalendarRange from './CalendarRange';
 
-export { CalendarRange, Calendar };
+export { Calendar, CalendarRange };

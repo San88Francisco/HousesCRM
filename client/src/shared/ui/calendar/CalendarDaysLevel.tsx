@@ -1,5 +1,3 @@
-import { FC, Fragment } from 'react';
-import CalendarCell from './calendar-cell';
 import {
   Day,
   eachDayOfInterval,
@@ -15,6 +13,8 @@ import {
   startOfDay,
   startOfWeek,
 } from 'date-fns';
+import { FC, Fragment } from 'react';
+import CalendarCell from './CalendarCell';
 /* eslint-disable */
 
 interface ICalendarDaysLevelProps {

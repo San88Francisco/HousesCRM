@@ -1,13 +1,13 @@
 'use client';
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { LoadingState } from '@/components/chart-states/LoadingState';
 import { HousesPerformanceTableColumns } from '@/constants/apartment/houses-performance-analytic';
 import { useHousesPerformance } from '@/hooks/all-house/houses-performance-analytic/use-houses-performance';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useEffect, useState } from 'react';
-import { HousesPerformanceTable } from './houses-performance-table';
+import { HousesPerformanceTable } from './HousesPerformanceTable';
 
 const PAGE_SIZE = 10;
 
@@ -15,7 +15,7 @@ export const HousesPerformanceAnalytic = () => {
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [limit, setLimit] = useState<number>(PAGE_SIZE);
 
-  const { data, trigger, pageCount, isFetching, isError, error, isEmpty } = useHousesPerformance();
+  const { data, trigger, pageCount, isLoading, isError, error, isEmpty } = useHousesPerformance();
 
   useEffect(() => {
     setPageIndex(0);
@@ -55,14 +55,14 @@ export const HousesPerformanceAnalytic = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isFetching) return <LoadingState className="w-full" />;
+  if (isLoading) return <HousesPerformanceTableSkeleton rows={limit} />;
 
   if (isError) return <ErrorState className="w-full" error={error} />;
 
   if (isEmpty) return <EmptyState className="w-full" />;
 
   return (
-    <Card>
+    <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Показники будинків</CardTitle>
       </CardHeader>

@@ -1,15 +1,15 @@
-import { Table } from '@tanstack/react-table';
 import useVisiblePages from '@/hooks/use-visible-pages';
+import { cn } from '@/shared/utils/cn';
+import { Table } from '@tanstack/react-table';
 import {
-  PaginationPrevious,
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
+  PaginationPrevious,
 } from '../pagination';
-import { cn } from '@/shared/utils/cn';
 
 type Props<T> = {
   table: Table<T>;
@@ -27,10 +27,7 @@ const TablePagination = <T,>({ table }: Props<T>) => {
         <PaginationItem>
           <PaginationPrevious
             onClick={() => table.previousPage()}
-            className={cn(
-              'cursor-pointer text-text',
-              !table.getCanPreviousPage() && 'pointer-events-none text-muted',
-            )}
+            className={cn(!table.getCanPreviousPage() && 'pointer-events-none text-muted')}
           />
         </PaginationItem>
 
@@ -40,14 +37,21 @@ const TablePagination = <T,>({ table }: Props<T>) => {
               <PaginationEllipsis />
             </PaginationItem>
           ) : (
-            <PaginationItem key={page}>
+            <PaginationItem
+              key={page}
+              className={cn(
+                'cursor-pointer text-text',
+                currentPageIndex === page &&
+                  'bg-gray dark:bg-gray rounded-[8px] text-white border-gray',
+              )}
+            >
               <PaginationLink
-                onClick={() => table.setPageIndex(page)}
+                onClick={() => {
+                  if (currentPageIndex !== page) {
+                    table.setPageIndex(page);
+                  }
+                }}
                 isActive={currentPageIndex === page}
-                className={cn(
-                  'cursor-pointer text-text',
-                  currentPageIndex === page && 'text-muted',
-                )}
               >
                 {page + 1}
               </PaginationLink>

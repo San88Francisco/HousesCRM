@@ -1,8 +1,8 @@
 import { getDefaultHouseValues } from '@/shared/utils/create-house-form/get-default-house-values';
 import { mapHouseToFormData } from '@/shared/utils/create-house-form/house-form';
-import { ApartmentFormData, apartmentSchema } from '@/shared/validation/add-houses/house-schema';
+import { HouseFormData, houseSchema } from '@/shared/validation/add-houses/house-schema';
 import { useCreateHouseMutation, useUpdateHouseMutation } from '@/store/houses-api';
-import { ApartmentToEdit } from '@/types/core/house';
+import { HouseToEdit } from '@/types/core/house';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { format } from 'date-fns';
 import { useEffect } from 'react';
@@ -11,16 +11,16 @@ import { toast } from 'sonner';
 
 type Props = {
   isEditMode: boolean;
-  apartmentToEdit?: ApartmentToEdit;
+  houseToEdit?: HouseToEdit;
   onSuccess: () => void;
 };
 
-export const useHouseForm = ({ isEditMode, apartmentToEdit, onSuccess }: Props) => {
+export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
   const [createHouse, { isLoading: isCreating }] = useCreateHouseMutation();
   const [updateHouse, { isLoading: isUpdating }] = useUpdateHouseMutation();
 
-  const methods = useForm<ApartmentFormData>({
-    resolver: yupResolver(apartmentSchema),
+  const methods = useForm<HouseFormData>({
+    resolver: yupResolver(houseSchema),
     defaultValues: getDefaultHouseValues(),
   });
 
@@ -28,48 +28,46 @@ export const useHouseForm = ({ isEditMode, apartmentToEdit, onSuccess }: Props) 
 
   useEffect(() => {
     const formData =
-      isEditMode && apartmentToEdit ? mapHouseToFormData(apartmentToEdit) : getDefaultHouseValues();
+      isEditMode && houseToEdit ? mapHouseToFormData(houseToEdit) : getDefaultHouseValues();
 
     reset(formData);
-  }, [isEditMode, apartmentToEdit, reset]);
+  }, [isEditMode, houseToEdit, reset]);
 
-  const handleCreate = async (data: ApartmentFormData) => {
+  const handleCreate = async (data: HouseFormData) => {
     await createHouse({
       ...data,
       purchaseDate: format(data.purchaseDate, 'yyyy-MM-dd'),
     }).unwrap();
-    toast.success('Квартиру успішно додано!');
   };
 
-  const handleUpdate = async (data: ApartmentFormData) => {
-    if (!apartmentToEdit?.id) {
-      toast.error('ID квартири не знайдено');
-      return;
+  const handleUpdate = async (data: HouseFormData) => {
+    if (!houseToEdit?.id) {
+      throw new Error('ID квартири не знайдено');
     }
 
     await updateHouse({
-      id: apartmentToEdit.id,
+      id: houseToEdit.id,
       ...data,
       purchaseDate: format(data.purchaseDate, 'yyyy-MM-dd'),
     }).unwrap();
-    toast.success('Квартиру успішно оновлено!');
   };
 
-  const onSubmit = async (data: ApartmentFormData) => {
+  const onSubmit = async (data: HouseFormData) => {
     const toastId = toast.loading(isEditMode ? 'Оновлення квартири...' : 'Створення квартири...');
 
     try {
       if (isEditMode) {
         await handleUpdate(data);
+        toast.success('Квартиру успішно оновлено!', { id: toastId });
       } else {
         await handleCreate(data);
+        toast.success('Квартиру успішно додано!', { id: toastId });
       }
 
-      toast.dismiss(toastId);
       onSuccess();
     } catch (error) {
       console.error('Помилка:', error);
-      toast.error(isEditMode ? 'Не вдалося оновити квартиру' : 'Не вдалося додати квартиру', {
+      toast.error(isEditMode ? 'Не вдалося оновити квартиру' : 'Не вдалося створити квартиру', {
         id: toastId,
       });
     }

@@ -2,6 +2,8 @@
 
 language: en-US
 
+tone_instructions: "Write clearly and professionally in English. Be concise, direct, and constructive. Focus on code quality and correctness. Avoid sarcasm or role-play personas."
+
 reviews:
   profile: assertive
   high_level_summary: true
@@ -12,56 +14,131 @@ reviews:
     auto_incremental_review: true
     drafts: false
     base_branches:
-      - "^develop$"
+      - '^develop$'
     ignore_title_keywords:
-      - "WIP"
-      - "DRAFT"
+      - 'WIP'
+      - 'DRAFT'
     ignore_usernames:
-      - "dependabot"
-      - "renovate-bot"
+      - 'dependabot'
+      - 'renovate-bot'
 
-  instructions: |
-    You are reviewing a monorepo with:
-    - Next.js app in the "client" folder
-    - NestJS API in the "server" folder
+  path_filters:
+    - 'client/**'
+    - 'server/**'
+    - '!**/*.md'
+    - '!**/dist/**'
+    - '!**/build/**'
 
-    General:
-    - Be strict about code quality, readability and maintainability.
-    - Suggest refactoring when code is too complex, duplicated or violates SOLID principles.
-    - Prefer small, focused functions and clear separation of concerns.
-    - Point out potential security, performance and reliability issues with clear, actionable suggestions.
-    - Make sure configuration and secrets are not hard-coded.
-    - Encourage consistent error handling and logging patterns.
+  path_instructions:
+    - path: '**/*'
+      instructions: |
+        ====================
+        Language & tone
+        ====================
+        - All review comments, summaries, and suggestions MUST be written in English.
+        - Use a professional, direct, and constructive tone.
+        - No role-play personas, sarcasm, or insults.
 
-path_filters:
-  - "client/**"
-  - "server/**"
-  - "!**/*.md"
-  - "!**/dist/**"
-  - "!**/build/**"
+        ====================
+        Review format (MANDATORY)
+        ====================
+        - EVERY issue MUST follow this exact structure:
 
-path_instructions:
-  - path: "client/**"
-    instructions: |
-      This is a Next.js application.
-      - Check React component structure, props, and state management.
-      - Prefer small, reusable components over large ones.
-      - Point out unnecessary re-renders and obvious performance issues.
-      - Verify correct usage of Next.js features (routing, data fetching).
-      - Encourage accessibility (a11y), semantic HTML and clear UX.
+          Severity: Block | Warn | Nit
+          Why it matters: one concise sentence explaining the impact
+          Fix: concrete steps or a short code snippet / patch
 
-  - path: "server/**"
-    instructions: |
-      This is a NestJS backend application.
-      - Enforce NestJS best practices: modules, controllers, services, providers separation.
-      - Suggest splitting or refactoring services/controllers that are too large.
-      - Encourage use of DTOs, validation pipes and proper error handling.
-      - Check for security issues: validation, guards, unsafe queries, etc.
-      - Use dependency injection properly and avoid tight coupling.
-      - Suggest extracting shared logic into reusable providers/helpers where appropriate.
+        - For EVERY Block issue:
+          - ALWAYS provide a concrete fix or a minimal patch/diff.
+        - Avoid generic advice. If it is not actionable, do not include it.
 
-tools:
-  eslint:
-    enabled: true
-  gitleaks:
-    enabled: true
+        ====================
+        Review priorities
+        ====================
+        1) Security, data validation, authentication & authorization
+        2) Correctness & reliability
+        3) Performance
+        4) Maintainability & SOLID principles
+        5) Style & accessibility (a11y)
+
+        ====================
+        General rules
+        ====================
+        - Be strict about code quality, readability, and maintainability.
+        - If logic is duplicated more than 2 times, suggest extracting it into a helper / hook / provider.
+        - If a function or method exceeds ~40–60 lines, suggest splitting it.
+        - Prefer small, focused functions and clear separation of concerns.
+        - Configuration, secrets, URLs, and credentials MUST NOT be hard-coded.
+        - Enforce consistent error handling and structured logging.
+
+        ====================
+        Explicitly forbidden
+        ====================
+        - console.log in server-side code
+        - unsafe eval usage
+        - potentially catastrophic or unbounded regular expressions
+        - unvalidated user input reaching business logic or database layer
+
+    - path: 'client/**'
+      instructions: |
+        This is a Next.js application.
+
+        Server / Client Components:
+        - Clearly distinguish Server Components and Client Components.
+        - "use client" MUST be used ONLY when strictly necessary.
+        - Do NOT pull server-only logic or heavy dependencies into Client Components.
+        - Flag unnecessary client-side rendering and suggest server-side alternatives.
+
+        Performance & imports:
+        - Heavy imports (moment, full lodash, etc.) in client code are discouraged.
+        - Prefer tree-shaking, per-method imports, or lighter alternatives.
+        - Identify unnecessary re-renders.
+        - useMemo / useCallback MUST be used ONLY when there is a clear performance benefit.
+
+        State & data fetching:
+        - Prefer RTK Query for server state where applicable.
+        - Review caching strategy, invalidation, and over-fetching.
+        - Flag duplicated data-fetching logic.
+
+        Accessibility (a11y):
+        - Images MUST have alt attributes (or be explicitly decorative).
+        - Inputs MUST have associated labels.
+        - Prefer semantic HTML elements.
+        - Interactive elements MUST be keyboard-accessible.
+        - Flag missing aria-* attributes where required.
+        - Ensure visible focus states.
+
+    - path: 'server/**'
+      instructions: |
+        This is a NestJS backend application.
+
+        Architecture:
+        - Enforce proper separation: modules / controllers / services / providers.
+        - Controllers MUST be thin; business logic belongs in services.
+        - Large services or controllers MUST be split or refactored.
+        - Use dependency injection properly and avoid tight coupling.
+
+        Validation & security:
+        - ALL incoming data MUST go through DTOs.
+        - Use class-validator with ValidationPipe.
+        - ValidationPipe SHOULD use whitelist and forbidNonWhitelisted where applicable.
+        - Protected routes MUST use guards and roles where appropriate.
+        - Flag missing authentication or authorization checks.
+
+        Logging & errors:
+        - Use NestJS Logger or structured logging solutions.
+        - console.log is forbidden.
+        - Use HttpException and/or ExceptionFilters consistently.
+        - Avoid leaking sensitive information in error responses.
+
+        Database & performance:
+        - Use transactions when multiple dependent DB operations exist.
+        - Flag N+1 query problems.
+        - Suggest indexes where queries clearly benefit from them.
+        - Recommend pagination for list endpoints.
+
+  tools:
+    eslint:
+      enabled: true
+    gitleaks:
+      enabled: true

@@ -1,5 +1,3 @@
-import { FC } from 'react';
-import CalendarCell from './calendar-cell';
 import {
   endOfYear,
   format,
@@ -11,6 +9,8 @@ import {
   Locale,
   startOfYear,
 } from 'date-fns';
+import { FC } from 'react';
+import CalendarCell from './CalendarCell';
 /* eslint-disable */
 
 interface ICalendarYearsLevelProps {

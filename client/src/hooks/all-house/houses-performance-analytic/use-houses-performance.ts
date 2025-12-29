@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
 import { useGetHousesAnalyticsQuery, useLazyGetHousesPerformanceQuery } from '@/store/houses-api';
+import { useMemo, useState } from 'react';
 
 type TriggerArgs = {
   pageIndex: number;
@@ -49,7 +49,7 @@ export const useHousesPerformance = () => {
     trigger,
     pageCount,
 
-    isFetching: activeQuery.isFetching,
+    isLoading: activeQuery.isLoading,
     isError: activeQuery.isError,
     error: activeQuery.error,
 

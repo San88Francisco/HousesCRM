@@ -1,5 +1,5 @@
+import { getHouseColor } from '@/shared/utils/all-house/payback-chart/colors';
 import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart/analytics';
-import { getApartmentColor } from '@/shared/utils/all-house/payback-chart/colors';
 
 const FULL_PAYBACK_COEFFICIENT = 1;
 const COEFFICIENT_DECIMAL_PLACES = 2;
@@ -17,7 +17,7 @@ export const transformPaybackData = (stats: HousePaybackStats[]): PaybackChartDa
       paybackCoefficient: stat.paybackCoefficient,
       displayCoefficient,
       isFullyPaidBack,
-      color: getApartmentColor(index),
+      color: getHouseColor(index),
       purchaseDate: stat.purchaseDate,
       purchasePriceUSD: stat.purchasePriceUSD,
       totalIncomeUSD: stat.totalIncomeUSD,

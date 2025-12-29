@@ -1,8 +1,8 @@
+import { CalendarMode } from '@/types/core/calendar';
 import { Day, Locale, startOfToday } from 'date-fns';
 import { FC, useEffect } from 'react';
-import CalendarDisplay from './calendar-display';
-import { Button } from '../../button';
-import { CalendarMode } from '@/types/core/calendar';
+import { Button } from '../button';
+import CalendarDisplay from './CalendarDisplay';
 
 interface ICalendarProps {
   date: Date;
