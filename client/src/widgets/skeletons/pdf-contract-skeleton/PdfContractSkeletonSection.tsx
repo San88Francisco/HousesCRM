@@ -1,6 +1,6 @@
 import { Skeleton } from '@/shared/ui/skeleton';
 
-export const SkeletonSection = () => {
+export const PdfContractSkeletonSection = () => {
   return (
     <div className="mb-8">
       <Skeleton className="h-5 w-48 mb-3 rounded-md" />
