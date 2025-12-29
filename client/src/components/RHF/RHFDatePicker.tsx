@@ -41,6 +41,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
     const [open, setOpen] = useState(false);
     const [tempDate, setTempDate] = useState<Date>(() => new Date());
     const today = startOfToday();
+    const minDate = new Date('1900-01-01');
 
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
@@ -105,6 +106,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                     setDate={setTempDate}
                     lang={uk}
                     mode={calendarMode}
+                    minDate={minDate}
                     maxDate={today}
                   />
                 </form>

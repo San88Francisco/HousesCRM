@@ -6,7 +6,7 @@ export const houseSchema = yup.object({
     .string()
     .trim()
     .required("Назва квартири обов'язкова")
-    .max(30, 'Назва квартири не може перевищувати 30 символів'),
+    .max(45, 'Назва квартири не може перевищувати 45 символів'),
 
   roomsCount: yup
     .number()
@@ -39,7 +39,11 @@ export const houseSchema = yup.object({
     .min(1, 'Поверх має бути не менше 1')
     .integer('Поверх має бути цілим числом'),
 
-  street: yup.string().trim().required("Вулиця обов'язкова"),
+  street: yup
+    .string()
+    .trim()
+    .required("Вулиця обов'язкова")
+    .max(45, 'Вулиця не може перевищувати 45 символів'),
 
   apartmentType: yup
     .mixed<ApartmentType>()
