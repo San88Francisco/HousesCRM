@@ -5,10 +5,12 @@ export type House = {
   apartmentName: string;
   roomsCount: number;
   totalArea: number;
+  price: number;
   purchaseDate: string;
   floor: number;
   street: string;
   apartmentType: ApartmentType;
+  contractIds?: string[];
 };
 
 export type HouseByIdResponse = {
@@ -60,3 +62,7 @@ export type OccupancyQueryParams = {
   page?: number;
   limit?: number;
 };
+
+export type CreateHousePayload = Omit<House, 'id'>;
+
+export type UpdateHousePayload = House;

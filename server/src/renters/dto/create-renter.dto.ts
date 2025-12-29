@@ -1,4 +1,16 @@
-import { ArrayNotEmpty, IsArray, IsDefined, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator'
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsDefined,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Max,
+  MaxLength,
+  Min,
+  MinLength,
+} from 'class-validator'
 
 export class CreateRenterDto {
   @IsDefined({ message: 'FirstName is required' })
@@ -14,10 +26,10 @@ export class CreateRenterDto {
   lastName: string
 
   @IsDefined({ message: 'Age is required' })
-  @IsString({ message: 'Age must be a string' })
-  @MinLength(0)
-  @MaxLength(100)
-  age: string
+  @IsInt({ message: 'Age must be an integer' })
+  @Min(18, { message: 'Age must be at least 18' })
+  @Max(100, { message: 'Age must be at most 100' })
+  age: number
 
   @IsOptional()
   @IsArray({ message: 'contractIds must be an array' })

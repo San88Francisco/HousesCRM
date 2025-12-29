@@ -1,6 +1,5 @@
 'use client';
 import { Button } from '@/shared/ui/button';
-import React from 'react';
 import { toast } from 'sonner';
 
 export const ToastCopmponent = () => {

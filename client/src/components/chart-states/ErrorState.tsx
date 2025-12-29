@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/shared/ui/card';
-import { getErrorMessage } from '@/shared/utils/all-apartments/currency-revaluation-chart/utils';
+import { getErrorMessage } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { cn } from '@/shared/utils/cn';
 
 type Props = {

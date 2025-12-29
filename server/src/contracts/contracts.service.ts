@@ -1,16 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Contract } from './entities/contract.entity'
+import { plainToInstance } from 'class-transformer'
+import { QueryDto } from 'src/common/dto/query.dto'
+import { RentersService } from 'src/renters/renters.service'
 import { EntityNotFoundError, Repository } from 'typeorm'
+import { ContractPdfFileDto } from './dto/contract-pdf-file.dto'
+import { ContractResponseDto } from './dto/contract-response.dto'
+import { ContractWithRelationsDto } from './dto/contract-with-relations.dto'
 import { ContractDto } from './dto/contract.dto'
 import { CreateContractDto } from './dto/create-contract.dto'
-import { plainToInstance } from 'class-transformer'
-import { ContractWithRelationsDto } from './dto/contract-with-relations.dto'
 import { UpdateContractDto } from './dto/update-contract-dto'
-import { ContractResponseDto } from './dto/contract-response.dto'
-import { QueryDto } from 'src/common/dto/query.dto'
-import { ContractPdfFileDto } from './dto/contract-pdf-file.dto'
-import { RentersService } from 'src/renters/renters.service'
+import { Contract } from './entities/contract.entity'
 
 @Injectable()
 export class ContractsService {
@@ -88,7 +88,6 @@ export class ContractsService {
 
     const savedContract = await this.contractsRepository.save(contractToSave)
 
-    // Оновлюємо дати рентаря після створення контракту
     if (dto.renterId) {
       await this.rentersService.updateRenterDates(dto.renterId)
     }
@@ -101,7 +100,6 @@ export class ContractsService {
   }
 
   async update(dto: UpdateContractDto, id: string): Promise<ContractWithRelationsDto> {
-    // Отримуємо старий контракт для збереження старого renterId
     const oldContract = await this.contractsRepository.findOne({ where: { id } })
 
     const contractToUpdate = await this.contractsRepository.preload({
@@ -117,13 +115,11 @@ export class ContractsService {
 
     const savedContract = await this.contractsRepository.save(contractToUpdate)
 
-    // Оновлюємо дати для нового рентаря (якщо він вказаний)
     const newRenterId = dto.renterId || savedContract.renterId
     if (newRenterId) {
       await this.rentersService.updateRenterDates(newRenterId)
     }
 
-    // Якщо рентар змінився, оновлюємо дати і для старого рентаря
     if (oldContract && oldContract.renterId && dto.renterId && oldContract.renterId !== dto.renterId) {
       await this.rentersService.updateRenterDates(oldContract.renterId)
     }
@@ -136,7 +132,6 @@ export class ContractsService {
   }
 
   async remove(id: string): Promise<void> {
-    // Отримуємо контракт перед видаленням для збереження renterId
     const contract = await this.contractsRepository.findOne({ where: { id } })
 
     const res = await this.contractsRepository.delete(id)
@@ -145,7 +140,6 @@ export class ContractsService {
       throw new EntityNotFoundError(Contract, id)
     }
 
-    // Оновлюємо дати рентаря після видалення контракту
     if (contract?.renterId) {
       await this.rentersService.updateRenterDates(contract.renterId)
     }

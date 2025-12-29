@@ -7,6 +7,7 @@ import { SidebarPagesGroup } from './SidebarPagesGroup';
 
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
 import { LogoSidebar } from './LogoSidebar';
+import { SidebarActionsGroup } from './SidebarActionsGroup';
 import { SidebarFavoritesGroup } from './SidebarFavoritesGroup';
 import { SidebarTablesGroup } from './SidebarTablesGroup';
 
@@ -21,6 +22,8 @@ export const AppSidebar = () => {
       <SidebarContent>
         <SidebarPagesGroup />
         <SidebarTablesGroup />
+        <SidebarActionsGroup />
+        {/* <SidebarTablesGroup /> */}
         <SidebarFavoritesGroup />
       </SidebarContent>
       <LogoSidebar />

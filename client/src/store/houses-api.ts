@@ -1,13 +1,17 @@
 import { rootApi } from '@/shared/api';
+import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
 import {
   HousesPerformanceRequest,
   HousesPerformanceResponse,
 } from '@/types/core/houses-performance/types';
-import { AllAnalyticsResponse } from '@/types/services/all-analitics';
+import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 import {
+  CreateHousePayload,
+  House,
   HouseByIdResponse,
   OccupancyPaginatedResponse,
   OccupancyQueryParams,
+  UpdateHousePayload,
 } from '@/types/services/houses';
 
 export const housesApi = rootApi.injectEndpoints({
@@ -15,7 +19,7 @@ export const housesApi = rootApi.injectEndpoints({
   endpoints: build => ({
     getHousesAnalytics: build.query<AllAnalyticsResponse, void>({
       query: () => '/houses-analytics/all-analytics',
-      providesTags: ['Houses'],
+      providesTags: ['Analytics'],
     }),
 
     getHouseById: build.query<HouseByIdResponse, string>({
@@ -29,6 +33,29 @@ export const housesApi = rootApi.injectEndpoints({
         params: { page, limit },
       }),
       providesTags: (_result, _error, { id }) => [{ type: 'Houses', id }],
+    }),
+
+    getCurrencyRevaluation: build.query<CurrencyRevaluation[], void>({
+      query: () => '/houses-analytics/currency-revaluation-analytic',
+      providesTags: ['Analytics'],
+    }),
+
+    createHouse: build.mutation<House, CreateHousePayload>({
+      query: body => ({
+        url: '/houses',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Houses', 'Analytics'],
+    }),
+
+    updateHouse: build.mutation<House, Partial<UpdateHousePayload>>({
+      query: ({ id, ...body }) => ({
+        url: `/houses/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses', 'Analytics'],
     }),
 
     getHousesPerformance: build.query<HousesPerformanceResponse, HousesPerformanceRequest>({
@@ -51,6 +78,9 @@ export const {
   useLazyGetHousesAnalyticsQuery,
   useGetHouseByIdQuery,
   useGetHouseByIdOccupancyQuery,
+  useGetCurrencyRevaluationQuery,
+  useCreateHouseMutation,
+  useUpdateHouseMutation,
   useGetHousesPerformanceQuery,
   useLazyGetHousesPerformanceQuery,
 } = housesApi;

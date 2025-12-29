@@ -1,14 +1,14 @@
 'use client';
 
+import { itemsNav } from '@/shared/constants/sidebar/sidebar-nav-items';
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
 import {
-  SidebarMenu,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarMenu,
 } from '@/shared/ui/sidebar';
 import { SidebarMenuItem } from './SidebarMenuItem';
-import { itemsNav } from '@/shared/constants/sidebar/sidebarNavItems';
 
 export const SidebarPagesGroup = () => {
   const pagesItems = itemsNav.filter(item => item.url);
