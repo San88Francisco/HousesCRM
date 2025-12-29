@@ -2,7 +2,6 @@ import { Button } from '@/shared/ui/button';
 import { KeySquareIcon } from '@/shared/ui/key';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { User } from 'lucide-react';
-import React from 'react';
 
 const meta: Meta<typeof Button> = {
   title: 'UI/Icon',

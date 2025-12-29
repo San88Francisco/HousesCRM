@@ -1,13 +1,14 @@
-import { Type } from 'class-transformer'
 import {
   ArrayNotEmpty,
   IsArray,
-  IsDate,
   IsDefined,
+  IsInt,
   IsOptional,
   IsString,
   IsUUID,
+  Max,
   MaxLength,
+  Min,
   MinLength,
 } from 'class-validator'
 
@@ -24,15 +25,11 @@ export class CreateRenterDto {
   @MaxLength(30)
   lastName: string
 
-  @IsDefined({ message: 'Occupied is required' })
-  @IsDate({ message: 'Occupied must be a valid date' })
-  @Type(() => Date)
-  occupied: Date
-
-  @IsOptional()
-  @IsDate({ message: 'Vacated must be a valid date' })
-  @Type(() => Date)
-  vacated?: Date
+  @IsDefined({ message: 'Age is required' })
+  @IsInt({ message: 'Age must be an integer' })
+  @Min(18, { message: 'Age must be at least 18' })
+  @Max(100, { message: 'Age must be at most 100' })
+  age: number
 
   @IsOptional()
   @IsArray({ message: 'contractIds must be an array' })
