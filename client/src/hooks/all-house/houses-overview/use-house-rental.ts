@@ -1,25 +1,25 @@
-import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import {
-  findMinMaxRentWithFivePercent,
-  generateChartData,
-  getPeriodRange,
-} from '@/shared/utils/all-house/houses-overview/chart-houses-overview';
 import {
   DEFAULT_CHART_WIDTH,
   DEFAULT_Y_MAX,
   DEFAULT_Y_MIN,
   Y_DOMAIN_STEP,
 } from '@/constants/line-chart/line-chart';
+import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
+import {
+  findMinMaxRentWithFivePercent,
+  generateChartData,
+  getPeriodRange,
+} from '@/shared/utils/all-house/houses-overview/chart-houses-overview';
 import {
   debounce,
   getDataRange,
   getOptimalTicks,
 } from '@/shared/utils/all-house/houses-overview/chart-math';
 import { TimeRangeEnum } from '@/types/core/houses-overview/types';
-import { AllAnalyticsResponse } from '@/types/services/all-analitics';
-import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
+import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
 export function useHouseRental(apartmentsData: Partial<AllAnalyticsResponse>) {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ONE_YEAR);

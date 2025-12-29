@@ -2,32 +2,41 @@
 
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
 import {
-  SidebarMenuItem,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
+  SidebarMenuItem,
 } from '@/shared/ui/sidebar';
+import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
+import { MapPinHouse } from 'lucide-react';
 import { CollapsibleMenu } from './ColapsibleMenu';
-import { itemsNav } from '@/shared/constants/sidebar/sidebar-nav-items';
 
 export const SidebarTablesGroup = () => {
-  const tablesItems = itemsNav.filter(item => !item.url);
+  const { data, error, isLoading } = useGetHousesAnalyticsQuery();
+  const colapsibleMenuItems =
+    data?.housesOverview?.map(house => ({
+      title: house.apartmentName,
+      url: `/apartment/${house.id}`,
+      icon: MapPinHouse,
+    })) || [];
 
   return (
     <SidebarGroup className={SIDEBAR_STYLES.sidebarGroup.hidden}>
       <SidebarGroupLabel>Таблиці</SidebarGroupLabel>
       <SidebarGroupContent>
-        <SidebarMenu>
-          {tablesItems.map(item => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <CollapsibleMenu title={item.title} icon={item.icon} />
+        {isLoading && <div>Loading...</div>}
+        {error && <div>Щось пішло не так</div>}
+        {!isLoading && !error && (
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip="Квартири">
+                <CollapsibleMenu title="Квартири" items={colapsibleMenuItems} />
               </SidebarMenuButton>
             </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
+          </SidebarMenu>
+        )}
       </SidebarGroupContent>
     </SidebarGroup>
   );

@@ -30,15 +30,37 @@ export type HouseByIdResponse = {
     street: string;
     apartmentType: ApartmentType;
   };
-  occupancyReports: {
-    totalIncome: number;
-    status: string;
-    id: string;
-    firstName: string;
-    lastName: string;
-    occupied: string;
-    vacated: string;
-  }[];
+  occupancyReports: OccupancyPaginatedResponse;
+};
+
+export type MetadataResponse = {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+};
+
+export type occupancyApartmentResponse = {
+  totalIncome: number;
+  status: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  occupied: string;
+  vacated: string;
+};
+
+export type OccupancyPaginatedResponse = {
+  data: occupancyApartmentResponse[];
+  meta: MetadataResponse;
+};
+
+export type OccupancyQueryParams = {
+  id: string;
+  page?: number;
+  limit?: number;
 };
 
 export type CreateHousePayload = Omit<House, 'id'>;
