@@ -2,7 +2,7 @@ import { ApartmentType } from '@/types/core/house';
 import * as yup from 'yup';
 
 export const houseSchema = yup.object({
-  apartmentName: yup.string().required("Назва квартири обов'язкова"),
+  apartmentName: yup.string().trim().required("Назва квартири обов'язкова"),
 
   roomsCount: yup
     .number()
@@ -35,7 +35,7 @@ export const houseSchema = yup.object({
       return value === undefined || !Object.is(value, -0);
     }),
 
-  street: yup.string().required("Вулиця обов'язкова"),
+  street: yup.string().trim().required("Вулиця обов'язкова"),
 
   apartmentType: yup
     .mixed<ApartmentType>()

@@ -11,11 +11,11 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-interface Props {
+type Props = {
   isEditMode: boolean;
   renterToEdit?: RenterResponse;
   onSuccess: () => void;
-}
+};
 
 export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) => {
   const [createRenter, { isLoading: isCreating }] = useCreateRenterMutation();
@@ -72,8 +72,13 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
       });
       onSuccess();
     } catch (error) {
-      console.error('Помилка:', error);
-      toast.error(isEditMode ? 'Не вдалося оновити орендаря' : 'Не вдалося додати орендаря', {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : isEditMode
+            ? 'Не вдалося оновити орендаря'
+            : 'Не вдалося додати орендаря';
+      toast.error(errorMessage, {
         id: toastId,
       });
     }

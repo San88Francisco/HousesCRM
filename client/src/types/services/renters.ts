@@ -1,4 +1,5 @@
 import { RenterResponse } from '../model/renter';
+import { ContractStatus } from './statuses';
 
 export interface RenterByIdResponse {
   allContractsByRenterId: {
@@ -8,7 +9,7 @@ export interface RenterByIdResponse {
       termination: string;
       monthlyPayment: number;
       totalRevenue: number;
-      status: string;
+      status: ContractStatus;
     }[];
     meta: {
       page: number;

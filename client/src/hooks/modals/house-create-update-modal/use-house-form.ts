@@ -66,8 +66,13 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
 
       onSuccess();
     } catch (error) {
-      console.error('Помилка:', error);
-      toast.error(isEditMode ? 'Не вдалося оновити квартиру' : 'Не вдалося створити квартиру', {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : isEditMode
+            ? 'Не вдалося оновити квартиру'
+            : 'Не вдалося створити квартиру';
+      toast.error(errorMessage, {
         id: toastId,
       });
     }

@@ -1,8 +1,8 @@
 import * as yup from 'yup';
 
 export const renterSchema = yup.object({
-  firstName: yup.string().required("Ім'я обов'язкове"),
-  lastName: yup.string().required("Прізвище обов'язкове"),
+  firstName: yup.string().trim().required("Ім'я обов'язкове"),
+  lastName: yup.string().trim().required("Прізвище обов'язкове"),
   age: yup
     .number()
     .required("Вік обов'язковий")

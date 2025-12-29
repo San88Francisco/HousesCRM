@@ -16,7 +16,7 @@ export const ToastComponent = () => {
   };
 
   const handleWarningToast = () => {
-    toast.warning('This is the warning  toast');
+    toast.warning('This is the warning toast');
   };
 
   const handleLoadingToast = () => {
