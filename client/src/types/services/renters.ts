@@ -1,7 +1,7 @@
 import { RenterResponse } from '../model/renter';
 import { ContractStatus } from './statuses';
 
-export interface RenterByIdResponse {
+export type RenterByIdResponse = {
   allContractsByRenterId: {
     data: {
       id: string;
@@ -21,4 +21,4 @@ export interface RenterByIdResponse {
     };
   };
   oneRenterReport: RenterResponse;
-}
+};

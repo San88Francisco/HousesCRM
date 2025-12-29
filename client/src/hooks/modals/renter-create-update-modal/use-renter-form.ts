@@ -45,8 +45,7 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
 
   const handleUpdate = async (data: RenterFormData) => {
     if (!renterToEdit?.id) {
-      toast.error('ID орендаря не знайдено');
-      return;
+      throw new Error('ID орендаря не знайдено');
     }
 
     await updateRenter({

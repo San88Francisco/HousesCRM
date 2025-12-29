@@ -2,7 +2,11 @@ import { ApartmentType } from '@/types/core/house';
 import * as yup from 'yup';
 
 export const houseSchema = yup.object({
-  apartmentName: yup.string().trim().required("Назва квартири обов'язкова"),
+  apartmentName: yup
+    .string()
+    .trim()
+    .required("Назва квартири обов'язкова")
+    .max(30, 'Назва квартири не може перевищувати 30 символів'),
 
   roomsCount: yup
     .number()
@@ -15,25 +19,25 @@ export const houseSchema = yup.object({
     .number()
     .transform((v, o) => (o === '' ? undefined : v))
     .required("Загальна площа обов'язкова")
-    .min(1, 'Площа має бути не менше 1 м²'),
+    .positive('Площа має бути більше 0'),
 
-  purchaseDate: yup.date().required("Дата покупки обов'язкова"),
+  purchaseDate: yup
+    .date()
+    .typeError('Дата покупки повинна бути дійсною датою')
+    .required("Дата покупки обов'язкова"),
 
   price: yup
     .number()
     .transform((v, o) => (o === '' ? undefined : v))
     .required("Ціна обов'язкова")
-    .min(1, 'Ціна має бути не менше 1 грн'),
+    .positive('Ціна має бути більше 0'),
 
   floor: yup
     .number()
     .transform((v, o) => (o === '' ? undefined : v))
     .required("Поверх обов'язковий")
-    .min(0, "Поверх не може бути від'ємним")
-    .integer('Поверх має бути цілим числом')
-    .test('no-negative-zero', "Поверх не може бути від'ємним", value => {
-      return value === undefined || !Object.is(value, -0);
-    }),
+    .min(1, 'Поверх має бути не менше 1')
+    .integer('Поверх має бути цілим числом'),
 
   street: yup.string().trim().required("Вулиця обов'язкова"),
 
