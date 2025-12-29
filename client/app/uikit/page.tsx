@@ -14,6 +14,9 @@ import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
+import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
+import { ModalTrigger } from '@/widgets/uikit/modal';
+import { PdfContractTrigger } from '@/widgets/pdf-contract-content/PdfContractTrigger';
 import UpdateApartment from '@/widgets/uikit/update-house';
 
 export default function Page() {

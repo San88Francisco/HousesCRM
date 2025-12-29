@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useEffect, useState } from 'react';
-import { HousesPerformanceTable } from './houses-performance-table';
+import { HousesPerformanceTable } from './HousesPerformanceTable';
 
 const PAGE_SIZE = 10;
 
