@@ -1,4 +1,4 @@
-import { HouseFormData } from '@/shared/validation/create-update-houses/house-schema';
+import { HouseFormData } from '@/shared/validation/create-update-house/house-schema';
 
 type Price = {
   id: string;

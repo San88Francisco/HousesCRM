@@ -1,9 +1,9 @@
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { Cake, User } from 'lucide-react';
 
-interface Props {
+type Props = {
   isLoading: boolean;
-}
+};
 
 export const RenterFormFields = ({ isLoading }: Props) => {
   return (

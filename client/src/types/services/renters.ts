@@ -1,14 +1,4 @@
-import { ContractStatus } from './statuses';
-
-export type Renter = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  occupied: string;
-  vacated: string;
-  totalIncome: number;
-  status: ContractStatus;
-};
+import { RenterResponse } from '../model/renter';
 
 export interface RenterByIdResponse {
   allContractsByRenterId: {
@@ -29,14 +19,5 @@ export interface RenterByIdResponse {
       hasPreviousPage: boolean;
     };
   };
-  oneRenterReport: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    age: number;
-    occupied: string;
-    vacated?: string;
-    status: string;
-    totalIncome?: number;
-  };
+  oneRenterReport: RenterResponse;
 }

@@ -1,4 +1,4 @@
-import { HouseFormData } from '@/shared/validation/create-update-houses/house-schema';
+import { HouseFormData } from '@/shared/validation/create-update-house/house-schema';
 import { HouseToEdit } from '@/types/core/house';
 import { getDefaultHouseValues } from './get-default-house-values';
 

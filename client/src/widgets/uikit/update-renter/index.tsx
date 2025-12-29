@@ -36,10 +36,7 @@ const UpdateRenter = () => {
 
   return (
     <div className="w-[150px] mb-5">
-      <Button
-        onClick={e => data?.oneRenterReport && handleEdit(e, data?.oneRenterReport)}
-        disabled={!data?.oneRenterReport}
-      >
+      <Button onClick={e => handleEdit(e, data?.oneRenterReport)} disabled={!data?.oneRenterReport}>
         Відредагувати орендаря
       </Button>
     </div>

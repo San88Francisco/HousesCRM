@@ -1,6 +1,6 @@
 import { getDefaultHouseValues } from '@/shared/utils/create-update-house-form/get-default-house-values';
 import { mapHouseToFormData } from '@/shared/utils/create-update-house-form/house-form';
-import { HouseFormData, houseSchema } from '@/shared/validation/create-update-houses/house-schema';
+import { HouseFormData, houseSchema } from '@/shared/validation/create-update-house/house-schema';
 import { useCreateHouseMutation, useUpdateHouseMutation } from '@/store/houses-api';
 import { HouseToEdit } from '@/types/core/house';
 import { yupResolver } from '@hookform/resolvers/yup';

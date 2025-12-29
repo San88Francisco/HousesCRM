@@ -1,22 +1,18 @@
-export type RenterBase = {
-  firstName: string;
-  lastName: string;
-  age: number;
-};
+import { ContractStatus } from '../services/statuses';
 
-// Повний рентер, який приходить із бекенду
-export type RenterResponse = RenterBase & {
+export type RenterCreateDTO = { firstName: string; lastName: string; age: number };
+
+export type RenterResponse = RenterCreateDTO & {
   id: string;
   occupied: string;
   vacated?: string;
-  status: string;
+  status: ContractStatus;
   totalIncome?: number;
 };
 
-// Payload модалки
 export type RenterModalPayload = {
   renter: RenterResponse;
 };
 
-export type CreateRenterPayload = RenterBase;
-// Для створення нового рентера
+export type CreateRenterPayload = RenterCreateDTO;
+export type RenterUpdateDTO = RenterCreateDTO;
