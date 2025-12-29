@@ -10,15 +10,15 @@ import { usePathname } from 'next/navigation';
 
 type Props = {
   item: NavItem;
+  hideTitle?: boolean;
 };
-export const SidebarMenuItem = ({ item }: Props) => {
+
+export const SidebarMenuItem = ({ item, hideTitle = false }: Props) => {
   const pathname = usePathname();
   const isActive = isActiveItem(pathname, item.url);
   const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(item.icon);
 
-  if (!item.url) {
-    return null;
-  }
+  if (!item.url) return null;
 
   return (
     <ShadcnSidebarMenuItem className={getSidebarMenuItemClasses(isActive)}>
@@ -26,12 +26,12 @@ export const SidebarMenuItem = ({ item }: Props) => {
         asChild
         tooltip={{
           children: item.title,
-          className: 'bg-text text-background',
+          className: 'bg-background text-text border-border shadow-lg',
         }}
       >
         <Link href={item.url} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
           {animatedIcon}
-          <span>{item.title}</span>
+          {!hideTitle && <span>{item.title}</span>}
         </Link>
       </SidebarMenuButton>
     </ShadcnSidebarMenuItem>

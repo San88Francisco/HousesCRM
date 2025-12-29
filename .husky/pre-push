@@ -1,0 +1,18 @@
+#!/bin/sh
+echo "🚀 Running pre-push checks..."
+
+npm run lint:all || exit 1
+
+echo "\n📦 Checking TypeScript compilation..."
+
+cd server
+echo "Checking server..."
+npx tsc --noEmit || exit 1
+cd ..
+
+cd client
+echo "Checking client..."
+npx tsc --noEmit || exit 1
+cd ..
+
+echo "\n✅ All pre-push checks passed! Ready to push."

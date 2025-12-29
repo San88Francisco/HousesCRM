@@ -4,12 +4,12 @@ import { forwardRef, type TextareaHTMLAttributes } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { Textarea } from '@/shared/ui/textarea';
 import { Label } from '@/shared/ui/label';
+import { cn } from '@/shared/utils/cn';
 
 interface Props extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'maxLength'> {
   name: string;
   label?: string;
   required?: boolean;
-
   maxLength?: number | string;
   disabled?: boolean;
   placeholder?: string;
@@ -39,36 +39,42 @@ const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
     const errorMessage = error?.message as string | undefined;
 
     return (
-      <div className="space-y-2">
-        {label && (
-          <Label htmlFor={name} className="flex items-center gap-1">
-            {label}
-            {required && <span className="text-destructive">*</span>}
-          </Label>
-        )}
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <div className={cn('flex flex-col gap-2', className)}>
+            {label && (
+              <Label htmlFor={name}>
+                {label}
+                {required && <span className="text-red ml-1">*</span>}
+              </Label>
+            )}
 
-        <Controller
-          name={name}
-          control={control}
-          render={({ field }) => (
             <Textarea
               id={name}
               {...field}
               value={field.value || ''}
               onChange={e => field.onChange(e.target.value)}
+              className={cn(errorMessage && 'border-red focus-visible:ring-red')}
               error={errorMessage}
               maxLength={maxLength}
               disabled={disabled}
               placeholder={placeholder}
-              className={className}
               aria-invalid={!!errorMessage}
               aria-describedby={errorMessage ? `${name}-error` : undefined}
               {...props}
               ref={ref}
             />
-          )}
-        />
-      </div>
+
+            {error && (
+              <div className="text-sm text-red" id={`${name}-error`}>
+                {errorMessage}
+              </div>
+            )}
+          </div>
+        )}
+      />
     );
   },
 );

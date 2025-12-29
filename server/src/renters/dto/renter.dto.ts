@@ -12,7 +12,10 @@ export class RenterDto {
   lastName: string
 
   @Expose()
-  occupied: Date
+  age: number
+
+  @Expose()
+  occupied: Date | null
 
   @Expose()
   vacated?: Date | null

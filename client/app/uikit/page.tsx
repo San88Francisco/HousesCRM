@@ -1,18 +1,20 @@
+'use client';
+import { mockData } from '@/shared/constants/table/dataTable';
+import { PdfContractTrigger } from '@/widgets/pdf-contract-content/PdfContractTrigger';
 import { ButtonComponent } from '@/widgets/uikit/button-component';
 import { CalendarComponent } from '@/widgets/uikit/calendar-component';
 import { CardComponent } from '@/widgets/uikit/card-component';
 import { ControlButtons } from '@/widgets/uikit/control-buttons';
+import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 import { InputComponent } from '@/widgets/uikit/input-component';
+import { ModalTrigger } from '@/widgets/uikit/modal';
 import { PaymentTable } from '@/widgets/uikit/payment-table';
 import { SelectComponent } from '@/widgets/uikit/select-copmponent';
 import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
-import { mockData } from '@/shared/constants/table/dataTable';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
-import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
-import { TestGetHouses } from '@/widgets/uikit/test-get-houses';
-import { ModalTrigger } from '@/widgets/uikit/modal';
+import UpdateApartment from '@/widgets/uikit/update-house';
 
 export default function Page() {
   return (
@@ -29,8 +31,9 @@ export default function Page() {
       <TextareaComponent />
       <ToastCopmponent />
       <SelectComponent />
-      <TestGetHouses />
+      <PdfContractTrigger id="e9d638de-1872-4ac0-acc5-c4f767e9fa66" />
       <ModalTrigger />
+      <UpdateApartment />
     </div>
   );
 }

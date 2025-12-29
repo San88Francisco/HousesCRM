@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form';
 import { Search } from 'lucide-react';
 
 import { SearchRequest } from '@/types/services/search';
-import { searchDefaultValues, searchSchema } from '@/validation/search/search';
+import { searchDefaultValues, searchSchema } from '@/shared/validation/search/search';
 import { RHFForm } from '@/components/RHF/RHForm';
 import { RHFInput } from '@/components/RHF/RHFInput';
-import { useLazyGetAllSearchQuery } from '@/store/search';
+import { useLazyGetAllSearchQuery } from '@/store/search-api';
 import { useDebounce } from '@/hooks/use-debounce';
 import { SearchDropdown } from './SearchDropdown';
 
@@ -43,7 +43,7 @@ const HeaderSearch = () => {
 
   return (
     <div className="relative w-full max-w-md">
-      <RHFForm form={form} onSubmit={() => {}}>
+      <RHFForm form={form} onSubmit={() => undefined}>
         <RHFInput
           name="query"
           type="text"

@@ -1,4 +1,4 @@
-import { useEffect, RefObject } from 'react';
+import { RefObject, useEffect } from 'react';
 
 type HotkeyAction = 'focus' | 'click';
 
@@ -34,6 +34,8 @@ export const useHotkeyForRef = (
     if (!key) return;
 
     const handler = (event: KeyboardEvent) => {
+      if (!event) return;
+
       if (!isHotkeyEvent(event, key, { ctrl, shift, alt, meta })) return;
 
       if (preventDefault) event.preventDefault();
@@ -47,5 +49,5 @@ export const useHotkeyForRef = (
 
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [key, action, ctrl, shift, alt, meta, preventDefault]);
+  }, [key, action, ctrl, shift, alt, meta, preventDefault, ref]);
 };

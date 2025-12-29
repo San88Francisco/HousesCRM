@@ -1,11 +1,10 @@
-import React from 'react';
 import {
-  CardTitle,
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
+  CardTitle,
 } from '@/shared/ui/card';
 
 export const CardComponent = () => {

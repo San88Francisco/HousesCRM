@@ -1,21 +1,24 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Contract } from 'src/contracts/entities/contract.entity'
-import { Repository } from 'typeorm'
 import { plainToInstance } from 'class-transformer'
-import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
+import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
+import { Contract } from 'src/contracts/entities/contract.entity'
 import { HouseOccupancyQueryDto } from 'src/houses/dto/house-occupancy-query.dto'
 import { HouseOccupancyReportResponseDto } from 'src/houses/dto/house-occupancy-report-response.dto'
-import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
-import { SortOrder } from 'src/common/enums/sort-order.enum'
-import { HouseOccupancySortField } from 'src/houses/constants/house-occupancy-sort-field'
 import { RenterDto } from 'src/renters/dto/renter.dto'
+import { Renter } from 'src/renters/entities/renter.entity'
+import { Repository } from 'typeorm'
+import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
 
 @Injectable()
 export class HouseDetailAnalyticsService {
+  private readonly validSortableFields: string[] = ['firstName', 'lastName', 'occupied', 'vacated']
+
   constructor(
     @InjectRepository(Contract)
-    private readonly contractsRepository: Repository<Contract>
+    private readonly contractsRepository: Repository<Contract>,
+    @InjectRepository(Renter)
+    private readonly rentersRepository: Repository<Renter>
   ) {}
 
   async getHouseOccupancyReport(id: string): Promise<RenterDto[]> {
@@ -23,15 +26,135 @@ export class HouseDetailAnalyticsService {
   }
 
   async getHouseOccupancyReportList(id: string, dto: HouseOccupancyQueryDto): Promise<HouseOccupancyReportResponseDto> {
-    const report = await this.buildHouseOccupancyReport(id)
-    const filtered = this.applyFilters(report, dto)
-    const sorted = this.applySorting(filtered, dto)
+    const {
+      page = QUERY_DEFAULTS.PAGE,
+      limit = QUERY_DEFAULTS.LIMIT,
+      order = QUERY_DEFAULTS.ORDER,
+      sortBy = 'totalIncome',
+    } = dto
 
-    const page = dto.page ?? QUERY_DEFAULTS.PAGE
-    const limit = dto.limit ?? QUERY_DEFAULTS.LIMIT
-    const total = sorted.length
-    const start = (page - 1) * limit
-    const data = sorted.slice(start, start + limit)
+    if (sortBy === 'totalIncome' || sortBy === 'status') {
+      return this.getHouseOccupancyReportSortedInMemory(id, page, limit, order, sortBy)
+    }
+
+    const orderField = this.validSortableFields.includes(sortBy) ? sortBy : 'firstName'
+
+    const totalRenters = await this.contractsRepository
+      .createQueryBuilder('contract')
+      .select('COUNT(DISTINCT contract.renterId)', 'count')
+      .where('contract.houseId = :id', { id })
+      .getRawOne<{ count: string }>()
+
+    const total = parseInt(totalRenters?.count ?? '0', 10)
+
+    if (total === 0) {
+      return plainToInstance(
+        HouseOccupancyReportResponseDto,
+        { data: [], meta: { total: 0, page, limit } },
+        { excludeExtraneousValues: true }
+      )
+    }
+
+    const subQuery = this.rentersRepository
+      .createQueryBuilder('sub')
+      .select('sub.id', 'id')
+      .addSelect(`sub.${orderField}`, 'orderField')
+      .innerJoin('sub.contracts', 'contract')
+      .where('contract.houseId = :id', { id })
+      .groupBy('sub.id')
+      .addGroupBy(`sub.${orderField}`)
+      .orderBy(`sub.${orderField}`, order)
+      .limit(limit)
+      .offset((page - 1) * limit)
+
+    const renterIds = await subQuery.getRawMany<{ id: string }>()
+    const ids = renterIds.map((r) => r.id)
+
+    if (ids.length === 0) {
+      return plainToInstance(
+        HouseOccupancyReportResponseDto,
+        { data: [], meta: { total, page, limit } },
+        { excludeExtraneousValues: true }
+      )
+    }
+
+    const contracts = await this.contractsRepository
+      .createQueryBuilder('contract')
+      .innerJoinAndSelect('contract.renter', 'renter')
+      .where('contract.renterId IN (:...ids)', { ids })
+      .andWhere('contract.houseId = :id', { id })
+      .orderBy(`renter.${orderField}`, order)
+      .getMany()
+
+    const rentersData = aggregateOccupancyReports(contracts)
+
+    const orderedIds = contracts.map((c) => c.renter.id)
+    const seen = new Set<string>()
+    const uniqueOrderedIds = orderedIds.filter((id) => {
+      if (seen.has(id)) {
+        return false
+      }
+      seen.add(id)
+      return true
+    })
+
+    const orderMap = new Map(uniqueOrderedIds.map((id, index) => [id, index]))
+    rentersData.sort((a, b) => (orderMap.get(a.id) ?? 0) - (orderMap.get(b.id) ?? 0))
+
+    const data = plainToInstance(RenterDto, rentersData, { excludeExtraneousValues: true })
+
+    return plainToInstance(
+      HouseOccupancyReportResponseDto,
+      {
+        data,
+        meta: {
+          total,
+          page,
+          limit,
+        },
+      },
+      { excludeExtraneousValues: true }
+    )
+  }
+
+  private async getHouseOccupancyReportSortedInMemory(
+    id: string,
+    page: number,
+    limit: number,
+    order: string,
+    sortBy: string
+  ): Promise<HouseOccupancyReportResponseDto> {
+    const contracts = await this.contractsRepository.find({
+      where: { house: { id } },
+      relations: { renter: true },
+    })
+
+    const rentersData = aggregateOccupancyReports(contracts)
+
+    rentersData.sort((a, b) => {
+      const aValue = a[sortBy as keyof RenterDto]
+      const bValue = b[sortBy as keyof RenterDto]
+
+      if (aValue === null || aValue === undefined) {
+        return 1
+      }
+      if (bValue === null || bValue === undefined) {
+        return -1
+      }
+
+      const diff =
+        typeof aValue === 'number' && typeof bValue === 'number'
+          ? aValue - bValue
+          : String(aValue).localeCompare(String(bValue))
+
+      return order === 'ASC' ? diff : -diff
+    })
+
+    const total = rentersData.length
+    const startIndex = (page - 1) * limit
+    const paginatedRenters = rentersData.slice(startIndex, startIndex + limit)
+
+    const data = plainToInstance(RenterDto, paginatedRenters, { excludeExtraneousValues: true })
 
     return plainToInstance(
       HouseOccupancyReportResponseDto,
@@ -56,178 +179,5 @@ export class HouseDetailAnalyticsService {
     return plainToInstance(RenterDto, aggregateOccupancyReports(contractsByHouseId), {
       excludeExtraneousValues: true,
     })
-  }
-
-  private applyFilters(report: RenterDto[], dto: HouseOccupancyQueryDto): RenterDto[] {
-    const { id, renterName, occupiedFrom, occupiedTo, vacatedFrom, vacatedTo, minTotalIncome, maxTotalIncome, status } =
-      dto
-
-    const renterNameSearch = renterName?.toLowerCase()
-
-    return report.filter((item) => {
-      if (id && item.id !== id) {
-        return false
-      }
-
-      if (renterNameSearch) {
-        const fullName = `${item.firstName ?? ''} ${item.lastName ?? ''}`
-        if (!this.matchesText(fullName, renterNameSearch)) {
-          return false
-        }
-      }
-
-      if ((occupiedFrom || occupiedTo) && !this.inDateRange(item.occupied, occupiedFrom, occupiedTo)) {
-        return false
-      }
-
-      if ((vacatedFrom || vacatedTo) && !this.inDateRange(item.vacated, vacatedFrom, vacatedTo)) {
-        return false
-      }
-
-      if (
-        (minTotalIncome !== undefined || maxTotalIncome !== undefined) &&
-        !this.inNumberRange(item.totalIncome, minTotalIncome, maxTotalIncome)
-      ) {
-        return false
-      }
-
-      if (status && item.status !== status) {
-        return false
-      }
-
-      return true
-    })
-  }
-
-  private applySorting(report: RenterDto[], dto: HouseOccupancyQueryDto): RenterDto[] {
-    const sortField = dto.sortBy ?? HouseOccupancySortField.TOTAL_INCOME
-    const direction = dto.order === SortOrder.ASC ? 1 : -1
-
-    const withNullsLast =
-      <T>(compare: (a: T, b: T) => number) =>
-      (a: T | null | undefined, b: T | null | undefined): number => {
-        const aIsNull = a === null || a === undefined
-        const bIsNull = b === null || b === undefined
-
-        if (aIsNull && bIsNull) {
-          return 0
-        }
-        if (aIsNull) {
-          return 1
-        }
-        if (bIsNull) {
-          return -1
-        }
-
-        return compare(a as T, b as T)
-      }
-
-    let comparator: (a: RenterDto, b: RenterDto) => number
-
-    switch (sortField) {
-      case HouseOccupancySortField.RENTER_NAME: {
-        const getValue = (item: RenterDto): string | null => {
-          const fullName = `${item.firstName ?? ''} ${item.lastName ?? ''}`.trim()
-          return fullName ? fullName.toLowerCase() : null
-        }
-
-        const compareStrings = withNullsLast<string>((a, b) => a.localeCompare(b))
-        comparator = (a, b) => compareStrings(getValue(a), getValue(b)) * direction
-        break
-      }
-
-      case HouseOccupancySortField.FIRST_NAME:
-      case HouseOccupancySortField.LAST_NAME:
-      case HouseOccupancySortField.ID: {
-        const getValue = (item: RenterDto): string | null => {
-          const value = item[sortField]
-          return value ? String(value).toLowerCase() : null
-        }
-
-        const compareStrings = withNullsLast<string>((a, b) => a.localeCompare(b))
-        comparator = (a, b) => compareStrings(getValue(a), getValue(b)) * direction
-        break
-      }
-
-      case HouseOccupancySortField.OCCUPIED:
-      case HouseOccupancySortField.VACATED: {
-        const getValue = (item: RenterDto): number | null => {
-          const value = item[sortField]
-          if (!value) {
-            return null
-          }
-
-          if (value instanceof Date) {
-            return value.getTime()
-          }
-
-          const parsed = new Date(value as string)
-          const time = parsed.getTime()
-          return Number.isNaN(time) ? null : time
-        }
-
-        const compareNumbers = withNullsLast<number>((a, b) => a - b)
-        comparator = (a, b) => compareNumbers(getValue(a), getValue(b)) * direction
-        break
-      }
-
-      case HouseOccupancySortField.TOTAL_INCOME:
-      default: {
-        const getValue = (item: RenterDto): number | null => {
-          const value = item[sortField]
-          if (value === null || value === undefined) {
-            return null
-          }
-          if (typeof value === 'number') {
-            return value
-          }
-
-          const num = Number(value)
-          return Number.isNaN(num) ? null : num
-        }
-
-        const compareNumbers = withNullsLast<number>((a, b) => a - b)
-        comparator = (a, b) => compareNumbers(getValue(a), getValue(b)) * direction
-        break
-      }
-    }
-
-    return [...report].sort(comparator)
-  }
-
-  private matchesText(value: string | null | undefined, search?: string): boolean {
-    if (!search) {
-      return true
-    }
-    if (!value) {
-      return false
-    }
-    return value.toLowerCase().includes(search)
-  }
-
-  private inDateRange(value: Date | null | undefined, from?: Date, to?: Date): boolean {
-    if (!value) {
-      return false
-    }
-    if (from && value < from) {
-      return false
-    }
-    if (to && value > to) {
-      return false
-    }
-    return true
-  }
-
-  private inNumberRange(value: number | null | undefined, min?: number, max?: number): boolean {
-    if (value === null || value === undefined) {
-      return false
-    }
-    if (min !== undefined && value < min) {
-      return false
-    }
-    if (max !== undefined && value > max) {
-      return false
-    }
-    return true
   }
 }
