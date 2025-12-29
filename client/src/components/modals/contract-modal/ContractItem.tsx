@@ -8,7 +8,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
 import { ContractResponse } from '@/types/services/renters';
-import { PdfContractTrigger } from '@/widgets/pdf-contract-content/pdf-contract-trigger';
+import { PdfContractTrigger } from '@/widgets/pdf-contract-content/PdfContractTrigger';
 
 type Props = {
   contract: ContractResponse;
