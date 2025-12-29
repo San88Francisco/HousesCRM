@@ -1,6 +1,6 @@
 'use client';
 import { mockData } from '@/shared/constants/table/dataTable';
-import { PdfContractTrigger } from '@/widgets/pdf-contract-content/pdf-contract-trigger';
+import { PdfContractTrigger } from '@/widgets/pdf-contract-content/PdfContractTrigger';
 import { ButtonComponent } from '@/widgets/uikit/button-component';
 import { CalendarComponent } from '@/widgets/uikit/calendar-component';
 import { CardComponent } from '@/widgets/uikit/card-component';
@@ -14,9 +14,6 @@ import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastCopmponent } from '@/widgets/uikit/toast-component';
-import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
-import { ModalTrigger } from '@/widgets/uikit/modal';
-import { PdfContractTrigger } from '@/widgets/pdf-contract-content/PdfContractTrigger';
 import UpdateApartment from '@/widgets/uikit/update-house';
 
 export default function Page() {
