@@ -27,10 +27,7 @@ const TablePagination = <T,>({ table }: Props<T>) => {
         <PaginationItem>
           <PaginationPrevious
             onClick={() => table.previousPage()}
-            className={cn(
-              'cursor-pointer text-text',
-              !table.getCanPreviousPage() && 'pointer-events-none text-muted',
-            )}
+            className={cn(!table.getCanPreviousPage() && 'pointer-events-none text-muted')}
           />
         </PaginationItem>
 

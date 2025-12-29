@@ -62,7 +62,7 @@ export const HousesPerformanceAnalytic = () => {
   if (isEmpty) return <EmptyState className="w-full" />;
 
   return (
-    <Card>
+    <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Показники будинків</CardTitle>
       </CardHeader>
