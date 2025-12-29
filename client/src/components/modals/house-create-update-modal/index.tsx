@@ -1,26 +1,21 @@
 'use client';
 
-import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
-import { Button } from '@/shared/ui/button';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useHouseForm } from '@/hooks/use-house-form';
-import { useHouseModal } from '@/hooks/use-house-modal';
-import { ApartmentFormFields } from './HouseFormFields';
+import { useHouseForm } from '@/hooks/modals/house-create-update-modal/use-house-form';
+import { useHouseModal } from '@/hooks/modals/house-create-update-modal/use-house-modal';
+import { Button } from '@/shared/ui/button';
+import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';
+import { HouseFormFields } from '@/widgets/house-create-update-modal/HouseFormFields';
 import Modal from '../modal-wrapper';
 
-export const HouseFormModal = () => {
-  const {
-    isEditMode,
-    apartmentToEdit,
-    handleClose: getHandleClose,
-    modalContent,
-  } = useHouseModal();
+export const HouseCreateUpdateModal = () => {
+  const { isEditMode, houseToEdit, handleClose: getHandleClose, modalContent } = useHouseModal();
 
   const { methods, onSubmit, isLoading, reset } = useHouseForm({
     isEditMode,
-    apartmentToEdit,
-    onSuccess: () => getHandleClose(reset),
+    houseToEdit,
+    onSuccess: () => handleClose(),
   });
 
   const handleClose = () => getHandleClose(reset);
@@ -36,7 +31,7 @@ export const HouseFormModal = () => {
       </DialogHeader>
 
       <RHFForm form={methods} onSubmit={onSubmit}>
-        <ApartmentFormFields isLoading={isLoading} />
+        <HouseFormFields isLoading={isLoading} />
 
         <DialogFooter className="mt-6 px-6 pb-6">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>

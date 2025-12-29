@@ -16,6 +16,6 @@ export const HOUSE_COLORS = [
   '#2dd4bf',
 ] as const;
 
-export const getApartmentColor = (index: number): string => {
+export const getHouseColor = (index: number): string => {
   return HOUSE_COLORS[index % HOUSE_COLORS.length];
 };

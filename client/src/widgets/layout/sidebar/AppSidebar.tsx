@@ -21,7 +21,6 @@ export const AppSidebar = () => {
       <SidebarContent>
         <SidebarPagesGroup />
         <SidebarActionsGroup />
-        {/* <SidebarTablesGroup /> */}
         <SidebarFavoritesGroup />
       </SidebarContent>
       <LogoSidebar />
