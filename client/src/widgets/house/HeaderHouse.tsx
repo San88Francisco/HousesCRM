@@ -1,12 +1,12 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { useGetHouseByIdQuery } from '@/store/houses-api';
-import { MapPin, DoorOpen, Ruler, Building2, PackagePlus } from 'lucide-react';
+import { PROPERTY_TYPE_MAP } from '@/constants/apartment/apartment-type-map';
 import { formatDate } from '@/shared/utils/format/format-date';
-import { APARTMENT_TYPE_MAP } from '@/constants/apartment/apartment-type-map';
+import { useGetHouseByIdQuery } from '@/store/houses-api';
+import { Building2, DoorOpen, MapPin, PackagePlus, Ruler } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
-export const HeaderApartment = () => {
+export const HeaderHouse = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading, error } = useGetHouseByIdQuery(id, {
@@ -19,7 +19,7 @@ export const HeaderApartment = () => {
   const { street, roomsCount, totalArea, floor, apartmentName, purchaseDate, apartmentType } =
     data.houseDetail;
 
-  const { label, icon: TypeIcon } = APARTMENT_TYPE_MAP[apartmentType];
+  const { label, icon: TypeIcon } = PROPERTY_TYPE_MAP[apartmentType];
 
   const items = [
     { Icon: DoorOpen, text: `${roomsCount} кімн.` },

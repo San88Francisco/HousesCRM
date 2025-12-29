@@ -1,10 +1,10 @@
 'use client';
 
-import * as React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import * as React from 'react';
 
-import { cn } from '@/shared/utils/cn';
 import { ButtonProps, buttonVariants } from '@/shared/ui/button';
+import { cn } from '@/shared/utils/cn';
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav
@@ -28,7 +28,7 @@ const PaginationItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li'
     <li
       ref={ref}
       className={cn(
-        'border-[1px] border-solid rounded-[8px] w-[38px] h-[38px] dark:bg-bg-input flex items-center justify-center',
+        'border-[1px] border-solid rounded-[8px] w-[38px] h-[38px] bg-bg-input flex items-center justify-center cursor-pointer text-text',
         className,
       )}
       {...props}
@@ -95,9 +95,9 @@ PaginationEllipsis.displayName = 'PaginationEllipsis';
 export {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationPrevious,
   PaginationNext,
-  PaginationEllipsis,
+  PaginationPrevious,
 };

@@ -8,7 +8,7 @@ type Props = {
   isLoading: boolean;
 };
 
-export const ApartmentFormFields = ({ isLoading }: Props) => {
+export const HouseFormFields = ({ isLoading }: Props) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <RHFInput
@@ -84,7 +84,7 @@ export const ApartmentFormFields = ({ isLoading }: Props) => {
       <RHFSelect
         name="apartmentType"
         label="Тип квартири"
-        options={[...HOUSE_TYPE_OPTIONS]}
+        options={HOUSE_TYPE_OPTIONS}
         placeholder="Виберіть тип"
         disabled={isLoading}
       />

@@ -1,13 +1,13 @@
-import { FC, useState } from 'react';
-import CalendarHeader from './calendar-header';
-import CalendarDaysLevel from './calendar-days-level';
-import CalendarMonthsLevel from './calendar-months-level';
-import CalendarYearsLevel from './calendar-years-level';
-import { Day, Locale } from 'date-fns';
-import { useCalendarState } from '@/hooks/calendar-hooks/use-calendar-state';
 import { useCalendarNavigation } from '@/hooks/calendar-hooks/use-calendar-navigation';
-import { CalendarMode, levelType } from '@/types/core/calendar';
+import { useCalendarState } from '@/hooks/calendar-hooks/use-calendar-state';
 import { levelMap, nextLevelMap } from '@/shared/constants/calendar/calendar';
+import { CalendarMode, levelType } from '@/types/core/calendar';
+import { Day, Locale } from 'date-fns';
+import { FC, useState } from 'react';
+import CalendarDaysLevel from './CalendarDaysLevel';
+import CalendarHeader from './CalendarHeader';
+import CalendarMonthsLevel from './CalendarMonthsLevel';
+import CalendarYearsLevel from './CalendarYearsLevel';
 /* eslint-disable */
 
 interface ICalendarDisplayProps {

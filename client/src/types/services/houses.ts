@@ -1,4 +1,4 @@
-import { ApartmentType } from '../core/houses';
+import { ApartmentType } from '../core/house';
 
 export type House = {
   id: string;
