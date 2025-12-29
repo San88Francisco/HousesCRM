@@ -7,19 +7,22 @@ import { cn } from '@/shared/utils/cn';
 import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/card';
 import { CustomBar } from './CustomBar';
 import { CustomXAxisTick } from './CustomXAxisTick';
-import { mockPaybackStats } from '@/shared/constants/payback-chart/analytics.mock';
 import { usePaybackChartData, useChartDimensions, useChartScroll } from './utils';
-import { renderLoadingState } from './ChartStates';
+import { LoadingState } from '@/components/chart-states/LoadingState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
+import { EmptyState } from '@/components/chart-states/EmptyState';
 import { formatYAxis } from '@/shared/utils/all-apartments/payback-chart/payback';
 import { PaybackChartTooltip } from './PaybackChartTooltip';
+import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 
 const CHART_HEIGHT = 250;
 
 export const PaybackChart = () => {
   const [mounted, setMounted] = useState(false);
-  const [loading] = useState(false);
 
-  const chartData = usePaybackChartData(mockPaybackStats);
+  const { data: analyticsData, isLoading, error } = useGetHousesAnalyticsQuery();
+
+  const chartData = usePaybackChartData(analyticsData?.housesPaybackStats);
   const { yAxisMax, minChartWidth } = useChartDimensions(chartData);
   const {
     scrollRef,
@@ -35,10 +38,12 @@ export const PaybackChart = () => {
   }, []);
 
   if (!mounted) return null;
-  if (loading) return renderLoadingState();
+  if (isLoading) return <LoadingState />;
+  if (error) return <ErrorState error={error} />;
+  if (!chartData || chartData.length === 0) return <EmptyState />;
 
   return (
-    <Card className="w-full shadow-xl">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-lg sm:text-xl md:text-2xl">
           Статистика окупності квартир
@@ -81,10 +86,10 @@ export const PaybackChart = () => {
                 <YAxis
                   domain={[0, yAxisMax]}
                   tickFormatter={formatYAxis}
-                  tick={{ fontSize: 12, fill: 'var(--muted-text)', fontWeight: 500 }}
+                  tick={{ fontSize: 12, fill: 'var(--text)', fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
-                  width={60}
+                  width={40}
                 />
                 <Tooltip content={<PaybackChartTooltip />} cursor={false} />
                 <Bar dataKey="purchasePriceUSD" shape={<CustomBar />} />

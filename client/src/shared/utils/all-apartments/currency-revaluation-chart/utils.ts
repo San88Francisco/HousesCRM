@@ -5,7 +5,7 @@ const THOUSAND = 1_000;
 const DECIMAL_PLACES_MILLION = 1;
 const DECIMAL_PLACES_THOUSAND = 0;
 const DECIMAL_PLACES_RATE = 2;
-const DEFAULT_MAX_LENGTH = 15;
+const DEFAULT_MAX_LENGTH = 20;
 
 export const BAR_RADIUS = 4;
 export const BAR_SIZE = 10;
@@ -14,12 +14,15 @@ export const OPACITY_DARK = 0.6;
 export const OPACITY_LIGHT = 0.7;
 export const TOOLTIP_Z_INDEX = 9999;
 
-export const MAX_TEXT_LENGTH_YAXIS = 10;
+export const MAX_TEXT_LENGTH_YAXIS = 12;
 export const Y_AXIS_PADDING = 0.15;
-export const ROW_HEIGHT = 30;
+export const ROW_HEIGHT = 45;
 export const CHART_PADDING = 30;
 export const MIN_VISIBLE_ROWS = 4;
 export const MAX_VISIBLE_ROWS = 7;
+
+export const PURCHASE_ANIMATION_DURATION = 600;
+export const GROWTH_ANIMATION_DURATION = 600;
 
 export const getBarColors = (isDark: boolean) => ({
   purchase: isDark ? 'var(--dark-purple)' : 'var(--dark)',

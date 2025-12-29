@@ -23,7 +23,7 @@ export const CustomXAxisTick = ({ x = 0, y = 0, payload }: CustomXAxisTickProps)
         y={0}
         dy={16}
         textAnchor="end"
-        fill="var(--muted-text)"
+        fill="var(--text)"
         fontSize={12}
         fontWeight={400}
         transform="rotate(-45)"
