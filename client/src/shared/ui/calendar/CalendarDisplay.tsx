@@ -1,7 +1,7 @@
 import { useCalendarNavigation } from '@/hooks/calendar-hooks/use-calendar-navigation';
 import { useCalendarState } from '@/hooks/calendar-hooks/use-calendar-state';
 import { levelMap, nextLevelMap } from '@/shared/constants/calendar/calendar';
-import { CalendarMode, levelType } from '@/types/core/calendar';
+import { CalendarMode, LevelType } from '@/types/core/calendar/calendar';
 import { Day, Locale } from 'date-fns';
 import { FC, useState } from 'react';
 import CalendarDaysLevel from './CalendarDaysLevel';
@@ -29,7 +29,7 @@ const CalendarDisplay: FC<ICalendarDisplayProps> = ({
   lang,
   mode,
 }) => {
-  const [level, setLevel] = useState<levelType>(levelMap[mode]);
+  const [level, setLevel] = useState<LevelType>(levelMap[mode]);
 
   const handleSelect = (date: Date) => {
     setDate(date);

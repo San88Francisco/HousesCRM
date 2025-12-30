@@ -1,13 +1,13 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
-import { NextTheme } from '@/types/core/theme';
-import { ThemeOptionItem } from './ThemeOptionItem';
 import { useAnimatedIcon } from '@/hooks';
-import { THEME_OPTIONS, themeIconMap } from '@/constants/theme/theme-switcher';
-import { DropdownMenuTrigger, DropdownMenu, DropdownMenuContent } from '@/shared/ui/dropdown-menu';
-import { SunMoonIcon } from '@/shared/ui/sunmoon';
+import { THEME_OPTIONS, themeIconMap } from '@/shared/constants/theme/theme-switcher';
 import { Button } from '@/shared/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
+import { SunMoonIcon } from '@/shared/ui/sunmoon';
+import { NextTheme } from '@/types/core/theme/indexe';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
+import { ThemeOptionItem } from './ThemeOptionItem';
 
 export const ThemeSwitch = () => {
   const [mounted, setMounted] = useState(false);

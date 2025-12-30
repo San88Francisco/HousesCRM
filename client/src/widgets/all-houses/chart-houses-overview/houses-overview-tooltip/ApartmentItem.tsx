@@ -1,4 +1,4 @@
-import { Apartment, PayloadData } from '@/types/core/houses-overview/types';
+import { Apartment, PayloadData } from '@/types/model/houses-overview/types';
 
 import { isContract } from '@/shared/utils/all-house/houses-overview/chart-houses-overview';
 import {

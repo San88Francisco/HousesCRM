@@ -1,17 +1,17 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
-import { ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { NavItem } from '@/types/navigation';
 import {
   getChevronClasses,
-  SIDEBAR_STYLES,
   getCollapsibleHeaderClasses,
+  SIDEBAR_STYLES,
 } from '@/shared/constants/styles';
 import { SidebarMenu, useSidebar } from '@/shared/ui/sidebar';
-import { SidebarMenuItem } from './SidebarMenuItem';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
+import { NavItem } from '@/types/model/navigation/navigation';
+import { motion } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
+import { ReactNode, useState } from 'react';
+import { SidebarMenuItem } from './SidebarMenuItem';
 
 type Props = {
   title: string;

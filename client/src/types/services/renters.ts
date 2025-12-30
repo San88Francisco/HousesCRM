@@ -1,4 +1,4 @@
-import { ContractStatus } from './statuses';
+import { ContractStatus } from '../core/status/status';
 
 export type Renter = {
   id: string;

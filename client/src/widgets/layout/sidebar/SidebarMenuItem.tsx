@@ -1,11 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useAnimatedIcon } from '@/hooks';
-import { NavItem } from '@/types/navigation';
 import { getSidebarMenuItemClasses } from '@/shared/constants/styles';
-import { SidebarMenuButton, SidebarMenuItem as ShadcnSidebarMenuItem } from '@/shared/ui/sidebar';
+import { SidebarMenuItem as ShadcnSidebarMenuItem, SidebarMenuButton } from '@/shared/ui/sidebar';
 import { isActiveItem } from '@/shared/utils/sidebar/navigation';
+import { NavItem } from '@/types/model/navigation/navigation';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 type Props = {

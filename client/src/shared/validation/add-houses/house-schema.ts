@@ -1,4 +1,4 @@
-import { ApartmentType } from '@/types/core/house';
+import { ApartmentType } from '@/types/core/house/house';
 import * as yup from 'yup';
 
 export const houseSchema = yup.object({
@@ -17,7 +17,7 @@ export const houseSchema = yup.object({
     .required("Загальна площа обов'язкова")
     .min(1, 'Площа має бути не менше 1 м²'),
 
-  purchaseDate: yup.date().required("Дата покупки обов'язкова"),
+  purchaseDate: yup.string().required("Дата покупки обов'язкова"),
 
   price: yup
     .number()

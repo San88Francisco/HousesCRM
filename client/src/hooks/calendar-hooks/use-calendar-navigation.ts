@@ -1,5 +1,5 @@
 'use client';
-import { levelType } from '@/types/core/calendar';
+import { LevelType } from '@/types/core/calendar/calendar';
 import { add, addYears, format } from 'date-fns';
 
 const DECADE_PAGE_STEP = 10;
@@ -7,7 +7,7 @@ const MONTHS_PAGE_STEP = 1;
 const YEARS_PAGE_STEP = 1;
 
 type useCalendarNavigationProps = {
-  level: levelType;
+  level: LevelType;
   firstDayCurrentMonth: Date;
   currentDecadeStart: Date;
   currentYear: Date;

@@ -1,46 +1,26 @@
-import { ApartmentType } from '../core/house';
+import { CurrencyRevaluation } from '../core/currency-revaluation-chart/types';
+import { ApartmentType, House } from '../core/house/house';
+import { Renter } from './renters';
 
-export type House = {
-  id: string;
+export type HouseByIdResponse = {
+  houseDetail: House;
+  occupancyReports: Renter[];
+};
+
+export type CreateHouseResponse = Omit<House, 'id'>;
+export type CreateHouseRequest = {
   apartmentName: string;
   roomsCount: number;
   totalArea: number;
-  price: number;
   purchaseDate: string;
+  price: number;
   floor: number;
   street: string;
   apartmentType: ApartmentType;
   contractIds?: string[];
 };
 
-export type HouseByIdResponse = {
-  houseDetail: {
-    prices: {
-      id: string;
-      amount: number;
-      code: string;
-      exchangeRate: number;
-    }[];
-    id: string;
-    apartmentName: string;
-    roomsCount: number;
-    totalArea: number;
-    purchaseDate: string;
-    floor: number;
-    street: string;
-    apartmentType: ApartmentType;
-  };
-  occupancyReports: {
-    totalIncome: number;
-    status: string;
-    id: string;
-    firstName: string;
-    lastName: string;
-    occupied: string;
-    vacated: string;
-  }[];
-};
+export type UpdateHouseResponse = House;
+export type UpdateHouseRequest = House;
 
-export type CreateHousePayload = Omit<House, 'id'>;
-
-export type UpdateHousePayload = House;
+export type CurrencyRevaluationResponse = CurrencyRevaluation[];

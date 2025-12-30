@@ -1,11 +1,11 @@
-import { LIKED_ROUTES_KEY } from '@/constants/breadcrumbs/breadcrumbs';
-
 export type FavoriteItem = {
   id: string;
   path: string;
   type: string;
   name: string;
 };
+
+export const LIKED_ROUTES_KEY = 'likedRoutes';
 
 const isBrowser = () => typeof window !== 'undefined';
 
