@@ -1,8 +1,8 @@
+import { EmptyState } from '@/components/chart-states/EmptyState';
+import { createChartPieConfig } from '@/shared/utils/all-house/pie-chart/create-chart-pie-config';
+import { HouseDistributionChartDataItem } from '@/types/model/revenue-distribution/pie-chart-items';
 import { Label, Pie, PieChart } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './charts';
-import { createChartPieConfig } from '@/shared/utils/all-house/pie-chart/create-chart-pie-config';
-import { HouseDistributionChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
-import { EmptyState } from '@/components/chart-states/EmptyState';
 
 type Props = {
   adjustedData: HouseDistributionChartDataItem[];
