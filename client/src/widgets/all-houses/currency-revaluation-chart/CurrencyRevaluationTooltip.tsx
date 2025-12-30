@@ -10,7 +10,7 @@ import {
 const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;
 const TOOLTIP_OFFSET_Y = 10;
-const TOOLTIP_HALF_WIDTH = 120;
+const TOOLTIP_HALF_WIDTH = 90;
 
 type TooltipRowProps = {
   label: string;
@@ -75,7 +75,7 @@ export const CurrencyRevaluationTooltip = ({ active, payload, coordinate, viewBo
 
   return (
     <div
-      className="p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] border-border bg-background"
+      className="p-3 rounded-lg border min-w-[220px] max-w-[280px] border-border bg-background"
       style={transformStyle}
     >
       <p className="font-bold mb-3 text-sm" title={data.apartmentName}>

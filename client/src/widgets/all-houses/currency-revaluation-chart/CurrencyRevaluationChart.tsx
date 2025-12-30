@@ -62,72 +62,74 @@ export const CurrencyRevaluationChart = () => {
 
       <CardContent className="pt-0">
         <div
-          className="w-full relative max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800"
+          className="w-full relative overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800"
           style={{ height: containerHeight }}
         >
-          <ResponsiveContainer width="100%" height={chartHeight} minWidth={280}>
-            <BarChart
-              data={chartData}
-              layout="vertical"
-              margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-              onMouseMove={state => {
-                if (state.activeTooltipIndex !== undefined) {
-                  setHoveredIndex(state.activeTooltipIndex);
-                }
-              }}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              <XAxis type="number" domain={[0, xAxisMax]} hide />
-
-              <YAxis
-                type="category"
-                dataKey="apartmentName"
-                tickFormatter={formatYAxisTick}
-                tick={{
-                  fontSize: 13,
-                  fill: isDark ? 'var(--white)' : 'var(--dark)',
-                  fontWeight: 500,
+          <div style={{ minHeight: chartHeight, display: 'flex', alignItems: 'flex-end' }}>
+            <ResponsiveContainer width="100%" height={chartHeight} minWidth={280}>
+              <BarChart
+                data={chartData}
+                layout="vertical"
+                margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+                onMouseMove={state => {
+                  if (state.activeTooltipIndex !== undefined) {
+                    setHoveredIndex(state.activeTooltipIndex);
+                  }
                 }}
-                axisLine={false}
-                tickLine={false}
-                width={110}
-              />
-
-              <Tooltip
-                content={<CurrencyRevaluationTooltip />}
-                cursor={{ fill: 'transparent' }}
-                wrapperStyle={{ outline: 'none', zIndex: TOOLTIP_Z_INDEX }}
-                allowEscapeViewBox={{ x: true, y: true }}
-              />
-
-              <Bar
-                dataKey="purchaseAmount"
-                stackId="a"
-                radius={[BAR_RADIUS, 0, 0, BAR_RADIUS]}
-                barSize={BAR_SIZE}
-                fill={purchaseBarFill}
-                isAnimationActive
-                animationDuration={PURCHASE_ANIMATION_DURATION}
+                onMouseLeave={() => setHoveredIndex(null)}
               >
-                {renderCells(purchaseBarFill, index =>
-                  hoveredIndex === index ? 1 : OPACITY_DEFAULT,
-                )}
-              </Bar>
+                <XAxis type="number" domain={[0, xAxisMax]} hide />
 
-              <Bar
-                dataKey="growthAmount"
-                stackId="a"
-                radius={[0, BAR_RADIUS, BAR_RADIUS, 0]}
-                barSize={BAR_SIZE}
-                fill={growthBarFill}
-                isAnimationActive
-                animationDuration={GROWTH_ANIMATION_DURATION}
-                animationBegin={PURCHASE_ANIMATION_DURATION}
-              >
-                {renderCells(growthBarFill, getGrowthOpacity)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+                <YAxis
+                  type="category"
+                  dataKey="apartmentName"
+                  tickFormatter={formatYAxisTick}
+                  tick={{
+                    fontSize: 13,
+                    fill: isDark ? 'var(--white)' : 'var(--dark)',
+                    fontWeight: 500,
+                  }}
+                  axisLine={false}
+                  tickLine={false}
+                  width={110}
+                />
+
+                <Tooltip
+                  content={<CurrencyRevaluationTooltip />}
+                  cursor={{ fill: 'transparent' }}
+                  wrapperStyle={{ outline: 'none', zIndex: TOOLTIP_Z_INDEX }}
+                  allowEscapeViewBox={{ x: true, y: true }}
+                />
+
+                <Bar
+                  dataKey="purchaseAmount"
+                  stackId="a"
+                  radius={[BAR_RADIUS, 0, 0, BAR_RADIUS]}
+                  barSize={BAR_SIZE}
+                  fill={purchaseBarFill}
+                  isAnimationActive
+                  animationDuration={PURCHASE_ANIMATION_DURATION}
+                >
+                  {renderCells(purchaseBarFill, index =>
+                    hoveredIndex === index ? 1 : OPACITY_DEFAULT,
+                  )}
+                </Bar>
+
+                <Bar
+                  dataKey="growthAmount"
+                  stackId="a"
+                  radius={[0, BAR_RADIUS, BAR_RADIUS, 0]}
+                  barSize={BAR_SIZE}
+                  fill={growthBarFill}
+                  isAnimationActive
+                  animationDuration={GROWTH_ANIMATION_DURATION}
+                  animationBegin={PURCHASE_ANIMATION_DURATION}
+                >
+                  {renderCells(growthBarFill, getGrowthOpacity)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </CardContent>
     </Card>
