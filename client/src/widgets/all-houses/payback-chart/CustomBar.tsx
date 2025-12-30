@@ -31,10 +31,10 @@ export const CustomBar = ({ x = 0, y = 0, width = 0, height = 0, payload }: Cust
   return (
     <g>
       <defs>
-        <filter id={`glow-${id}`}>
-          <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+        <filter id={`glow-${id}`} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="blur" />
           <feMerge>
-            <feMergeNode in="coloredBlur" />
+            <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>

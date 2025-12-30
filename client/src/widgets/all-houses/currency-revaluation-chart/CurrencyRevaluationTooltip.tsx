@@ -10,6 +10,7 @@ import {
 const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;
 const TOOLTIP_OFFSET_Y = 10;
+const TOOLTIP_HALF_WIDTH = 90;
 
 type TooltipRowProps = {
   label: string;
@@ -44,23 +45,37 @@ type Props = {
   active?: boolean;
   payload?: Array<{ payload: ChartDataItem }>;
   coordinate?: { x: number; y: number };
+  viewBox?: { width: number; height: number; x?: number; y?: number };
 };
 
-export const CurrencyRevaluationTooltip = ({ active, payload, coordinate }: Props) => {
-  if (!active || !payload?.length) {
+export const CurrencyRevaluationTooltip = ({ active, payload, coordinate, viewBox }: Props) => {
+  if (!active || !payload?.length || !coordinate || !viewBox) {
     return null;
   }
 
   const data = payload[0].payload;
 
-  const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
+  const containerLeft = viewBox.x || 0;
+  const containerWidth = viewBox.width;
+  const minLeft = containerLeft + TOOLTIP_HALF_WIDTH;
+  const maxLeft = containerLeft + containerWidth - TOOLTIP_HALF_WIDTH;
+  const safeLeft = Math.min(Math.max(coordinate.x, minLeft), maxLeft);
+
+  const shouldShowAbove = coordinate.y > TOOLTIP_BOUNDARY_Y;
   const transformStyle: CSSProperties = {
-    transform: shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`,
+    position: 'absolute',
+    top: coordinate.y,
+    left: safeLeft,
+    transform: shouldShowAbove
+      ? `translate(-50%, calc(-100% - ${TOOLTIP_OFFSET_Y}px))`
+      : `translate(-50%, ${TOOLTIP_OFFSET_Y}px)`,
+    pointerEvents: 'none',
+    zIndex: 9999,
   };
 
   return (
     <div
-      className="p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] relative border-border z-[9999] bg-background"
+      className="p-3 rounded-lg border min-w-[220px] max-w-[280px] border-border bg-background"
       style={transformStyle}
     >
       <p className="font-bold mb-3 text-sm" title={data.apartmentName}>

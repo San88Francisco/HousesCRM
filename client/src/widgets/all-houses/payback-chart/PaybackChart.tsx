@@ -1,25 +1,28 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { useEffect, useState } from 'react';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
+import { EmptyState } from '@/components/chart-states/EmptyState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
+import { LoadingState } from '@/components/chart-states/LoadingState';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { formatYAxis } from '@/shared/utils/all-house/payback-chart/payback';
 import { cn } from '@/shared/utils/cn';
-import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/card';
+import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
 import { CustomBar } from './CustomBar';
 import { CustomXAxisTick } from './CustomXAxisTick';
-import { mockPaybackStats } from '@/shared/constants/payback-chart/analytics.mock';
-import { usePaybackChartData, useChartDimensions, useChartScroll } from './utils';
-import { renderLoadingState } from './ChartStates';
-import { formatYAxis } from '@/shared/utils/all-house/payback-chart/payback';
 import { PaybackChartTooltip } from './PaybackChartTooltip';
+import { useChartDimensions, useChartScroll, usePaybackChartData } from './utils';
 
 const CHART_HEIGHT = 250;
 
 export const PaybackChart = () => {
   const [mounted, setMounted] = useState(false);
-  const [loading] = useState(false);
 
-  const chartData = usePaybackChartData(mockPaybackStats);
+  const { data: analyticsData, isLoading, error } = useGetHousesAnalyticsQuery();
+
+  const chartData = usePaybackChartData(analyticsData?.housesPaybackStats);
   const { yAxisMax, minChartWidth } = useChartDimensions(chartData);
   const {
     scrollRef,
@@ -35,10 +38,12 @@ export const PaybackChart = () => {
   }, []);
 
   if (!mounted) return null;
-  if (loading) return renderLoadingState();
+  if (isLoading) return <LoadingState />;
+  if (error) return <ErrorState error={error} />;
+  if (!chartData || chartData.length === 0) return <EmptyState />;
 
   return (
-    <Card className="w-full shadow-xl">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-lg sm:text-xl md:text-2xl">
           Статистика окупності квартир
@@ -81,10 +86,10 @@ export const PaybackChart = () => {
                 <YAxis
                   domain={[0, yAxisMax]}
                   tickFormatter={formatYAxis}
-                  tick={{ fontSize: 12, fill: 'var(--muted-text)', fontWeight: 500 }}
+                  tick={{ fontSize: 12, fill: 'var(--text)', fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
-                  width={60}
+                  width={40}
                 />
                 <Tooltip content={<PaybackChartTooltip />} cursor={false} />
                 <Bar dataKey="purchasePriceUSD" shape={<CustomBar />} />
