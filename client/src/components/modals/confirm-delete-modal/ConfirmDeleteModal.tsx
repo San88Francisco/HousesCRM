@@ -1,17 +1,17 @@
 'use client';
 
-import { ModalTriggers } from '@/types/model/modals';
+import { Button } from '@/shared/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/shared/ui/dialog';
-import { closeModal } from '@/store/modal-slice';
-import { Button } from '@/shared/ui/button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { closeModal } from '@/store/slice/modal-slice';
+import { ModalTriggers } from '@/types/model/modals/modals';
 
 export const ConfirmDeleteModal = () => {
   const dispatch = useAppDispatch();

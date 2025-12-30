@@ -1,18 +1,18 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useParams, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
+import { useParams, usePathname } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
+import { ROUTES } from '@/shared/routes';
 import { Button } from '@/shared/ui/button';
 import {
   FavoriteItem,
   isPathFavorite,
   toggleFavoriteItem,
 } from '@/shared/utils/storage/favorites-storage';
-import { ROUTES } from '@/shared/routes';
-import { useGetHouseByIdQuery } from '@/store/houses-api';
+import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 
 const FavoriteStar = () => {
   const pathname = usePathname();

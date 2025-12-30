@@ -1,5 +1,5 @@
-import { useRef, ReactElement, isValidElement, cloneElement, ReactNode, Ref } from 'react';
-import { AnimatedIconHandle } from '@/types/navigation';
+import { AnimatedIconHandle } from '@/types/model/animate-icon/animate-icon';
+import { cloneElement, isValidElement, ReactElement, ReactNode, Ref, useRef } from 'react';
 
 export const useAnimatedIcon = (icon: ReactNode) => {
   const iconRef = useRef<AnimatedIconHandle | null>(null);

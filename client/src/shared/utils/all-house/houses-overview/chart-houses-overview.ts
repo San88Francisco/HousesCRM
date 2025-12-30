@@ -3,7 +3,7 @@ import {
   ChartDataPoint,
   Contract,
   TimeRangeEnum,
-} from '@/types/core/houses-overview/types';
+} from '@/types/model/houses-overview/types';
 
 const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.SIX_MONTHS]: date => {

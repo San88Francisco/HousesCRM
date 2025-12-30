@@ -1,11 +1,11 @@
 'use client';
 
-import { ComponentProps, ReactNode, useCallback } from 'react';
-import { clsx } from 'clsx';
 import { Dialog, DialogContent } from '@/shared/ui/dialog';
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { closeModal } from '@/store/modal-slice';
-import { ModalTriggers } from '@/types/model/modals';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { closeModal } from '@/store/slice/modal-slice';
+import { ModalTriggers } from '@/types/model/modals/modals';
+import { clsx } from 'clsx';
+import { ComponentProps, ReactNode, useCallback } from 'react';
 
 interface ModalProps extends ComponentProps<typeof DialogContent> {
   children: ReactNode[] | ReactNode;

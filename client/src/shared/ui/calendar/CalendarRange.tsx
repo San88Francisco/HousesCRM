@@ -1,4 +1,4 @@
-import { CalendarMode, DateRange } from '@/types/core/calendar';
+import { CalendarMode, DateRange } from '@/types/core/calendar/calendar';
 import { Day, Locale, startOfToday } from 'date-fns';
 import { FC, useEffect, useState } from 'react';
 import { Button } from '../button';

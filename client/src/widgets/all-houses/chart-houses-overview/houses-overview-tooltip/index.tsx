@@ -1,14 +1,14 @@
 /* eslint-disable */
-import { ApartmentItem } from './ApartmentItem';
-import { NoContractTooltip } from './NoContractTooltip';
-import { LockedApartmentTooltip } from '../LockedApartmentTooltip';
 import {
   findGapBetweenContracts,
   isApartmentAcquired,
 } from '@/shared/utils/helpers/custom-tooltip-helper';
+import { LockedApartmentTooltip } from '../LockedApartmentTooltip';
+import { ApartmentItem } from './ApartmentItem';
+import { NoContractTooltip } from './NoContractTooltip';
 
-import { HouseOverviewChartDataItem, TooltipPayload } from '@/types/core/houses-overview/types';
 import { isContract } from '@/shared/utils/all-house/houses-overview/chart-houses-overview';
+import { HouseOverviewChartDataItem, TooltipPayload } from '@/types/model/houses-overview/types';
 
 type Props = {
   active?: boolean;

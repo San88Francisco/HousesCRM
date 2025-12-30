@@ -1,4 +1,4 @@
-import { Apartment } from '@/types/core/houses-overview/types';
+import { Apartment } from '@/types/model/houses-overview/types';
 
 export const truncate = (text: string, maxLen: number): string => {
   if (maxLen <= 3) return text.slice(0, maxLen);

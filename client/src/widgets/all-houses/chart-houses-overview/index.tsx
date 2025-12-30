@@ -13,8 +13,12 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { formatTickDate } from '@/shared/utils/all-house/houses-overview/chart-houses-overview';
 import { cn } from '@/shared/utils/cn';
-import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
+import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 
+import { EmptyState } from '@/components/chart-states/EmptyState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
+import { LoadingState } from '@/components/chart-states/LoadingState';
+import { HouseOverviewChartDataItem, TimeRangeEnum } from '@/types/model/houses-overview/types';
 import { useCallback } from 'react';
 import {
   Legend,
@@ -26,10 +30,6 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { HouseOverviewChartDataItem, TimeRangeEnum } from '@/types/core/houses-overview/types';
-import { LoadingState } from '@/components/chart-states/LoadingState';
-import { ErrorState } from '@/components/chart-states/ErrorState';
-import { EmptyState } from '@/components/chart-states/EmptyState';
 import { LegendContent } from './LegendContent';
 import { CustomTooltip } from './houses-overview-tooltip';
 

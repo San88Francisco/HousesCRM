@@ -1,13 +1,13 @@
-import { HouseFormData } from '@/shared/validation/add-houses/house-schema';
-import { ApartmentType } from '@/types/core/house';
+import { ApartmentType } from '@/types/core/house/house';
 
-export const getDefaultHouseValues = (): HouseFormData => ({
+export const defaultHouseValues = {
   apartmentName: '',
   roomsCount: 1,
   totalArea: 1,
-  purchaseDate: new Date(),
+  // purchaseDate: new Date(),
+  purchaseDate: '',
   price: 1,
   floor: 1,
   street: '',
   apartmentType: ApartmentType.NEW_BUILD,
-});
+};

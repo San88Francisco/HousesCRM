@@ -1,4 +1,4 @@
-import { PIE_COLORS } from '@/constants/revenue-pie-chart/chart-pie-colors';
+import { PIE_COLORS } from '@/shared/constants/revenue-pie-chart/chart-pie-colors';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 
 type WithFill<T> = T & { fill: string };

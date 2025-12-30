@@ -1,5 +1,5 @@
-import { Contract } from './contracts';
-import { House } from './houses';
+import { Contract } from '../core/contract/contract';
+import { House } from '../core/house/house';
 import { Renter } from './renters';
 
 export type SearchRequest = {

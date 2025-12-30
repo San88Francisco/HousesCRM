@@ -5,7 +5,7 @@ import { Calendar } from '@/shared/ui/calendar';
 import { Label } from '@/shared/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { cn } from '@/shared/utils/cn';
-import { CalendarMode } from '@/types/core/calendar';
+import { CalendarMode } from '@/types/core/calendar/calendar';
 import { format, startOfToday } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';

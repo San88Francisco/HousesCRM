@@ -1,13 +1,13 @@
 'use client';
 
+import { EmptyState } from '@/components/chart-states/EmptyState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
+import { LoadingState } from '@/components/chart-states/LoadingState';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
+import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { ChartList } from './ChartList';
 import { PieChartRevenue } from './PieChartRevenue';
-import { LoadingState } from '@/components/chart-states/LoadingState';
-import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
-import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
-import { ErrorState } from '@/components/chart-states/ErrorState';
-import { EmptyState } from '@/components/chart-states/EmptyState';
 
 export function ChartPieDonutText() {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();

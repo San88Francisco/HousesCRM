@@ -1,6 +1,6 @@
 'use client';
 import { mockData } from '@/shared/constants/table/dataTable';
-import { PdfContractTrigger } from '@/widgets/pdf-contract-content/PdfContractTrigger';
+import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 import { ButtonComponent } from '@/widgets/uikit/button-component';
 import { CalendarComponent } from '@/widgets/uikit/calendar-component';
 import { CardComponent } from '@/widgets/uikit/card-component';

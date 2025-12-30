@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
 
-import { HouseOverviewChartDataItem } from '@/types/core/houses-overview/types';
+import { HouseOverviewChartDataItem } from '@/types/model/houses-overview/types';
 
 type Props = {
   apartmentsData: HouseOverviewChartDataItem[];

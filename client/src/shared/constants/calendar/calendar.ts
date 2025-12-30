@@ -1,12 +1,12 @@
-import { CalendarMode, levelType } from '@/types/core/calendar';
+import { CalendarMode, LevelType } from '@/types/core/calendar/calendar';
 
-export const levelMap: Record<CalendarMode, levelType> = {
+export const levelMap: Record<CalendarMode, LevelType> = {
   years: 'years',
   yearsMonths: 'months',
   yearsMonthsDays: 'days',
 };
 
-export const nextLevelMap: Record<CalendarMode, Partial<Record<levelType, levelType>>> = {
+export const nextLevelMap: Record<CalendarMode, Partial<Record<LevelType, LevelType>>> = {
   years: {},
   yearsMonths: { years: 'months' },
   yearsMonthsDays: { years: 'months', months: 'days' },

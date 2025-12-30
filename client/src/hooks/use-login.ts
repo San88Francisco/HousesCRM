@@ -1,12 +1,12 @@
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { toast } from 'sonner';
-import { useLoginMutation } from '@/store/auth-api';
-import { LoginRequest } from '@/types/services/login';
-import { loginSchema } from '@/shared/validation/login/login';
 import { ROUTES } from '@/shared/routes';
 import { loginDefaultValues } from '@/shared/validation/login/defaultValues';
+import { loginSchema } from '@/shared/validation/login/login';
+import { useLoginMutation } from '@/store/api/auth-api';
+import { LoginRequest } from '@/types/services/auth';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export const useLogin = () => {
   const router = useRouter();
