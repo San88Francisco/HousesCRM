@@ -39,7 +39,7 @@ export const CurrencyRevaluationChart = () => {
   if (!mounted) return null;
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
-  if (!chartData || chartData.length === 0) return <EmptyState />;
+  if (chartData.length === 0) return <EmptyState />;
 
   const renderCells = (fill: string, customOpacity?: (index: number) => number) =>
     chartData.map((_, index) => (

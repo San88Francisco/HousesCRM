@@ -10,7 +10,7 @@ import {
 const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;
 const TOOLTIP_OFFSET_Y = 10;
-const TOOLTIP_HALF_WIDTH = 90;
+const TOOLTIP_HALF_WIDTH = 120;
 
 type TooltipRowProps = {
   label: string;
@@ -54,10 +54,12 @@ export const CurrencyRevaluationTooltip = ({ active, payload, coordinate, viewBo
   }
 
   const data = payload[0].payload;
+
   const containerLeft = viewBox.x || 0;
   const containerWidth = viewBox.width;
+  const minLeft = containerLeft + TOOLTIP_HALF_WIDTH;
   const maxLeft = containerLeft + containerWidth - TOOLTIP_HALF_WIDTH;
-  const safeLeft = Math.min(coordinate.x, maxLeft);
+  const safeLeft = Math.min(Math.max(coordinate.x, minLeft), maxLeft);
 
   const shouldShowAbove = coordinate.y > TOOLTIP_BOUNDARY_Y;
   const transformStyle: CSSProperties = {
