@@ -1,7 +1,7 @@
 import { MoonIcon } from '@/shared/ui/moon';
 import { SunIcon } from '@/shared/ui/sun';
 import { SunMoonIcon } from '@/shared/ui/sunmoon';
-import { NextTheme } from '@/types/core/theme/indexe';
+import { NextTheme } from '@/types/core/theme/theme';
 
 export const THEME_OPTIONS = [NextTheme.Light, NextTheme.Dark, NextTheme.System];
 

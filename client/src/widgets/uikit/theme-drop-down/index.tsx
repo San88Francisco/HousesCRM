@@ -4,7 +4,7 @@ import { THEME_OPTIONS, themeIconMap } from '@/shared/constants/theme/theme-swit
 import { Button } from '@/shared/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
 import { SunMoonIcon } from '@/shared/ui/sunmoon';
-import { NextTheme } from '@/types/core/theme/indexe';
+import { NextTheme } from '@/types/core/theme/theme';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { ThemeOptionItem } from './ThemeOptionItem';

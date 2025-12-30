@@ -1,3 +1,4 @@
+'use client';
 import { useCalendarNavigation } from '@/hooks/calendar-hooks/use-calendar-navigation';
 import { useCalendarState } from '@/hooks/calendar-hooks/use-calendar-state';
 import { levelMap, nextLevelMap } from '@/shared/constants/calendar/calendar';
@@ -10,7 +11,7 @@ import CalendarMonthsLevel from './CalendarMonthsLevel';
 import CalendarYearsLevel from './CalendarYearsLevel';
 /* eslint-disable */
 
-interface ICalendarDisplayProps {
+type Props = {
   lang: Locale;
   firstWeekDayNumber: Day;
   date: Date;
@@ -18,9 +19,9 @@ interface ICalendarDisplayProps {
   minDate?: Date;
   maxDate?: Date;
   mode: CalendarMode;
-}
+};
 
-const CalendarDisplay: FC<ICalendarDisplayProps> = ({
+const CalendarDisplay: FC<Props> = ({
   firstWeekDayNumber,
   date,
   setDate,
