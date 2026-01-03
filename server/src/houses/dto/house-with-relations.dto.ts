@@ -1,12 +1,12 @@
 import { Expose, Type } from 'class-transformer'
 import { HouseDto } from './house.dto'
-import { HousePriceDto } from 'src/house-prices/dto/house-price.dto'
+import { HousePriceCalculatedDto } from './house-price-calculated.dto'
 import { ContractWithRentersDto } from 'src/contracts/dto/contract-with-renters.dto'
 
 export class HouseWithRelationsDto extends HouseDto {
   @Expose()
-  @Type(() => HousePriceDto)
-  prices: HousePriceDto[]
+  @Type(() => HousePriceCalculatedDto)
+  prices: HousePriceCalculatedDto[]
 
   @Expose()
   @Type(() => ContractWithRentersDto)

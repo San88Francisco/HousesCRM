@@ -1,9 +1,13 @@
 import { Expose, Type } from 'class-transformer'
 import { HouseDto } from './house.dto'
-import { HousePriceDto } from 'src/house-prices/dto/house-price.dto'
+import { HousePriceCalculatedDto } from './house-price-calculated.dto'
 
+/**
+ * DTO для квартири з цінами у всіх валютах
+ * Ціни розраховуються на льоту при поверненні даних
+ */
 export class HouseWithPricesDto extends HouseDto {
   @Expose()
-  @Type(() => HousePriceDto)
-  prices: HousePriceDto[]
+  @Type(() => HousePriceCalculatedDto)
+  prices: HousePriceCalculatedDto[]
 }

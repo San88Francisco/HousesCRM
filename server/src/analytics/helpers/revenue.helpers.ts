@@ -1,9 +1,6 @@
 import { Contract } from 'src/contracts/entities/contract.entity'
 import { House } from 'src/houses/entities/house.entity'
-import {
-  RevenueDistributionDto,
-  RevenueDistributionItemDto,
-} from '../houses-analytics/dto/revenue-distribution/revenue-distribution.dto'
+import { RevenueDistributionItemBase, RevenueDistributionBase } from '../types/analytics.types'
 
 export const calculateMonthsBetween = (start: Date, end: Date): number => {
   const startYear = start.getFullYear()
@@ -21,7 +18,7 @@ export const calculateContractRevenue = (contract: Contract): number => {
   return months * contract.monthlyPayment
 }
 
-export const calculateHouseRevenue = (house: House): Omit<RevenueDistributionItemDto, 'percentage'> => {
+export const calculateHouseRevenue = (house: House): RevenueDistributionItemBase => {
   const apartmentTotalRevenue =
     house.contracts?.reduce((sum, contract) => {
       return sum + calculateContractRevenue(contract)
@@ -35,8 +32,8 @@ export const calculateHouseRevenue = (house: House): Omit<RevenueDistributionIte
 }
 
 export const calculateRevenuePercentages = (
-  housesRevenue: Array<Omit<RevenueDistributionItemDto, 'percentage'>>
-): RevenueDistributionDto => {
+  housesRevenue: Array<RevenueDistributionItemBase>
+): RevenueDistributionBase => {
   const grandTotal = housesRevenue.reduce((sum, house) => sum + house.apartmentTotalRevenue, 0)
 
   const data = housesRevenue.map((house) => ({

@@ -2,12 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import { QueryDto } from 'src/common/dto/query.dto'
+import { CurrencyCode } from 'src/exchange-rates/entities/exchange-rate.entity'
+import { ExchangeRatesService } from 'src/exchange-rates/exchange-rates.service'
+import { convertAmountToAllCurrencies } from 'src/exchange-rates/helpers/convert-amount.helper'
+import { splitContractIntoPeriods } from 'src/exchange-rates/helpers/split-contract-periods.helper'
 import { RentersService } from 'src/renters/renters.service'
 import { EntityNotFoundError, Repository } from 'typeorm'
 import { ContractPdfFileDto } from './dto/contract-pdf-file.dto'
 import { ContractResponseDto } from './dto/contract-response.dto'
+import { ContractWithCurrenciesDto } from './dto/contract-with-currencies.dto'
 import { ContractWithRelationsDto } from './dto/contract-with-relations.dto'
-import { ContractDto } from './dto/contract.dto'
 import { CreateContractDto } from './dto/create-contract.dto'
 import { UpdateContractDto } from './dto/update-contract-dto'
 import { Contract } from './entities/contract.entity'
@@ -17,7 +21,8 @@ export class ContractsService {
   constructor(
     @InjectRepository(Contract)
     private contractsRepository: Repository<Contract>,
-    private rentersService: RentersService
+    private rentersService: RentersService,
+    private exchangeRatesService: ExchangeRatesService
   ) {}
 
   async findAll(dto: QueryDto): Promise<ContractResponseDto> {
@@ -28,12 +33,55 @@ export class ContractsService {
       take: limit,
     })
 
-    const contractsDto = plainToInstance(ContractDto, contracts, {
-      excludeExtraneousValues: true,
+    const allPeriodDates = new Set<string>()
+    const contractPeriods = new Map<string, Array<{ from: Date; to: Date }>>()
+
+    contracts.forEach((contract) => {
+      const periods = splitContractIntoPeriods(contract.commencement, contract.termination)
+      contractPeriods.set(contract.id, periods)
+
+      periods.forEach((period) => {
+        allPeriodDates.add(period.from.toISOString().split('T')[0])
+      })
+    })
+
+    const ratesByDate = new Map<string, Record<CurrencyCode, number>>()
+    await Promise.all(
+      Array.from(allPeriodDates).map(async (dateStr) => {
+        const rates = await this.exchangeRatesService.getExchangeRatesForDate(new Date(dateStr))
+        ratesByDate.set(dateStr, rates)
+      })
+    )
+
+    const contractsDto = contracts.map((contract) => {
+      const periods = contractPeriods.get(contract.id) || []
+
+      const monthlyPaymentInCurrencies = periods.map((period) => {
+        const dateKey = period.from.toISOString().split('T')[0]
+        const rates = ratesByDate.get(dateKey)
+        if (!rates) {
+          throw new Error(`Exchange rates not found for date: ${dateKey}`)
+        }
+
+        return {
+          period: {
+            from: period.from,
+            to: period.to,
+          },
+          currencies: convertAmountToAllCurrencies(contract.monthlyPayment, rates),
+        }
+      })
+
+      return {
+        ...contract,
+        monthlyPaymentInCurrencies,
+      }
     })
 
     const rawData = {
-      data: contractsDto,
+      data: plainToInstance(ContractWithCurrenciesDto, contractsDto, {
+        excludeExtraneousValues: true,
+      }),
       meta: {
         total,
         page,

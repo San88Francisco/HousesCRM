@@ -1,10 +1,11 @@
 import { Expose, Type } from 'class-transformer'
 import { PaginationMetaDto } from 'src/common/dto/pagination-meta.dto'
-import { RenterDto } from './renter.dto'
+import { RenterWithCurrenciesDto } from './renter-with-currencies.dto'
 
 export class RenterResponseDto {
   @Expose()
-  data: RenterDto[]
+  @Type(() => RenterWithCurrenciesDto)
+  data: RenterWithCurrenciesDto[]
 
   @Expose()
   @Type(() => PaginationMetaDto)

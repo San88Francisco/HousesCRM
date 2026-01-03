@@ -1,6 +1,7 @@
 import { PickType } from '@nestjs/swagger'
-import { Expose, Transform } from 'class-transformer'
+import { Expose, Transform, Type } from 'class-transformer'
 import { HouseDto } from 'src/houses/dto/house.dto'
+import { AmountInCurrencyDto } from 'src/exchange-rates/dto/amount-with-currencies.dto'
 
 export class CurrencyRevaluationDto extends PickType(HouseDto, ['id', 'apartmentName'] as const) {
   @Expose()
@@ -13,9 +14,17 @@ export class CurrencyRevaluationDto extends PickType(HouseDto, ['id', 'apartment
 
   @Expose()
   @Transform(({ value }) => Math.round(Number(value)))
-  revaluationAmountUah: number
+  revaluationAmount: number
+
+  @Expose()
+  @Type(() => AmountInCurrencyDto)
+  revaluationAmountInCurrencies: AmountInCurrencyDto[]
 
   @Expose()
   @Transform(({ value }) => parseFloat(Number(value).toFixed(2)))
-  purchaseAmountUah: number
+  purchaseAmount: number
+
+  @Expose()
+  @Type(() => AmountInCurrencyDto)
+  purchaseAmountInCurrencies: AmountInCurrencyDto[]
 }

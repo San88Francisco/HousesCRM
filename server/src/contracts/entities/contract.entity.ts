@@ -2,6 +2,7 @@ import { House } from 'src/houses/entities/house.entity'
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import type { Relation } from 'typeorm'
 import { Renter } from 'src/renters/entities/renter.entity'
+import { CurrencyCode } from 'src/exchange-rates/entities/exchange-rate.entity'
 
 export enum ContractStatus {
   ACTIVE = 'active',
@@ -30,6 +31,14 @@ export class Contract {
 
   @Column({ name: 'monthly_payment' })
   monthlyPayment: number
+
+  @Column({
+    type: 'enum',
+    enum: CurrencyCode,
+    default: CurrencyCode.UAH,
+    name: 'payment_currency',
+  })
+  paymentCurrency: CurrencyCode
 
   @Column({ name: 'houseId' })
   houseId: string

@@ -1,6 +1,7 @@
 import { IsDate, IsDefined, IsEnum, IsNumber, IsOptional, IsPositive, IsUUID } from 'class-validator'
 import { Type } from 'class-transformer'
 import { ContractStatus } from '../entities/contract.entity'
+import { CurrencyCode } from 'src/exchange-rates/entities/exchange-rate.entity'
 
 export class CreateContractDto {
   @IsDefined({ message: 'commencement is required' })
@@ -21,6 +22,10 @@ export class CreateContractDto {
   @IsNumber({}, { message: 'monthlyPayment must be a number' })
   @IsPositive({ message: 'monthlyPayment must be positive' })
   monthlyPayment: number
+
+  @IsOptional()
+  @IsEnum(CurrencyCode, { message: 'paymentCurrency must be a valid currency code' })
+  paymentCurrency?: CurrencyCode
 
   @IsOptional()
   @IsUUID('4', { message: 'houseId must be a valid UUID' })
