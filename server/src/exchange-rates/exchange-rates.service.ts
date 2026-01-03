@@ -1,28 +1,23 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { getExchangeRates } from 'src/utils/exchange-rates.util'
-import { Between, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 import { CurrencyCode, ExchangeRate } from './entities/exchange-rate.entity'
 
 @Injectable()
 export class ExchangeRatesService {
+  private readonly SEARCH_RANGE_DAYS = 45
+  private readonly MS_PER_DAY = 24 * 60 * 60 * 1000
+
   constructor(
     @InjectRepository(ExchangeRate)
     private exchangeRateRepository: Repository<ExchangeRate>
   ) {}
 
   async getExchangeRatesForDate(date: Date): Promise<Record<CurrencyCode, number>> {
-    const rangeInDays = 45
-    const startDate = new Date(date)
-    startDate.setDate(startDate.getDate() - rangeInDays)
+    const cachedRates = await this.findClosestRates(date)
 
-    const endDate = new Date(date)
-    endDate.setDate(endDate.getDate() + rangeInDays)
-
-    const cachedRates = await this.findClosestRates(date, startDate, endDate)
-
-    const expectedCount = Object.keys(CurrencyCode).length - 1
-    if (cachedRates && Object.keys(cachedRates).length === expectedCount) {
+    if (cachedRates) {
       return { ...cachedRates, [CurrencyCode.UAH]: 1 }
     }
 
@@ -33,67 +28,40 @@ export class ExchangeRatesService {
     return nbuRates
   }
 
-  private async findClosestRates(
-    targetDate: Date,
-    startDate: Date,
-    endDate: Date
-  ): Promise<Record<CurrencyCode, number> | null> {
+  private async findClosestRates(targetDate: Date): Promise<Record<CurrencyCode, number> | null> {
+    const target = targetDate.toISOString().slice(0, 10)
+    const expected = Object.values(CurrencyCode).length - 1
+
+    const rangeMs = this.SEARCH_RANGE_DAYS * this.MS_PER_DAY
+    const targetTime = targetDate.getTime()
+
+    const closestDate = await this.exchangeRateRepository
+      .createQueryBuilder('r')
+      .select('r.date', 'date')
+      .where('r.date BETWEEN :start AND :end', {
+        start: new Date(targetTime - rangeMs),
+        end: new Date(targetTime + rangeMs),
+      })
+      .groupBy('r.date')
+      .having('COUNT(*) = :count', { count: expected })
+      .orderBy('ABS(r.date - :target)', 'ASC')
+      .setParameter('target', target)
+      .limit(1)
+      .getRawOne<{ date: string }>()
+
+    if (!closestDate?.date) {
+      return null
+    }
+
     const rates = await this.exchangeRateRepository.find({
-      where: {
-        date: Between(startDate, endDate),
-      },
-      order: {
-        date: 'DESC',
-      },
+      where: { date: new Date(closestDate.date) },
     })
 
-    if (rates.length === 0) {
+    if (rates.length !== expected) {
       return null
     }
 
-    const ratesByDate = rates.reduce(
-      (acc, rate) => {
-        const dateObj = rate.date instanceof Date ? rate.date : new Date(rate.date)
-        const dateKey = dateObj.toISOString().split('T')[0]
-        if (!acc[dateKey]) {
-          acc[dateKey] = []
-        }
-        acc[dateKey].push(rate)
-        return acc
-      },
-      {} as Record<string, ExchangeRate[]>
-    )
-
-    const targetTime = targetDate.getTime()
-    let closestDate: string | null = null
-    let closestDiff = Infinity
-
-    for (const dateKey of Object.keys(ratesByDate)) {
-      const rateDate = new Date(dateKey)
-      const diff = Math.abs(rateDate.getTime() - targetTime)
-
-      if (diff < closestDiff) {
-        closestDiff = diff
-        closestDate = dateKey
-      }
-    }
-
-    if (!closestDate) {
-      return null
-    }
-
-    const closestRates = ratesByDate[closestDate]
-    if (closestRates.length !== Object.keys(CurrencyCode).length) {
-      return null
-    }
-
-    return closestRates.reduce(
-      (acc, rate) => {
-        acc[rate.code] = Number(rate.rate)
-        return acc
-      },
-      {} as Record<CurrencyCode, number>
-    )
+    return Object.fromEntries(rates.map((r) => [r.code, Number(r.rate)])) as Record<CurrencyCode, number>
   }
 
   private async saveExchangeRates(date: Date, rates: Record<CurrencyCode, number>): Promise<void> {
