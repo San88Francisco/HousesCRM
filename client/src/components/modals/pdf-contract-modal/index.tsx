@@ -1,16 +1,16 @@
-import { DialogDescription } from '@/shared/ui/dialog';
-import { Fragment, useEffect, useState, useCallback } from 'react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Button } from '@/shared/ui/button';
-import { PdfContractSkeleton } from '@/widgets/skeletons/pdf-contract-skeleton';
-import { PdfContractDocument } from '@/widgets/pdf-contract-content/PdfContractDocument';
-import { PdfContractFile } from '@/widgets/pdf-contract-content/PdfContractFile';
-import Modal from '../modal-wrapper';
-import { ModalTriggers } from '@/types/model/modals';
-import { useAppSelector } from '@/store/hooks';
-import { PdfContractModel } from '@/types/services/contracts';
+import { DialogDescription } from '@/shared/ui/dialog';
 import { PdfContractAdapter } from '@/shared/utils/pdf-contract/pdf-contract-adapter';
-import { useLazyGetContractPdfQuery } from '@/store/contracts-api';
+import { useLazyGetContractPdfQuery } from '@/store/api/contracts-api';
+import { useAppSelector } from '@/store/hooks';
+import { ModalTriggers } from '@/types/model/modals/modals';
+import { PdfContractModel } from '@/types/services/contracts';
+import { PdfContractDocument } from '@/widgets/modals/pdf-contract-content-modal/PdfContractDocument';
+import { PdfContractFile } from '@/widgets/modals/pdf-contract-content-modal/PdfContractFile';
+import { PdfContractSkeleton } from '@/widgets/skeletons/pdf-contract-modal-skeleton';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import Modal from '../modal-wrapper';
 
 export const PdfContractModal = () => {
   const { isOpen, trigger, payload } = useAppSelector(s => s.modal);

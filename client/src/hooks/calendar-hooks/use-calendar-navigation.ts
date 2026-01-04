@@ -1,5 +1,5 @@
 'use client';
-import { levelType } from '@/types/core/calendar';
+import { LevelType } from '@/types/core/calendar/calendar';
 import { add, addYears, format } from 'date-fns';
 
 const DECADE_PAGE_STEP = 10;
@@ -7,7 +7,7 @@ const MONTHS_PAGE_STEP = 1;
 const YEARS_PAGE_STEP = 1;
 
 type useCalendarNavigationProps = {
-  level: levelType;
+  level: LevelType;
   firstDayCurrentMonth: Date;
   currentDecadeStart: Date;
   currentYear: Date;
@@ -26,13 +26,13 @@ export const useCalendarNavigation = ({
   setCurrentDecadeStart,
 }: useCalendarNavigationProps) => {
   const nextMonth = () => {
-    const firtsDayNextMonth = add(firstDayCurrentMonth, { months: MONTHS_PAGE_STEP });
-    setCurrentMonth(format(firtsDayNextMonth, 'MMM-yyyy'));
+    const firstDayNextMonth = add(firstDayCurrentMonth, { months: MONTHS_PAGE_STEP });
+    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
   };
 
   const prevMonth = () => {
-    const firtsDayNextMonth = add(firstDayCurrentMonth, { months: -MONTHS_PAGE_STEP });
-    setCurrentMonth(format(firtsDayNextMonth, 'MMM-yyyy'));
+    const firstDayNextMonth = add(firstDayCurrentMonth, { months: -MONTHS_PAGE_STEP });
+    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
   };
 
   const nextYear = () => {
@@ -52,26 +52,30 @@ export const useCalendarNavigation = ({
   };
 
   const handleNextPage = () => {
-    if (level === 'days') {
-      nextMonth();
-    }
-    if (level === 'months') {
-      nextYear();
-    }
-    if (level === 'years') {
-      nextDecade();
+    switch (level) {
+      case 'days':
+        nextMonth();
+        break;
+      case 'months':
+        nextYear();
+        break;
+      case 'years':
+        nextDecade();
+        break;
     }
   };
 
   const handlePrevPage = () => {
-    if (level === 'days') {
-      prevMonth();
-    }
-    if (level === 'months') {
-      prevYear();
-    }
-    if (level === 'years') {
-      prevDecade();
+    switch (level) {
+      case 'days':
+        prevMonth();
+        break;
+      case 'months':
+        prevYear();
+        break;
+      case 'years':
+        prevDecade();
+        break;
     }
   };
 

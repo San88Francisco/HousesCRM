@@ -4,8 +4,8 @@ import {
   MOBILE_TABLET_TICKS,
   ONE_YEAR_MS,
   SMALL_MOBILE_TICKS,
-} from '@/constants/line-chart/line-chart';
-import { ChartDataPoint, TimeRangeEnum } from '@/types/core/houses-overview/types';
+} from '@/shared/constants/line-chart/line-chart';
+import { ChartDataPoint, TimeRangeEnum } from '@/types/model/houses-overview/types';
 
 export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: number) => {
   let timeoutId: ReturnType<typeof setTimeout>;

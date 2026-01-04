@@ -2,21 +2,21 @@
 import { Button } from '@/shared/ui/button';
 import { toast } from 'sonner';
 
-export const ToastCopmponent = () => {
+export const ToastComponent = () => {
   const handlePositiveToast = () => {
-    toast.success('This is positive toast');
+    toast.success('This is a positive toast');
   };
 
   const handleInfoToast = () => {
-    toast.info('This is info toast');
+    toast.info('This is an info toast');
   };
 
   const handleErrorToast = () => {
-    toast.error('This is error toast');
+    toast.error('This is an error toast');
   };
 
   const handleWarningToast = () => {
-    toast.warning('This is the warnning toast');
+    toast.warning('This is the warning toast');
   };
 
   const handleLoadingToast = () => {

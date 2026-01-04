@@ -1,10 +1,10 @@
 'use client';
 
-import { forwardRef, type TextareaHTMLAttributes } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
-import { Textarea } from '@/shared/ui/textarea';
 import { Label } from '@/shared/ui/label';
+import { Textarea } from '@/shared/ui/textarea';
 import { cn } from '@/shared/utils/cn';
+import { forwardRef, type TextareaHTMLAttributes } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 interface Props extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'maxLength'> {
   name: string;
@@ -67,7 +67,7 @@ const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
               ref={ref}
             />
 
-            {error && (
+            {errorMessage && (
               <div className="text-sm text-red" id={`${name}-error`}>
                 {errorMessage}
               </div>

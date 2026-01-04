@@ -1,5 +1,5 @@
 import { ROUTES } from '@/shared/routes';
-import { NavItem } from '@/types/navigation';
+import { NavItem } from '@/types/model/navigation/navigation';
 // import { KeySquareIcon } from '@/shared/ui/key';
 import { HomeIcon } from '@/shared/ui/home';
 import { Cookie } from 'lucide-react';

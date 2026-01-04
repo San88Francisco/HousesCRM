@@ -1,7 +1,7 @@
+import { isHouseModalPayload } from '@/shared/utils/create-update-house-form/is-house-modal-payload';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { closeModal } from '@/store/modal-slice';
-import { HouseModalPayload } from '@/types/model/house-modal';
-import { ModalTriggers } from '@/types/model/modals';
+import { closeModal } from '@/store/slice/modal-slice';
+import { ModalTriggers } from '@/types/model/modals/modals';
 
 export const useHouseModal = () => {
   const dispatch = useAppDispatch();
@@ -12,8 +12,7 @@ export const useHouseModal = () => {
 
   const isEditMode = trigger === ModalTriggers.EDIT_HOUSE;
 
-  const houseToEdit =
-    payload && 'house' in payload ? (payload as HouseModalPayload).house : undefined;
+  const houseToEdit = isHouseModalPayload(payload) ? payload.house : undefined;
 
   const handleClose = (reset?: () => void) => {
     dispatch(closeModal());

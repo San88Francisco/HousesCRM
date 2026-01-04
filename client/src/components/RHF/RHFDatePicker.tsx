@@ -5,7 +5,7 @@ import { Calendar } from '@/shared/ui/calendar';
 import { Label } from '@/shared/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { cn } from '@/shared/utils/cn';
-import { CalendarMode } from '@/types/core/calendar';
+import { CalendarMode } from '@/types/core/calendar/calendar';
 import { format, startOfToday } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
@@ -41,6 +41,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
     const [open, setOpen] = useState(false);
     const [tempDate, setTempDate] = useState<Date>(() => new Date());
     const today = startOfToday();
+    const minDate = new Date('1900-01-01');
 
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
@@ -105,6 +106,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
                     setDate={setTempDate}
                     lang={uk}
                     mode={calendarMode}
+                    minDate={minDate}
                     maxDate={today}
                   />
                 </form>

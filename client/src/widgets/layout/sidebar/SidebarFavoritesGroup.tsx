@@ -1,18 +1,18 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useFavoriteStar } from '@/hooks/use-favorite-star';
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
+import { BookmarkIcon } from '@/shared/ui/bookmark';
 import {
-  SidebarMenu,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarMenu,
 } from '@/shared/ui/sidebar';
-import { SidebarMenuItem } from './SidebarMenuItem';
-import { NavItem } from '@/types/navigation';
-import { BookmarkIcon } from '@/shared/ui/bookmark';
-import { useFavoriteStar } from '@/hooks/use-favorite-star';
 import { makeTitle } from '@/shared/utils/favorite-start/formate-title';
+import { NavItem } from '@/types/model/navigation/navigation';
+import { useMemo } from 'react';
+import { SidebarMenuItem } from './SidebarMenuItem';
 
 const bookmarkIcon = <BookmarkIcon size={16} />;
 

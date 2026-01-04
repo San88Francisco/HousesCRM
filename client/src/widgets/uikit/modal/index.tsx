@@ -1,8 +1,8 @@
 'use client';
 import { Button } from '@/shared/ui/button';
 import { useAppDispatch } from '@/store/hooks';
-import { openModal } from '@/store/modal-slice';
-import { ModalTriggers } from '@/types/model/modals';
+import { openModal } from '@/store/slice/modal-slice';
+import { ModalTriggers } from '@/types/model/modals/modals';
 
 export const ModalTrigger = () => {
   const dispatch = useAppDispatch();

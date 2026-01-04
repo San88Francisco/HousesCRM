@@ -1,8 +1,8 @@
 'use client';
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { HousesPerformanceTableColumns } from '@/constants/apartment/houses-performance-analytic';
 import { useHousesPerformance } from '@/hooks/all-house/houses-performance-analytic/use-houses-performance';
+import { HousesPerformanceTableColumns } from '@/shared/constants/apartment/houses-performance-analytic';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
