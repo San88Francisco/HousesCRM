@@ -1,13 +1,4 @@
-export type PieRevenueItem = {
-  apartmentTotalRevenue: number;
-  percentage: number;
-  id: string;
-  apartmentName: string;
-};
-
-export type HouseDistributionChartDataItem = PieRevenueItem & {
-  fill: string;
-};
+import { PieRevenueItem } from '@/types/model/revenue-distribution/pie-chart-items';
 
 export interface RevenueDistribution {
   data: PieRevenueItem[];

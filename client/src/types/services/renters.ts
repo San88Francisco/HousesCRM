@@ -1,24 +1,18 @@
-import { RenterResponse } from '../model/renter';
-import { ContractStatus } from './statuses';
+import { HousesPerformanceResponse } from '../core/houses-performance/types';
+import { ContractStatus } from '../core/status/status';
+
+export type Renter = {
+  id: string;
+  age: number;
+  firstName: string;
+  lastName: string;
+  occupied: string;
+  vacated: string;
+  totalIncome: number;
+  status: ContractStatus;
+};
 
 export type RenterByIdResponse = {
-  allContractsByRenterId: {
-    data: {
-      id: string;
-      commencement: string;
-      termination: string;
-      monthlyPayment: number;
-      totalRevenue: number;
-      status: ContractStatus;
-    }[];
-    meta: {
-      page: number;
-      limit: number;
-      total: number;
-      totalPages: number;
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-  };
-  oneRenterReport: RenterResponse;
+  oneRenterReport: Renter;
+  allContractsByRenterId: HousesPerformanceResponse;
 };

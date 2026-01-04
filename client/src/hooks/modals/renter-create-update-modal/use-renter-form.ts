@@ -4,7 +4,7 @@ import {
   RenterFormData,
   renterSchema,
 } from '@/shared/validation/create-update-renter/renter-schema';
-import { useCreateRenterMutation, useUpdateRenterMutation } from '@/store/houses-api';
+import { useCreateRenterMutation, useUpdateRenterMutation } from '@/store/api/houses-api';
 import { RenterResponse } from '@/types/model/renter';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
@@ -23,14 +23,14 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
 
   const methods = useForm<RenterFormData>({
     resolver: yupResolver(renterSchema),
-    defaultValues: getDefaultRenterValues(),
+    defaultValues: getDefaultRenterValues,
   });
 
   const { reset } = methods;
 
   useEffect(() => {
     const formData =
-      isEditMode && renterToEdit ? mapRenterToFormData(renterToEdit) : getDefaultRenterValues();
+      isEditMode && renterToEdit ? mapRenterToFormData(renterToEdit) : getDefaultRenterValues;
 
     reset(formData);
   }, [isEditMode, renterToEdit, reset]);

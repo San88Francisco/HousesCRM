@@ -1,10 +1,10 @@
 'use client';
 
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { openModal } from '@/store/modal-slice';
-import { SidebarMenuButton, SidebarMenuItem } from '@/shared/ui/sidebar';
 import { getSidebarMenuItemClasses } from '@/shared/constants/styles';
-import { ActionItem } from '@/types/model/sidebar-action-item';
+import { SidebarMenuButton, SidebarMenuItem } from '@/shared/ui/sidebar';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { openModal } from '@/store/slice/modal-slice';
+import { ActionItem } from '@/types/model/sidebar/sidebar-action-item';
 import { MouseEvent } from 'react';
 
 type Props = {

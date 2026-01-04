@@ -1,15 +1,12 @@
 import { HouseFormData } from '@/shared/validation/create-update-house/house-schema';
-import { HouseToEdit } from '@/types/core/house';
-import { getDefaultHouseValues } from './get-default-house-values';
+import { House } from '@/types/core/house/house';
 
-export const mapHouseToFormData = (house?: HouseToEdit): HouseFormData => {
-  if (!house) return getDefaultHouseValues();
-
+export const mapHouseToFormData = (house: House): HouseFormData => {
   return {
     apartmentName: house.apartmentName,
     roomsCount: house.roomsCount,
     totalArea: house.totalArea,
-    purchaseDate: new Date(house.purchaseDate),
+    purchaseDate: house.purchaseDate,
     price: house.prices[0]?.amount,
     floor: house.floor,
     street: house.street,

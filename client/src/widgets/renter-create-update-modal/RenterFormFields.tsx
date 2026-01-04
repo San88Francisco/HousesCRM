@@ -21,7 +21,7 @@ export const RenterFormFields = ({ isLoading }: Props) => {
         <RHFInput
           name="lastName"
           label="Прізвище"
-          placeholder="Порошенко"
+          placeholder="Непорошенко"
           icon={<User className="w-4 h-4" />}
           required
           disabled={isLoading}

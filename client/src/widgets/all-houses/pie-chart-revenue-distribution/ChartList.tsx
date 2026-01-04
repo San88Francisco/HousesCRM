@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
-import { HouseDistributionChartDataItem } from '@/types/core/revenue-distribution/chart-pie-item';
+import { HouseDistributionChartDataItem } from '@/types/model/revenue-distribution/pie-chart-items';
 
 export const ChartList = ({ chartData }: { chartData: HouseDistributionChartDataItem[] }) => {
   return (

@@ -1,5 +1,5 @@
-import { ModalTriggers } from '@/types/model/modals';
-import { ActionItem } from '@/types/model/sidebar-action-item';
+import { ModalTriggers } from '@/types/model/modals/modals';
+import { ActionItem } from '@/types/model/sidebar/sidebar-action-item';
 import { FileText, Home, UserPlus } from 'lucide-react';
 
 export const actionItems: ActionItem[] = [

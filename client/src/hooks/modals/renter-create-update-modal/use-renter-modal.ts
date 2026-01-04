@@ -1,7 +1,7 @@
 import { isRenterModalPayload } from '@/shared/utils/create-update-renter-form/is-renter-modal-payload';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { closeModal } from '@/store/modal-slice';
-import { ModalTriggers } from '@/types/model/modals';
+import { closeModal } from '@/store/slice/modal-slice';
+import { ModalTriggers } from '@/types/model/modals/modals';
 
 export const useRenterModal = () => {
   const dispatch = useAppDispatch();

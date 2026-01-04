@@ -1,8 +1,8 @@
-import { getDefaultHouseValues } from '@/shared/utils/create-update-house-form/get-default-house-values';
+import { defaultHouseValues } from '@/shared/utils/create-update-house-form/get-default-house-values';
 import { mapHouseToFormData } from '@/shared/utils/create-update-house-form/house-form';
 import { HouseFormData, houseSchema } from '@/shared/validation/create-update-house/house-schema';
-import { useCreateHouseMutation, useUpdateHouseMutation } from '@/store/houses-api';
-import { HouseToEdit } from '@/types/core/house';
+import { useCreateHouseMutation, useUpdateHouseMutation } from '@/store/api/houses-api';
+import { House } from '@/types/core/house/house';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { format } from 'date-fns';
 import { useEffect } from 'react';
@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 
 type Props = {
   isEditMode: boolean;
-  houseToEdit?: HouseToEdit;
+  houseToEdit?: House;
   onSuccess: () => void;
 };
 
@@ -21,22 +21,35 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
 
   const methods = useForm<HouseFormData>({
     resolver: yupResolver(houseSchema),
-    defaultValues: getDefaultHouseValues(),
+    defaultValues: defaultHouseValues,
   });
 
   const { reset } = methods;
 
   useEffect(() => {
     const formData =
-      isEditMode && houseToEdit ? mapHouseToFormData(houseToEdit) : getDefaultHouseValues();
+      isEditMode && houseToEdit ? mapHouseToFormData(houseToEdit) : defaultHouseValues;
 
     reset(formData);
   }, [isEditMode, houseToEdit, reset]);
 
   const handleCreate = async (data: HouseFormData) => {
+    const purchaseDateValue = data.purchaseDate as string | Date;
+    const purchaseDate =
+      purchaseDateValue instanceof Date
+        ? purchaseDateValue.toISOString()
+        : new Date(purchaseDateValue).toISOString();
+
     await createHouse({
-      ...data,
-      purchaseDate: format(data.purchaseDate, 'yyyy-MM-dd'),
+      apartmentName: data.apartmentName,
+      roomsCount: data.roomsCount,
+      totalArea: data.totalArea,
+      purchaseDate,
+      price: data.price,
+      floor: data.floor,
+      street: data.street,
+      apartmentType: data.apartmentType,
+      contractIds: undefined,
     }).unwrap();
   };
 
@@ -46,10 +59,10 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
     }
 
     await updateHouse({
-      id: houseToEdit.id,
+      ...houseToEdit,
       ...data,
       purchaseDate: format(data.purchaseDate, 'yyyy-MM-dd'),
-    }).unwrap();
+    } satisfies House).unwrap();
   };
 
   const onSubmit = async (data: HouseFormData) => {

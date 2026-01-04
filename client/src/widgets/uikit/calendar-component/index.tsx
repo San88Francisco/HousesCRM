@@ -1,10 +1,10 @@
 'use client';
 
-import { CalendarMode, DateRange } from '@/types/core/calendar';
-import { format, startOfToday } from 'date-fns';
-import { useState } from 'react';
-import { uk, enUS } from 'date-fns/locale';
 import { Calendar, CalendarRange } from '@/shared/ui/calendar';
+import { CalendarMode, DateRange } from '@/types/core/calendar/calendar';
+import { format, startOfToday } from 'date-fns';
+import { enUS, uk } from 'date-fns/locale';
+import { useState } from 'react';
 
 export const CalendarComponent = () => {
   const [selectedRangeDate, setSelectedRangeDay] = useState<DateRange>({

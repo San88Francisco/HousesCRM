@@ -1,7 +1,5 @@
-import { RenterFormData } from '@/shared/validation/create-update-renter/renter-schema';
-
-export const getDefaultRenterValues = (): Partial<RenterFormData> => ({
+export const getDefaultRenterValues = {
   firstName: '',
   lastName: '',
   age: undefined,
-});
+};

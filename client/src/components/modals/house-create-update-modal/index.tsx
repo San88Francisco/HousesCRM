@@ -5,8 +5,8 @@ import { useHouseForm } from '@/hooks/modals/house-create-update-modal/use-house
 import { useHouseModal } from '@/hooks/modals/house-create-update-modal/use-house-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
-import { ModalTriggers } from '@/types/model/modals';
-import { HouseFormFields } from '@/widgets/house-create-update-modal/HouseFormFields';
+import { ModalTriggers } from '@/types/model/modals/modals';
+import { HouseFormFields } from '@/widgets/modals/house-create-update-modal/HouseFormFields';
 import Modal from '../modal-wrapper';
 
 export const HouseCreateUpdateModal = () => {
@@ -33,7 +33,7 @@ export const HouseCreateUpdateModal = () => {
       <RHFForm form={methods} onSubmit={onSubmit}>
         <HouseFormFields isLoading={isLoading} />
 
-        <DialogFooter className="!mt-6 pb-6">
+        <DialogFooter className="mt-6 gap-2">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
             Скасувати
           </Button>

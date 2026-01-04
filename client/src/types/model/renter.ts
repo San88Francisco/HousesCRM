@@ -1,4 +1,4 @@
-import { ContractStatus } from '../services/statuses';
+import { ContractStatus } from '../core/status/status';
 
 export type RenterCreateDTO = { firstName: string; lastName: string; age: number };
 
