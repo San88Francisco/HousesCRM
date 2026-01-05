@@ -1,6 +1,6 @@
 import { CalendarMode } from '@/types/core/calendar/calendar';
 import { Day, Locale, startOfToday } from 'date-fns';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { Button } from '../button';
 import CalendarDisplay from './CalendarDisplay';
 
@@ -24,9 +24,6 @@ const Calendar: FC<ICalendarProps> = ({
   maxDate,
 }) => {
   const today = startOfToday();
-  useEffect(() => {
-    setDate(today);
-  }, []);
 
   const handleCancel = () => {
     setDate(today);

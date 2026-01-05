@@ -21,7 +21,14 @@ export const houseSchema = yup.object({
     .required("Загальна площа обов'язкова")
     .positive('Площа має бути більше 0'),
 
-  purchaseDate: yup.string().required("Дата покупки обов'язкова"),
+  purchaseDate: yup
+    .string()
+    .required("Дата покупки обов'язкова")
+    .test('min-date', 'Дата не може бути раніше 1960 року', value => {
+      if (!value) return false;
+      const date = new Date(value);
+      return date >= new Date('1960-01-01');
+    }),
 
   price: yup
     .number()

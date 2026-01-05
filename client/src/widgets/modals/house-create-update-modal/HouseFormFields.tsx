@@ -25,6 +25,7 @@ export const HouseFormFields = ({ isLoading }: Props) => {
         label="Дата покупки"
         placeholder="Оберіть дату покупки"
         disabled={isLoading}
+        required
       />
 
       <RHFInput
