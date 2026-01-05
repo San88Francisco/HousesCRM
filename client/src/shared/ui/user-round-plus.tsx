@@ -6,11 +6,7 @@ import type { HTMLAttributes } from 'react';
 import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 
 import { cn } from '@/shared/utils/cn';
-
-export interface UserRoundPlusIconHandle {
-  startAnimation: () => void;
-  stopAnimation: () => void;
-}
+import { AnimatedIconHandle } from '@/types/model/animate-icon/animate-icon';
 
 interface UserRoundPlusIconProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
@@ -46,7 +42,7 @@ const HORIZONTAL_BAR_VARIANTS: Variants = {
   },
 };
 
-const UserRoundPlusIcon = forwardRef<UserRoundPlusIconHandle, UserRoundPlusIconProps>(
+const UserRoundPlusIcon = forwardRef<AnimatedIconHandle, UserRoundPlusIconProps>(
   ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
     const controls = useAnimation();
     const isControlledRef = useRef(false);
@@ -88,6 +84,7 @@ const UserRoundPlusIcon = forwardRef<UserRoundPlusIconHandle, UserRoundPlusIconP
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}
+        role="img"
       >
         <motion.svg
           fill="none"
