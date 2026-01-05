@@ -73,6 +73,7 @@ const FilePenLineIcon = forwardRef<AnimatedIconHandle, FilePenLineIconProps>(
         onMouseLeave={handleMouseLeave}
         {...props}
         role="img"
+        aria-label="Add contract"
       >
         <svg
           fill="none"
