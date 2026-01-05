@@ -20,6 +20,10 @@ export const HouseCreateUpdateModal = () => {
 
   const handleClose = () => getHandleClose(reset);
 
+  const {
+    formState: { isDirty },
+  } = methods;
+
   return (
     <Modal
       triggers={isEditMode ? ModalTriggers.EDIT_HOUSE : ModalTriggers.ADD_HOUSE}
@@ -37,7 +41,7 @@ export const HouseCreateUpdateModal = () => {
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
             Скасувати
           </Button>
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading || (isEditMode && !isDirty)}>
             {modalContent.submitText}
           </Button>
         </DialogFooter>

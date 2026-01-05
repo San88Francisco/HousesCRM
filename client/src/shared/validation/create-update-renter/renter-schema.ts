@@ -15,6 +15,7 @@ export const renterSchema = yup.object({
     .max(30, 'Прізвище має містити не більше 30 символів'),
   age: yup
     .number()
+    .transform((v, o) => (o === '' ? undefined : v))
     .required("Вік обов'язковий")
     .integer('Вік має бути цілим числом')
     .min(18, 'Мінімальний вік — 18 років')

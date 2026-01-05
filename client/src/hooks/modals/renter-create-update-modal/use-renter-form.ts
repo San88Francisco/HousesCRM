@@ -1,4 +1,4 @@
-import { getDefaultRenterValues } from '@/shared/utils/create-update-renter-form/get-default-renter-values';
+import { defaultRenterValues } from '@/shared/utils/create-update-renter-form/default-renter-values';
 import { mapRenterToFormData } from '@/shared/utils/create-update-renter-form/renter-form';
 import {
   RenterFormData,
@@ -23,23 +23,21 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
 
   const methods = useForm<RenterFormData>({
     resolver: yupResolver(renterSchema),
-    defaultValues: getDefaultRenterValues,
+    defaultValues: defaultRenterValues,
   });
 
   const { reset } = methods;
 
   useEffect(() => {
     const formData =
-      isEditMode && renterToEdit ? mapRenterToFormData(renterToEdit) : getDefaultRenterValues;
+      isEditMode && renterToEdit ? mapRenterToFormData(renterToEdit) : defaultRenterValues;
 
     reset(formData);
   }, [isEditMode, renterToEdit, reset]);
 
   const handleCreate = async (data: RenterFormData) => {
     await createRenter({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      age: data.age,
+      ...data,
     }).unwrap();
   };
 
@@ -50,9 +48,7 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
 
     await updateRenter({
       id: renterToEdit.id,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      age: data.age,
+      ...data,
     }).unwrap();
   };
 

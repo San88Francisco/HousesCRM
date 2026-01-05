@@ -5,22 +5,17 @@ import { openModal } from '@/store/slice/modal-slice';
 import { House } from '@/types/core/house/house';
 import { ModalTriggers } from '@/types/model/modals/modals';
 import { MouseEvent } from 'react';
-import { toast } from 'sonner';
 
 // TODO цей файл тимчасовий. Тут приклад як робити функцію редагування данних існуючої квартири.
 // TODO це ID вашої квартири.
-const idHouse = '4eaeccd2-4d5e-45b3-9035-1f6bc3ad6c48';
+const idHouse = 'f5c222f9-9bb7-4fb4-a0e5-6f98205beb3f';
+// const idHouse = '4eaeccd2-4d5e-45b3-9035-1f6bc3ad6c48';
 
 const UpdateHouse = () => {
   const dispatch = useAppDispatch();
 
   const handleEdit = (e: MouseEvent<HTMLButtonElement>, house?: House) => {
     e.currentTarget.blur();
-
-    if (!house) {
-      toast.error('Не вдалося завантажити дані квартири');
-      return;
-    }
 
     dispatch(
       openModal({

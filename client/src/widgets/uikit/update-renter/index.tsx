@@ -5,22 +5,17 @@ import { openModal } from '@/store/slice/modal-slice';
 import { ModalTriggers } from '@/types/model/modals/modals';
 import { Renter } from '@/types/services/renters';
 import { MouseEvent } from 'react';
-import { toast } from 'sonner';
 
 // TODO цей файл тимчасовий. Тут приклад як робити функцію редагування данних існуючої квартири.
 // TODO це ID вашого орендаря.
-const idRenter = '244ca675-895f-4054-831c-e14fb085e57d';
+// const idRenter = '244ca675-895f-4054-831c-e14fb085e57d';
+const idRenter = '4426450f-cbde-4332-a78e-e65495f2242b';
 
 const UpdateRenter = () => {
   const dispatch = useAppDispatch();
 
   const handleEdit = (e: MouseEvent<HTMLButtonElement>, renter?: Renter) => {
     e.currentTarget.blur();
-
-    if (!renter) {
-      toast.error('Не вдалося завантажити дані орендаря');
-      return;
-    }
 
     dispatch(
       openModal({

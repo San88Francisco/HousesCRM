@@ -4,7 +4,6 @@ export const defaultHouseValues = {
   apartmentName: '',
   roomsCount: 1,
   totalArea: 1,
-  // purchaseDate: new Date(),
   purchaseDate: '',
   price: 1,
   floor: 1,

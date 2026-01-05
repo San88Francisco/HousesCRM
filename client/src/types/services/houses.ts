@@ -21,6 +21,6 @@ export type CreateHouseRequest = {
 };
 
 export type UpdateHouseResponse = House;
-export type UpdateHouseRequest = House;
+export type UpdateHouseRequest = Partial<Omit<House, 'prices'>> & { id: string };
 
 export type CurrencyRevaluationResponse = CurrencyRevaluation[];
