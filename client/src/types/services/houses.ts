@@ -7,7 +7,7 @@ export type HouseByIdResponse = {
   occupancyReports: Renter[];
 };
 
-export type CreateHouseResponse = Omit<House, 'id'>;
+export type CreateHouseResponse = House;
 export type CreateHouseRequest = {
   apartmentName: string;
   roomsCount: number;

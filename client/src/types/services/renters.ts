@@ -6,7 +6,7 @@ export type RenterByIdResponse = {
   allContractsByRenterId: HousesPerformanceResponse;
 };
 
-export type CreateRenterResponse = Omit<Renter, 'id'>;
+export type CreateRenterResponse = Renter;
 export type CreateRenterRequest = RenterFormFields;
 
 export type UpdateRenterResponse = Renter;
