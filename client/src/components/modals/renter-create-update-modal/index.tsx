@@ -1,13 +1,13 @@
 'use client';
 
+import Modal from '@/components/modals/modal-wrapper';
 import { RHFForm } from '@/components/RHF/RHForm';
 import { useRenterForm } from '@/hooks/modals/renter-create-update-modal/use-renter-form';
 import { useRenterModal } from '@/hooks/modals/renter-create-update-modal/use-renter-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals/modals';
-import { RenterFormFields } from '../../../widgets/modals/renter-create-update-modal/RenterFormFields';
-import Modal from '../modal-wrapper';
+import { RenterFormFields } from '@/widgets/modals/renter-create-update-modal/RenterFormFields';
 
 export const RenterCreateUpdateModal = () => {
   const { isEditMode, renterToEdit, handleClose: getHandleClose, modalContent } = useRenterModal();
@@ -39,7 +39,7 @@ export const RenterCreateUpdateModal = () => {
 
         <DialogFooter className="gap-2">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
-            Скасувати
+            {modalContent.cancelText}
           </Button>
           <Button type="submit" disabled={isLoading || (isEditMode && !isDirty)}>
             {modalContent.submitText}

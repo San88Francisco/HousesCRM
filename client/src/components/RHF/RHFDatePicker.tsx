@@ -4,6 +4,7 @@ import { DatePicker } from '@/shared/ui/data-picker';
 import { Label } from '@/shared/ui/label';
 import { cn } from '@/shared/utils/cn';
 import { CalendarMode } from '@/types/core/calendar/calendar';
+import { startOfToday } from 'date-fns';
 import { forwardRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
@@ -39,6 +40,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
 
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
+    const today = startOfToday();
 
     return (
       <Controller
@@ -62,6 +64,8 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
               error={errorMessage}
               iconWithError={iconWithError}
               calendarMode={calendarMode}
+              required={required}
+              maxDate={today}
             />
 
             {errorMessage && (

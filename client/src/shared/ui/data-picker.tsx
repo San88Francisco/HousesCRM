@@ -3,12 +3,13 @@
 import { Button } from '@/shared/ui/button';
 import { Calendar } from '@/shared/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
-import { cn } from '@/shared/utils/cn';
 import { CalendarMode } from '@/types/core/calendar/calendar';
-import { format, startOfToday } from 'date-fns';
+import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon, CircleAlert } from 'lucide-react';
 import { forwardRef, useState } from 'react';
+
+import { cn } from '@/shared/utils/cn';
 
 type Props = {
   value?: Date | null;
@@ -19,6 +20,9 @@ type Props = {
   iconWithError?: boolean;
   calendarMode?: CalendarMode;
   className?: string;
+  required?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
 };
 
 export const DatePicker = forwardRef<HTMLButtonElement, Props>(
@@ -32,19 +36,19 @@ export const DatePicker = forwardRef<HTMLButtonElement, Props>(
       iconWithError = true,
       calendarMode = CalendarMode.YearsMonthsDays,
       className,
+      required = false,
+      minDate,
+      maxDate,
     },
     ref,
   ) => {
     const [open, setOpen] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
-    const [tempDate, setTempDate] = useState<Date>(() => value || new Date());
-    const today = startOfToday();
+    const [tempDate, setTempDate] = useState<Date>(new Date());
 
     const handleOpenChange = (isOpen: boolean) => {
-      if (isOpen && value) {
-        setTempDate(value);
-      } else if (isOpen) {
-        setTempDate(new Date());
+      if (isOpen) {
+        setTempDate(value || new Date());
       }
       setOpen(isOpen);
     };
@@ -65,7 +69,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, Props>(
               type="button"
               variant="outline"
               className={cn(
-                'w-full justify-start text-left font-normal h-10 px-2',
+                'w-full justify-start text-left font-normal h-10 px-2 ',
                 'transition-all duration-200 ease-in-out',
                 '!bg-bg-input rounded-lg border border-solid border-border',
                 'text-sm',
@@ -76,12 +80,14 @@ export const DatePicker = forwardRef<HTMLButtonElement, Props>(
                 error && 'border-red text-red focus-visible:ring-red',
               )}
               disabled={disabled}
+              aria-required={required}
+              aria-invalid={!!error}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
             >
               <CalendarIcon
                 className={cn(
-                  'mr-2 h-4 w-4 transition-all duration-200 ease-in-out text-muted',
+                  'transition-all duration-200 ease-in-out text-muted',
                   isFocused && 'text-active-border',
                   error && 'text-red',
                 )}
@@ -103,7 +109,8 @@ export const DatePicker = forwardRef<HTMLButtonElement, Props>(
                 setDate={setTempDate}
                 lang={uk}
                 mode={calendarMode}
-                maxDate={today}
+                minDate={minDate}
+                maxDate={maxDate}
               />
             </form>
           </PopoverContent>

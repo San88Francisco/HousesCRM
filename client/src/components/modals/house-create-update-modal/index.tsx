@@ -1,5 +1,6 @@
 'use client';
 
+import Modal from '@/components/modals/modal-wrapper';
 import { RHFForm } from '@/components/RHF/RHForm';
 import { useHouseForm } from '@/hooks/modals/house-create-update-modal/use-house-form';
 import { useHouseModal } from '@/hooks/modals/house-create-update-modal/use-house-modal';
@@ -7,7 +8,6 @@ import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals/modals';
 import { HouseFormFields } from '@/widgets/modals/house-create-update-modal/HouseFormFields';
-import Modal from '../modal-wrapper';
 
 export const HouseCreateUpdateModal = () => {
   const { isEditMode, houseToEdit, handleClose: getHandleClose, modalContent } = useHouseModal();
@@ -37,9 +37,9 @@ export const HouseCreateUpdateModal = () => {
       <RHFForm form={methods} onSubmit={onSubmit}>
         <HouseFormFields isLoading={isLoading} />
 
-        <DialogFooter className="gap-2">
+        <DialogFooter className="!mt-10 gap-2">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
-            Скасувати
+            {modalContent.cancelText}
           </Button>
           <Button type="submit" disabled={isLoading || (isEditMode && !isDirty)}>
             {modalContent.submitText}
