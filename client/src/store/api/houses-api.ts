@@ -53,7 +53,7 @@ export const housesApi = rootApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses', 'Analytics'],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Analytics'],
     }),
 
     getRenterById: build.query<RenterByIdResponse, string>({
@@ -76,11 +76,7 @@ export const housesApi = rootApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (_result, _error, { id }) => [
-        { type: 'Renters', id },
-        'Renters',
-        'Analytics',
-      ],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Renters', id }, 'Analytics'],
     }),
 
     getHousesPerformance: build.query<HousesPerformanceResponse, HousesPerformanceRequest>({

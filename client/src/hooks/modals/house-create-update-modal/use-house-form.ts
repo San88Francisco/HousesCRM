@@ -1,8 +1,8 @@
 import { useHouseCrud } from '@/hooks/modals/house-create-update-modal/use-house-crud';
 import { defaultHouseValues } from '@/shared/utils/create-update-house-form/default-house-values';
-import { getDirtyFormValues } from '@/shared/utils/create-update-house-form/get-dirty-form-values';
 import { mapHouseToFormData } from '@/shared/utils/create-update-house-form/house-form';
 import { houseFormToast } from '@/shared/utils/create-update-house-form/house-form-toast';
+import { extractDirtyFormValues } from '@/shared/utils/helpers/extract-dirty-form-values';
 import { HouseFormData, houseSchema } from '@/shared/validation/create-update-house/house-schema';
 import { House } from '@/types/core/house/house';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -36,7 +36,7 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
       if (isEditMode) {
         if (!houseToEdit?.id) throw new Error('ID квартири не знайдено');
 
-        const changedData = getDirtyFormValues(data, formState.dirtyFields);
+        const changedData = extractDirtyFormValues(data, formState.dirtyFields);
         await update(houseToEdit.id, changedData);
       } else {
         await create(data);

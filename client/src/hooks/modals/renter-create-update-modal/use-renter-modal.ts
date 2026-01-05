@@ -1,4 +1,4 @@
-import { isRenterModalPayload } from '@/shared/utils/create-update-renter-form/is-renter-modal-payload';
+import { isRenterEditModalPayload } from '@/shared/utils/create-update-renter-form/is-renter-edit-modal-payload';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeModal } from '@/store/slice/modal-slice';
 import { ModalTriggers } from '@/types/model/modals/modals';
@@ -12,7 +12,7 @@ export const useRenterModal = () => {
 
   const isEditMode = trigger === ModalTriggers.EDIT_RENTER;
 
-  const renterToEdit = isRenterModalPayload(payload) ? payload.renter : undefined;
+  const renterToEdit = isRenterEditModalPayload(payload) ? payload.renter : undefined;
 
   const handleClose = (reset: () => void) => {
     dispatch(closeModal());

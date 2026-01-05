@@ -1,88 +1,62 @@
+import { useRenterCrud } from '@/hooks/modals/renter-create-update-modal/use-renter-crud';
 import { defaultRenterValues } from '@/shared/utils/create-update-renter-form/default-renter-values';
 import { mapRenterToFormData } from '@/shared/utils/create-update-renter-form/renter-form';
+import { renterFormToast } from '@/shared/utils/create-update-renter-form/renter-form-toast';
+import { extractDirtyFormValues } from '@/shared/utils/helpers/extract-dirty-form-values';
 import {
   RenterFormData,
   renterSchema,
 } from '@/shared/validation/create-update-renter/renter-schema';
-import { useCreateRenterMutation, useUpdateRenterMutation } from '@/store/api/houses-api';
-import { UpdateRenterRequest } from '@/types/services/renters';
+import { Renter } from '@/types/core/renter/renter';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 
 type Props = {
   isEditMode: boolean;
-  renterToEdit?: UpdateRenterRequest;
+  renterToEdit?: Renter;
   onSuccess: () => void;
 };
 
 export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) => {
-  const [createRenter, { isLoading: isCreating }] = useCreateRenterMutation();
-  const [updateRenter, { isLoading: isUpdating }] = useUpdateRenterMutation();
+  const { create, update, isLoading } = useRenterCrud();
 
   const methods = useForm<RenterFormData>({
     resolver: yupResolver(renterSchema),
     defaultValues: defaultRenterValues,
   });
 
-  const { reset } = methods;
+  const { reset, formState } = methods;
 
   useEffect(() => {
-    const formData =
-      isEditMode && renterToEdit ? mapRenterToFormData(renterToEdit) : defaultRenterValues;
-
-    reset(formData);
+    reset(isEditMode && renterToEdit ? mapRenterToFormData(renterToEdit) : defaultRenterValues);
   }, [isEditMode, renterToEdit, reset]);
 
-  const handleCreate = async (data: RenterFormData) => {
-    await createRenter({
-      ...data,
-    }).unwrap();
-  };
-
-  const handleUpdate = async (data: RenterFormData) => {
-    if (!renterToEdit?.id) {
-      throw new Error('ID орендаря не знайдено');
-    }
-
-    await updateRenter({
-      id: renterToEdit.id,
-      ...data,
-    }).unwrap();
-  };
-
-  const handleFormSubmit = async (data: RenterFormData) => {
-    const toastId = toast.loading(isEditMode ? 'Оновлення орендаря...' : 'Створення орендаря...');
+  const onSubmit = async (data: RenterFormData) => {
+    const toastId = renterFormToast.loading(isEditMode);
 
     try {
       if (isEditMode) {
-        await handleUpdate(data);
+        if (!renterToEdit?.id) throw new Error('ID орендаря не знайдено');
+
+        if (!formState.isDirty) {
+          renterFormToast.info(toastId);
+          onSuccess();
+          return;
+        }
+
+        const changedData = extractDirtyFormValues(data, formState.dirtyFields);
+        await update(renterToEdit.id, changedData);
       } else {
-        await handleCreate(data);
+        await create(data);
       }
 
-      toast.success(isEditMode ? 'Орендаря успішно оновлено!' : 'Орендаря успішно додано!', {
-        id: toastId,
-      });
+      renterFormToast.success(isEditMode, toastId);
       onSuccess();
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : isEditMode
-            ? 'Не вдалося оновити орендаря'
-            : 'Не вдалося додати орендаря';
-      toast.error(errorMessage, {
-        id: toastId,
-      });
+    } catch (e) {
+      renterFormToast.error(isEditMode, toastId, e instanceof Error ? e.message : undefined);
     }
   };
 
-  return {
-    methods,
-    onSubmit: handleFormSubmit,
-    isLoading: isCreating || isUpdating,
-    reset,
-  };
+  return { methods, onSubmit, isLoading, reset };
 };

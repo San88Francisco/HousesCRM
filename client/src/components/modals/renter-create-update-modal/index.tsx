@@ -33,7 +33,7 @@ export const RenterCreateUpdateModal = () => {
       <RHFForm form={methods} onSubmit={onSubmit}>
         <RenterFormFields isLoading={isLoading} />
 
-        <DialogFooter className="!mt-10 pb-6">
+        <DialogFooter className="gap-2">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
             Скасувати
           </Button>
