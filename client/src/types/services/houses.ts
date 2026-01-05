@@ -1,6 +1,6 @@
 import { CurrencyRevaluation } from '../core/currency-revaluation-chart/types';
 import { ApartmentType, House } from '../core/house/house';
-import { Renter } from './renters';
+import { Renter } from '../core/renter/renter';
 
 export type HouseByIdResponse = {
   houseDetail: House;

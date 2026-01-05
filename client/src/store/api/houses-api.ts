@@ -3,7 +3,6 @@ import {
   HousesPerformanceRequest,
   HousesPerformanceResponse,
 } from '@/types/core/houses-performance/types';
-import { CreateRenterPayload, RenterResponse, RenterUpdateDTO } from '@/types/model/renter';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 import {
   CreateHouseRequest,
@@ -13,7 +12,13 @@ import {
   UpdateHouseRequest,
   UpdateHouseResponse,
 } from '@/types/services/houses';
-import { RenterByIdResponse } from '@/types/services/renters';
+import {
+  CreateRenterRequest,
+  CreateRenterResponse,
+  RenterByIdResponse,
+  UpdateRenterRequest,
+  UpdateRenterResponse,
+} from '@/types/services/renters';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -56,7 +61,7 @@ export const housesApi = rootApi.injectEndpoints({
       providesTags: (_result, _error, id) => [{ type: 'Renters', id }],
     }),
 
-    createRenter: build.mutation<RenterResponse, CreateRenterPayload>({
+    createRenter: build.mutation<CreateRenterResponse, CreateRenterRequest>({
       query: body => ({
         url: '/renters',
         method: 'POST',
@@ -65,7 +70,7 @@ export const housesApi = rootApi.injectEndpoints({
       invalidatesTags: ['Renters', 'Analytics'],
     }),
 
-    updateRenter: build.mutation<RenterResponse, { id: string } & Partial<RenterUpdateDTO>>({
+    updateRenter: build.mutation<UpdateRenterResponse, UpdateRenterRequest>({
       query: ({ id, ...body }) => ({
         url: `/renters/${id}`,
         method: 'PATCH',

@@ -1,5 +1,5 @@
-import { HouseModalPayload } from '@/types/model/house-create-update-modal/house-create-update-modal';
+import { House } from '@/types/core/house/house';
 
-export function isHouseEditModalPayload(payload: unknown): payload is HouseModalPayload {
+export function isHouseEditModalPayload(payload: unknown): payload is { house?: House } {
   return typeof payload === 'object' && payload !== null && 'house' in payload;
 }

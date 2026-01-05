@@ -1,3 +1,5 @@
+import { Currencies } from '../currencies/currencies';
+
 export interface House {
   id: string;
   apartmentName: string;
@@ -14,7 +16,7 @@ export interface House {
 export type Price = {
   id: string;
   amount: number;
-  code: string;
+  code: Currencies;
   exchangeRate: number;
 };
 

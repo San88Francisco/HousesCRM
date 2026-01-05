@@ -1,9 +1,10 @@
+'use client';
 import { Button } from '@/shared/ui/button';
 import { useGetRenterByIdQuery } from '@/store/api/houses-api';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
+import { Renter } from '@/types/core/renter/renter';
 import { ModalTriggers } from '@/types/model/modals/modals';
-import { Renter } from '@/types/services/renters';
 import { MouseEvent } from 'react';
 
 // TODO цей файл тимчасовий. Тут приклад як робити функцію редагування данних існуючої квартири.

@@ -6,7 +6,7 @@ import { useRenterModal } from '@/hooks/modals/renter-create-update-modal/use-re
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals/modals';
-import { RenterFormFields } from '../../../widgets/renter-create-update-modal/RenterFormFields';
+import { RenterFormFields } from '../../../widgets/modals/renter-create-update-modal/RenterFormFields';
 import Modal from '../modal-wrapper';
 
 export const RenterCreateUpdateModal = () => {
@@ -33,7 +33,7 @@ export const RenterCreateUpdateModal = () => {
       <RHFForm form={methods} onSubmit={onSubmit}>
         <RenterFormFields isLoading={isLoading} />
 
-        <DialogFooter className="mt-6 pb-6">
+        <DialogFooter className="!mt-10 pb-6">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
             Скасувати
           </Button>

@@ -5,7 +5,7 @@ import {
   renterSchema,
 } from '@/shared/validation/create-update-renter/renter-schema';
 import { useCreateRenterMutation, useUpdateRenterMutation } from '@/store/api/houses-api';
-import { RenterResponse } from '@/types/model/renter';
+import { UpdateRenterRequest } from '@/types/services/renters';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 
 type Props = {
   isEditMode: boolean;
-  renterToEdit?: RenterResponse;
+  renterToEdit?: UpdateRenterRequest;
   onSuccess: () => void;
 };
 

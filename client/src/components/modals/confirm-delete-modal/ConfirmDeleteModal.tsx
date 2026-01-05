@@ -19,10 +19,12 @@ export const ConfirmDeleteModal = () => {
 
   const isThisModalOpen = isOpen && trigger === ModalTriggers.CONFIRM_DELETE;
 
-  const title = (payload?.title as string) ?? 'Підтвердження видалення';
+  const title = typeof payload?.title === 'string' ? payload.title : 'Підтвердження видалення';
 
   const description =
-    (payload?.description as string) ?? 'Цю дію неможливо буде скасувати. Ви впевнені?';
+    typeof payload?.description === 'string'
+      ? payload.description
+      : 'Цю дію неможливо буде скасувати. Ви впевнені?';
 
   const handleConfirm = () => {
     dispatch(closeModal());

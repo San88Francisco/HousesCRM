@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription } from '@/shared/ui/dialog';
 import { PdfContractAdapter } from '@/shared/utils/pdf-contract/pdf-contract-adapter';

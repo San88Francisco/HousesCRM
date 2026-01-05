@@ -37,7 +37,7 @@ export const HouseCreateUpdateModal = () => {
       <RHFForm form={methods} onSubmit={onSubmit}>
         <HouseFormFields isLoading={isLoading} />
 
-        <DialogFooter className="mt-6 gap-2">
+        <DialogFooter className="!mt-10 gap-2">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
             Скасувати
           </Button>
