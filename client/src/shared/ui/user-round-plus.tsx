@@ -84,8 +84,6 @@ const UserRoundPlusIcon = forwardRef<AnimatedIconHandle, UserRoundPlusIconProps>
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}
-        role="img"
-        aria-label="Add renter"
       >
         <motion.svg
           fill="none"
