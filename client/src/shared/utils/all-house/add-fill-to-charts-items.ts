@@ -1,5 +1,5 @@
 import { PIE_COLORS } from '@/constants/revenue-pie-chart/chart-pie-colors';
-import { AllAnalyticsResponse } from '@/types/services/all-analitics';
+import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
 type WithFill<T> = T & { fill: string };
 

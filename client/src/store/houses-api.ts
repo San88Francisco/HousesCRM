@@ -4,11 +4,13 @@ import {
   HousesPerformanceRequest,
   HousesPerformanceResponse,
 } from '@/types/core/houses-performance/types';
-import { AllAnalyticsResponse } from '@/types/services/all-analitics';
+import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 import {
   CreateHousePayload,
   House,
   HouseByIdResponse,
+  OccupancyPaginatedResponse,
+  OccupancyQueryParams,
   UpdateHousePayload,
 } from '@/types/services/houses';
 
@@ -23,6 +25,14 @@ export const housesApi = rootApi.injectEndpoints({
     getHouseById: build.query<HouseByIdResponse, string>({
       query: id => `/houses/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Houses', id }],
+    }),
+
+    getHouseByIdOccupancy: build.query<OccupancyPaginatedResponse, OccupancyQueryParams>({
+      query: ({ id, page = 1, limit = 10 }) => ({
+        url: `/houses/${id}/occupancy`,
+        params: { page, limit },
+      }),
+      providesTags: (_result, _error, { id }) => [{ type: 'Houses', id }],
     }),
 
     getCurrencyRevaluation: build.query<CurrencyRevaluation[], void>({
@@ -67,6 +77,7 @@ export const {
   useGetHousesAnalyticsQuery,
   useLazyGetHousesAnalyticsQuery,
   useGetHouseByIdQuery,
+  useGetHouseByIdOccupancyQuery,
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,
