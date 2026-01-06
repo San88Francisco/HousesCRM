@@ -1,5 +1,6 @@
+import { ApartmentType } from '@/types/core/apartment-type';
+import { House } from '@/types/core/house';
 import { CurrencyRevaluation } from '../../core/currency-revaluation-chart';
-import { ApartmentType, House } from '../../core/house';
 import { Metadata } from '../../core/metadata';
 import { OccupancyHouses } from '../../model/houses-occupancy';
 import { Renter } from '../renters';

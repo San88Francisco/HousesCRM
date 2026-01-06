@@ -1,10 +1,9 @@
-import { ApartmentType } from '@/types/core/house';
+import { ApartmentType } from '@/types/core/apartment-type';
 
 export const defaultHouseValues = {
   apartmentName: '',
   roomsCount: 1,
   totalArea: 1,
-  // purchaseDate: new Date(),
   purchaseDate: '',
   price: 1,
   floor: 1,
