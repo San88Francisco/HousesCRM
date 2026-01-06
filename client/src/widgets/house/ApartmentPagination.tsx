@@ -9,10 +9,10 @@ import {
   PaginationPrevious,
 } from '@/shared/ui/pagination';
 import { cn } from '@/shared/utils/cn';
-import { MetadataResponse } from '@/types/services/houses';
+import { Metadata } from '@/types/core/metadata';
 
 type Props = {
-  meta?: MetadataResponse;
+  meta?: Metadata;
   onPageChange: (page: number) => void;
 };
 
