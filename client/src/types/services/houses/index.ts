@@ -23,8 +23,10 @@ export type CreateHouseRequest = {
   contractIds?: string[];
 };
 
-export type UpdateHouseResponse = House;
-export type UpdateHouseRequest = House;
+export type UpdateHouseRequest = Partial<Omit<CreateHouseRequest, 'contractIds'>> & {
+  id: string;
+  contractIds?: string[];
+};
 
 export type OccupancyHousesPaginatedResponse = {
   data: OccupancyHouses[];

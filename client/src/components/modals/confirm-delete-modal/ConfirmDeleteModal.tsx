@@ -25,6 +25,9 @@ export const ConfirmDeleteModal = () => {
     (payload?.description as string) ?? 'Цю дію неможливо буде скасувати. Ви впевнені?';
 
   const handleConfirm = () => {
+    if (payload?.onConfirm && typeof payload.onConfirm === 'function') {
+      payload.onConfirm();
+    }
     dispatch(closeModal());
   };
 
