@@ -1,4 +1,3 @@
-'use client';
 import { Button } from '@/shared/ui/button';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { useAppDispatch } from '@/store/hooks';

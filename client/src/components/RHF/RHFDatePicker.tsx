@@ -40,7 +40,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
 
     const error = errors[name];
     const errorMessage = error?.message as string | undefined;
-    const today = startOfToday();
+    const todaysDate = startOfToday();
 
     return (
       <Controller
@@ -65,7 +65,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
               iconWithError={iconWithError}
               calendarMode={calendarMode}
               required={required}
-              maxDate={today}
+              maxDate={todaysDate}
             />
 
             {errorMessage && (

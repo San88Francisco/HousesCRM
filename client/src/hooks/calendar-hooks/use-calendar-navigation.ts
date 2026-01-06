@@ -6,7 +6,7 @@ const DECADE_PAGE_STEP = 10;
 const MONTHS_PAGE_STEP = 1;
 const YEARS_PAGE_STEP = 1;
 
-type useCalendarNavigationProps = {
+type Props = {
   level: LevelType;
   firstDayCurrentMonth: Date;
   currentDecadeStart: Date;
@@ -24,7 +24,7 @@ export const useCalendarNavigation = ({
   setCurrentMonth,
   setCurrentYear,
   setCurrentDecadeStart,
-}: useCalendarNavigationProps) => {
+}: Props) => {
   const nextMonth = () => {
     const firstDayNextMonth = add(firstDayCurrentMonth, { months: MONTHS_PAGE_STEP });
     setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
