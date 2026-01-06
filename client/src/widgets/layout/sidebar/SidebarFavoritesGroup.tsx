@@ -14,8 +14,6 @@ import { NavItem } from '@/types/model/navigation/navigation';
 import { useMemo } from 'react';
 import { SidebarMenuItem } from './SidebarMenuItem';
 
-const bookmarkIcon = <BookmarkIcon size={16} />;
-
 export const SidebarFavoritesGroup = () => {
   const favorites = useFavoriteStar();
 
@@ -24,7 +22,7 @@ export const SidebarFavoritesGroup = () => {
       favorites.map(fav => ({
         title: makeTitle(fav),
         url: fav.path,
-        icon: bookmarkIcon,
+        icon: <BookmarkIcon size={16} />,
       })),
     [favorites],
   );
