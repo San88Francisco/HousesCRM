@@ -12,8 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
-import { useGetHouseByIdOccupancyQuery, useGetHouseByIdQuery } from '@/store/houses-api';
-import { occupancyApartmentResponse } from '@/types/services/houses';
+import { useGetHouseByIdOccupancyQuery, useGetHouseByIdQuery } from '@/store/api/houses-api';
+import { OccupancyHouses } from '@/types/model/houses-occupancy';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ApartmentPagination } from './ApartmentPagination';
@@ -50,10 +50,9 @@ export const TableApartment = () => {
   if (isLoading) return <LoadingState className="min-h-[550px]" />;
   if (error) return <ErrorState className="min-h-[550px]" error={error} />;
 
-  const occupancySource = currentPage === null ? initialData?.occupancyReports : paginatedData;
-
-  const tableData: occupancyApartmentResponse[] = occupancySource?.data ?? [];
-  const meta = occupancySource?.meta;
+  const tableData =
+    currentPage === null ? (initialData?.occupancyReports ?? []) : (paginatedData?.data ?? []);
+  const meta = currentPage === null ? undefined : paginatedData?.meta;
 
   if (!tableData.length) return <EmptyState className="min-h-[550px] w-full" />;
 
@@ -91,7 +90,7 @@ export const TableApartment = () => {
               </TableHeader>
 
               <TableBody>
-                {tableData.map((item: occupancyApartmentResponse) => {
+                {tableData.map((item: OccupancyHouses) => {
                   return (
                     <TableRow
                       key={item.id}

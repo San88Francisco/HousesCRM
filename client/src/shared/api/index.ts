@@ -1,8 +1,7 @@
+import { clearUser } from '@/store/slice/user-slice';
 import type { Dispatch } from '@reduxjs/toolkit';
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-import { clearUser } from '@/store/user-slice';
 import { toast } from 'sonner';
 import { tokenStorage } from '../utils/auth/token';
 

@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/shared/ui/button';
 import { useAppDispatch } from '@/store/hooks';
-import { openModal } from '@/store/modal-slice';
+import { openModal } from '@/store/slice/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
 
 export const ModalTrigger = () => {

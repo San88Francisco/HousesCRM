@@ -1,4 +1,4 @@
-import { ChartDataItem } from '@/types/core/currency-revaluation-chart/types';
+import { ChartDataItem } from '@/types/core/currency-revaluation-chart';
 import { CSSProperties } from 'react';
 
 import {

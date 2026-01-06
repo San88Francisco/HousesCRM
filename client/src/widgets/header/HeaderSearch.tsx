@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { Search } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { SearchRequest } from '@/types/services/search';
-import { searchDefaultValues, searchSchema } from '@/shared/validation/search/search';
-import { RHFForm } from '@/components/RHF/RHForm';
 import { RHFInput } from '@/components/RHF/RHFInput';
-import { useLazyGetAllSearchQuery } from '@/store/search-api';
+import { RHFForm } from '@/components/RHF/RHForm';
 import { useDebounce } from '@/hooks/use-debounce';
+import { searchDefaultValues, searchSchema } from '@/shared/validation/search/search';
+import { useLazyGetAllSearchQuery } from '@/store/api/search-api';
+import { SearchRequest } from '@/types/services/search';
 import { SearchDropdown } from './SearchDropdown';
 
 const DEBOUNCE = 400;

@@ -1,20 +1,18 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useFavoriteStar } from '@/hooks/use-favorite-star';
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
+import { BookmarkIcon } from '@/shared/ui/bookmark';
 import {
-  SidebarMenu,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarMenu,
 } from '@/shared/ui/sidebar';
-import { SidebarMenuItem } from './SidebarMenuItem';
-import { NavItem } from '@/types/navigation';
-import { BookmarkIcon } from '@/shared/ui/bookmark';
-import { useFavoriteStar } from '@/hooks/use-favorite-star';
 import { makeTitle } from '@/shared/utils/favorite-start/formate-title';
-
-const bookmarkIcon = <BookmarkIcon size={16} />;
+import { NavItem } from '@/types/model/navigation';
+import { useMemo } from 'react';
+import { SidebarMenuItem } from './SidebarMenuItem';
 
 export const SidebarFavoritesGroup = () => {
   const favorites = useFavoriteStar();
@@ -24,7 +22,7 @@ export const SidebarFavoritesGroup = () => {
       favorites.map(fav => ({
         title: makeTitle(fav),
         url: fav.path,
-        icon: bookmarkIcon,
+        icon: <BookmarkIcon size={16} />,
       })),
     [favorites],
   );

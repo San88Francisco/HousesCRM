@@ -6,7 +6,7 @@ import {
   DEFAULT_Y_MAX,
   DEFAULT_Y_MIN,
   Y_DOMAIN_STEP,
-} from '@/constants/line-chart/line-chart';
+} from '@/shared/constants/line-chart/line-chart';
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
 import {
   findMinMaxRentWithFivePercent,
@@ -18,7 +18,7 @@ import {
   getDataRange,
   getOptimalTicks,
 } from '@/shared/utils/all-house/houses-overview/chart-math';
-import { TimeRangeEnum } from '@/types/core/houses-overview/types';
+import { TimeRangeEnum } from '@/types/model/houses-overview';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
 export function useHouseRental(apartmentsData: Partial<AllAnalyticsResponse>) {

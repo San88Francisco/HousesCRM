@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/shared/ui/sidebar';
-import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
+import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { MapPinHouse } from 'lucide-react';
 import { CollapsibleMenu } from './ColapsibleMenu';
 

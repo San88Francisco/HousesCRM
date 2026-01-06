@@ -5,10 +5,10 @@ import { KeyboardEvent, useState } from 'react';
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { useAppDispatch } from '@/store/hooks';
-import { openModal } from '@/store/modal-slice';
+import { openModal } from '@/store/slice/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
 import { ContractResponse } from '@/types/services/renters';
-import { PdfContractTrigger } from '@/widgets/pdf-contract-content/PdfContractTrigger';
+import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 
 type Props = {
   contract: ContractResponse;

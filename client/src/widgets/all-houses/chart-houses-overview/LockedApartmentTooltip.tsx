@@ -1,5 +1,5 @@
 import { formatDateRange, truncate } from '@/shared/utils/helpers/custom-tooltip-helper';
-import { Contract } from '@/types/core/houses-overview/types';
+import { Contract } from '@/types/model/houses-overview';
 
 type Props = {
   color: string;

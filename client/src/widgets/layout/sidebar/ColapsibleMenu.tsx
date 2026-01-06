@@ -7,7 +7,7 @@ import {
 } from '@/shared/constants/styles';
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
-import { SubNavItem } from '@/types/navigation';
+import { SubNavItem } from '@/types/model/navigation';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';

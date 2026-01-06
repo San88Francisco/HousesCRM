@@ -1,4 +1,4 @@
-import { AnimatedIconHandle } from '@/types/navigation';
+import { AnimatedIconHandle } from '@/types/model/animate-icon';
 import {
   cloneElement,
   isValidElement,

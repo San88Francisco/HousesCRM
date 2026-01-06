@@ -3,7 +3,7 @@ import { useAnimatedIcon } from '@/hooks';
 import { Button } from '@/shared/ui/button';
 import { FileChartLineIcon } from '@/shared/ui/file-chart-line-icon-handle';
 import { useAppDispatch } from '@/store/hooks';
-import { openModal } from '@/store/modal-slice';
+import { openModal } from '@/store/slice/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
 
 type Props = {
