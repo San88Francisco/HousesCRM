@@ -4,8 +4,8 @@ import { Button } from '@/shared/ui/button';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
-import { House } from '@/types/core/house/house';
-import { ModalTriggers } from '@/types/model/modals/modals';
+import { House } from '@/types/core/house';
+import { ModalTriggers } from '@/types/model/modals';
 import { MouseEvent } from 'react';
 import { toast } from 'sonner';
 

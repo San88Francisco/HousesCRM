@@ -10,7 +10,7 @@ import {
   SidebarMenu,
 } from '@/shared/ui/sidebar';
 import { makeTitle } from '@/shared/utils/favorite-start/formate-title';
-import { NavItem } from '@/types/model/navigation/navigation';
+import { NavItem } from '@/types/model/navigation';
 import { useMemo } from 'react';
 import { SidebarMenuItem } from './SidebarMenuItem';
 

@@ -1,6 +1,8 @@
-import { CurrencyRevaluation } from '../core/currency-revaluation-chart/types';
-import { ApartmentType, House } from '../core/house/house';
-import { Renter } from './renters';
+import { CurrencyRevaluation } from '../../core/currency-revaluation-chart';
+import { ApartmentType, House } from '../../core/house';
+import { Metadata } from '../../core/metadata';
+import { OccupancyHouses } from '../../model/houses-occupancy';
+import { Renter } from '../renters';
 
 export type HouseByIdResponse = {
   houseDetail: House;
@@ -22,5 +24,16 @@ export type CreateHouseRequest = {
 
 export type UpdateHouseResponse = House;
 export type UpdateHouseRequest = House;
+
+export type OccupancyHousesPaginatedResponse = {
+  data: OccupancyHouses[];
+  meta: Metadata;
+};
+
+export type OccupancyHousesRequest = {
+  id: string;
+  page?: number;
+  limit?: number;
+};
 
 export type CurrencyRevaluationResponse = CurrencyRevaluation[];

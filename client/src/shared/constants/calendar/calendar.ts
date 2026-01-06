@@ -1,4 +1,4 @@
-import { CalendarMode, LevelType } from '@/types/core/calendar/calendar';
+import { CalendarMode, LevelType } from '@/types/core/calendar';
 
 export const levelMap: Record<CalendarMode, LevelType> = {
   years: 'years',

@@ -1,8 +1,8 @@
 'use client';
 
-import { PaybackChartData } from '@/types/core/payback-chart/analytics';
 import { formatPaybackCoefficient } from '@/shared/utils/all-house/payback-chart/payback';
 import { cn } from '@/shared/utils/cn';
+import { PaybackChartData } from '@/types/core/payback-chart';
 
 interface CustomTooltipProps {
   active?: boolean;

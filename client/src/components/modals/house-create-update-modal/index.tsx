@@ -5,7 +5,7 @@ import { useHouseForm } from '@/hooks/modals/house-create-update-modal/use-house
 import { useHouseModal } from '@/hooks/modals/house-create-update-modal/use-house-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
-import { ModalTriggers } from '@/types/model/modals/modals';
+import { ModalTriggers } from '@/types/model/modals';
 import { HouseFormFields } from '@/widgets/modals/house-create-update-modal/HouseFormFields';
 import Modal from '../modal-wrapper';
 

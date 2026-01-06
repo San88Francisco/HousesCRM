@@ -1,4 +1,4 @@
-import { CalendarMode, LevelType } from '@/types/core/calendar/calendar';
+import { CalendarMode, LevelType } from '@/types/core/calendar';
 import { format, getYear, Locale } from 'date-fns';
 import { MoveLeft, MoveRight } from 'lucide-react';
 import { FC, Fragment } from 'react';

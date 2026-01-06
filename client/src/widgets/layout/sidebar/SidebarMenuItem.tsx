@@ -4,7 +4,7 @@ import { useAnimatedIcon } from '@/hooks';
 import { getSidebarMenuItemClasses } from '@/shared/constants/styles';
 import { SidebarMenuItem as ShadcnSidebarMenuItem, SidebarMenuButton } from '@/shared/ui/sidebar';
 import { isActiveItem } from '@/shared/utils/sidebar/navigation';
-import { NavItem } from '@/types/model/navigation/navigation';
+import { NavItem } from '@/types/model/navigation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 

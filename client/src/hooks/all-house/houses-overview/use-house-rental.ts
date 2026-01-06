@@ -18,8 +18,8 @@ import {
   getDataRange,
   getOptimalTicks,
 } from '@/shared/utils/all-house/houses-overview/chart-math';
-import { TimeRangeEnum } from '@/types/model/houses-overview/types';
-import { AllAnalyticsResponse } from '@/types/services/all-analitics';
+import { TimeRangeEnum } from '@/types/model/houses-overview';
+import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
 export function useHouseRental(apartmentsData: Partial<AllAnalyticsResponse>) {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ONE_YEAR);

@@ -11,7 +11,7 @@ import {
 } from '@/shared/ui/dialog';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeModal } from '@/store/slice/modal-slice';
-import { ModalTriggers } from '@/types/model/modals/modals';
+import { ModalTriggers } from '@/types/model/modals';
 
 export const ConfirmDeleteModal = () => {
   const dispatch = useAppDispatch();

@@ -1,4 +1,4 @@
-import { ApartmentType } from '@/types/core/house/house';
+import { ApartmentType } from '@/types/core/house';
 
 export const defaultHouseValues = {
   apartmentName: '',

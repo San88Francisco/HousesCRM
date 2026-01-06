@@ -1,4 +1,4 @@
-import { HousePerformanceItem } from '@/types/core/houses-performance/types';
+import { HousePerformanceItem } from '@/types/core/houses-performance';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const HousesPerformanceTableColumns: ColumnDef<HousePerformanceItem>[] = [

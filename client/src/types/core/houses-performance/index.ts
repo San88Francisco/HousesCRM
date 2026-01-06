@@ -1,3 +1,5 @@
+import { Metadata } from '../metadata';
+
 export type HousePerformanceItem = {
   apartmentName: string;
   rentersCount: number;
@@ -5,18 +7,9 @@ export type HousePerformanceItem = {
   currentPayment: number;
 };
 
-export type HousesPerformanceMeta = {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-};
-
 export type HousesPerformanceResponse = {
   data: HousePerformanceItem[];
-  meta: HousesPerformanceMeta;
+  meta: Metadata;
 };
 
 export type HousesPerformanceRequest = {

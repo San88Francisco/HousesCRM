@@ -2,6 +2,9 @@ import { Expose } from 'class-transformer'
 
 export class HousePerformanceDto {
   @Expose()
+  id: string
+
+  @Expose()
   apartmentName: string
 
   @Expose()

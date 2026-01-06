@@ -1,14 +1,16 @@
 import { rootApi } from '@/shared/api';
+import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart';
 import {
   HousesPerformanceRequest,
   HousesPerformanceResponse,
-} from '@/types/core/houses-performance/types';
-import { AllAnalyticsResponse } from '@/types/services/all-analitics';
+} from '@/types/core/houses-performance';
+import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 import {
   CreateHouseRequest,
   CreateHouseResponse,
-  CurrencyRevaluationResponse,
   HouseByIdResponse,
+  OccupancyHousesPaginatedResponse,
+  OccupancyHousesRequest,
   UpdateHouseRequest,
   UpdateHouseResponse,
 } from '@/types/services/houses';
@@ -26,7 +28,15 @@ export const housesApi = rootApi.injectEndpoints({
       providesTags: (_result, _error, id) => [{ type: 'Houses', id }],
     }),
 
-    getCurrencyRevaluation: build.query<CurrencyRevaluationResponse, void>({
+    getHouseByIdOccupancy: build.query<OccupancyHousesPaginatedResponse, OccupancyHousesRequest>({
+      query: ({ id, page = 1, limit = 10 }) => ({
+        url: `/houses/${id}/occupancy`,
+        params: { page, limit },
+      }),
+      providesTags: (_result, _error, { id }) => [{ type: 'Houses', id }],
+    }),
+
+    getCurrencyRevaluation: build.query<CurrencyRevaluation[], void>({
       query: () => '/houses-analytics/currency-revaluation-analytic',
       providesTags: ['Analytics'],
     }),
@@ -68,6 +78,7 @@ export const {
   useGetHousesAnalyticsQuery,
   useLazyGetHousesAnalyticsQuery,
   useGetHouseByIdQuery,
+  useGetHouseByIdOccupancyQuery,
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,

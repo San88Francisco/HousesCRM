@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeModal } from '@/store/slice/modal-slice';
-import { HouseModalPayload } from '@/types/model/house-create-update-modal/house-create-update-modal';
-import { ModalTriggers } from '@/types/model/modals/modals';
+import { HouseModalPayload } from '@/types/model/house-create-update-modal';
+import { ModalTriggers } from '@/types/model/modals';
 
 export const useHouseModal = () => {
   const dispatch = useAppDispatch();

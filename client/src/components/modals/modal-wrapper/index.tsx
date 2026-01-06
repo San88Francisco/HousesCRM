@@ -3,7 +3,7 @@
 import { Dialog, DialogContent } from '@/shared/ui/dialog';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeModal } from '@/store/slice/modal-slice';
-import { ModalTriggers } from '@/types/model/modals/modals';
+import { ModalTriggers } from '@/types/model/modals';
 import { clsx } from 'clsx';
 import { ComponentProps, ReactNode, useCallback } from 'react';
 

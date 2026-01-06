@@ -1,4 +1,4 @@
-import { HousePaybackStats } from '@/types/core/payback-chart/analytics';
+import { HousePaybackStats } from '@/types/core/payback-chart';
 
 export const mockPaybackStats: HousePaybackStats[] = [
   {

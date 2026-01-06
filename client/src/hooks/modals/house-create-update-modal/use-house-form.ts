@@ -2,7 +2,7 @@ import { defaultHouseValues } from '@/shared/utils/create-house-form/get-default
 import { mapHouseToFormData } from '@/shared/utils/create-house-form/house-form';
 import { HouseFormData, houseSchema } from '@/shared/validation/add-houses/house-schema';
 import { useCreateHouseMutation, useUpdateHouseMutation } from '@/store/api/houses-api';
-import { House } from '@/types/core/house/house';
+import { House } from '@/types/core/house';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { format } from 'date-fns';
 import { useEffect } from 'react';
