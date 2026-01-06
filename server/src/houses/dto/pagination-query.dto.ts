@@ -18,3 +18,4 @@ export class PaginationQueryDto {
   @IsPositive()
   limit?: number = QUERY_DEFAULTS.LIMIT
 }
+

@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
-import { useTheme } from 'next-themes';
 import {
-  transformCurrencyData,
-  computeXAxisMax,
-  computeContainerHeight,
   computeChartHeight,
+  computeContainerHeight,
+  computeXAxisMax,
   getBarColors,
   MIN_VISIBLE_ROWS,
+  transformCurrencyData,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart/types';
+import { useTheme } from 'next-themes';
+import { useMemo } from 'react';
 
 export const useChartData = (apiData: unknown) => {
   return useMemo(() => {
@@ -32,6 +32,7 @@ export const useChartData = (apiData: unknown) => {
 
 export const useChartConfig = (chartData: ChartDataItem[]) => {
   const { theme, systemTheme } = useTheme();
+  console.log('✌️theme --->', theme);
 
   return useMemo(() => {
     const actualRows = chartData.length;

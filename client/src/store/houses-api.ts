@@ -4,6 +4,7 @@ import {
   HousesPerformanceRequest,
   HousesPerformanceResponse,
 } from '@/types/core/houses-performance/types';
+import type { HouseCoordinates } from '@/types/model/geo-map-3d/house-coordinates';
 import { AllAnalyticsResponse } from '@/types/services/all-analitics';
 import {
   CreateHousePayload,
@@ -60,6 +61,35 @@ export const housesApi = rootApi.injectEndpoints({
       }),
       providesTags: ['Houses'],
     }),
+
+    getHousesForMap: build.query<HouseCoordinates[], void>({
+      query: () => '/houses/map',
+      transformResponse: (
+        response: Array<{ id: string; apartmentName: string; street: string }>,
+      ) => {
+        return response.map(house => ({
+          id: house.id,
+          lng: 0,
+          lat: 0,
+          apartmentName: house.apartmentName,
+          street: house.street,
+        }));
+      },
+      providesTags: ['Houses'],
+    }),
+
+    geocodeAddress: build.query<
+      { lat: number; lng: number; displayName: string } | null,
+      { address: string; city: string }
+    >({
+      query: ({ address, city }) => ({
+        url: '/houses/geocode',
+        params: { address, city },
+      }),
+      transformResponse: (response: { lat: number; lng: number; displayName: string } | null) => {
+        return response;
+      },
+    }),
   }),
 });
 
@@ -72,4 +102,6 @@ export const {
   useUpdateHouseMutation,
   useGetHousesPerformanceQuery,
   useLazyGetHousesPerformanceQuery,
+  useGetHousesForMapQuery,
+  useLazyGeocodeAddressQuery,
 } = housesApi;
