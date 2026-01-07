@@ -47,8 +47,8 @@ export const TableHouse = () => {
   const isLoading = currentPage === null ? initialLoading : paginatedLoading;
   const error = currentPage === null ? initialError : paginatedError;
 
-  if (isLoading) return <LoadingState className="min-h-[550px] " />;
-  if (error) return <ErrorState className="min-h-[550px] " error={error} />;
+  if (isLoading) return <LoadingState className="min-h-[550px]" />;
+  if (error) return <ErrorState className="min-h-[550px]" error={error} />;
 
   const tableData =
     currentPage === null
@@ -56,9 +56,7 @@ export const TableHouse = () => {
       : (paginatedData?.data ?? []);
   const meta = currentPage === null ? initialData?.occupancyReports?.meta : paginatedData?.meta;
 
-  console.log(initialData);
-
-  if (!tableData.length) return <EmptyState className="min-h-[550px] " />;
+  if (!tableData.length) return <EmptyState className="min-h-[550px]" />;
 
   const handleRouteToRenter = (renterId: string) => {
     push(`${ROUTES.RENTER}/${renterId}`);
@@ -72,7 +70,7 @@ export const TableHouse = () => {
         </CardHeader>
 
         <CardContent>
-          <div className="w-full overflow-x-auto  pb-6">
+          <div className="w-full overflow-x-auto pb-6">
             <Table className="min-h-[550px] min-w-[800px]">
               <TableHeader>
                 <TableRow style={{ gridTemplateColumns: '60px repeat(5, 1fr) 100px' }}>

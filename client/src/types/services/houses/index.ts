@@ -7,10 +7,10 @@ import { Renter } from '../renters';
 
 export type HouseByIdResponse = {
   houseDetail: House;
-  occupancyReports: occupancyReports;
+  occupancyReports: OccupancyReports;
 };
 
-type occupancyReports = {
+type OccupancyReports = {
   data: Renter[];
   meta: Metadata;
 };
