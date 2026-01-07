@@ -1,5 +1,7 @@
+import { scrollbarClasses } from '@/shared/constants/cn';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription } from '@/shared/ui/dialog';
+import { cn } from '@/shared/utils/cn';
 import { PdfContractAdapter } from '@/shared/utils/pdf-contract/pdf-contract-adapter';
 import { useLazyGetContractPdfQuery } from '@/store/api/contracts-api';
 import { useAppSelector } from '@/store/hooks';
@@ -49,15 +51,7 @@ export const PdfContractModal = () => {
         Тут відображається PDF договору та можливість його завантажити.
       </DialogDescription>
 
-      <div
-        className="max-w-[800px] max-h-[90vh] overflow-auto p-5
-            scrollbar-none
-            [&::-webkit-scrollbar]:w-[4px]
-            [&::-webkit-scrollbar]:bg-transparent
-            [&::-webkit-scrollbar-thumb]:bg-muted-text
-            [&::-webkit-scrollbar-track]:bg-transparent
-            [&::-webkit-scrollbar-thumb]:rounded-full"
-      >
+      <div className={cn(scrollbarClasses, 'max-w-[800px] max-h-[90vh] overflow-auto p-5')}>
         {isLoading || !contractData ? (
           <PdfContractSkeleton />
         ) : (

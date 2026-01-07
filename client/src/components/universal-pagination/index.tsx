@@ -9,24 +9,28 @@ import {
   PaginationPrevious,
 } from '@/shared/ui/pagination';
 import { cn } from '@/shared/utils/cn';
-import { Metadata } from '@/types/core/metadata';
 
 type Props = {
-  meta?: Metadata;
+  currentPage: number;
+  totalPages: number;
   onPageChange: (page: number) => void;
+  className?: string;
 };
 
-export const ApartmentPagination = ({ meta, onPageChange }: Props) => {
-  const currentPage = meta?.page || 1;
-  const totalPages = meta?.totalPages || 1;
-
+export const UniversalPagination = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+  className,
+}: Props) => {
+  const currentPageIndex = currentPage - 1;
   const canPreviousPage = currentPage > 1;
   const canNextPage = currentPage < totalPages;
 
-  const visiblePages = useVisiblePages(currentPage - 1, totalPages);
+  const visiblePages = useVisiblePages(currentPageIndex, totalPages);
 
   return (
-    <Pagination className="mt-5">
+    <Pagination className={className}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -44,11 +48,21 @@ export const ApartmentPagination = ({ meta, onPageChange }: Props) => {
               <PaginationEllipsis />
             </PaginationItem>
           ) : (
-            <PaginationItem key={page}>
+            <PaginationItem
+              key={page}
+              className={cn(
+                'cursor-pointer text-text',
+                currentPageIndex === page &&
+                  'bg-gray dark:bg-gray rounded-[8px] text-white border-gray',
+              )}
+            >
               <PaginationLink
-                onClick={() => onPageChange(page + 1)}
-                isActive={currentPage === page + 1}
-                className={cn('cursor-pointer text-text', currentPage === page + 1 && 'text-muted')}
+                onClick={() => {
+                  if (currentPageIndex !== page) {
+                    onPageChange(page + 1);
+                  }
+                }}
+                isActive={currentPageIndex === page}
               >
                 {page + 1}
               </PaginationLink>

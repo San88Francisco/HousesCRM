@@ -11,7 +11,7 @@ export const ErrorState = ({ error, className }: Props) => {
   const errorMessage = getErrorMessage(error);
 
   return (
-    <Card className={cn('mx-auto', className)}>
+    <Card className={cn('mx-auto w-full', className)}>
       <CardContent className="flex items-center justify-center h-96">
         <div className="text-center">
           <p className="mb-2 text-[var(--red)]">Помилка завантаження даних</p>
