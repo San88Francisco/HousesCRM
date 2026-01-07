@@ -71,8 +71,8 @@ export const TableHouse = () => {
           <CardTitle>Історія оренди</CardTitle>
         </CardHeader>
 
-        <CardContent className="p-0">
-          <div className="w-full overflow-x-auto">
+        <CardContent>
+          <div className="w-full overflow-x-auto  pb-6">
             <Table className="min-h-[550px] min-w-[800px]">
               <TableHeader>
                 <TableRow style={{ gridTemplateColumns: '60px repeat(5, 1fr) 100px' }}>
@@ -166,7 +166,7 @@ export const TableHouse = () => {
               currentPage={meta.page || 1}
               totalPages={meta.totalPages || 1}
               onPageChange={handlePageChange}
-              className="mt-5 flex justify-end"
+              className="flex justify-end"
             />
           )}
         </CardContent>
