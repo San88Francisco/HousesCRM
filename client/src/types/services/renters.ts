@@ -1,5 +1,6 @@
 import { HousesPerformanceResponse } from '../core/houses-performance/types';
-import { Renter, RenterFormFields } from '../core/renter/renter';
+import { Renter } from '../core/renter/renter';
+import { RenterFormFields } from '../model/form/renter';
 
 export type RenterByIdResponse = {
   oneRenterReport: Renter;

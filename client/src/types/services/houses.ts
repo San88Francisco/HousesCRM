@@ -1,6 +1,7 @@
 import { CurrencyRevaluation } from '../core/currency-revaluation-chart/types';
-import { ApartmentType, House } from '../core/house/house';
+import { House } from '../core/house/house';
 import { Renter } from '../core/renter/renter';
+import { CreateUpdateHouseForm } from '../model/form/house';
 
 export type HouseByIdResponse = {
   houseDetail: House;
@@ -8,19 +9,9 @@ export type HouseByIdResponse = {
 };
 
 export type CreateHouseResponse = House;
-export type CreateHouseRequest = {
-  apartmentName: string;
-  roomsCount: number;
-  totalArea: number;
-  purchaseDate: string;
-  price: number;
-  floor: number;
-  street: string;
-  apartmentType: ApartmentType;
-  contractIds?: string[];
-};
+export type CreateHouseRequest = CreateUpdateHouseForm;
 
 export type UpdateHouseResponse = House;
-export type UpdateHouseRequest = Partial<Omit<House, 'prices'>> & { id: string };
+export type UpdateHouseRequest = Partial<CreateUpdateHouseForm> & { id: string };
 
 export type CurrencyRevaluationResponse = CurrencyRevaluation[];

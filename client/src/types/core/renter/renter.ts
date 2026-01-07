@@ -10,5 +10,3 @@ export interface Renter {
   totalIncome: number;
   status: ContractStatus;
 }
-
-export type RenterFormFields = Pick<Renter, 'firstName' | 'lastName' | 'age'>;
