@@ -10,4 +10,3 @@ export class GeocodeResponseDto {
   @Expose()
   displayName: string
 }
-

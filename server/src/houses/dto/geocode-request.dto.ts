@@ -12,4 +12,3 @@ export class GeocodeRequestDto {
   @IsNotEmpty()
   city: string
 }
-

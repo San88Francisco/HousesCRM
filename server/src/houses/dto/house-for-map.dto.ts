@@ -10,4 +10,3 @@ export class HouseForMapDto {
   @Expose()
   street: string
 }
-

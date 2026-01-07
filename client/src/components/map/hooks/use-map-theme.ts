@@ -14,4 +14,3 @@ export const useMapTheme = () => {
 
   return { isDark, mounted };
 };
-
