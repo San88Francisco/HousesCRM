@@ -9,4 +9,5 @@ export interface Renter {
   vacated: string;
   totalIncome: number;
   status: ContractStatus;
+  contractIds?: string[];
 }

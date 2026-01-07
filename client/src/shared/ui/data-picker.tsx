@@ -93,16 +93,14 @@ export const DatePicker = forwardRef<HTMLButtonElement, Props>(
                 )}
                 aria-hidden="true"
               />
-              {value ? format(value, 'dd MMMM yyyy', { locale: uk }) : <span>{placeholder}</span>}
+              <span className={cn('line-clamp-1', !value && 'text-muted')}>
+                {value ? format(value, 'dd MMMM yyyy', { locale: uk }) : placeholder}
+              </span>
               {error && iconWithError && <CircleAlert className="ml-auto text-red" />}
             </Button>
           </PopoverTrigger>
 
-          <PopoverContent
-            className="w-auto p-0"
-            align="start"
-            onOpenAutoFocus={e => e.preventDefault()}
-          >
+          <PopoverContent className="w-auto p-0" align="start">
             <form onSubmit={handleSubmit}>
               <Calendar
                 date={tempDate}
