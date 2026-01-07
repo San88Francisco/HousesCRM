@@ -1,21 +1,21 @@
-export type Renter = {
+export type HousesOverviewRenter = {
   id: string;
   firstName: string;
   lastName: string;
 };
 
-export type Contract = {
+export type HousesOverviewContract = {
   id: string;
   commencement: string;
   termination: string;
   monthlyPayment: number;
-  renter: Renter;
+  renter: HousesOverviewRenter;
 };
 
 export type Apartment = {
   id: string;
   apartmentName: string;
-  contract: Contract[];
+  contract: HousesOverviewContract[];
 };
 
 export type HouseOverviewChartDataItem = Apartment & {
@@ -23,22 +23,12 @@ export type HouseOverviewChartDataItem = Apartment & {
 };
 
 export type PayloadData = {
-  [key: string]: Contract | string | number | null | undefined;
+  [key: string]: HousesOverviewContract | string | number | null | undefined;
 };
 
 export type ChartDataPoint = PayloadData & {
   date: number;
 };
-
-export enum TimeRangeEnum {
-  SIX_MONTHS = '6 місяців',
-  ONE_YEAR = '1 рік',
-  TWO_YEARS = '2 роки',
-  FIVE_YEARS = '5 років',
-  TEN_YEARS = '10 років',
-  FIFTEEN_YEARS = '15 років',
-  ALL_DATA = 'Всі дані',
-}
 
 export type TooltipPayload = {
   dataKey: string;

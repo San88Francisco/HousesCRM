@@ -1,16 +1,8 @@
+import { Contract } from '@/types/core/contract';
 import { HousesPerformanceResponse } from '@/types/core/houses-performance';
+import { Metadata } from '@/types/core/metadata';
 import { Renter } from '@/types/core/renter';
 import { RenterFormFields } from '@/types/model/form/renter';
-import { Metadata } from '../../core/metadata';
-import { ContractStatus } from '../../core/status/status';
-
-export type ContractResponse = {
-  id: string;
-  commencement: string;
-  termination: string;
-  status: ContractStatus;
-  monthlyPayment: number;
-};
 
 export type RenterReportResponse = {
   firstName: string;
@@ -25,7 +17,7 @@ export type RenterByIdResponse = {
 export type AllContractsByRenterIdResponse = {
   oneRenterReport: Renter;
   allContractsByRenterId: {
-    data: ContractResponse[];
+    data: Contract[];
     meta: Metadata;
   };
 };

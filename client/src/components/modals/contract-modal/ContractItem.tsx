@@ -6,12 +6,12 @@ import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
+import { Contract } from '@/types/core/contract';
 import { ModalTriggers } from '@/types/model/modals';
-import { ContractResponse } from '@/types/services/renters';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 
 type Props = {
-  contract: ContractResponse;
+  contract: Contract;
 };
 
 export const ContractItem = ({ contract }: Props) => {
