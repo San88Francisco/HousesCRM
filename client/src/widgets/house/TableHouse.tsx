@@ -164,7 +164,7 @@ export const TableHouse = () => {
               currentPage={meta.page || 1}
               totalPages={meta.totalPages || 1}
               onPageChange={handlePageChange}
-              className="flex justify-end"
+              className="mt-2 flex justify-end"
             />
           )}
         </CardContent>

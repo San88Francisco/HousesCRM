@@ -12,16 +12,18 @@ export const contractDuration = (occupied: string, vacated: string) => {
     return '0 дн.';
   }
 
-  const months = differenceInMonths(endDate, startDate);
+  const [start, end] = startDate > endDate ? [endDate, startDate] : [startDate, endDate];
+
+  const months = differenceInMonths(end, start);
   if (months > 0) {
     return `${months} міс`;
   }
 
-  const weeks = differenceInWeeks(endDate, startDate);
+  const weeks = differenceInWeeks(end, start);
   if (weeks > 0) {
     return `${weeks} тиж.`;
   }
 
-  const days = differenceInDays(endDate, startDate);
+  const days = differenceInDays(end, start);
   return `${days} дн.`;
 };

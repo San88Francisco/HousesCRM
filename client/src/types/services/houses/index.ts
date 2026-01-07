@@ -10,7 +10,7 @@ export type HouseByIdResponse = {
   occupancyReports: OccupancyReports;
 };
 
-type OccupancyReports = {
+export type OccupancyReports = {
   data: Renter[];
   meta: Metadata;
 };
