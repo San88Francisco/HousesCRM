@@ -1,0 +1,12 @@
+export enum Status {
+  SUCCESS = 'success',
+  FAILED = 'failed',
+  PROCESSING = 'processing',
+  PENDING = 'pending',
+  DEFAULT = 'default',
+}
+
+export enum ContractStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+}

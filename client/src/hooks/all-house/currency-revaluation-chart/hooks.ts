@@ -6,7 +6,7 @@ import {
   MIN_VISIBLE_ROWS,
   transformCurrencyData,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
-import { ChartDataItem } from '@/types/core/currency-revaluation-chart/types';
+import { ChartDataItem } from '@/types/core/currency-revaluation-chart';
 import { useTheme } from 'next-themes';
 import { useMemo } from 'react';
 
@@ -32,7 +32,6 @@ export const useChartData = (apiData: unknown) => {
 
 export const useChartConfig = (chartData: ChartDataItem[]) => {
   const { theme, systemTheme } = useTheme();
-  console.log('✌️theme --->', theme);
 
   return useMemo(() => {
     const actualRows = chartData.length;

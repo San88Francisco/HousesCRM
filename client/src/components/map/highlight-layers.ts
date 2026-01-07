@@ -1,6 +1,6 @@
-import type { Map } from 'maplibre-gl';
-import type { GeoJSONFeatureCollection } from './types';
+import maplibregl, { type Map } from 'maplibre-gl';
 import { HIGHLIGHT_COLOR } from './constants';
+import type { GeoJSONFeatureCollection } from './types';
 
 export const ensureHighlightLayers = (map: Map) => {
   if (!map.getSource('highlight-building-geo')) {

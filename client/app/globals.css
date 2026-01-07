@@ -142,7 +142,6 @@
   --chart-pie-15: #e2bd6b;
   --bg-logo: url('/logo/dark-logo.png');
   --bg-geo-map-3d: url('/geo-map-3d/bg-btn-map/bg-map-night.png');
-
 }
 
 html,
@@ -150,7 +149,7 @@ body,
 main {
   height: 100%;
 }
-
+html,
 body {
   margin: 0;
   padding: 0;

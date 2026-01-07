@@ -1,4 +1,4 @@
-import { useLazyGeocodeAddressQuery } from '@/store/houses-api';
+import { useLazyGeocodeAddressQuery } from '@/store/api/houses-api';
 import type { HouseCoordinates } from '@/types/model/geo-map-3d/house-coordinates';
 import { useEffect, useState } from 'react';
 

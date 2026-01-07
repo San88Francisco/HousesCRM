@@ -7,9 +7,10 @@ import { SidebarPagesGroup } from './SidebarPagesGroup';
 
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
 import { LogoSidebar } from './LogoSidebar';
+import { MapButton } from './MapButton';
 import { SidebarActionsGroup } from './SidebarActionsGroup';
 import { SidebarFavoritesGroup } from './SidebarFavoritesGroup';
-import { MapButton } from './MapButton';
+import { SidebarTablesGroup } from './SidebarTablesGroup';
 
 export const AppSidebar = () => {
   const pathname = usePathname();
@@ -21,6 +22,7 @@ export const AppSidebar = () => {
       <SidebarHeaderComponent />
       <SidebarContent>
         <SidebarPagesGroup />
+        <SidebarTablesGroup />
         <SidebarActionsGroup />
         <SidebarFavoritesGroup />
       </SidebarContent>

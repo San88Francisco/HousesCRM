@@ -1,6 +1,6 @@
-import React, { useMemo, useState, useRef, useCallback } from 'react';
-import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart/analytics';
 import { transformPaybackData } from '@/shared/utils/all-house/payback-chart/payback';
+import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 const MIN_CHART_WIDTH = 800;
 const CHART_WIDTH_MULTIPLIER = 80;

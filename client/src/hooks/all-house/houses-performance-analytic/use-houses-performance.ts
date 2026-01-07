@@ -1,4 +1,7 @@
-import { useGetHousesAnalyticsQuery, useLazyGetHousesPerformanceQuery } from '@/store/houses-api';
+import {
+  useGetHousesAnalyticsQuery,
+  useLazyGetHousesPerformanceQuery,
+} from '@/store/api/houses-api';
 import { useMemo, useState } from 'react';
 
 type TriggerArgs = {

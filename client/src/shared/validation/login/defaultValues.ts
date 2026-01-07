@@ -1,4 +1,4 @@
-import { LoginRequest } from '@/types/services/login';
+import { LoginRequest } from '@/types/services/auth';
 
 export const loginDefaultValues: LoginRequest = {
   email: '',

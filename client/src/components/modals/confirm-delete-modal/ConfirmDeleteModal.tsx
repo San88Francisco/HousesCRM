@@ -1,17 +1,17 @@
 'use client';
 
-import { ModalTriggers } from '@/types/model/modals';
+import { Button } from '@/shared/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/shared/ui/dialog';
-import { closeModal } from '@/store/modal-slice';
-import { Button } from '@/shared/ui/button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { closeModal } from '@/store/slice/modal-slice';
+import { ModalTriggers } from '@/types/model/modals';
 
 export const ConfirmDeleteModal = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +25,9 @@ export const ConfirmDeleteModal = () => {
     (payload?.description as string) ?? 'Цю дію неможливо буде скасувати. Ви впевнені?';
 
   const handleConfirm = () => {
+    if (payload?.onConfirm && typeof payload.onConfirm === 'function') {
+      payload.onConfirm();
+    }
     dispatch(closeModal());
   };
 

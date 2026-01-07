@@ -1,8 +1,8 @@
 'use client';
 
 import { GeoMap3D } from '@/components/map/rivne-3d-map';
-import { useGetHousesForMapQuery } from '@/store/houses-api';
 
+import { useGetHousesForMapQuery } from '@/store/api/houses-api';
 import { useAddressSearch } from '../../src/hooks/geo-map-3d/use-address-search';
 import { useGeocodeHouses } from '../../src/hooks/geo-map-3d/use-geocode-houses';
 import { useHouseList } from '../../src/hooks/geo-map-3d/use-house-list';

@@ -1,5 +1,5 @@
 import type { Map } from 'maplibre-gl';
-import type { MutableRefObject } from 'react';
+import type { RefObject } from 'react';
 import { useEffect } from 'react';
 
 import { HIGHLIGHT_ZOOM } from '../constants';
@@ -8,10 +8,10 @@ import { pickBuildingAtPoint } from '../pick-building';
 import type { MapActionsRef } from '../types';
 
 export const useMapActions = (
-  mapInstance: React.RefObject<Map | null>,
-  actionsRef: MutableRefObject<MapActionsRef | null> | undefined,
+  mapInstance: RefObject<Map | null>,
+  actionsRef: RefObject<MapActionsRef | null> | undefined,
   isMapLoaded: boolean,
-  highlightedHouseIdRef: React.MutableRefObject<string | null>,
+  highlightedHouseIdRef: RefObject<string | null>,
 ) => {
   useEffect(() => {
     if (!actionsRef || !mapInstance.current || !isMapLoaded) return;
@@ -68,4 +68,3 @@ export const useMapActions = (
     };
   }, [actionsRef, isMapLoaded, mapInstance, highlightedHouseIdRef]);
 };
-

@@ -1,4 +1,4 @@
-import { GeocodingResult } from '@/types/model/GeoMap3D/geocoding';
+import { GeocodingResult } from '@/types/model/geo-map-3d/geocoding';
 
 export async function geocodeAddress(
   address: string,

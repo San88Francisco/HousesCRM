@@ -1,5 +1,5 @@
 import type { Map } from 'maplibre-gl';
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 
 import { createMapStyle, initializeMap } from '../map-setup';
 
@@ -10,10 +10,7 @@ type MapState = {
   bearing: number;
 };
 
-export const useMapInstance = (
-  mapContainer: React.RefObject<HTMLDivElement | null>,
-  isDark: boolean,
-) => {
+export const useMapInstance = (mapContainer: RefObject<HTMLDivElement | null>, isDark: boolean) => {
   const mapInstance = useRef<Map | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isStyleLoaded, setIsStyleLoaded] = useState(false);
@@ -82,4 +79,3 @@ export const useMapInstance = (
     isStyleLoaded,
   };
 };
-

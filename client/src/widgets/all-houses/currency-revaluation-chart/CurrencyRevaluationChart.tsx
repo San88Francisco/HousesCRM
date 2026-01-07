@@ -1,23 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { useEffect, useState } from 'react';
+import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
+import { EmptyState } from '@/components/chart-states/EmptyState';
+import { ErrorState } from '@/components/chart-states/ErrorState';
+import { LoadingState } from '@/components/chart-states/LoadingState';
+import { useChartConfig, useChartData } from '@/hooks/all-house/currency-revaluation-chart/hooks';
 import {
   BAR_RADIUS,
   BAR_SIZE,
-  OPACITY_DEFAULT,
   OPACITY_DARK,
+  OPACITY_DEFAULT,
   OPACITY_LIGHT,
   TOOLTIP_Z_INDEX,
   formatYAxisTick,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
-import { useChartData, useChartConfig } from '@/hooks/all-house/currency-revaluation-chart/hooks';
-import { useGetHousesAnalyticsQuery } from '@/store/houses-api';
-import { LoadingState } from '@/components/chart-states/LoadingState';
-import { EmptyState } from '@/components/chart-states/EmptyState';
-import { ErrorState } from '@/components/chart-states/ErrorState';
+import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { CurrencyRevaluationTooltip } from './CurrencyRevaluationTooltip';
 
 export const CurrencyRevaluationChart = () => {
