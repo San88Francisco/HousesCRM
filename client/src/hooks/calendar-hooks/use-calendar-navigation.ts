@@ -1,5 +1,5 @@
 'use client';
-import { LevelType } from '@/types/core/calendar/calendar';
+import { LevelType } from '@/types/core/calendar';
 import { add, addYears, format } from 'date-fns';
 
 const DECADE_PAGE_STEP = 10;
@@ -76,6 +76,8 @@ export const useCalendarNavigation = ({
       case 'years':
         prevDecade();
         break;
+      default:
+        console.error(`Unexpected calendar level: ${level}`);
     }
   };
 

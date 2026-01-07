@@ -6,7 +6,7 @@ import { useRenterForm } from '@/hooks/modals/renter-create-update-modal/use-ren
 import { useRenterModal } from '@/hooks/modals/renter-create-update-modal/use-renter-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
-import { ModalTriggers } from '@/types/model/modals/modals';
+import { ModalTriggers } from '@/types/model/modals';
 import { RenterFormFields } from '@/widgets/modals/renter-create-update-modal/RenterFormFields';
 
 export const RenterCreateUpdateModal = () => {

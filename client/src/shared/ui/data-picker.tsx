@@ -3,13 +3,13 @@
 import { Button } from '@/shared/ui/button';
 import { Calendar } from '@/shared/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
-import { CalendarMode } from '@/types/core/calendar/calendar';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon, CircleAlert } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 
 import { cn } from '@/shared/utils/cn';
+import { CalendarMode } from '@/types/core/calendar';
 
 type Props = {
   value?: Date | null;

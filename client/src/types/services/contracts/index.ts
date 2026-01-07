@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { Contract } from '../core/contract/contract';
+import { Contract } from '../../core/contract';
 
 export enum ContractPeriod {
   OneMonth = '1month',

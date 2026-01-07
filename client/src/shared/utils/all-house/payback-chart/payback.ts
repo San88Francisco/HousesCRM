@@ -1,5 +1,5 @@
 import { getHouseColor } from '@/shared/utils/all-house/payback-chart/colors';
-import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart/analytics';
+import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart';
 
 const FULL_PAYBACK_COEFFICIENT = 1;
 const COEFFICIENT_DECIMAL_PLACES = 2;

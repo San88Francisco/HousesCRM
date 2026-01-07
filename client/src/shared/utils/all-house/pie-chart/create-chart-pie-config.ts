@@ -1,5 +1,5 @@
 import { ChartPieConfig } from '@/types/core/revenue-distribution/chart-pie-config';
-import { HouseDistributionChartDataItem } from '@/types/model/revenue-distribution/pie-chart-items';
+import { HouseDistributionChartDataItem } from '@/types/model/revenue-distribution';
 
 export function createChartPieConfig(data: HouseDistributionChartDataItem[]): ChartPieConfig {
   const entries = data.map((item, index) => [

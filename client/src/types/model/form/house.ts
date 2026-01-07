@@ -1,4 +1,4 @@
-import { ApartmentType } from '@/types/core/house/house';
+import { ApartmentType } from '@/types/core/apartment-type';
 
 export type CreateUpdateHouseForm = {
   apartmentName: string;

@@ -1,7 +1,7 @@
+import { ContractStatus } from 'src/contracts/entities/contract.entity'
 import { House } from 'src/houses/entities/house.entity'
 import { HousePerformanceDto } from '../houses-analytics/dto/house-performance/house-performance.dto'
 import { calculateHouseRevenue } from './revenue.helpers'
-import { ContractStatus } from 'src/contracts/entities/contract.entity'
 
 export const housesPerformance = (houses: House[]): HousePerformanceDto[] => {
   return houses.map((house): HousePerformanceDto => {
@@ -11,6 +11,7 @@ export const housesPerformance = (houses: House[]): HousePerformanceDto[] => {
     const currentPayment = activeContract ? activeContract.monthlyPayment : 0
 
     return {
+      id: house.id,
       apartmentName: house.apartmentName,
       rentersCount: totalUniqueRenters.size,
       totalRevenue: houseRevenue.apartmentTotalRevenue,

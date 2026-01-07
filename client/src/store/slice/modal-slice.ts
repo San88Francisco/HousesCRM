@@ -1,4 +1,4 @@
-import { ModalTriggers } from '@/types/model/modals/modals';
+import { ModalTriggers } from '@/types/model/modals';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type ModalState = {

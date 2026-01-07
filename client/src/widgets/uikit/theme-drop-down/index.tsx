@@ -4,7 +4,7 @@ import { THEME_OPTIONS, themeIconMap } from '@/shared/constants/theme/theme-swit
 import { Button } from '@/shared/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
 import { SunMoonIcon } from '@/shared/ui/sunmoon';
-import { NextTheme } from '@/types/core/theme/theme';
+import { NextTheme } from '@/types/core/theme';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { ThemeOptionItem } from './ThemeOptionItem';
@@ -14,7 +14,11 @@ export const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme();
 
   useEffect(() => setMounted(true), []);
-  const CurrentIcon = themeIconMap[theme as NextTheme] || SunMoonIcon;
+  const isValidTheme = (t: string | undefined): t is NextTheme => {
+    return t === NextTheme.Light || t === NextTheme.Dark || t === NextTheme.System;
+  };
+  const validTheme = theme && isValidTheme(theme) ? theme : NextTheme.System;
+  const CurrentIcon = themeIconMap[validTheme];
 
   const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(<CurrentIcon />);
 

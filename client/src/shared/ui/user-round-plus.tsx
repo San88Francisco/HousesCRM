@@ -6,7 +6,7 @@ import type { HTMLAttributes } from 'react';
 import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 
 import { cn } from '@/shared/utils/cn';
-import { AnimatedIconHandle } from '@/types/model/animate-icon/animate-icon';
+import { AnimatedIconHandle } from '@/types/model/animate-icon';
 
 interface UserRoundPlusIconProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;

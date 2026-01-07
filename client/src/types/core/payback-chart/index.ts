@@ -7,14 +7,6 @@ export interface HousePaybackStats {
   purchaseDate: string;
 }
 
-export interface HousesAnalyticsResponse {
-  housesOverview: unknown[];
-  revenueDistribution: unknown;
-  housesPaybackStats: HousePaybackStats[];
-  currencyRevaluation: unknown[];
-  housesPerformance: unknown;
-}
-
 export interface PaybackChartData {
   id: string;
   apartmentName: string;

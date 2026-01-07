@@ -1,0 +1,30 @@
+import { House } from '@/types/core/house';
+import { Renter } from '@/types/core/renter';
+import { CreateUpdateHouseForm } from '@/types/model/form/house';
+import { CurrencyRevaluation } from '../../core/currency-revaluation-chart';
+import { Metadata } from '../../core/metadata';
+import { OccupancyHouses } from '../../model/houses-occupancy';
+
+export type HouseByIdResponse = {
+  houseDetail: House;
+  occupancyReports: Renter[];
+};
+
+export type CreateHouseResponse = House;
+export type CreateHouseRequest = CreateUpdateHouseForm;
+
+export type UpdateHouseResponse = House;
+export type UpdateHouseRequest = Partial<CreateUpdateHouseForm> & { id: string };
+
+export type OccupancyHousesPaginatedResponse = {
+  data: OccupancyHouses[];
+  meta: Metadata;
+};
+
+export type OccupancyHousesRequest = {
+  id: string;
+  page?: number;
+  limit?: number;
+};
+
+export type CurrencyRevaluationResponse = CurrencyRevaluation[];

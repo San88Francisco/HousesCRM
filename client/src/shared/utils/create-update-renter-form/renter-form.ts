@@ -1,5 +1,5 @@
 import { RenterFormData } from '@/shared/validation/create-update-renter/renter-schema';
-import { Renter } from '@/types/core/renter/renter';
+import { Renter } from '@/types/core/renter';
 
 export const mapRenterToFormData = (renter: Renter): RenterFormData => {
   return {

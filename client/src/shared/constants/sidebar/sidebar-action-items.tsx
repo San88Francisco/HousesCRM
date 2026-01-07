@@ -1,8 +1,8 @@
 import { FilePenLineIcon } from '@/shared/ui/file-pen-line';
 import { HomeIcon } from '@/shared/ui/home';
 import { UserRoundPlusIcon } from '@/shared/ui/user-round-plus';
-import { ModalTriggers } from '@/types/model/modals/modals';
-import { ActionItem } from '@/types/model/sidebar/sidebar-action-item';
+import { ModalTriggers } from '@/types/model/modals';
+import { ActionItem } from '@/types/model/sidebar';
 
 export const actionItems: ActionItem[] = [
   {

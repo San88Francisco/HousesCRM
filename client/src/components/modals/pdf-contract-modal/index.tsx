@@ -4,7 +4,7 @@ import { DialogDescription } from '@/shared/ui/dialog';
 import { PdfContractAdapter } from '@/shared/utils/pdf-contract/pdf-contract-adapter';
 import { useLazyGetContractPdfQuery } from '@/store/api/contracts-api';
 import { useAppSelector } from '@/store/hooks';
-import { ModalTriggers } from '@/types/model/modals/modals';
+import { ModalTriggers } from '@/types/model/modals';
 import { PdfContractModel } from '@/types/services/contracts';
 import { PdfContractDocument } from '@/widgets/modals/pdf-contract-content-modal/PdfContractDocument';
 import { PdfContractFile } from '@/widgets/modals/pdf-contract-content-modal/PdfContractFile';

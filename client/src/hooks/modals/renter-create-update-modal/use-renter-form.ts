@@ -7,7 +7,7 @@ import {
   RenterFormData,
   renterSchema,
 } from '@/shared/validation/create-update-renter/renter-schema';
-import { Renter } from '@/types/core/renter/renter';
+import { Renter } from '@/types/core/renter';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';

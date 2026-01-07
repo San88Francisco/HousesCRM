@@ -1,5 +1,5 @@
 import { HouseFormData } from '@/shared/validation/create-update-house/house-schema';
-import { House } from '@/types/core/house/house';
+import { House } from '@/types/core/house';
 
 export const mapHouseToFormData = (house: House): HouseFormData => {
   return {

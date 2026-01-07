@@ -1,7 +1,7 @@
 'use client';
 
 import { Calendar, CalendarRange } from '@/shared/ui/calendar';
-import { CalendarMode, DateRange } from '@/types/core/calendar/calendar';
+import { CalendarMode, DateRange } from '@/types/core/calendar';
 import { format, startOfToday } from 'date-fns';
 import { enUS, uk } from 'date-fns/locale';
 import { useState } from 'react';

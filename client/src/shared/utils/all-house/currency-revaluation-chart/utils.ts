@@ -1,4 +1,4 @@
-import { ChartDataItem, CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
+import { ChartDataItem, CurrencyRevaluation } from '@/types/core/currency-revaluation-chart';
 
 const MILLION = 1_000_000;
 const THOUSAND = 1_000;

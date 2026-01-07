@@ -2,7 +2,7 @@
 import { useCalendarNavigation } from '@/hooks/calendar-hooks/use-calendar-navigation';
 import { useCalendarState } from '@/hooks/calendar-hooks/use-calendar-state';
 import { levelMap, nextLevelMap } from '@/shared/constants/calendar/calendar';
-import { CalendarMode, LevelType } from '@/types/core/calendar/calendar';
+import { CalendarMode, LevelType } from '@/types/core/calendar';
 import { Day, Locale } from 'date-fns';
 import { FC, useState } from 'react';
 import CalendarDaysLevel from './CalendarDaysLevel';

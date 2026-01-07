@@ -7,3 +7,11 @@ export interface Contract {
   monthlyPayment: number;
   status: ContractStatus;
 }
+
+// export type Contract = {
+//   id: string;
+//   commencement: string;
+//   termination: string;
+//   monthlyPayment: number;
+//   renter: Renter;
+// };

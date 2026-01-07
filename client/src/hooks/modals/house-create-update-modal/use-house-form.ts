@@ -1,13 +1,13 @@
-import { useHouseCrud } from '@/hooks/modals/house-create-update-modal/use-house-crud';
 import { defaultHouseValues } from '@/shared/utils/create-update-house-form/default-house-values';
 import { mapHouseToFormData } from '@/shared/utils/create-update-house-form/house-form';
 import { houseFormToast } from '@/shared/utils/create-update-house-form/house-form-toast';
 import { extractDirtyFormValues } from '@/shared/utils/helpers/extract-dirty-form-values';
 import { HouseFormData, houseSchema } from '@/shared/validation/create-update-house/house-schema';
-import { House } from '@/types/core/house/house';
+import { House } from '@/types/core/house';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useHouseCrud } from './use-house-crud';
 
 type Props = {
   isEditMode: boolean;

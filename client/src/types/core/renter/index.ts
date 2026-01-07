@@ -6,7 +6,7 @@ export interface Renter {
   firstName: string;
   lastName: string;
   occupied: string;
-  vacated?: string;
+  vacated: string;
   totalIncome: number;
   status: ContractStatus;
 }

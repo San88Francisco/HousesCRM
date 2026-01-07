@@ -1,6 +1,6 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { createChartPieConfig } from '@/shared/utils/all-house/pie-chart/create-chart-pie-config';
-import { HouseDistributionChartDataItem } from '@/types/model/revenue-distribution/pie-chart-items';
+import { HouseDistributionChartDataItem } from '@/types/model/revenue-distribution';
 import { Label, Pie, PieChart } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './charts';
 

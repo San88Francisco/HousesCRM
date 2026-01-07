@@ -3,7 +3,7 @@
 import { DatePicker } from '@/shared/ui/data-picker';
 import { Label } from '@/shared/ui/label';
 import { cn } from '@/shared/utils/cn';
-import { CalendarMode } from '@/types/core/calendar/calendar';
+import { CalendarMode } from '@/types/core/calendar';
 import { startOfToday } from 'date-fns';
 import { forwardRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
