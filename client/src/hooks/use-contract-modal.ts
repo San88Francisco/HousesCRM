@@ -1,4 +1,4 @@
-import { INTERSECTION_ROOT_MARGIN, PAGE_LIMIT } from '@/constants/renter';
+import { INTERSECTION_ROOT_MARGIN, PAGE_LIMIT } from '@/shared/constants/renter';
 import { useGetAllContractsByRenterIdQuery } from '@/store/renters-api';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
