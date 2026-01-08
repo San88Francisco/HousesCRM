@@ -2,19 +2,19 @@
 
 import Modal from '@/components/modals/modal-wrapper';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useHouseForm } from '@/hooks/modals/house-create-update-modal/use-house-form';
-import { useHouseModal } from '@/hooks/modals/house-create-update-modal/use-house-modal';
+import { useRenterForm } from '@/hooks/modals/renter-create-update-modal/use-renter-form';
+import { useRenterModal } from '@/hooks/modals/renter-create-update-modal/use-renter-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';
-import { HouseFormFields } from '@/widgets/modals/house-create-update-modal/HouseFormFields';
+import { RenterFormFields } from '@/widgets/modals/renter-create-update-modal/RenterFormFields';
 
-export const HouseCreateUpdateModal = () => {
-  const { isEditMode, houseToEdit, handleClose: getHandleClose, modalContent } = useHouseModal();
+export const RenterCreateUpdateModal = () => {
+  const { isEditMode, renterToEdit, handleClose: getHandleClose, modalContent } = useRenterModal();
 
-  const { methods, onSubmit, isLoading, reset } = useHouseForm({
+  const { methods, onSubmit, isLoading, reset } = useRenterForm({
     isEditMode,
-    houseToEdit,
+    renterToEdit,
     onSuccess: () => handleClose(),
   });
 
@@ -26,7 +26,7 @@ export const HouseCreateUpdateModal = () => {
 
   return (
     <Modal
-      triggers={isEditMode ? ModalTriggers.EDIT_HOUSE : ModalTriggers.ADD_HOUSE}
+      triggers={isEditMode ? ModalTriggers.EDIT_RENTER : ModalTriggers.ADD_RENTER}
       className="max-w-2xl max-h-[90vh] overflow-y-auto"
     >
       <DialogHeader>
@@ -35,9 +35,9 @@ export const HouseCreateUpdateModal = () => {
       </DialogHeader>
 
       <RHFForm form={methods} onSubmit={onSubmit}>
-        <HouseFormFields isLoading={isLoading} />
+        <RenterFormFields isLoading={isLoading} />
 
-        <DialogFooter className="!mt-10 gap-2">
+        <DialogFooter className="gap-2">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
             {modalContent.cancelText}
           </Button>

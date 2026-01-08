@@ -31,8 +31,8 @@ export const useCalendarNavigation = ({
   };
 
   const prevMonth = () => {
-    const firstDayNextMonth = add(firstDayCurrentMonth, { months: -MONTHS_PAGE_STEP });
-    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
+    const firstDayPrevMonth = add(firstDayCurrentMonth, { months: -MONTHS_PAGE_STEP });
+    setCurrentMonth(format(firstDayPrevMonth, 'MMM-yyyy'));
   };
 
   const nextYear = () => {
