@@ -60,6 +60,7 @@ export const PagePagination = ({ currentPage, totalPages, onPageChange, classNam
           <PaginationPrevious
             onClick={handlePrevious}
             aria-disabled={!canGoPrev}
+            aria-label="Previous page"
             className={cn(
               'cursor-pointer text-text',
               !canGoPrev && 'pointer-events-none text-muted',
@@ -69,14 +70,14 @@ export const PagePagination = ({ currentPage, totalPages, onPageChange, classNam
         {visiblePages.map((page, index) => {
           if (page === 'ellipsis') {
             return (
-              <PaginationItem key={`ellipsis-${index}`}>
+              <PaginationItem key={index === 0 ? 'ellipsis-start' : `ellipsis-${index}`}>
                 <PaginationEllipsis />
               </PaginationItem>
             );
           }
 
           const pageNumber = page + 1;
-          const isActive = pageNumber === currentPage;
+          const isActive = pageNumber === safeCurrentPage;
 
           return (
             <PaginationItem
@@ -96,6 +97,7 @@ export const PagePagination = ({ currentPage, totalPages, onPageChange, classNam
           <PaginationNext
             onClick={handleNext}
             aria-disabled={!canGoNext}
+            aria-label="Next page"
             className={cn(
               'cursor-pointer text-text',
               !canGoNext && 'pointer-events-none text-muted',
