@@ -4,11 +4,6 @@ import { Metadata } from '@/types/core/metadata';
 import { Renter } from '@/types/core/renter';
 import { RenterFormFields } from '@/types/model/form/renter';
 
-export type RenterReportResponse = {
-  firstName: string;
-  lastName: string;
-};
-
 export type RenterByIdResponse = {
   oneRenterReport: Renter;
   allContractsByRenterId: HousesPerformanceResponse;
