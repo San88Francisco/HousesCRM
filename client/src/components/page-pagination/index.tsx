@@ -1,3 +1,4 @@
+'use client';
 import useVisiblePages from '@/hooks/use-visible-pages';
 import {
   Pagination,
@@ -18,12 +19,19 @@ type Props = {
 };
 
 export const PagePagination = ({ currentPage, totalPages, onPageChange, className }: Props) => {
-  const currentPageIndex = currentPage - 1;
+  const isValid = totalPages > 0;
+  const safeCurrentPage = isValid ? Math.min(Math.max(currentPage, 1), totalPages) : 1;
 
-  const canGoPrev = currentPage > 1;
-  const canGoNext = currentPage < totalPages;
+  const currentPageIndex = safeCurrentPage - 1;
 
   const visiblePages = useVisiblePages(currentPageIndex, totalPages);
+
+  if (!isValid) {
+    return null;
+  }
+
+  const canGoPrev = safeCurrentPage > 1;
+  const canGoNext = safeCurrentPage < totalPages;
 
   const handlePageClick = (pageIndex: number) => {
     const nextPage = pageIndex + 1;
@@ -51,6 +59,7 @@ export const PagePagination = ({ currentPage, totalPages, onPageChange, classNam
         <PaginationItem>
           <PaginationPrevious
             onClick={handlePrevious}
+            aria-disabled={!canGoPrev}
             className={cn(
               'cursor-pointer text-text',
               !canGoPrev && 'pointer-events-none text-muted',
@@ -86,6 +95,7 @@ export const PagePagination = ({ currentPage, totalPages, onPageChange, classNam
         <PaginationItem>
           <PaginationNext
             onClick={handleNext}
+            aria-disabled={!canGoNext}
             className={cn(
               'cursor-pointer text-text',
               !canGoNext && 'pointer-events-none text-muted',
