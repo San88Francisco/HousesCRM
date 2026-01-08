@@ -10,17 +10,15 @@ export const houseSchema = yup.object({
 
   roomsCount: yup
     .number()
-    .nullable()
     .transform((v, o) => (o === '' ? null : v))
-    .defined("Кількість кімнат обов'язкова")
+    .required("Кількість кімнат обов'язкова")
     .min(1, 'Кількість кімнат має бути не менше 1')
     .integer('Кількість кімнат має бути цілим числом'),
 
   totalArea: yup
     .number()
-    .nullable()
     .transform((v, o) => (o === '' ? null : v))
-    .defined("Загальна площа обов'язкова")
+    .required("Загальна площа обов'язкова")
     .positive('Площа має бути більше 0'),
 
   purchaseDate: yup
@@ -34,16 +32,14 @@ export const houseSchema = yup.object({
 
   price: yup
     .number()
-    .nullable()
     .transform((v, o) => (o === '' ? null : v))
-    .defined("Ціна обов'язкова")
+    .required("Ціна обов'язкова")
     .positive('Ціна має бути більше 0'),
 
   floor: yup
     .number()
-    .nullable()
     .transform((v, o) => (o === '' ? null : v))
-    .defined("Поверх обов'язковий")
+    .required("Поверх обов'язковий")
     .min(1, 'Поверх має бути не менше 1')
     .integer('Поверх має бути цілим числом'),
 
@@ -59,4 +55,13 @@ export const houseSchema = yup.object({
     .required("Тип квартири обов'язковий"),
 });
 
-export type HouseFormData = yup.InferType<typeof houseSchema>;
+export type HouseFormData = {
+  apartmentName: string;
+  roomsCount: number | null;
+  totalArea: number | null;
+  purchaseDate: string;
+  price: number | null;
+  floor: number | null;
+  street: string;
+  apartmentType: ApartmentType;
+};

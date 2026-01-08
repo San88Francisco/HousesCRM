@@ -10,7 +10,7 @@ import {
 import { Renter } from '@/types/core/renter';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 
 type Props = {
   isEditMode: boolean;
@@ -22,7 +22,7 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
   const { create, update, isLoading } = useRenterCrud();
 
   const methods = useForm<RenterFormData>({
-    resolver: yupResolver(renterSchema),
+    resolver: yupResolver(renterSchema) as Resolver<RenterFormData>,
     defaultValues: defaultRenterValues,
   });
 

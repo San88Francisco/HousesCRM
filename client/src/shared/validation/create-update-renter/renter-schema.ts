@@ -15,12 +15,14 @@ export const renterSchema = yup.object({
     .max(30, 'Прізвище має містити не більше 30 символів'),
   age: yup
     .number()
-    .nullable()
-    .transform((v, o) => (o === '' ? null : v))
-    .defined("Вік обов'язковий")
+    .required("Вік обов'язковий")
     .integer('Вік має бути цілим числом')
     .min(18, 'Мінімальний вік — 18 років')
     .max(100, 'Максимальний вік — 100 років'),
 });
 
-export type RenterFormData = yup.InferType<typeof renterSchema>;
+export type RenterFormData = {
+  firstName: string;
+  lastName: string;
+  age: number | null;
+};

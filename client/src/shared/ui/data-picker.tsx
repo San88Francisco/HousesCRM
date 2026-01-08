@@ -20,7 +20,7 @@ type Props = {
   iconWithError?: boolean;
   calendarMode?: CalendarMode;
   className?: string;
-  required?: boolean;
+  ariaRequired?: boolean;
   minDate?: Date;
   maxDate?: Date;
 };
@@ -36,7 +36,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, Props>(
       iconWithError = true,
       calendarMode = CalendarMode.YearsMonthsDays,
       className,
-      required = false,
+      ariaRequired = false,
       minDate,
       maxDate,
     },
@@ -80,7 +80,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, Props>(
                 error && 'border-red text-red focus-visible:ring-red',
               )}
               disabled={disabled}
-              aria-required={required}
+              aria-required={ariaRequired}
               aria-invalid={!!error}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}

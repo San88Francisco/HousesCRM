@@ -9,7 +9,7 @@ import { MouseEvent } from 'react';
 // TODO цей файл тимчасовий. Тут приклад як робити функцію редагування данних існуючої квартири.
 // TODO це ID вашого орендаря.
 // const idRenter = '244ca675-895f-4054-831c-e14fb085e57d';
-const idRenter = '4426450f-cbde-4332-a78e-e65495f2242b';
+const idRenter = '660e8400-e29b-41d4-a716-446655440001';
 
 const UpdateRenter = () => {
   const dispatch = useAppDispatch();
