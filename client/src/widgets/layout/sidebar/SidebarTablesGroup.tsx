@@ -1,6 +1,7 @@
 'use client';
 
 import { SIDEBAR_STYLES } from '@/shared/constants/styles';
+import { ROUTES } from '@/shared/routes';
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -18,7 +19,7 @@ export const SidebarTablesGroup = () => {
   const colapsibleMenuItems =
     data?.housesOverview?.map(house => ({
       title: house.apartmentName,
-      url: `/apartment/${house.id}`,
+      url: `${ROUTES.HOUSE}/${house.id}`,
       icon: MapPinHouse,
     })) || [];
 
