@@ -20,25 +20,27 @@ type Props = {
 export const PagePagination = ({ currentPage, totalPages, onPageChange, className }: Props) => {
   const currentPageIndex = currentPage - 1;
 
-  const canPreviousPage = currentPage > 1;
-  const canNextPage = currentPage < totalPages;
+  const canGoPrev = currentPage > 1;
+  const canGoNext = currentPage < totalPages;
 
   const visiblePages = useVisiblePages(currentPageIndex, totalPages);
-  const handlePageClick = (pageIndex: number) => {
-    const pageNumber = pageIndex + 1;
 
-    if (pageNumber !== currentPage) {
-      onPageChange(pageNumber);
+  const handlePageClick = (pageIndex: number) => {
+    const nextPage = pageIndex + 1;
+
+    if (nextPage !== currentPage) {
+      onPageChange(nextPage);
     }
   };
+
   const handlePrevious = () => {
-    if (canPreviousPage) {
+    if (canGoPrev) {
       onPageChange(currentPage - 1);
     }
   };
 
   const handleNext = () => {
-    if (canNextPage) {
+    if (canGoNext) {
       onPageChange(currentPage + 1);
     }
   };
@@ -51,42 +53,42 @@ export const PagePagination = ({ currentPage, totalPages, onPageChange, classNam
             onClick={handlePrevious}
             className={cn(
               'cursor-pointer text-text',
-              !canPreviousPage && 'pointer-events-none text-muted',
+              !canGoPrev && 'pointer-events-none text-muted',
             )}
           />
         </PaginationItem>
-        {visiblePages.map((page, index) =>
-          page === 'ellipsis' ? (
-            <PaginationItem key={`ellipsis-${index}`}>
-              <PaginationEllipsis />
-            </PaginationItem>
-          ) : (
-            (() => {
-              const pageNumber = page + 1;
-              const isActive = currentPage === pageNumber;
+        {visiblePages.map((page, index) => {
+          if (page === 'ellipsis') {
+            return (
+              <PaginationItem key={`ellipsis-${index}`}>
+                <PaginationEllipsis />
+              </PaginationItem>
+            );
+          }
 
-              return (
-                <PaginationItem
-                  key={page}
-                  className={cn(
-                    'cursor-pointer text-text',
-                    isActive && 'bg-gray dark:bg-gray rounded-[8px] text-white border-gray',
-                  )}
-                >
-                  <PaginationLink onClick={() => handlePageClick(page)} isActive={isActive}>
-                    {pageNumber}
-                  </PaginationLink>
-                </PaginationItem>
-              );
-            })()
-          ),
-        )}
+          const pageNumber = page + 1;
+          const isActive = pageNumber === currentPage;
+
+          return (
+            <PaginationItem
+              key={page}
+              className={cn(
+                'cursor-pointer text-text',
+                isActive && 'bg-gray dark:bg-gray rounded-[8px] text-white border-gray',
+              )}
+            >
+              <PaginationLink onClick={() => handlePageClick(page)} isActive={isActive}>
+                {pageNumber}
+              </PaginationLink>
+            </PaginationItem>
+          );
+        })}
         <PaginationItem>
           <PaginationNext
             onClick={handleNext}
             className={cn(
               'cursor-pointer text-text',
-              !canNextPage && 'pointer-events-none text-muted',
+              !canGoNext && 'pointer-events-none text-muted',
             )}
           />
         </PaginationItem>
