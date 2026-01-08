@@ -84,9 +84,9 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
     return (
       <div className="space-y-2">
         {label && (
-          <Label htmlFor={name} className="flex items-center gap-1">
+          <Label htmlFor={name} className="flex items-center gap-1 text-text font-medium">
             {label}
-            {required && <span className="text-destructive">*</span>}
+            {required && <span className="text-red ml-1">*</span>}
           </Label>
         )}
 

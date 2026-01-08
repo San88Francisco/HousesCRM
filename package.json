@@ -33,20 +33,13 @@
       "npm run lint:fix --prefix client",
       "prettier --write --config client/.prettierrc --ignore-path client/.prettierignore"
     ],
-    "client/**/*.{css,scss}": [
-      "prettier --write --config client/.prettierrc --ignore-path client/.prettierignore"
-    ],
     "server/**/*.{js,ts}": [
       "npm run lint --prefix server -- --fix",
       "prettier --write --config server/.prettierrc --ignore-path server/.prettierignore"
-    ],
-    "*.{json,md}": [
-      "prettier --write"
     ]
   },
   "dependencies": {
     "@eslint/js": "^9.32.0",
-    "@nestjs/mapped-types": "*",
-    "date-fns": "^4.1.0"
+    "@nestjs/mapped-types": "*"
   }
 }

@@ -45,7 +45,7 @@ const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
         render={({ field }) => (
           <div className={cn('flex flex-col gap-2', className)}>
             {label && (
-              <Label htmlFor={name}>
+              <Label htmlFor={name} className="text-text font-medium">
                 {label}
                 {required && <span className="text-red ml-1">*</span>}
               </Label>

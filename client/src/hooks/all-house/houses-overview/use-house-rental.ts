@@ -22,7 +22,7 @@ import { TimeRangeEnum } from '@/types/core/time-range';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
 export function useHouseRental(apartmentsData: Partial<AllAnalyticsResponse>) {
-  const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ONE_YEAR);
+  const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ALL_DATA);
   const [lockedApartment, setLockedApartment] = useState<string | null>(null);
   const [cursorDate, setCursorDate] = useState<string>('');
   const [chartWidth, setChartWidth] = useState(DEFAULT_CHART_WIDTH);
