@@ -6,7 +6,7 @@ import { HouseFormData, houseSchema } from '@/shared/validation/create-update-ho
 import { House } from '@/types/core/house';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { useHouseCrud } from './use-house-crud';
 
 type Props = {
@@ -19,7 +19,7 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
   const { create, update, isLoading } = useHouseCrud();
 
   const methods = useForm<HouseFormData>({
-    resolver: yupResolver(houseSchema),
+    resolver: yupResolver(houseSchema) as Resolver<HouseFormData>,
     defaultValues: defaultHouseValues,
   });
 

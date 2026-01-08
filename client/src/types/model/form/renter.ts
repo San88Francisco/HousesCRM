@@ -1,5 +1,5 @@
-export interface RenterFormFields {
+export type RenterFormFields = {
   age: number | null;
   firstName: string;
   lastName: string;
-}
+};

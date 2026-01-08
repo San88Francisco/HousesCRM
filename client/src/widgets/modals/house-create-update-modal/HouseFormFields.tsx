@@ -25,7 +25,7 @@ export const HouseFormFields = ({ isLoading }: Props) => {
         label="Дата покупки"
         placeholder="Оберіть дату покупки"
         disabled={isLoading}
-        required
+        ariaRequired
       />
 
       <RHFInput
@@ -58,7 +58,7 @@ export const HouseFormFields = ({ isLoading }: Props) => {
         placeholder="5"
         icon={<Building className="w-4 h-4" />}
         required
-        min={0}
+        min={1}
         disabled={isLoading}
       />
 

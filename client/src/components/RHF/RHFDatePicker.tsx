@@ -16,7 +16,7 @@ type Props = {
   iconWithError?: boolean;
   className?: string;
   calendarMode?: CalendarMode;
-  required?: boolean;
+  ariaRequired?: boolean;
 };
 
 export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
@@ -29,7 +29,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
       iconWithError = true,
       className,
       calendarMode,
-      required = false,
+      ariaRequired = false,
     },
     ref,
   ) => {
@@ -51,7 +51,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
             {label && (
               <Label htmlFor={name}>
                 {label}
-                {required && <span className="text-red ml-1">*</span>}
+                {ariaRequired && <span className="text-red ml-1">*</span>}
               </Label>
             )}
 
@@ -64,7 +64,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
               error={errorMessage}
               iconWithError={iconWithError}
               calendarMode={calendarMode}
-              required={required}
+              ariaRequired={ariaRequired}
               maxDate={todaysDate}
             />
 
