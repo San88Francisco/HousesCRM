@@ -39,12 +39,6 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
       if (isEditMode) {
         if (!renterToEdit?.id) throw new Error('ID орендаря не знайдено');
 
-        if (!formState.isDirty) {
-          renterFormToast.info(toastId);
-          onSuccess();
-          return;
-        }
-
         const changedData = extractDirtyFormValues(data, formState.dirtyFields);
         await update(renterToEdit.id, changedData);
       } else {

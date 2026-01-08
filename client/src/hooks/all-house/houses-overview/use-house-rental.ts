@@ -18,7 +18,7 @@ import {
   getDataRange,
   getOptimalTicks,
 } from '@/shared/utils/all-house/houses-overview/chart-math';
-import { TimeRangeEnum } from '@/types/model/houses-overview';
+import { TimeRangeEnum } from '@/types/core/time-range';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
 export function useHouseRental(apartmentsData: Partial<AllAnalyticsResponse>) {
