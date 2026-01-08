@@ -5,7 +5,7 @@ import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
-import { UniversalPagination } from '@/components/universal-pagination';
+import { PagePagination } from '@/components/page-pagination';
 import { apartmentColumns, PAGE_LIMIT } from '@/shared/constants/current-apartment';
 import { ROUTES } from '@/shared/routes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -160,7 +160,7 @@ export const TableHouse = () => {
             </Table>
           </div>
           {meta && (
-            <UniversalPagination
+            <PagePagination
               currentPage={meta.page || 1}
               totalPages={meta.totalPages || 1}
               onPageChange={handlePageChange}

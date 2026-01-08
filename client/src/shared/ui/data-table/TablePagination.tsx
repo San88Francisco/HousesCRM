@@ -1,4 +1,4 @@
-import { UniversalPagination } from '@/components/universal-pagination';
+import { PagePagination } from '@/components/page-pagination';
 import { Table } from '@tanstack/react-table';
 
 type Props<T> = {
@@ -15,7 +15,7 @@ const TablePagination = <T,>({ table, className }: Props<T>) => {
   };
 
   return (
-    <UniversalPagination
+    <PagePagination
       currentPage={currentPage}
       totalPages={totalPages}
       onPageChange={handlePageChange}
