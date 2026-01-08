@@ -40,13 +40,13 @@ export const PagePagination = ({ currentPage, totalPages, onPageChange, classNam
 
   const handlePrevious = () => {
     if (canGoPrev) {
-      onPageChange(currentPage - 1);
+      onPageChange(safeCurrentPage - 1);
     }
   };
 
   const handleNext = () => {
     if (canGoNext) {
-      onPageChange(currentPage + 1);
+      onPageChange(safeCurrentPage + 1);
     }
   };
 
