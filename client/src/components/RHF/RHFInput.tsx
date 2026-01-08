@@ -1,18 +1,18 @@
 'use client';
 
+import { useHotkeyForRef } from '@/hooks/use-hotkey-for-ref';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { cn } from '@/shared/utils/cn';
 import {
   forwardRef,
   HTMLInputTypeAttribute,
   InputHTMLAttributes,
-  useRef,
   ReactNode,
+  useRef,
   useState,
 } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
-import { cn } from '@/shared/utils/cn';
-import { useHotkeyForRef } from '@/hooks/use-hotkey-for-ref';
+import { Controller, get, useFormContext } from 'react-hook-form';
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   name: string;
@@ -56,7 +56,8 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
     } = useFormContext();
 
     const [isFocused, setIsFocused] = useState(false);
-    const error = errors[name];
+
+    const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
 
     const internalRef = useRef<HTMLInputElement | null>(null);
