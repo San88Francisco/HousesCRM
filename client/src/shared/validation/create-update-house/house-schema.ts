@@ -10,14 +10,12 @@ export const houseSchema = yup.object({
 
   roomsCount: yup
     .number()
-    .transform((v, o) => (o === '' ? null : v))
     .required("Кількість кімнат обов'язкова")
     .min(1, 'Кількість кімнат має бути не менше 1')
     .integer('Кількість кімнат має бути цілим числом'),
 
   totalArea: yup
     .number()
-    .transform((v, o) => (o === '' ? null : v))
     .required("Загальна площа обов'язкова")
     .positive('Площа має бути більше 0'),
 
@@ -30,15 +28,10 @@ export const houseSchema = yup.object({
       return date >= new Date('2000-01-01');
     }),
 
-  price: yup
-    .number()
-    .transform((v, o) => (o === '' ? null : v))
-    .required("Ціна обов'язкова")
-    .positive('Ціна має бути більше 0'),
+  price: yup.number().required("Ціна обов'язкова").positive('Ціна має бути більше 0'),
 
   floor: yup
     .number()
-    .transform((v, o) => (o === '' ? null : v))
     .required("Поверх обов'язковий")
     .min(1, 'Поверх має бути не менше 1')
     .integer('Поверх має бути цілим числом'),

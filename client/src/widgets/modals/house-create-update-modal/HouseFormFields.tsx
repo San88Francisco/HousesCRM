@@ -58,7 +58,7 @@ export const HouseFormFields = ({ isLoading }: Props) => {
         placeholder="5"
         icon={<Building className="w-4 h-4" />}
         required
-        min={0}
+        min={1}
         disabled={isLoading}
       />
 

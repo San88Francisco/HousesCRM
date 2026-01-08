@@ -21,9 +21,9 @@ export const useRenterModal = () => {
 
   const renterToEdit = isEditMode ? payload?.renter : undefined;
 
-  const handleClose = (reset: () => void) => {
+  const handleClose = (reset?: () => void) => {
     dispatch(closeModal());
-    reset();
+    reset?.();
   };
 
   const modalContent = {

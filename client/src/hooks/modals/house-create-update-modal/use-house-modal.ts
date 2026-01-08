@@ -43,6 +43,3 @@ export const useHouseModal = () => {
     modalContent,
   };
 };
-// const houseToEdit = isEditModalPayload<'house', House>(payload, 'house')
-//   ? payload.house
-//   : undefined;
