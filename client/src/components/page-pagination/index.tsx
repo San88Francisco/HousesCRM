@@ -85,7 +85,11 @@ export const PagePagination = ({ currentPage, totalPages, onPageChange, classNam
                 isActive && 'bg-gray dark:bg-gray rounded-[8px] text-white border-gray',
               )}
             >
-              <PaginationLink onClick={() => handlePageClick(page)} isActive={isActive}>
+              <PaginationLink
+                onClick={() => handlePageClick(page)}
+                isActive={isActive}
+                aria-label={`Page ${pageNumber}`}
+              >
                 {pageNumber}
               </PaginationLink>
             </PaginationItem>
