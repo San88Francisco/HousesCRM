@@ -75,17 +75,27 @@ export const useChartDimensions = (data: PaybackChartData[]) => {
 
 export const useChartScroll = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const capturedPointerRef = useRef<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  const handleDragEnd = useCallback(() => setIsDragging(false), []);
+  const handleDragEnd = useCallback(() => {
+    const element = scrollRef.current;
+
+    if (capturedPointerRef.current !== null && element) {
+      element.releasePointerCapture(capturedPointerRef.current);
+      capturedPointerRef.current = null;
+    }
+    setIsDragging(false);
+  }, []);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     const element = scrollRef.current;
     if (!element) return;
 
     element.setPointerCapture(e.pointerId);
+    capturedPointerRef.current = e.pointerId;
 
     setIsDragging(true);
     setStartX(e.pageX - element.offsetLeft);

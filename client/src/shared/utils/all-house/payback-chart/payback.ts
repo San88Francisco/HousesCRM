@@ -30,6 +30,7 @@ export const transformPaybackData = (
       purchasePriceUSD: stat.purchasePriceUSD,
       totalIncomeUSD: stat.totalIncomeUSD,
       currencySymbol: symbol,
+      currencyCode: currency,
     };
   });
 };

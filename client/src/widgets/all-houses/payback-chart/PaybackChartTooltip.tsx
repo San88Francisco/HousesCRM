@@ -50,16 +50,12 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
         <div className="space-y-1.5">
           <div className="flex justify-between items-center gap-4">
             <span className="text-xs text-muted">Вартість:</span>
-            <span className="text-xs font-medium">
-              {formatTooltipPrice(data.purchasePriceUSD, 'USD')}
-            </span>
+            <span className="text-xs font-medium">{formatTooltipPrice(data.purchasePriceUSD)}</span>
           </div>
 
           <div className="flex justify-between items-center gap-4">
             <span className="text-xs text-muted">Заплачено:</span>
-            <span className="text-xs font-medium">
-              {formatTooltipPrice(data.totalIncomeUSD, 'USD')}
-            </span>
+            <span className="text-xs font-medium">{formatTooltipPrice(data.totalIncomeUSD)}</span>
           </div>
 
           <div className="flex justify-between items-center gap-4">
