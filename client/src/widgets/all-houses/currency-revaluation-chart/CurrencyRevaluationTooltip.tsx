@@ -7,7 +7,6 @@ import {
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { truncateText } from '@/shared/utils/text';
 
-const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;
 const TOOLTIP_OFFSET_Y = 10;
 
@@ -64,7 +63,7 @@ export const CurrencyRevaluationTooltip = ({ active, payload, coordinate }: Prop
       style={transformStyle}
     >
       <p className="font-bold mb-3 text-sm" title={data.apartmentName}>
-        {truncateText(data.apartmentName, MAX_NAME_LENGTH)}
+        {truncateText(data.apartmentName)}
       </p>
 
       <div className="space-y-2">

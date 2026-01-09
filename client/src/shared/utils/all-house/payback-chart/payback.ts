@@ -7,10 +7,11 @@ const FULL_PAYBACK_COEFFICIENT = 1;
 const COEFFICIENT_DECIMAL_PLACES = 2;
 const MILLION = 1_000_000;
 const THOUSAND = 1_000;
+const DEFAULT_CURRENCY: Currencies = 'USD';
 
 export const transformPaybackData = (
   stats: HousePaybackStats[],
-  currency: Currencies = 'USD',
+  currency: Currencies = DEFAULT_CURRENCY,
 ): PaybackChartData[] => {
   const symbol = getCurrencySymbol(currency);
 
@@ -38,7 +39,7 @@ export const formatPaybackCoefficient = (coefficient: number): string => {
   return `x${coefficient.toFixed(COEFFICIENT_DECIMAL_PLACES)}`;
 };
 
-export const formatYAxis = (value: number, currency: Currencies = 'USD'): string => {
+export const formatYAxis = (value: number, currency: Currencies = DEFAULT_CURRENCY): string => {
   const symbol = getCurrencySymbol(currency);
 
   if (value >= MILLION) {
@@ -52,7 +53,10 @@ export const formatYAxis = (value: number, currency: Currencies = 'USD'): string
   return value === 0 ? `${symbol}0` : `${symbol}${value}`;
 };
 
-export const formatTooltipPrice = (value: number, currency: Currencies = 'USD'): string => {
+export const formatTooltipPrice = (
+  value: number,
+  currency: Currencies = DEFAULT_CURRENCY,
+): string => {
   const symbol = getCurrencySymbol(currency);
 
   if (value >= MILLION) {
@@ -68,5 +72,5 @@ export const formatTooltipPrice = (value: number, currency: Currencies = 'USD'):
       : `${symbol}${thousands.toFixed(decimals)}k`;
   }
 
-  return `${symbol}${value.toLocaleString('en-US')}`;
+  return `${symbol}${value.toLocaleString()}`;
 };

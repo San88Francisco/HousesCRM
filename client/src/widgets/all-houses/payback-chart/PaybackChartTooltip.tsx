@@ -16,12 +16,14 @@ interface CustomTooltipProps {
 export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (!active || !payload?.length) return null;
 
+  const DEFAULT_LOCALE = 'uk-UA';
+
   const data: PaybackChartData = payload[0].payload;
   const currentCurrency = data.currencyCode;
 
   const purchaseDate = new Date(data.purchaseDate);
   const formattedDate = !isNaN(purchaseDate.getTime())
-    ? purchaseDate.toLocaleDateString('uk-UA', {
+    ? purchaseDate.toLocaleDateString(DEFAULT_LOCALE, {
         year: 'numeric',
         month: 'short',
       })
@@ -57,7 +59,7 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
           </div>
 
           <div className="flex justify-between items-center gap-4">
-            <span className="text-xs text-muted">Заплачено:</span>
+            <span className="text-xs text-muted">Дохід:</span>
             <span className="text-xs font-medium">
               {formatTooltipPrice(data.totalIncomeUSD, currentCurrency)}
             </span>
