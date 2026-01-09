@@ -24,6 +24,7 @@ import { PaybackChartTooltip } from './PaybackChartTooltip';
 
 const CHART_HEIGHT = 300;
 const CHART_MARGIN = { top: 20, right: 30, left: 20, bottom: 50 };
+const CHART_CURRENCY = 'USD';
 
 export const PaybackChart = () => {
   const [mounted, setMounted] = useState(false);
@@ -80,7 +81,7 @@ export const PaybackChart = () => {
                 <YAxis
                   scale={scaleType}
                   domain={yAxisDomain}
-                  tickFormatter={value => formatYAxis(value, 'USD')}
+                  tickFormatter={value => formatYAxis(value, CHART_CURRENCY)}
                   axisLine={false}
                   tickLine={false}
                   width={65}

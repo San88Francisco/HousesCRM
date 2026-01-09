@@ -72,7 +72,7 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
           <>
             <div className="h-px bg-border" />
             <div className="flex items-center justify-end pt-1">
-              <span className="text-xs font-semibold text-green-600">Окуплена</span>
+              <span className="text-xs font-semibold text-[var(--positive)]">Окуплена</span>
             </div>
           </>
         )}

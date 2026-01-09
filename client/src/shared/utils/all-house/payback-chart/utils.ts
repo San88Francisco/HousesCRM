@@ -1,3 +1,4 @@
+import { Currencies } from '@/types/core/currencies';
 import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { transformPaybackData } from './payback';
@@ -22,11 +23,14 @@ const getOptimalRounding = (maxValue: number): number => {
   return config?.step ?? 500_000;
 };
 
-export const usePaybackChartData = (apiData?: HousePaybackStats[]) => {
+export const usePaybackChartData = (
+  apiData?: HousePaybackStats[],
+  currency: Currencies = 'USD',
+) => {
   return useMemo(() => {
     if (!apiData?.length) return [];
-    return transformPaybackData(apiData);
-  }, [apiData]);
+    return transformPaybackData(apiData, currency);
+  }, [apiData, currency]);
 };
 
 export const useChartDimensions = (data: PaybackChartData[]) => {
@@ -51,8 +55,9 @@ export const useChartDimensions = (data: PaybackChartData[]) => {
       };
     }
 
-    const maxPrice = Math.max(...prices);
-    const minPrice = Math.min(...prices);
+    const maxPrice = prices.reduce((max, current) => Math.max(max, current), -Infinity);
+    const minPrice = prices.reduce((min, current) => Math.min(min, current), Infinity);
+
     const scaleType =
       maxPrice / minPrice >= LOG_SCALE_THRESHOLD ? ('log' as const) : ('linear' as const);
 
