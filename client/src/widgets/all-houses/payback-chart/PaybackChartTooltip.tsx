@@ -3,9 +3,9 @@
 import {
   formatPaybackCoefficient,
   formatTooltipPrice,
-  truncateText,
 } from '@/shared/utils/all-house/payback-chart/payback';
 import { cn } from '@/shared/utils/cn';
+import { truncateText } from '@/shared/utils/text';
 import { PaybackChartData } from '@/types/core/payback-chart';
 
 interface CustomTooltipProps {
@@ -17,6 +17,7 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
   if (!active || !payload?.length) return null;
 
   const data: PaybackChartData = payload[0].payload;
+  const currentCurrency = data.currencyCode;
 
   const purchaseDate = new Date(data.purchaseDate);
   const formattedDate = !isNaN(purchaseDate.getTime())
@@ -50,12 +51,16 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
         <div className="space-y-1.5">
           <div className="flex justify-between items-center gap-4">
             <span className="text-xs text-muted">Вартість:</span>
-            <span className="text-xs font-medium">{formatTooltipPrice(data.purchasePriceUSD)}</span>
+            <span className="text-xs font-medium">
+              {formatTooltipPrice(data.purchasePriceUSD, currentCurrency)}
+            </span>
           </div>
 
           <div className="flex justify-between items-center gap-4">
             <span className="text-xs text-muted">Заплачено:</span>
-            <span className="text-xs font-medium">{formatTooltipPrice(data.totalIncomeUSD)}</span>
+            <span className="text-xs font-medium">
+              {formatTooltipPrice(data.totalIncomeUSD, currentCurrency)}
+            </span>
           </div>
 
           <div className="flex justify-between items-center gap-4">

@@ -4,8 +4,8 @@ import { CSSProperties } from 'react';
 import {
   formatCurrency,
   formatRate,
-  truncateText,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
+import { truncateText } from '@/shared/utils/text';
 
 const MAX_NAME_LENGTH = 20;
 const TOOLTIP_BOUNDARY_Y = 180;

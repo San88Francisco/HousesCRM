@@ -7,7 +7,6 @@ const FULL_PAYBACK_COEFFICIENT = 1;
 const COEFFICIENT_DECIMAL_PLACES = 2;
 const MILLION = 1_000_000;
 const THOUSAND = 1_000;
-const MAX_NAME_LENGTH = 20;
 
 export const transformPaybackData = (
   stats: HousePaybackStats[],
@@ -38,9 +37,6 @@ export const transformPaybackData = (
 export const formatPaybackCoefficient = (coefficient: number): string => {
   return `x${coefficient.toFixed(COEFFICIENT_DECIMAL_PLACES)}`;
 };
-
-export const truncateText = (text: string, maxLength: number = MAX_NAME_LENGTH): string =>
-  text.length <= maxLength ? text : `${text.substring(0, maxLength)}...`;
 
 export const formatYAxis = (value: number, currency: Currencies = 'USD'): string => {
   const symbol = getCurrencySymbol(currency);

@@ -1,11 +1,11 @@
 import { ChartDataItem, CurrencyRevaluation } from '@/types/core/currency-revaluation-chart';
+import { truncateText } from '@/shared/utils/text';
 
 const MILLION = 1_000_000;
 const THOUSAND = 1_000;
 const DECIMAL_PLACES_MILLION = 1;
 const DECIMAL_PLACES_THOUSAND = 0;
 const DECIMAL_PLACES_RATE = 2;
-const DEFAULT_MAX_LENGTH = 15;
 
 export const BAR_RADIUS = 4;
 export const BAR_SIZE = 10;
@@ -49,16 +49,6 @@ export const formatCurrency = (value: number): string => {
 
 export const formatRate = (rate: number): string => {
   return `${rate.toFixed(DECIMAL_PLACES_RATE)} ₴/$`;
-};
-
-export const truncateText = (text: string, maxLength: number = DEFAULT_MAX_LENGTH): string => {
-  const shouldTruncate = text.length > maxLength;
-
-  if (shouldTruncate) {
-    return `${text.substring(0, maxLength)}...`;
-  }
-
-  return text;
 };
 
 export const formatYAxisTick = (value: string) => {
