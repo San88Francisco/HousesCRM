@@ -32,14 +32,7 @@ export const PaybackChart = () => {
 
   const chartData = usePaybackChartData(analyticsData?.housesPaybackStats);
   const { yAxisMax, yAxisMin, minChartWidth, scaleType } = useChartDimensions(chartData);
-  const {
-    scrollRef,
-    isDragging,
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleMouseLeave,
-  } = useChartScroll();
+  const { scrollRef, isDragging, handlePointerDown, handlePointerMove } = useChartScroll();
 
   useEffect(() => {
     setMounted(true);
@@ -68,11 +61,10 @@ export const PaybackChart = () => {
             isDragging ? 'cursor-grabbing' : 'cursor-grab',
             'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200',
             'dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800',
+            'payback-chart-wrapper',
           )}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
         >
           <div style={{ minWidth: `${minChartWidth}px` }}>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
@@ -88,7 +80,7 @@ export const PaybackChart = () => {
                 <YAxis
                   scale={scaleType}
                   domain={yAxisDomain}
-                  tickFormatter={value => formatYAxis(value)}
+                  tickFormatter={value => formatYAxis(value, 'USD')}
                   axisLine={false}
                   tickLine={false}
                   width={65}

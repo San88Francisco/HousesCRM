@@ -18,6 +18,14 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
 
   const data: PaybackChartData = payload[0].payload;
 
+  const purchaseDate = new Date(data.purchaseDate);
+  const formattedDate = !isNaN(purchaseDate.getTime())
+    ? purchaseDate.toLocaleDateString('uk-UA', {
+        year: 'numeric',
+        month: 'short',
+      })
+    : '—';
+
   return (
     <div
       className={cn(
@@ -42,22 +50,21 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
         <div className="space-y-1.5">
           <div className="flex justify-between items-center gap-4">
             <span className="text-xs text-muted">Вартість:</span>
-            <span className="text-xs font-medium">{formatTooltipPrice(data.purchasePriceUSD)}</span>
+            <span className="text-xs font-medium">
+              {formatTooltipPrice(data.purchasePriceUSD, 'USD')}
+            </span>
           </div>
 
           <div className="flex justify-between items-center gap-4">
             <span className="text-xs text-muted">Заплачено:</span>
-            <span className="text-xs font-medium">{formatTooltipPrice(data.totalIncomeUSD)}</span>
+            <span className="text-xs font-medium">
+              {formatTooltipPrice(data.totalIncomeUSD, 'USD')}
+            </span>
           </div>
 
           <div className="flex justify-between items-center gap-4">
             <span className="text-xs text-muted">Дата:</span>
-            <span className="text-xs text-muted">
-              {new Date(data.purchaseDate).toLocaleDateString('uk-UA', {
-                year: 'numeric',
-                month: 'short',
-              })}
-            </span>
+            <span className="text-xs text-muted">{formattedDate}</span>
           </div>
         </div>
 

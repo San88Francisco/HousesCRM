@@ -1,5 +1,5 @@
 import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { transformPaybackData } from './payback';
 
 const MIN_CHART_WIDTH = 800;
@@ -60,7 +60,7 @@ export const useChartDimensions = (data: PaybackChartData[]) => {
     const roundingStep = getOptimalRounding(maxPriceWithPadding);
     const yAxisMax = Math.ceil(maxPriceWithPadding / roundingStep) * roundingStep;
 
-    const yAxisMin = scaleType === 'log' ? Math.floor(minPrice * 0.8) : 0;
+    const yAxisMin = scaleType === 'log' ? Math.max(1, Math.floor(minPrice * 0.8)) : 0;
 
     const minChartWidth = Math.max(MIN_CHART_WIDTH, data.length * CHART_WIDTH_PER_ITEM);
 
@@ -74,37 +74,46 @@ export const useChartScroll = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+  const handleDragEnd = useCallback(() => setIsDragging(false), []);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
     const element = scrollRef.current;
     if (!element) return;
+
+    element.setPointerCapture(e.pointerId);
 
     setIsDragging(true);
     setStartX(e.pageX - element.offsetLeft);
     setScrollLeft(element.scrollLeft);
   }, []);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent) => {
       if (!isDragging || !scrollRef.current) return;
 
       e.preventDefault();
+
       const x = e.pageX - scrollRef.current.offsetLeft;
       const walk = (x - startX) * SCROLL_SPEED;
+
       scrollRef.current.scrollLeft = scrollLeft - walk;
     },
     [isDragging, startX, scrollLeft],
   );
 
-  const handleMouseUp = useCallback(() => setIsDragging(false), []);
-  const handleMouseLeave = useCallback(() => setIsDragging(false), []);
+  useEffect(() => {
+    window.addEventListener('pointerup', handleDragEnd);
+
+    return () => {
+      window.removeEventListener('pointerup', handleDragEnd);
+    };
+  }, [handleDragEnd]);
 
   return {
     scrollRef,
     isDragging,
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleMouseLeave,
+    handlePointerDown,
+    handlePointerMove,
   };
 };
 

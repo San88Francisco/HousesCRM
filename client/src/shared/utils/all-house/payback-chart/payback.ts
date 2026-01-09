@@ -11,7 +11,7 @@ const MAX_NAME_LENGTH = 20;
 
 export const transformPaybackData = (
   stats: HousePaybackStats[],
-  currency: Currencies = 'UAH',
+  currency: Currencies = 'USD',
 ): PaybackChartData[] => {
   const symbol = getCurrencySymbol(currency);
 
@@ -41,7 +41,7 @@ export const formatPaybackCoefficient = (coefficient: number): string => {
 export const truncateText = (text: string, maxLength: number = MAX_NAME_LENGTH): string =>
   text.length <= maxLength ? text : `${text.substring(0, maxLength)}...`;
 
-export const formatYAxis = (value: number, currency: Currencies = 'UAH'): string => {
+export const formatYAxis = (value: number, currency: Currencies = 'USD'): string => {
   const symbol = getCurrencySymbol(currency);
 
   if (value >= MILLION) {
@@ -55,7 +55,7 @@ export const formatYAxis = (value: number, currency: Currencies = 'UAH'): string
   return value === 0 ? `${symbol}0` : `${symbol}${value}`;
 };
 
-export const formatTooltipPrice = (value: number, currency: Currencies = 'UAH'): string => {
+export const formatTooltipPrice = (value: number, currency: Currencies = 'USD'): string => {
   const symbol = getCurrencySymbol(currency);
 
   if (value >= MILLION) {
@@ -65,7 +65,8 @@ export const formatTooltipPrice = (value: number, currency: Currencies = 'UAH'):
   if (value >= THOUSAND) {
     const thousands = value / THOUSAND;
     const decimals = thousands >= 100 ? 1 : 2;
-    return thousands % 1 === 0
+
+    return Number.isInteger(thousands)
       ? `${symbol}${thousands}k`
       : `${symbol}${thousands.toFixed(decimals)}k`;
   }
