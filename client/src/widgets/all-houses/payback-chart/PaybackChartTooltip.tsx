@@ -21,7 +21,11 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
   const data: PaybackChartData = payload[0].payload;
   const currentCurrency = data.currencyCode;
 
-  const purchaseDate = new Date(data.purchaseDate);
+  const purchaseDate = (() => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(data.purchaseDate);
+    if (m) return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, 1));
+    return new Date(data.purchaseDate);
+  })();
   const formattedDate = !isNaN(purchaseDate.getTime())
     ? purchaseDate.toLocaleDateString(DEFAULT_LOCALE, {
         year: 'numeric',

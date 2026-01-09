@@ -9,6 +9,30 @@ const MILLION = 1_000_000;
 const THOUSAND = 1_000;
 const DEFAULT_CURRENCY: Currencies = 'USD';
 
+const formatLargeNumber = (abs: number, symbol: string, sign: string): string => {
+  if (abs >= MILLION) {
+    return `${sign}${symbol}${Math.round(abs / MILLION)}M`;
+  }
+
+  const k = Math.round(abs / THOUSAND);
+  return k >= 1000 ? `${sign}${symbol}${Math.round(abs / MILLION)}M` : `${sign}${symbol}${k}k`;
+};
+
+const formatSmallNumber = (abs: number, symbol: string, sign: string): string => {
+  return abs === 0 ? `${symbol}0` : `${sign}${symbol}${abs}`;
+};
+
+const formatThousands = (thousands: number, symbol: string, sign: string): string => {
+  if (thousands >= 1000) {
+    return `${sign}${symbol}${((thousands * THOUSAND) / MILLION).toFixed(2)}M`;
+  }
+
+  const decimals = thousands >= 100 ? 1 : 2;
+  return Number.isInteger(thousands)
+    ? `${sign}${symbol}${thousands}k`
+    : `${sign}${symbol}${thousands.toFixed(decimals)}k`;
+};
+
 export const transformPaybackData = (
   stats: HousePaybackStats[],
   currency: Currencies = DEFAULT_CURRENCY,
@@ -42,15 +66,16 @@ export const formatPaybackCoefficient = (coefficient: number): string => {
 export const formatYAxis = (value: number, currency: Currencies = DEFAULT_CURRENCY): string => {
   const symbol = getCurrencySymbol(currency);
 
-  if (value >= MILLION) {
-    return `${symbol}${Math.round(value / MILLION)}M`;
+  if (!Number.isFinite(value)) return '—';
+
+  const sign = value < 0 ? '-' : '';
+  const abs = Math.abs(value);
+
+  if (abs >= THOUSAND) {
+    return formatLargeNumber(abs, symbol, sign);
   }
 
-  if (value >= THOUSAND) {
-    return `${symbol}${Math.round(value / THOUSAND)}k`;
-  }
-
-  return value === 0 ? `${symbol}0` : `${symbol}${value}`;
+  return formatSmallNumber(abs, symbol, sign);
 };
 
 export const formatTooltipPrice = (
@@ -59,18 +84,19 @@ export const formatTooltipPrice = (
 ): string => {
   const symbol = getCurrencySymbol(currency);
 
-  if (value >= MILLION) {
-    return `${symbol}${(value / MILLION).toFixed(2)}M`;
+  if (!Number.isFinite(value)) return '—';
+
+  const sign = value < 0 ? '-' : '';
+  const abs = Math.abs(value);
+
+  if (abs >= MILLION) {
+    return `${sign}${symbol}${(abs / MILLION).toFixed(2)}M`;
   }
 
-  if (value >= THOUSAND) {
-    const thousands = value / THOUSAND;
-    const decimals = thousands >= 100 ? 1 : 2;
-
-    return Number.isInteger(thousands)
-      ? `${symbol}${thousands}k`
-      : `${symbol}${thousands.toFixed(decimals)}k`;
+  if (abs >= THOUSAND) {
+    const thousands = abs / THOUSAND;
+    return formatThousands(thousands, symbol, sign);
   }
 
-  return `${symbol}${value.toLocaleString()}`;
+  return `${sign}${symbol}${abs.toLocaleString()}`;
 };

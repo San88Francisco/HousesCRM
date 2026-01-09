@@ -62,8 +62,8 @@ export const CurrencyRevaluationTooltip = ({ active, payload, coordinate }: Prop
       className="p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] relative border-border z-[9999] bg-background"
       style={transformStyle}
     >
-      <p className="font-bold mb-3 text-sm" title={data.apartmentName}>
-        {truncateText(data.apartmentName)}
+      <p className="font-bold mb-3 text-sm" title={data.apartmentName ?? ''}>
+        {truncateText(data.apartmentName ?? '')}
       </p>
 
       <div className="space-y-2">
