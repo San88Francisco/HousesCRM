@@ -23,7 +23,7 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
 
   const purchaseDate = (() => {
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(data.purchaseDate);
-    if (m) return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, 1));
+    if (m) return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
     return new Date(data.purchaseDate);
   })();
   const formattedDate = !isNaN(purchaseDate.getTime())

@@ -15,7 +15,7 @@ const formatLargeNumber = (abs: number, symbol: string, sign: string): string =>
   }
 
   const k = Math.round(abs / THOUSAND);
-  return k >= 1000 ? `${sign}${symbol}${Math.round(abs / MILLION)}M` : `${sign}${symbol}${k}k`;
+  return `${sign}${symbol}${k}k`;
 };
 
 const formatSmallNumber = (abs: number, symbol: string, sign: string): string => {
@@ -98,5 +98,5 @@ export const formatTooltipPrice = (
     return formatThousands(thousands, symbol, sign);
   }
 
-  return `${sign}${symbol}${abs.toLocaleString()}`;
+  return `${sign}${symbol}${abs}`;
 };
