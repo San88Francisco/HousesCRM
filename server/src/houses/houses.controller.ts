@@ -11,6 +11,9 @@ import { HouseWithOccupancyReports } from './dto/house-with-occupancy-reports.dt
 import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
 import { HouseResponseDto } from './dto/houses-response.dto'
 import { UpdateHouseDto } from './dto/update-house.dto'
+import { HouseForMapDto } from './dto/house-for-map.dto'
+import { GeocodeRequestDto } from './dto/geocode-request.dto'
+import { GeocodeResponseDto } from './dto/geocode-response.dto'
 import { HousesService } from './houses.service'
 
 @Controller(HOUSES_ROUTES.ROOT)
@@ -24,6 +27,18 @@ export class HousesController {
   @Auth()
   findAll(@Query() dto: HouseQueryDto): Promise<HouseResponseDto> {
     return this.housesService.findAll(dto)
+  }
+
+  @Get(HOUSES_ROUTES.MAP)
+  @Auth()
+  findAllForMap(): Promise<HouseForMapDto[]> {
+    return this.housesService.findAllForMap()
+  }
+
+  @Get('geocode')
+  @Auth()
+  async geocodeAddress(@Query() dto: GeocodeRequestDto): Promise<GeocodeResponseDto | null> {
+    return this.housesService.geocodeAddress(dto.address, dto.city)
   }
 
   @Get(HOUSES_ROUTES.BY_ID_OCCUPANCY)

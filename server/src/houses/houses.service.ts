@@ -1,19 +1,21 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { House } from './entities/house.entity'
-import { Between, EntityNotFoundError, Repository } from 'typeorm'
-import { CreateHouseDto } from './dto/create-house.dto'
 import { plainToInstance } from 'class-transformer'
-import { UpdateHouseDto } from './dto/update-house.dto'
-import { HousePriceService } from 'src/house-prices/house-price.service'
-import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
-import { HousePricesConverterService } from 'src/house-prices/house-prices.converter.service'
+import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { Contract } from 'src/contracts/entities/contract.entity'
-import { HouseResponseDto } from './dto/houses-response.dto'
+import { HousePriceService } from 'src/house-prices/house-price.service'
+import { HousePricesConverterService } from 'src/house-prices/house-prices.converter.service'
+import { Between, EntityNotFoundError, Repository } from 'typeorm'
+import { HOUSE_QUERY_DEFAULTS } from './constants/house-query.constant'
+import { CreateHouseDto } from './dto/create-house.dto'
+import { GeocodeResponseDto } from './dto/geocode-response.dto'
+import { HouseForMapDto } from './dto/house-for-map.dto'
 import { HouseQueryDto } from './dto/house-query.dto'
 import { HouseWithPricesDto } from './dto/house-with-prices.dto'
-import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
-import { HOUSE_QUERY_DEFAULTS } from './constants/house-query.constant'
+import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
+import { HouseResponseDto } from './dto/houses-response.dto'
+import { UpdateHouseDto } from './dto/update-house.dto'
+import { House } from './entities/house.entity'
 
 @Injectable()
 export class HousesService {
@@ -136,6 +138,64 @@ export class HousesService {
 
     if (res.affected === 0) {
       throw new EntityNotFoundError(House, id)
+    }
+  }
+
+  async findAllForMap(): Promise<HouseForMapDto[]> {
+    const houses = await this.houseRepository.find({
+      select: ['id', 'apartmentName', 'street'],
+    })
+
+    return plainToInstance(HouseForMapDto, houses, {
+      excludeExtraneousValues: true,
+    })
+  }
+
+  async geocodeAddress(address: string, city: string): Promise<GeocodeResponseDto | null> {
+    try {
+      const query = address.includes(city) ? address : `${address}, ${city}`
+      const encodedQuery = encodeURIComponent(query)
+
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedQuery}&limit=1&countrycodes=ua&addressdetails=1`
+
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'HousesCRM/1.0',
+        },
+      })
+
+      if (!response.ok) {
+        return null
+      }
+
+      interface NominatimResult {
+        lat: string
+        lon: string
+        display_name: string
+      }
+
+      const data = (await response.json()) as NominatimResult[] | null
+
+      if (!data || data.length === 0) {
+        return null
+      }
+
+      const result = data[0]
+
+      return plainToInstance(
+        GeocodeResponseDto,
+        {
+          lat: parseFloat(result.lat),
+          lng: parseFloat(result.lon),
+          displayName: result.display_name,
+        },
+        {
+          excludeExtraneousValues: true,
+        }
+      )
+    } catch (error) {
+      Logger.error('Geocoding error:', error)
+      return null
     }
   }
 }

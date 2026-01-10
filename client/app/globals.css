@@ -73,6 +73,7 @@
   --chart-pie-14: #4faf68;
   --chart-pie-15: #c8a045;
   --bg-logo: url('/logo/light-logo.png');
+  --bg-geo-map-3d: url('/geo-map-3d/bg-btn-map/bg-map-light.png');
 }
 
 .dark {
@@ -140,6 +141,7 @@
   --chart-pie-14: #6dd48a;
   --chart-pie-15: #e2bd6b;
   --bg-logo: url('/logo/dark-logo.png');
+  --bg-geo-map-3d: url('/geo-map-3d/bg-btn-map/bg-map-night.png');
 }
 
 html,
@@ -292,4 +294,66 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: var(--text) !important;
   caret-color: var(--text);
   transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Leaflet Map Styles */
+.leaflet-container {
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  background-color: var(--background);
+}
+
+/* Dark theme for Leaflet tiles */
+.dark .leaflet-tile {
+  filter: brightness(0.7) contrast(1.1) saturate(0.8);
+}
+
+/* Leaflet controls styling */
+.leaflet-control-zoom a,
+.leaflet-control-attribution {
+  background-color: var(--background) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+.dark .leaflet-control-zoom a {
+  background-color: #1a1a1a !important;
+  color: white !important;
+  border-color: #333333 !important;
+}
+
+.dark .leaflet-control-attribution {
+  background-color: rgba(26, 26, 26, 0.8) !important;
+  color: #7e7e7e !important;
+}
+
+/* Popup styling */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background-color: var(--background) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.dark .leaflet-popup-content-wrapper,
+.dark .leaflet-popup-tip {
+  background-color: #1a1a1a !important;
+  color: white !important;
+  border-color: #333333 !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--text) !important;
+}
+
+.dark .leaflet-container a.leaflet-popup-close-button {
+  color: white !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover {
+  color: var(--red) !important;
 }

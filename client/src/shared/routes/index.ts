@@ -19,4 +19,5 @@ export const SIDEBAR_PATTERNS = [
   /^\/house/,
   /^\/renter/,
   /^\/contract/,
+  /^\/geo-map-3d/,
 ] as const;

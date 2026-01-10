@@ -44,6 +44,7 @@ export default {
         'toast-shadow': 'var(--toast-shadow)',
 
         red: 'var(--red)',
+        gold: 'var(--gold)',
         blue: 'var(--blue)',
         'blue-medium': 'var(--blue-medium)',
         'blue-light': 'var(--blue-light)',
@@ -105,6 +106,7 @@ export default {
       },
       backgroundImage: {
         logo: 'var(--bg-logo)',
+        'geo-map-3d': 'var(--bg-geo-map-3d)',
       },
     },
   },
