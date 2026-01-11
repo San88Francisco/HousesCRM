@@ -1,4 +1,5 @@
-import { Apartment, ChartDataPoint, Contract, TimeRangeEnum } from '@/types/model/houses-overview';
+import { TimeRangeEnum } from '@/types/core/time-range';
+import { Apartment, ChartDataPoint, HousesOverviewContract } from '@/types/model/houses-overview';
 
 const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.SIX_MONTHS]: date => {
@@ -175,16 +176,16 @@ export function formatTickDate(value: number): string {
     .replace(' р.', '');
 }
 
-export const isContract = (value: unknown): value is Contract => {
+export const isContract = (value: unknown): value is HousesOverviewContract => {
   return (
     typeof value === 'object' &&
     value !== null &&
     'renter' in value &&
     'commencement' in value &&
     'termination' in value &&
-    typeof (value as Contract).commencement === 'string' &&
-    typeof (value as Contract).termination === 'string' &&
+    typeof value.commencement === 'string' &&
+    typeof value.termination === 'string' &&
     'monthlyPayment' in value &&
-    typeof (value as Contract).monthlyPayment === 'number'
+    typeof value.monthlyPayment === 'number'
   );
 };

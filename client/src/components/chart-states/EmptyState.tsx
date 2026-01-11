@@ -6,7 +6,7 @@ type Props = {
 };
 export const EmptyState = ({ className }: Props) => {
   return (
-    <Card className={cn('mx-auto', className)}>
+    <Card className={cn('mx-auto w-full', className)}>
       <CardContent className="flex items-center justify-center h-96">
         <p className="text-[var(--muted-text)]">Немає даних для відображення</p>
       </CardContent>

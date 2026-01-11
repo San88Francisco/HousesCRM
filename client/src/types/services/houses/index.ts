@@ -1,32 +1,25 @@
-import { ApartmentType } from '@/types/core/apartment-type';
 import { House } from '@/types/core/house';
+import { Renter } from '@/types/core/renter';
+import { CreateUpdateHouseForm } from '@/types/model/form/house';
 import { CurrencyRevaluation } from '../../core/currency-revaluation-chart';
 import { Metadata } from '../../core/metadata';
 import { OccupancyHouses } from '../../model/houses-occupancy';
-import { Renter } from '../renters';
 
 export type HouseByIdResponse = {
   houseDetail: House;
-  occupancyReports: Renter[];
+  occupancyReports: OccupancyReports;
 };
 
-export type CreateHouseResponse = Omit<House, 'id'>;
-export type CreateHouseRequest = {
-  apartmentName: string;
-  roomsCount: number;
-  totalArea: number;
-  purchaseDate: string;
-  price: number;
-  floor: number;
-  street: string;
-  apartmentType: ApartmentType;
-  contractIds?: string[];
+export type OccupancyReports = {
+  data: Renter[];
+  meta: Metadata;
 };
+
+export type CreateHouseResponse = House;
+export type CreateHouseRequest = CreateUpdateHouseForm;
 
 export type UpdateHouseResponse = House;
-export type UpdateHouseRequest = Partial<Omit<CreateHouseRequest, 'contractIds'>> & {
-  id: string;
-};
+export type UpdateHouseRequest = Partial<CreateUpdateHouseForm> & { id: string };
 
 export type OccupancyHousesPaginatedResponse = {
   data: OccupancyHouses[];

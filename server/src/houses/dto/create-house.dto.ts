@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer'
 import {
   ArrayNotEmpty,
   IsArray,
@@ -13,14 +14,13 @@ import {
   MaxLength,
   Min,
 } from 'class-validator'
-import { Type } from 'class-transformer'
 import { ApartmentType } from '../entities/house.entity'
 
 export class CreateHouseDto {
   @IsDefined({ message: 'apartmentName is required' })
   @IsString({ message: 'apartmentName must be a string' })
   @IsNotEmpty({ message: 'apartmentName must not be empty' })
-  @MaxLength(30)
+  @MaxLength(45, { message: 'apartmentName must be shorter than or equal to 45 characters' })
   apartmentName: string
 
   @IsDefined({ message: 'roomsCount is required' })
@@ -51,6 +51,7 @@ export class CreateHouseDto {
   @IsDefined({ message: 'street is required' })
   @IsString({ message: 'street must be a string' })
   @IsNotEmpty({ message: 'street must not be empty' })
+  @MaxLength(45, { message: 'street must be shorter than or equal to 45 characters' })
   street: string
 
   @IsDefined({ message: 'apartmentType is required' })

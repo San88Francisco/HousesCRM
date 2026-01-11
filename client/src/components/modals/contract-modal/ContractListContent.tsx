@@ -1,11 +1,12 @@
-import { MAX_MODAL_HEIGHT } from '@/constants/renter';
+import { MAX_MODAL_HEIGHT } from '@/shared/constants/renter';
+import { scrollbarClasses } from '@/shared/constants/styles/scrollbar';
 import { cn } from '@/shared/utils/cn';
-import { ContractResponse } from '@/types/services/renters';
+import { Contract } from '@/types/core/contract';
 import { RefObject } from 'react';
 import { ContractItem } from './ContractItem';
 
 type Props = {
-  contracts: ContractResponse[];
+  contracts: Contract[];
   isFetching: boolean;
   hasMore: boolean;
   loadMoreRef: RefObject<HTMLDivElement | null>;
@@ -16,7 +17,10 @@ export const ContractListContent = ({ contracts, isFetching, hasMore, loadMoreRe
   const showAllLoaded = !hasMore && contracts.length > 0;
 
   return (
-    <div className="mt-4 overflow-y-auto px-2" style={{ maxHeight: MAX_MODAL_HEIGHT }}>
+    <div
+      className={cn('mt-4 overflow-y-auto px-2', scrollbarClasses)}
+      style={{ maxHeight: MAX_MODAL_HEIGHT }}
+    >
       {contracts.length > 0 && (
         <ul className="space-y-2">
           {contracts.map(contract => (

@@ -1,18 +1,18 @@
 'use client';
 
-import { forwardRef, ReactNode } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import { Label } from '@/shared/ui/label';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
-  SelectGroup,
-  SelectLabel,
 } from '@/shared/ui/select';
 import { cn } from '@/shared/utils/cn';
-import { Label } from '@/shared/ui/label';
+import { forwardRef, ReactNode } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 type SelectOption = {
   value: string;
@@ -98,7 +98,11 @@ export const RHFSelect = forwardRef<HTMLDivElement, Props>(
         control={control}
         render={({ field, fieldState: { error } }) => (
           <div className={cn('flex flex-col gap-2', className)} ref={ref}>
-            {label && <Label htmlFor={name}>{label}</Label>}
+            {label && (
+              <Label htmlFor={name} className="text-text font-medium">
+                {label}
+              </Label>
+            )}
             <Select
               value={field.value}
               onValueChange={value => {

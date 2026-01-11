@@ -6,12 +6,12 @@ import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
+import { Contract } from '@/types/core/contract';
 import { ModalTriggers } from '@/types/model/modals';
-import { ContractResponse } from '@/types/services/renters';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 
 type Props = {
-  contract: ContractResponse;
+  contract: Contract;
 };
 
 export const ContractItem = ({ contract }: Props) => {
@@ -54,8 +54,8 @@ export const ContractItem = ({ contract }: Props) => {
       </div>
       <span
         className={cn(
-          'absolute right-0 top-0 p-1 text-purple text-xs',
-          contract.status === 'active' && 'text-yellow',
+          'absolute right-0 top-0 rounded-full px-2 py-0.5 text-xs font-semibold m-2 text-white ',
+          contract.status === 'active' ? 'bg-yellow' : 'bg-purple',
         )}
       >
         {contract.status === 'active' ? 'Активний' : 'Не активний'}

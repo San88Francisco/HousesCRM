@@ -7,7 +7,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: CardVariant;
 }
 
-export type CardHeaderProps = React.HTMLAttributes<HTMLDivElement>;
+export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   variant?: CardVariant;

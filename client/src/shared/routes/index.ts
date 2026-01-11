@@ -3,7 +3,7 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   ALL_HOUSES: '/all-houses',
-  APARTMENT: '/apartment',
+  HOUSE: '/house',
   RENTER: '/renter',
   CONTRACT: '/contract',
   UIKIT: '/uikit',
@@ -16,7 +16,7 @@ export const SIDEBAR_PATTERNS = [
   /^\/$/,
   /^\/all-houses/,
   /^\/uikit/,
-  /^\/apartment/,
+  /^\/house/,
   /^\/renter/,
   /^\/contract/,
 ] as const;

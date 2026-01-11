@@ -36,7 +36,21 @@ export default function Modal({ children, triggers, className, onClose, ...props
       <DialogContent
         onOpenAutoFocus={e => e.preventDefault()}
         className={clsx(
-          'max-w-full bottom-0 top-auto sm:bottom-auto sm:top-[50%] translate-y-0 sm:translate-y-[-50%] rounded-b-none sm:rounded-lg border-0 outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 focus-visible:ring-0',
+          `
+  max-w-full
+  bottom-0 top-auto
+  sm:bottom-auto sm:top-[50%]
+  translate-y-0 sm:translate-y-[-50%]
+
+  rounded-t-lg rounded-b-none
+  sm:rounded-lg
+
+  border-0 outline-none
+  focus:outline-none focus-visible:outline-none
+  ring-0 focus:ring-0 focus-visible:ring-0
+
+  p-2 sm:p-5
+  `,
           className,
         )}
         {...props}

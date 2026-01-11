@@ -1,7 +1,6 @@
 'use client';
 
-import { Slot } from '@radix-ui/react-slot';
-import { VariantProps, cva } from 'class-variance-authority';
+import { useAnimatedIcon } from '@/hooks';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
@@ -9,6 +8,8 @@ import { Separator } from '@/shared/ui/separator';
 import { Sheet, SheetContent } from '@/shared/ui/sheet';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
+import { Slot } from '@radix-ui/react-slot';
+import { cva, VariantProps } from 'class-variance-authority';
 import {
   ComponentProps,
   createContext,
@@ -21,8 +22,8 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { scrollbarClasses } from '../constants/styles/scrollbar';
 import { cn } from '../utils/cn';
-import { useAnimatedIcon } from '@/hooks';
 import { ChevronLeftIcon } from './chevron-left';
 import { ChevronRightIcon } from './chevron-right';
 /* eslint-disable */
@@ -399,6 +400,7 @@ const SidebarContent = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
         ref={ref}
         data-sidebar="content"
         className={cn(
+          scrollbarClasses,
           'relative flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto group-data-[collapsible=icon]:overflow-hidden',
           className,
         )}
