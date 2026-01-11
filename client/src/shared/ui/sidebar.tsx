@@ -22,7 +22,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { scrollbarClasses } from '../constants/cn';
+import { scrollbarClasses } from '../constants/styles/scrollbar';
 import { cn } from '../utils/cn';
 import { ChevronLeftIcon } from './chevron-left';
 import { ChevronRightIcon } from './chevron-right';

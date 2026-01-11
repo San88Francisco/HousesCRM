@@ -4,7 +4,7 @@ import { Label } from '@/shared/ui/label';
 import { Textarea } from '@/shared/ui/textarea';
 import { cn } from '@/shared/utils/cn';
 import { forwardRef, type TextareaHTMLAttributes } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, get, useFormContext } from 'react-hook-form';
 
 interface Props extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'maxLength'> {
   name: string;
@@ -35,7 +35,7 @@ const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
       formState: { errors },
     } = useFormContext();
 
-    const error = errors[name];
+    const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
 
     return (
@@ -45,7 +45,7 @@ const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
         render={({ field }) => (
           <div className={cn('flex flex-col gap-2', className)}>
             {label && (
-              <Label htmlFor={name}>
+              <Label htmlFor={name} className="text-text font-medium">
                 {label}
                 {required && <span className="text-red ml-1">*</span>}
               </Label>

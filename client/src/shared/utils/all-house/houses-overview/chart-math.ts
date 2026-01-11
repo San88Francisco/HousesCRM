@@ -5,7 +5,8 @@ import {
   ONE_YEAR_MS,
   SMALL_MOBILE_TICKS,
 } from '@/shared/constants/line-chart/line-chart';
-import { ChartDataPoint, TimeRangeEnum } from '@/types/model/houses-overview';
+import { TimeRangeEnum } from '@/types/core/time-range';
+import { ChartDataPoint } from '@/types/model/houses-overview';
 
 export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: number) => {
   let timeoutId: ReturnType<typeof setTimeout>;

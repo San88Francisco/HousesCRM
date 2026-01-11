@@ -1,12 +1,12 @@
-import { MAX_MODAL_HEIGHT } from '@/constants/renter';
-import { scrollbarClasses } from '@/shared/constants/cn';
+import { MAX_MODAL_HEIGHT } from '@/shared/constants/renter';
+import { scrollbarClasses } from '@/shared/constants/styles/scrollbar';
 import { cn } from '@/shared/utils/cn';
-import { ContractResponse } from '@/types/services/renters';
+import { Contract } from '@/types/core/contract';
 import { RefObject } from 'react';
 import { ContractItem } from './ContractItem';
 
 type Props = {
-  contracts: ContractResponse[];
+  contracts: Contract[];
   isFetching: boolean;
   hasMore: boolean;
   loadMoreRef: RefObject<HTMLDivElement | null>;

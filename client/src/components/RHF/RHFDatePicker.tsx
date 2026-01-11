@@ -1,12 +1,12 @@
 'use client';
 
-import { DatePicker } from '@/shared/ui/data-picker';
+import { DatePicker } from '@/shared/ui/date-picker';
 import { Label } from '@/shared/ui/label';
 import { cn } from '@/shared/utils/cn';
 import { CalendarMode } from '@/types/core/calendar';
 import { startOfToday } from 'date-fns';
 import { forwardRef } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, get, useFormContext } from 'react-hook-form';
 
 type Props = {
   name: string;
@@ -38,7 +38,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
       formState: { errors },
     } = useFormContext();
 
-    const error = errors[name];
+    const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
     const todaysDate = startOfToday();
 
@@ -49,7 +49,7 @@ export const RHFDatePicker = forwardRef<HTMLButtonElement, Props>(
         render={({ field }) => (
           <div className={cn('flex flex-col gap-2', className)}>
             {label && (
-              <Label htmlFor={name}>
+              <Label htmlFor={name} className=" text-text font-medium">
                 {label}
                 {ariaRequired && <span className="text-red ml-1">*</span>}
               </Label>

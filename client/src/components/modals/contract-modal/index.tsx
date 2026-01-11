@@ -1,7 +1,7 @@
 'use client';
 
-import { OBSERVER_RESET_DELAY } from '@/constants/renter';
 import { useContractsModal } from '@/hooks/use-contract-modal';
+import { OBSERVER_RESET_DELAY } from '@/shared/constants/renter';
 import { DialogDescription, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { useAppSelector } from '@/store/hooks';
 import { ModalTriggers } from '@/types/model/modals';

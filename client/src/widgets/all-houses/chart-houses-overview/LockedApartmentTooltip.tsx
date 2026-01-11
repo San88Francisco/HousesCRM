@@ -1,10 +1,10 @@
 import { formatDateRange, truncate } from '@/shared/utils/helpers/custom-tooltip-helper';
-import { Contract } from '@/types/model/houses-overview';
+import { HousesOverviewContract } from '@/types/model/houses-overview';
 
 type Props = {
   color: string;
   apartmentName: string;
-  contract: Contract;
+  contract: HousesOverviewContract;
 };
 
 export const LockedApartmentTooltip = ({ color, apartmentName, contract }: Props) => {

@@ -1,4 +1,4 @@
-import { scrollbarClasses } from '@/shared/constants/cn';
+import { scrollbarClasses } from '@/shared/constants/styles/scrollbar';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription } from '@/shared/ui/dialog';
 import { cn } from '@/shared/utils/cn';

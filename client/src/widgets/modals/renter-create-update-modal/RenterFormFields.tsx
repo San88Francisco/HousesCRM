@@ -12,7 +12,7 @@ export const RenterFormFields = ({ isLoading }: Props) => {
         <RHFInput
           name="firstName"
           label="Ім'я"
-          placeholder="Петро"
+          placeholder="Симон"
           icon={<User className="w-4 h-4" />}
           required
           disabled={isLoading}
@@ -21,7 +21,7 @@ export const RenterFormFields = ({ isLoading }: Props) => {
         <RHFInput
           name="lastName"
           label="Прізвище"
-          placeholder="Непорошенко"
+          placeholder="Петлюра"
           icon={<User className="w-4 h-4" />}
           required
           disabled={isLoading}

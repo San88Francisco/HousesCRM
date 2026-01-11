@@ -34,15 +34,15 @@ export const HeaderHouse = () => {
       <h1 className="text-xl sm:text-2xl font-semibold leading-tight">{apartmentName}</h1>
 
       <div className="flex items-start gap-2 text-sm sm:text-base font-semibold">
-        <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-muted-text mt-[2px]" />
-        <span className="text-gray-medium break-words">{street}</span>
+        <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-text mt-[2px] opacity-90" />
+        <span className="text-text break-words opacity-75">{street}</span>
       </div>
 
-      <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-muted-text">
+      <div className="flex flex-wrap gap-2 sm:gap-5 text-xs sm:text-sm text-text">
         {items.map(({ Icon, text }) => (
-          <div key={text} className="flex items-center gap-1 rounded-full bg-muted/60 px-2 py-1">
-            <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-text" />
-            <span className="text-gray-medium whitespace-nowrap">{text}</span>
+          <div key={text} className="flex items-center gap-1 rounded-full bg-muted/60 py-1">
+            <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text opacity-95" />
+            <span className="text-text whitespace-nowrap opacity-75">{text}</span>
           </div>
         ))}
       </div>
