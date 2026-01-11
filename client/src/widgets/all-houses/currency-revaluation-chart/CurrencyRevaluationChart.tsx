@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
@@ -11,10 +11,11 @@ import { useChartConfig, useChartData } from '@/hooks/all-house/currency-revalua
 import {
   BAR_RADIUS,
   BAR_SIZE,
+  GROWTH_ANIMATION_DURATION,
   OPACITY_DARK,
   OPACITY_DEFAULT,
   OPACITY_LIGHT,
-  TOOLTIP_Z_INDEX,
+  PURCHASE_ANIMATION_DURATION,
   formatYAxisTick,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
@@ -24,6 +25,7 @@ export const CurrencyRevaluationChart = () => {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();
   const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const chartContainerRef = useRef<HTMLDivElement>(null);
 
   const chartData = useChartData(data?.currencyRevaluation || []);
   const { xAxisMax, containerHeight, chartHeight, isDark, purchaseBarFill, growthBarFill } =
@@ -56,7 +58,11 @@ export const CurrencyRevaluationChart = () => {
       </CardHeader>
 
       <CardContent className="pt-0">
-        <div className="w-full no-scrollbar relative" style={{ height: containerHeight }}>
+        <div
+          ref={chartContainerRef}
+          className="w-full overflow-y-auto overflow-x-hidden custom-scrollbar relative"
+          style={{ height: containerHeight }}
+        >
           <ResponsiveContainer width="100%" height={chartHeight} minWidth={280}>
             <BarChart
               data={chartData}
@@ -86,10 +92,9 @@ export const CurrencyRevaluationChart = () => {
               />
 
               <Tooltip
-                content={<CurrencyRevaluationTooltip />}
+                content={<CurrencyRevaluationTooltip chartContainerRef={chartContainerRef} />}
                 cursor={{ fill: 'transparent' }}
-                wrapperStyle={{ outline: 'none', zIndex: TOOLTIP_Z_INDEX }}
-                allowEscapeViewBox={{ x: true, y: true }}
+                wrapperStyle={{ outline: 'none', visibility: 'visible' }}
               />
 
               <Bar
@@ -99,6 +104,8 @@ export const CurrencyRevaluationChart = () => {
                 barSize={BAR_SIZE}
                 fill={purchaseBarFill}
                 isAnimationActive
+                animationDuration={PURCHASE_ANIMATION_DURATION}
+                animationBegin={0}
               >
                 {renderCells(purchaseBarFill, index =>
                   hoveredIndex === index ? 1 : OPACITY_DEFAULT,
@@ -112,6 +119,8 @@ export const CurrencyRevaluationChart = () => {
                 barSize={BAR_SIZE}
                 fill={growthBarFill}
                 isAnimationActive
+                animationDuration={GROWTH_ANIMATION_DURATION}
+                animationBegin={PURCHASE_ANIMATION_DURATION}
               >
                 {renderCells(growthBarFill, getGrowthOpacity)}
               </Bar>

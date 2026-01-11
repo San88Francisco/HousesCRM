@@ -1,24 +1,23 @@
-import { ChartDataItem } from '@/types/core/currency-revaluation-chart';
-import { CSSProperties } from 'react';
-
 import {
   formatCurrency,
   formatRate,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { truncateText } from '@/shared/utils/text';
+import { ChartDataItem } from '@/types/core/currency-revaluation-chart';
+import React, { useEffect, useState } from 'react';
 
-const TOOLTIP_BOUNDARY_Y = 180;
-const TOOLTIP_OFFSET_Y = 10;
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
 
 type TooltipRowProps = {
   label: string;
-  value: string;
+  value: React.ReactNode;
+  bold?: boolean;
 };
 
-const TooltipRow = ({ label, value }: TooltipRowProps) => (
-  <div className="flex justify-between gap-4">
-    <span className="text-xs text-muted">{label}</span>
-    <span className="text-xs">{value}</span>
+const TooltipRow = ({ label, value, bold }: TooltipRowProps) => (
+  <div className="flex justify-between gap-2">
+    <span className="text-xs text-muted whitespace-nowrap">{label}</span>
+    <span className={bold ? 'text-xs font-semibold' : 'text-xs font-medium'}>{value}</span>
   </div>
 );
 
@@ -30,58 +29,100 @@ type TooltipSectionProps = {
 };
 
 const TooltipSection = ({ title, amount, rate, rateLabel }: TooltipSectionProps) => (
-  <div>
-    <div className="flex justify-between gap-4 mb-1">
-      <span className="text-xs text-muted">{title}</span>
-      <span className="font-semibold text-xs">{formatCurrency(amount)}</span>
-    </div>
+  <div className="space-y-1">
+    <TooltipRow label={title} value={formatCurrency(amount)} bold />
     <TooltipRow label={rateLabel} value={formatRate(rate)} />
   </div>
 );
+
+const TOOLTIP_WIDTH = 200;
+const TOOLTIP_MAX_HEIGHT = 140;
+const OFFSET_X = 10;
+const OFFSET_Y = 10;
+const PADDING = 8;
 
 type Props = {
   active?: boolean;
   payload?: Array<{ payload: ChartDataItem }>;
   coordinate?: { x: number; y: number };
+  chartContainerRef?: React.RefObject<HTMLDivElement | null>;
 };
 
-export const CurrencyRevaluationTooltip = ({ active, payload, coordinate }: Props) => {
-  if (!active || !payload?.length) {
-    return null;
-  }
+export const CurrencyRevaluationTooltip = ({
+  active,
+  payload,
+  coordinate,
+  chartContainerRef,
+}: Props) => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  const data = payload[0].payload;
+  useEffect(() => {
+    if (!active || !coordinate || !chartContainerRef?.current) return;
 
-  const shouldShowAbove = coordinate && coordinate.y > TOOLTIP_BOUNDARY_Y;
-  const transformStyle: CSSProperties = {
-    transform: shouldShowAbove ? 'translateY(-100%)' : `translateY(${TOOLTIP_OFFSET_Y}px)`,
-  };
+    const { width, height } = chartContainerRef.current.getBoundingClientRect();
+
+    let x = coordinate.x + OFFSET_X;
+    let y = coordinate.y + OFFSET_Y;
+
+    if (x + TOOLTIP_WIDTH > width) {
+      x = coordinate.x - TOOLTIP_WIDTH - OFFSET_X;
+    }
+
+    if (y + TOOLTIP_MAX_HEIGHT > height) {
+      y = coordinate.y - TOOLTIP_MAX_HEIGHT - OFFSET_Y;
+    }
+
+    setPosition({
+      x: clamp(x, PADDING, width - TOOLTIP_WIDTH - PADDING),
+      y: clamp(y, PADDING, height - TOOLTIP_MAX_HEIGHT - PADDING),
+    });
+  }, [active, coordinate, chartContainerRef]);
+
+  const data = payload?.[0]?.payload;
+  if (!active || !data) return null;
+
+  const sections = [
+    {
+      title: 'Початкова:',
+      amount: data.purchaseAmount,
+      rate: data.purchaseRate,
+      rateLabel: 'Курс купівлі:',
+    },
+    {
+      title: 'Поточна:',
+      amount: data.revaluationAmount,
+      rate: data.currentRate,
+      rateLabel: 'Поточний курс:',
+    },
+  ];
 
   return (
     <div
-      className="p-3 rounded-lg shadow-2xl border min-w-[220px] max-w-[280px] relative border-border z-[9999] bg-background"
-      style={transformStyle}
+      className="p-2 rounded-lg border border-border bg-background animate-in fade-in-0 zoom-in-95 duration-150"
+      style={{
+        position: 'absolute',
+        left: position.x,
+        top: position.y,
+        width: TOOLTIP_WIDTH,
+        maxHeight: TOOLTIP_MAX_HEIGHT,
+        pointerEvents: 'none',
+        zIndex: 50,
+        overflow: 'hidden',
+      }}
     >
-      <p className="font-bold mb-3 text-sm" title={data.apartmentName ?? ''}>
-        {truncateText(data.apartmentName ?? '')}
-      </p>
+      <div className="h-full overflow-y-auto pr-1 custom-scrollbar">
+        <p className="font-bold mb-2 text-xs" title={data.apartmentName ?? 'Без назви'}>
+          {truncateText(data.apartmentName ?? 'Без назви', 25)}
+        </p>
 
-      <div className="space-y-2">
-        <TooltipSection
-          title="Початкова:"
-          amount={data.purchaseAmount}
-          rate={data.purchaseRate}
-          rateLabel="Курс купівлі:"
-        />
-
-        <div className="h-px bg-border" />
-
-        <TooltipSection
-          title="Поточна:"
-          amount={data.revaluationAmount}
-          rate={data.currentRate}
-          rateLabel="Поточний курс:"
-        />
+        <div className="space-y-2">
+          {sections.map((section, index) => (
+            <React.Fragment key={section.title}>
+              {index > 0 && <div className="h-px bg-border" />}
+              <TooltipSection {...section} />
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -13,10 +13,10 @@ interface CustomTooltipProps {
   payload?: Array<{ payload: PaybackChartData }>;
 }
 
+const DEFAULT_LOCALE = 'uk-UA';
+
 export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (!active || !payload?.length) return null;
-
-  const DEFAULT_LOCALE = 'uk-UA';
 
   const data: PaybackChartData = payload[0].payload;
   const currentCurrency = data.currencyCode;
