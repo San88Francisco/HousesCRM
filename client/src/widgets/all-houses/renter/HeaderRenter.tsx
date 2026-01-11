@@ -1,6 +1,6 @@
 'use client';
 
-import { PAGE_LIMIT } from '@/constants/renter';
+import { PAGE_LIMIT } from '@/shared/constants/renter';
 import { useGetAllContractsByRenterIdQuery } from '@/store/renters-api';
 import { Building2, DoorOpen, MapPin, PackagePlus, Ruler } from 'lucide-react';
 import { useParams } from 'next/navigation';
