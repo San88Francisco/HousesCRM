@@ -3,7 +3,9 @@ import { tableGrid } from '@/shared/constants/styles/houses-performance-table';
 import TablePagination from '@/shared/ui/data-table/TablePagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
+import { HousePerformanceItem } from '@/types/core/houses-performance';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
+import { useRouter } from 'next/navigation';
 import { HousesPerformanceSelect } from './HousesPerformanceSelect';
 
 type Props<T> = {
@@ -12,7 +14,8 @@ type Props<T> = {
   setLimit: (limit: number) => void;
 };
 
-export const HousesPerformanceTable = <T,>({ table, limit, setLimit }: Props<T>) => {
+export const HousesPerformanceTable = ({ table, limit, setLimit }: Props<HousePerformanceItem>) => {
+  const router = useRouter();
   return (
     <div className="flex flex-col justify-between h-full">
       <Table>
@@ -27,7 +30,14 @@ export const HousesPerformanceTable = <T,>({ table, limit, setLimit }: Props<T>)
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.map(row => (
-            <TableRow key={row.id} className={cn(tableGrid)}>
+            <TableRow
+              key={row.original.id}
+              className={cn(
+                tableGrid,
+                'cursor-pointer transition-colors duration-300 ease-out  hover:bg-dark-lightest',
+              )}
+              onClick={() => router.push(`/house/${row.original.id}`)}
+            >
               {row.getVisibleCells().map(cell => (
                 <TableCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -6,7 +6,7 @@ import { HousesPerformanceTableColumns } from '@/shared/constants/apartment/hous
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { HousesPerformanceTable } from './HousesPerformanceTable';
 
 const PAGE_SIZE = 10;
@@ -17,7 +17,14 @@ export const HousesPerformanceAnalytic = () => {
 
   const { data, trigger, pageCount, isLoading, isError, error, isEmpty } = useHousesPerformance();
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     setPageIndex(0);
 
     trigger({
