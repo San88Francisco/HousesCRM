@@ -1,6 +1,7 @@
 import {
   formatCurrency,
   formatRate,
+  TOOLTIP_Z_INDEX,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { truncateText } from '@/shared/utils/text';
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart';
@@ -59,7 +60,10 @@ export const CurrencyRevaluationTooltip = ({
   useEffect(() => {
     if (!active || !coordinate || !chartContainerRef?.current) return;
 
-    const { width, height } = chartContainerRef.current.getBoundingClientRect();
+    const chartElement =
+      chartContainerRef.current.querySelector('svg') || chartContainerRef.current;
+
+    const { width, height } = chartElement.getBoundingClientRect();
 
     let x = coordinate.x + OFFSET_X;
     let y = coordinate.y + OFFSET_Y;
@@ -76,10 +80,10 @@ export const CurrencyRevaluationTooltip = ({
       x: clamp(x, PADDING, width - TOOLTIP_WIDTH - PADDING),
       y: clamp(y, PADDING, height - TOOLTIP_MAX_HEIGHT - PADDING),
     });
-  }, [active, coordinate, chartContainerRef]);
+  }, [active, coordinate]);
 
   const data = payload?.[0]?.payload;
-  if (!active || !data) return null;
+  if (!active || !data || !coordinate) return null;
 
   const sections = [
     {
@@ -106,11 +110,11 @@ export const CurrencyRevaluationTooltip = ({
         width: TOOLTIP_WIDTH,
         maxHeight: TOOLTIP_MAX_HEIGHT,
         pointerEvents: 'none',
-        zIndex: 50,
+        zIndex: TOOLTIP_Z_INDEX,
         overflow: 'hidden',
       }}
     >
-      <div className="h-full overflow-y-auto pr-1 custom-scrollbar">
+      <div className="h-full overflow-y-auto pr-1 custom-scrollbar tooltip-scroll">
         <p className="font-bold mb-2 text-xs" title={data.apartmentName ?? 'Без назви'}>
           {truncateText(data.apartmentName ?? 'Без назви', 25)}
         </p>

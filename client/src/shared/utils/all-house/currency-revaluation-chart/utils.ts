@@ -21,8 +21,9 @@ export const CHART_PADDING = 30;
 export const MIN_VISIBLE_ROWS = 4;
 export const MAX_VISIBLE_ROWS = 7;
 
-export const PURCHASE_ANIMATION_DURATION = 600;
-export const GROWTH_ANIMATION_DURATION = 600;
+const ANIMATION_DURATION_MS = 600;
+export const PURCHASE_ANIMATION_DURATION = ANIMATION_DURATION_MS;
+export const GROWTH_ANIMATION_DURATION = ANIMATION_DURATION_MS;
 
 export const getBarColors = (isDark: boolean) => ({
   purchase: isDark ? 'var(--dark-purple)' : 'var(--dark)',

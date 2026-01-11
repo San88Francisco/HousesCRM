@@ -60,7 +60,7 @@ export const CurrencyRevaluationChart = () => {
       <CardContent className="pt-0">
         <div
           ref={chartContainerRef}
-          className="w-full overflow-y-auto overflow-x-hidden custom-scrollbar relative"
+          className="w-full overflow-y-auto overflow-x-hidden no-scrollbar relative"
           style={{ height: containerHeight }}
         >
           <ResponsiveContainer width="100%" height={chartHeight} minWidth={280}>
@@ -94,7 +94,7 @@ export const CurrencyRevaluationChart = () => {
               <Tooltip
                 content={<CurrencyRevaluationTooltip chartContainerRef={chartContainerRef} />}
                 cursor={{ fill: 'transparent' }}
-                wrapperStyle={{ outline: 'none', visibility: 'visible' }}
+                wrapperStyle={{ outline: 'none' }}
               />
 
               <Bar
