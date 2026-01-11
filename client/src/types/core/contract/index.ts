@@ -1,8 +1,7 @@
-import { UUID } from 'crypto';
 import { ContractStatus } from '../status/status';
 
 export interface Contract {
-  id: UUID;
+  id: string;
   commencement: string;
   termination: string;
   monthlyPayment: number;

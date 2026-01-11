@@ -1,0 +1,39 @@
+import { Button } from '@/shared/ui/button';
+import { useGetRenterByIdQuery } from '@/store/api/houses-api';
+import { useAppDispatch } from '@/store/hooks';
+import { openModal } from '@/store/slice/modal-slice';
+import { Renter } from '@/types/core/renter';
+import { ModalTriggers } from '@/types/model/modals';
+import { MouseEvent } from 'react';
+
+// TODO цей файл тимчасовий. Тут приклад як робити функцію редагування данних існуючої квартири.
+// TODO це ID вашого орендаря.
+// const idRenter = '244ca675-895f-4054-831c-e14fb085e57d';
+const idRenter = '660e8400-e29b-41d4-a716-446655440001';
+
+const UpdateRenter = () => {
+  const dispatch = useAppDispatch();
+
+  const handleEdit = (e: MouseEvent<HTMLButtonElement>, renter?: Renter) => {
+    e.currentTarget.blur();
+
+    dispatch(
+      openModal({
+        trigger: ModalTriggers.EDIT_RENTER,
+        payload: { renter },
+      }),
+    );
+  };
+
+  const { data /* error, isLoading*/ } = useGetRenterByIdQuery(idRenter);
+
+  return (
+    <div className="w-[150px] mb-5">
+      <Button onClick={e => handleEdit(e, data?.oneRenterReport)} disabled={!data?.oneRenterReport}>
+        Відредагувати орендаря
+      </Button>
+    </div>
+  );
+};
+
+export default UpdateRenter;

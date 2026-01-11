@@ -1,9 +1,5 @@
 'use client';
 
-import { forwardRef, useState, useEffect } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { Label } from '@/shared/ui/label';
 import { Button } from '@/shared/ui/button';
 import {
   Command,
@@ -13,8 +9,12 @@ import {
   CommandItem,
   CommandList,
 } from '@/shared/ui/command';
+import { Label } from '@/shared/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { cn } from '@/shared/utils/cn';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { forwardRef, useEffect, useState } from 'react';
+import { Controller, get, useFormContext } from 'react-hook-form';
 
 export interface AutocompleteOption {
   value: string;
@@ -62,7 +62,7 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
     const [open, setOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const error = errors[name];
+    const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
 
     useEffect(() => {
@@ -84,9 +84,9 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
     return (
       <div className="space-y-2">
         {label && (
-          <Label htmlFor={name} className="flex items-center gap-1">
+          <Label htmlFor={name} className="flex items-center gap-1 text-text font-medium">
             {label}
-            {required && <span className="text-destructive">*</span>}
+            {required && <span className="text-red ml-1">*</span>}
           </Label>
         )}
 

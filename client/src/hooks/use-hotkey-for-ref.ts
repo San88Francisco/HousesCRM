@@ -11,15 +11,17 @@ type HotkeyOptions = {
 };
 
 const isHotkeyEvent = (event: KeyboardEvent, key: string, options: HotkeyOptions): boolean => {
+  if (!event.key) return false;
+
   const { ctrl = false, shift = false, alt = false, meta = false } = options;
 
-  return [
-    event.key.toLowerCase() === key.toLowerCase(),
-    event.ctrlKey === ctrl,
-    event.shiftKey === shift,
-    event.altKey === alt,
-    event.metaKey === meta,
-  ].every(Boolean);
+  return (
+    event.key.toLowerCase() === key.toLowerCase() &&
+    event.ctrlKey === ctrl &&
+    event.shiftKey === shift &&
+    event.altKey === alt &&
+    event.metaKey === meta
+  );
 };
 
 export const useHotkeyForRef = (

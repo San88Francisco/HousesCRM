@@ -14,7 +14,7 @@ export const HouseFormFields = ({ isLoading }: Props) => {
       <RHFInput
         name="apartmentName"
         label="Назва квартири"
-        placeholder="ЖК Щасливе - Квартира 1"
+        placeholder="ЖК Щасливе"
         icon={<Home className="w-4 h-4" />}
         required
         disabled={isLoading}
@@ -25,6 +25,7 @@ export const HouseFormFields = ({ isLoading }: Props) => {
         label="Дата покупки"
         placeholder="Оберіть дату покупки"
         disabled={isLoading}
+        ariaRequired
       />
 
       <RHFInput
@@ -57,7 +58,7 @@ export const HouseFormFields = ({ isLoading }: Props) => {
         placeholder="5"
         icon={<Building className="w-4 h-4" />}
         required
-        min={0}
+        min={1}
         disabled={isLoading}
       />
 

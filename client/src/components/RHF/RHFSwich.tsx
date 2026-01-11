@@ -1,10 +1,10 @@
 'use client';
 
-import { forwardRef, ReactNode } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import { Label } from '@/shared/ui/label';
 import { Switch } from '@/shared/ui/switch';
 import { cn } from '@/shared/utils/cn';
-import { Label } from '@/shared/ui/label';
+import { forwardRef, ReactNode } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 interface Props {
   name: string;
@@ -35,7 +35,7 @@ export const RHFSwitch = forwardRef<HTMLButtonElement, Props>(
               ref={ref}
             />
             {label && (
-              <Label htmlFor={name} className="text-sm font-medium cursor-pointer">
+              <Label htmlFor={name} className="cursor-pointer  text-text font-medium">
                 {label}
               </Label>
             )}

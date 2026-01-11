@@ -5,6 +5,7 @@ import {
   HousesPerformanceResponse,
 } from '@/types/core/houses-performance';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
+
 import {
   CreateHouseRequest,
   CreateHouseResponse,
@@ -13,7 +14,14 @@ import {
   OccupancyHousesRequest,
   UpdateHouseRequest,
   UpdateHouseResponse,
-} from '@/types/services/houses';
+} from '@/types/services/houses/index';
+import {
+  CreateRenterRequest,
+  CreateRenterResponse,
+  RenterByIdResponse,
+  UpdateRenterRequest,
+  UpdateRenterResponse,
+} from '@/types/services/renters';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -56,7 +64,30 @@ export const housesApi = rootApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Houses', 'Analytics'],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Analytics'],
+    }),
+
+    getRenterById: build.query<RenterByIdResponse, string>({
+      query: id => `/renters/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Renters', id }],
+    }),
+
+    createRenter: build.mutation<CreateRenterResponse, CreateRenterRequest>({
+      query: body => ({
+        url: '/renters',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Renters', 'Analytics'],
+    }),
+
+    updateRenter: build.mutation<UpdateRenterResponse, UpdateRenterRequest>({
+      query: ({ id, ...body }) => ({
+        url: `/renters/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Renters', id }, 'Analytics'],
     }),
 
     getHousesPerformance: build.query<HousesPerformanceResponse, HousesPerformanceRequest>({
@@ -82,6 +113,9 @@ export const {
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,
+  useGetRenterByIdQuery,
+  useCreateRenterMutation,
+  useUpdateRenterMutation,
   useGetHousesPerformanceQuery,
   useLazyGetHousesPerformanceQuery,
 } = housesApi;

@@ -1,11 +1,11 @@
 'use client';
 
-import { forwardRef, ReactNode } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import type { checkboxVariants } from '@/shared/ui/checkbox';
 import { Checkbox } from '@/shared/ui/checkbox';
 import { cn } from '@/shared/utils/cn';
 import type { VariantProps } from 'class-variance-authority';
-import type { checkboxVariants } from '@/shared/ui/checkbox';
+import { forwardRef, ReactNode } from 'react';
+import { Controller, get, useFormContext } from 'react-hook-form';
 
 interface Props extends VariantProps<typeof checkboxVariants> {
   name: string;
@@ -25,7 +25,7 @@ const RHFCheckbox = forwardRef<HTMLButtonElement, Props>(
       formState: { errors },
     } = useFormContext();
 
-    const error = errors[name];
+    const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
 
     return (

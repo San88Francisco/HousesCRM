@@ -1,33 +1,18 @@
-import { Metadata } from '../../core/metadata';
-import { ContractStatus } from '../../core/status/status';
+import { Contract } from '@/types/core/contract';
+import { HousesPerformanceResponse } from '@/types/core/houses-performance';
+import { Metadata } from '@/types/core/metadata';
+import { Renter } from '@/types/core/renter';
+import { RenterFormFields } from '@/types/model/form/renter';
 
-export type Renter = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  occupied: string;
-  vacated: string;
-  totalIncome: number;
-  status: ContractStatus;
-};
-
-export type ContractResponse = {
-  id: string;
-  commencement: string;
-  termination: string;
-  status: ContractStatus;
-  monthlyPayment: number;
-};
-
-export type RenterReportResponse = {
-  firstName: string;
-  lastName: string;
+export type RenterByIdResponse = {
+  oneRenterReport: Renter;
+  allContractsByRenterId: HousesPerformanceResponse;
 };
 
 export type AllContractsByRenterIdResponse = {
-  oneRenterReport: RenterReportResponse;
+  oneRenterReport: Renter;
   allContractsByRenterId: {
-    data: ContractResponse[];
+    data: Contract[];
     meta: Metadata;
   };
 };
@@ -39,3 +24,9 @@ export type RentersPaginatedRequest = {
   page?: number;
   limit?: number;
 };
+
+export type CreateRenterResponse = Renter;
+export type CreateRenterRequest = RenterFormFields;
+
+export type UpdateRenterResponse = Renter;
+export type UpdateRenterRequest = Partial<RenterFormFields> & { id: string };

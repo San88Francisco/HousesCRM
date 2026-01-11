@@ -27,7 +27,7 @@ const FavoriteStar = () => {
     if (!pathname) return null;
     if (!data) return null;
 
-    const isApartmentPage = pathname.startsWith(`${ROUTES.APARTMENT}/`);
+    const isApartmentPage = pathname.startsWith(`${ROUTES.HOUSE}/`);
     if (!isApartmentPage) return null;
 
     const segments = pathname.split(ROUTES.ROOT).filter(Boolean);

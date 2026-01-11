@@ -18,7 +18,8 @@ import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
-import { HouseOverviewChartDataItem, TimeRangeEnum } from '@/types/model/houses-overview';
+import { TimeRangeEnum } from '@/types/core/time-range';
+import { HouseOverviewChartDataItem } from '@/types/model/houses-overview';
 import { useCallback } from 'react';
 import {
   Legend,

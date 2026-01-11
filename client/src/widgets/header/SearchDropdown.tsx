@@ -83,7 +83,7 @@ export const SearchDropdown = ({ open, onOpenChange, data, isFetching, isError }
                     <DropdownMenuItem
                       key={house.id}
                       onClick={() => {
-                        navigateToItem(router, 'APARTMENT', house.id);
+                        navigateToItem(router, 'HOUSE', house.id);
                         onOpenChange(false);
                       }}
                     >
