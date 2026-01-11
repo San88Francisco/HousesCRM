@@ -60,7 +60,6 @@ export const CurrencyRevaluationTooltip = ({
   useEffect(() => {
     if (!active || !coordinate || !chartContainerRef?.current) return;
 
-    // Використовуємо SVG елемент для точних координат
     const chartElement =
       chartContainerRef.current.querySelector('svg') || chartContainerRef.current;
 
