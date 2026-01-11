@@ -5,7 +5,7 @@ import {
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { truncateText } from '@/shared/utils/text';
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
 
@@ -60,6 +60,7 @@ export const CurrencyRevaluationTooltip = ({
   useEffect(() => {
     if (!active || !coordinate || !chartContainerRef?.current) return;
 
+    // Використовуємо SVG елемент для точних координат
     const chartElement =
       chartContainerRef.current.querySelector('svg') || chartContainerRef.current;
 
@@ -80,25 +81,30 @@ export const CurrencyRevaluationTooltip = ({
       x: clamp(x, PADDING, width - TOOLTIP_WIDTH - PADDING),
       y: clamp(y, PADDING, height - TOOLTIP_MAX_HEIGHT - PADDING),
     });
-  }, [active, coordinate]);
+  }, [active, coordinate, chartContainerRef]);
 
   const data = payload?.[0]?.payload;
-  if (!active || !data || !coordinate) return null;
 
-  const sections = [
-    {
-      title: 'Початкова:',
-      amount: data.purchaseAmount,
-      rate: data.purchaseRate,
-      rateLabel: 'Курс купівлі:',
-    },
-    {
-      title: 'Поточна:',
-      amount: data.revaluationAmount,
-      rate: data.currentRate,
-      rateLabel: 'Поточний курс:',
-    },
-  ];
+  const sections = useMemo(() => {
+    if (!data) return [];
+
+    return [
+      {
+        title: 'Початкова:',
+        amount: data.purchaseAmount,
+        rate: data.purchaseRate,
+        rateLabel: 'Курс купівлі:',
+      },
+      {
+        title: 'Поточна:',
+        amount: data.revaluationAmount,
+        rate: data.currentRate,
+        rateLabel: 'Поточний курс:',
+      },
+    ];
+  }, [data]);
+
+  if (!active || !data || !coordinate) return null;
 
   return (
     <div
