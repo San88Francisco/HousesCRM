@@ -118,9 +118,12 @@ export const useChartScroll = () => {
     [isDragging, startX, scrollLeft],
   );
 
-  const handlePointerCancel = useCallback(() => {
-    handleDragEnd();
-  }, [handleDragEnd]);
+  const handlePointerCancel = useCallback(
+    (_e?: PointerEvent | React.PointerEvent) => {
+      handleDragEnd();
+    },
+    [handleDragEnd],
+  );
 
   useEffect(() => {
     const element = scrollRef.current;
@@ -146,24 +149,36 @@ export const useChartScroll = () => {
   };
 };
 
+type ApiError = {
+  status: number | string;
+  data?: unknown;
+};
+
+type ErrorWithMessage = {
+  message: string;
+};
+
+const isApiError = (error: unknown): error is ApiError =>
+  typeof error === 'object' && error !== null && 'status' in error;
+
+const hasMessage = (obj: unknown): obj is ErrorWithMessage =>
+  typeof obj === 'object' &&
+  obj !== null &&
+  'message' in obj &&
+  typeof (obj as ErrorWithMessage).message === 'string';
+
 export const getErrorMessage = (error: unknown): string => {
-  if (typeof error !== 'object' || error === null) {
+  if (!error || typeof error !== 'object') {
     return 'Помилка завантаження даних';
   }
 
-  if ('status' in error) {
-    const data = (error as { data?: unknown }).data;
-
+  if (isApiError(error)) {
+    const { data } = error;
     if (typeof data === 'string') return data;
-
-    if (typeof data === 'object' && data !== null && 'message' in data) {
-      return (data as { message: string }).message;
-    }
+    if (hasMessage(data)) return data.message;
   }
 
-  if ('message' in error) {
-    return (error as { message: string }).message;
-  }
+  if (hasMessage(error)) return error.message;
 
   return 'Помилка завантаження даних';
 };

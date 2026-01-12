@@ -10,6 +10,7 @@ import { LoadingState } from '@/components/chart-states/LoadingState';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { formatYAxis } from '@/shared/utils/all-house/payback-chart/payback';
 import { cn } from '@/shared/utils/cn';
+import { Currencies } from '@/types/core/currencies';
 
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 
@@ -24,7 +25,16 @@ import { PaybackChartTooltip } from './PaybackChartTooltip';
 
 const CHART_HEIGHT = 300;
 const CHART_MARGIN = { top: 20, right: 30, left: 20, bottom: 50 };
-const CHART_CURRENCY = 'USD';
+const CHART_CURRENCY: Currencies = 'USD';
+
+type ChartCoordinatesProps = {
+  yAxis?: {
+    scale?: {
+      ticks?: (count: number) => number[];
+      (value: number): number;
+    };
+  };
+};
 
 export const PaybackChart = () => {
   const [mounted, setMounted] = useState(false);
@@ -40,14 +50,7 @@ export const PaybackChart = () => {
   }, []);
 
   const horizontalCoordinatesGenerator = useCallback(
-    (props: {
-      yAxis?: {
-        scale?: {
-          ticks?: (count: number) => number[];
-          (value: number): number;
-        };
-      };
-    }) => {
+    (props: ChartCoordinatesProps) => {
       const { yAxis } = props;
       if (!yAxis?.scale) return [];
 
@@ -109,7 +112,6 @@ export const PaybackChart = () => {
                   axisLine={false}
                   tickLine={false}
                   width={65}
-                  allowDataOverflow={false}
                   tick={{
                     fontSize: 12,
                     fill: 'var(--text)',
