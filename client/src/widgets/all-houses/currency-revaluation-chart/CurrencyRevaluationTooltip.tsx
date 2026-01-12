@@ -1,6 +1,11 @@
 import {
   formatCurrency,
   formatRate,
+  OFFSET_X,
+  OFFSET_Y,
+  PADDING,
+  TOOLTIP_MAX_HEIGHT,
+  TOOLTIP_WIDTH,
   TOOLTIP_Z_INDEX,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { truncateText } from '@/shared/utils/text';
@@ -35,12 +40,6 @@ const TooltipSection = ({ title, amount, rate, rateLabel }: TooltipSectionProps)
     <TooltipRow label={rateLabel} value={formatRate(rate)} />
   </div>
 );
-
-const TOOLTIP_WIDTH = 200;
-const TOOLTIP_MAX_HEIGHT = 140;
-const OFFSET_X = 10;
-const OFFSET_Y = 10;
-const PADDING = 8;
 
 type Props = {
   active?: boolean;

@@ -39,6 +39,23 @@ export const PaybackChart = () => {
     setMounted(true);
   }, []);
 
+  const horizontalCoordinatesGenerator = (props: {
+    yAxis?: {
+      scale?: {
+        ticks?: (count: number) => number[];
+        (value: number): number;
+      };
+    };
+  }) => {
+    const { yAxis } = props;
+    if (!yAxis?.scale) return [];
+
+    const { scale } = yAxis;
+    const ticks = scale.ticks?.(6) ?? [];
+
+    return ticks.filter((tick: number) => tick < yAxisMax).map((tick: number) => scale(tick));
+  };
+
   if (!mounted) return null;
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
@@ -62,7 +79,6 @@ export const PaybackChart = () => {
             isDragging ? 'cursor-grabbing' : 'cursor-grab',
             'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200',
             'dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800',
-            'payback-chart-wrapper',
           )}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -70,7 +86,12 @@ export const PaybackChart = () => {
           <div style={{ minWidth: `${minChartWidth}px` }}>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
               <BarChart data={chartData} margin={CHART_MARGIN} barSize={20}>
-                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
+                <CartesianGrid
+                  stroke="var(--border)"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  horizontalCoordinatesGenerator={horizontalCoordinatesGenerator}
+                />
                 <XAxis
                   dataKey="apartmentName"
                   axisLine={false}

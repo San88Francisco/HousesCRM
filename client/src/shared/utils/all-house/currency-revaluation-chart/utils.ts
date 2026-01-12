@@ -25,6 +25,12 @@ const ANIMATION_DURATION_MS = 600;
 export const PURCHASE_ANIMATION_DURATION = ANIMATION_DURATION_MS;
 export const GROWTH_ANIMATION_DURATION = ANIMATION_DURATION_MS;
 
+export const TOOLTIP_WIDTH = 200;
+export const TOOLTIP_MAX_HEIGHT = 140;
+export const OFFSET_X = 10;
+export const OFFSET_Y = 10;
+export const PADDING = 8;
+
 export const getBarColors = (isDark: boolean) => ({
   purchase: isDark ? 'var(--dark-purple)' : 'var(--dark)',
   growth: isDark ? 'var(--purple-medium)' : 'var(--dark-light)',
