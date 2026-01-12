@@ -3,6 +3,7 @@ import { CurrencyRevaluationChart } from '@/widgets/all-houses/currency-revaluat
 import { HousesPerformanceAnalytic } from '@/widgets/all-houses/houses-performance-analytic';
 import { PaybackChart } from '@/widgets/all-houses/payback-chart/PaybackChart';
 import { ChartPieDonutText } from '@/widgets/all-houses/pie-chart-revenue-distribution';
+import { RentersOccupancy } from '@/widgets/all-houses/renters-occupancy';
 
 const Page = () => {
   return (
@@ -15,6 +16,9 @@ const Page = () => {
       <div className="grid grid-cols-1 lg:grid-cols-[4fr_1fr] gap-5 w-full">
         <HousesPerformanceAnalytic />
         <CurrencyRevaluationChart />
+      </div>
+      <div className="w-full">
+        <RentersOccupancy />
       </div>
     </div>
   );
