@@ -18,8 +18,8 @@ type Props<T> = {
 export const HousesPerformanceTable = ({ table, limit, setLimit }: Props<HousePerformanceItem>) => {
   const { push } = useRouter();
 
-  const handleRouteToRenter = (renterId: string) => {
-    push(`${ROUTES.HOUSE}/${renterId}`);
+  const handleRouteToHouse = (houseId: string) => {
+    push(`${ROUTES.HOUSE}/${houseId}`);
   };
   return (
     <div className="flex flex-col justify-between h-full">
@@ -41,11 +41,11 @@ export const HousesPerformanceTable = ({ table, limit, setLimit }: Props<HousePe
                 tableGrid,
                 'cursor-pointer transition-colors duration-300 ease-out hover:bg-muted-foreground text-text',
               )}
-              onClick={() => handleRouteToRenter(row.original.id)}
+              onClick={() => handleRouteToHouse(row.original.id)}
               onKeyDown={e => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  handleRouteToRenter(row.original.id);
+                  handleRouteToHouse(row.original.id);
                 }
               }}
               tabIndex={0}
