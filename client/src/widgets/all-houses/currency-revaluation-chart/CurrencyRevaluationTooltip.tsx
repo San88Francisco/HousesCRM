@@ -60,7 +60,6 @@ export const CurrencyRevaluationTooltip = ({
   useEffect(() => {
     if (!active || !coordinate || !chartContainerRef?.current) return;
 
-    // Використовуємо SVG елемент для точних координат
     const chartElement =
       chartContainerRef.current.querySelector('svg') || chartContainerRef.current;
 
@@ -81,11 +80,10 @@ export const CurrencyRevaluationTooltip = ({
       x: clamp(x, PADDING, width - TOOLTIP_WIDTH - PADDING),
       y: clamp(y, PADDING, height - TOOLTIP_MAX_HEIGHT - PADDING),
     });
-  }, [active, coordinate, chartContainerRef]); // Виправлення #1: додано chartContainerRef
+  }, [active, coordinate, chartContainerRef]);
 
   const data = payload?.[0]?.payload;
 
-  // Виправлення #2: useMemo для оптимізації sections (має бути перед early return)
   const sections = useMemo(() => {
     if (!data) return [];
 
