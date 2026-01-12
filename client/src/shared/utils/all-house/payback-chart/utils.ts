@@ -118,12 +118,9 @@ export const useChartScroll = () => {
     [isDragging, startX, scrollLeft],
   );
 
-  const handlePointerCancel = useCallback(
-    (_e?: PointerEvent | React.PointerEvent) => {
-      handleDragEnd();
-    },
-    [handleDragEnd],
-  );
+  const handlePointerCancel = useCallback(() => {
+    handleDragEnd();
+  }, [handleDragEnd]);
 
   useEffect(() => {
     const element = scrollRef.current;
