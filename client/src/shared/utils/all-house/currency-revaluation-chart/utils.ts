@@ -16,6 +16,11 @@ export const TOOLTIP_Z_INDEX = 9999;
 
 export const MAX_TEXT_LENGTH_YAXIS = 10;
 export const TOOLTIP_NAME_MAX_LENGTH = 25;
+export const TOOLTIP_WIDTH = 200;
+export const TOOLTIP_MAX_HEIGHT = 140;
+export const TOOLTIP_OFFSET_X = 10;
+export const TOOLTIP_OFFSET_Y = 10;
+export const TOOLTIP_PADDING = 8;
 export const Y_AXIS_PADDING = 0.15;
 export const ROW_HEIGHT = 30;
 export const CHART_PADDING = 30;

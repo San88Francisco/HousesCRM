@@ -2,12 +2,17 @@ import { clamp } from '@/shared/utils/all-house/currency-revaluation-chart/math'
 import {
   formatCurrency,
   formatRate,
+  TOOLTIP_MAX_HEIGHT,
   TOOLTIP_NAME_MAX_LENGTH,
+  TOOLTIP_OFFSET_X,
+  TOOLTIP_OFFSET_Y,
+  TOOLTIP_PADDING,
+  TOOLTIP_WIDTH,
   TOOLTIP_Z_INDEX,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { truncateText } from '@/shared/utils/text';
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useState } from 'react';
 
 type TooltipRowProps = {
   label: string;
@@ -36,12 +41,6 @@ const TooltipSection = ({ title, amount, rate, rateLabel }: TooltipSectionProps)
   </div>
 );
 
-const TOOLTIP_WIDTH = 200;
-const TOOLTIP_MAX_HEIGHT = 140;
-const OFFSET_X = 10;
-const OFFSET_Y = 10;
-const PADDING = 8;
-
 type Props = {
   active?: boolean;
   payload?: Array<{ payload: ChartDataItem }>;
@@ -57,7 +56,7 @@ export const CurrencyRevaluationTooltip = ({
 }: Props) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!active || !coordinate || !chartContainerRef?.current) return;
 
     const chartElement =
@@ -65,20 +64,20 @@ export const CurrencyRevaluationTooltip = ({
 
     const { width, height } = chartElement.getBoundingClientRect();
 
-    let x = coordinate.x + OFFSET_X;
-    let y = coordinate.y + OFFSET_Y;
+    let x = coordinate.x + TOOLTIP_OFFSET_X;
+    let y = coordinate.y + TOOLTIP_OFFSET_Y;
 
     if (x + TOOLTIP_WIDTH > width) {
-      x = coordinate.x - TOOLTIP_WIDTH - OFFSET_X;
+      x = coordinate.x - TOOLTIP_WIDTH - TOOLTIP_OFFSET_X;
     }
 
     if (y + TOOLTIP_MAX_HEIGHT > height) {
-      y = coordinate.y - TOOLTIP_MAX_HEIGHT - OFFSET_Y;
+      y = coordinate.y - TOOLTIP_MAX_HEIGHT - TOOLTIP_OFFSET_Y;
     }
 
     setPosition({
-      x: clamp(x, PADDING, width - TOOLTIP_WIDTH - PADDING),
-      y: clamp(y, PADDING, height - TOOLTIP_MAX_HEIGHT - PADDING),
+      x: clamp(x, TOOLTIP_PADDING, width - TOOLTIP_WIDTH - TOOLTIP_PADDING),
+      y: clamp(y, TOOLTIP_PADDING, height - TOOLTIP_MAX_HEIGHT - TOOLTIP_PADDING),
     });
   }, [active, coordinate, chartContainerRef]);
 
@@ -107,6 +106,7 @@ export const CurrencyRevaluationTooltip = ({
 
   return (
     <div
+      role="tooltip"
       className="p-2 rounded-lg border border-border bg-background animate-in fade-in-0 zoom-in-95 duration-150"
       style={{
         position: 'absolute',

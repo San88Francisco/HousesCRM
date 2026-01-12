@@ -17,7 +17,7 @@ import {
   useChartDimensions,
   useChartScroll,
   usePaybackChartData,
-} from '../../../shared/utils/all-house/payback-chart/utils';
+} from '@/shared/utils/all-house/payback-chart/utils';
 import { CustomBar } from './CustomBar';
 import { CustomXAxisTick } from './CustomXAxisTick';
 import { PaybackChartTooltip } from './PaybackChartTooltip';
@@ -31,7 +31,7 @@ export const PaybackChart = () => {
 
   const { data: analyticsData, isLoading, error } = useGetHousesAnalyticsQuery();
 
-  const chartData = usePaybackChartData(analyticsData?.housesPaybackStats);
+  const chartData = usePaybackChartData(analyticsData?.housesPaybackStats, CHART_CURRENCY);
   const { yAxisMax, yAxisMin, minChartWidth, scaleType } = useChartDimensions(chartData);
   const { scrollRef, isDragging, handlePointerDown, handlePointerMove } = useChartScroll();
 
@@ -59,10 +59,10 @@ export const PaybackChart = () => {
     [yAxisMax],
   );
 
-  if (!mounted) return null;
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
   if (!chartData?.length) return <EmptyState />;
+  if (!mounted) return null;
 
   const yAxisDomain: [number | string, number | string] = [yAxisMin, yAxisMax];
 

@@ -59,7 +59,9 @@ export const useChartDimensions = (data: PaybackChartData[]) => {
     const minPrice = prices.reduce((min, current) => Math.min(min, current), Infinity);
 
     const scaleType =
-      maxPrice / minPrice >= LOG_SCALE_THRESHOLD ? ('log' as const) : ('linear' as const);
+      maxPrice / minPrice >= LOG_SCALE_THRESHOLD && minPrice > 0
+        ? ('log' as const)
+        : ('linear' as const);
 
     const maxPriceWithPadding = maxPrice * (1 + Y_AXIS_PADDING_PERCENT);
     const roundingStep = getOptimalRounding(maxPriceWithPadding);
@@ -116,13 +118,25 @@ export const useChartScroll = () => {
     [isDragging, startX, scrollLeft],
   );
 
+  const handlePointerCancel = useCallback(() => {
+    handleDragEnd();
+  }, [handleDragEnd]);
+
   useEffect(() => {
+    const element = scrollRef.current;
+
     window.addEventListener('pointerup', handleDragEnd);
+    if (element) {
+      element.addEventListener('pointercancel', handlePointerCancel);
+    }
 
     return () => {
       window.removeEventListener('pointerup', handleDragEnd);
+      if (element) {
+        element.removeEventListener('pointercancel', handlePointerCancel);
+      }
     };
-  }, [handleDragEnd]);
+  }, [handleDragEnd, handlePointerCancel]);
 
   return {
     scrollRef,
