@@ -54,7 +54,6 @@ export const PaybackChart = () => {
       const { scale } = yAxis;
       const ticks = scale.ticks?.(6) ?? [];
 
-      // Фільтруємо: прибираємо tick що дорівнює або перевищує yAxisMax
       return ticks.filter((tick: number) => tick < yAxisMax).map((tick: number) => scale(tick));
     },
     [yAxisMax],
