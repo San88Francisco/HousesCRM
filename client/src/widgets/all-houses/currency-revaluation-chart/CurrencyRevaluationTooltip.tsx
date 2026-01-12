@@ -1,18 +1,13 @@
+import { clamp } from '@/shared/utils/all-house/currency-revaluation-chart/math';
 import {
   formatCurrency,
   formatRate,
-  OFFSET_X,
-  OFFSET_Y,
-  PADDING,
-  TOOLTIP_MAX_HEIGHT,
-  TOOLTIP_WIDTH,
+  TOOLTIP_NAME_MAX_LENGTH,
   TOOLTIP_Z_INDEX,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { truncateText } from '@/shared/utils/text';
 import { ChartDataItem } from '@/types/core/currency-revaluation-chart';
 import React, { useEffect, useMemo, useState } from 'react';
-
-const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
 
 type TooltipRowProps = {
   label: string;
@@ -41,6 +36,12 @@ const TooltipSection = ({ title, amount, rate, rateLabel }: TooltipSectionProps)
   </div>
 );
 
+const TOOLTIP_WIDTH = 200;
+const TOOLTIP_MAX_HEIGHT = 140;
+const OFFSET_X = 10;
+const OFFSET_Y = 10;
+const PADDING = 8;
+
 type Props = {
   active?: boolean;
   payload?: Array<{ payload: ChartDataItem }>;
@@ -59,6 +60,7 @@ export const CurrencyRevaluationTooltip = ({
   useEffect(() => {
     if (!active || !coordinate || !chartContainerRef?.current) return;
 
+    // Використовуємо SVG елемент для точних координат
     const chartElement =
       chartContainerRef.current.querySelector('svg') || chartContainerRef.current;
 
@@ -79,10 +81,11 @@ export const CurrencyRevaluationTooltip = ({
       x: clamp(x, PADDING, width - TOOLTIP_WIDTH - PADDING),
       y: clamp(y, PADDING, height - TOOLTIP_MAX_HEIGHT - PADDING),
     });
-  }, [active, coordinate, chartContainerRef]);
+  }, [active, coordinate, chartContainerRef]); // Виправлення #1: додано chartContainerRef
 
   const data = payload?.[0]?.payload;
 
+  // Виправлення #2: useMemo для оптимізації sections (має бути перед early return)
   const sections = useMemo(() => {
     if (!data) return [];
 
@@ -120,7 +123,7 @@ export const CurrencyRevaluationTooltip = ({
     >
       <div className="h-full overflow-y-auto pr-1 custom-scrollbar tooltip-scroll">
         <p className="font-bold mb-2 text-xs" title={data.apartmentName ?? 'Без назви'}>
-          {truncateText(data.apartmentName ?? 'Без назви', 25)}
+          {truncateText(data.apartmentName ?? 'Без назви', TOOLTIP_NAME_MAX_LENGTH)}
         </p>
 
         <div className="space-y-2">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
@@ -39,22 +39,26 @@ export const PaybackChart = () => {
     setMounted(true);
   }, []);
 
-  const horizontalCoordinatesGenerator = (props: {
-    yAxis?: {
-      scale?: {
-        ticks?: (count: number) => number[];
-        (value: number): number;
+  const horizontalCoordinatesGenerator = useCallback(
+    (props: {
+      yAxis?: {
+        scale?: {
+          ticks?: (count: number) => number[];
+          (value: number): number;
+        };
       };
-    };
-  }) => {
-    const { yAxis } = props;
-    if (!yAxis?.scale) return [];
+    }) => {
+      const { yAxis } = props;
+      if (!yAxis?.scale) return [];
 
-    const { scale } = yAxis;
-    const ticks = scale.ticks?.(6) ?? [];
+      const { scale } = yAxis;
+      const ticks = scale.ticks?.(6) ?? [];
 
-    return ticks.filter((tick: number) => tick < yAxisMax).map((tick: number) => scale(tick));
-  };
+      // Фільтруємо: прибираємо tick що дорівнює або перевищує yAxisMax
+      return ticks.filter((tick: number) => tick < yAxisMax).map((tick: number) => scale(tick));
+    },
+    [yAxisMax],
+  );
 
   if (!mounted) return null;
   if (isLoading) return <LoadingState />;

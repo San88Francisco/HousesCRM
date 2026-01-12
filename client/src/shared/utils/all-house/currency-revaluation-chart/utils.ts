@@ -15,6 +15,7 @@ export const OPACITY_LIGHT = 0.7;
 export const TOOLTIP_Z_INDEX = 9999;
 
 export const MAX_TEXT_LENGTH_YAXIS = 10;
+export const TOOLTIP_NAME_MAX_LENGTH = 25;
 export const Y_AXIS_PADDING = 0.15;
 export const ROW_HEIGHT = 30;
 export const CHART_PADDING = 30;
@@ -24,12 +25,6 @@ export const MAX_VISIBLE_ROWS = 7;
 const ANIMATION_DURATION_MS = 600;
 export const PURCHASE_ANIMATION_DURATION = ANIMATION_DURATION_MS;
 export const GROWTH_ANIMATION_DURATION = ANIMATION_DURATION_MS;
-
-export const TOOLTIP_WIDTH = 200;
-export const TOOLTIP_MAX_HEIGHT = 140;
-export const OFFSET_X = 10;
-export const OFFSET_Y = 10;
-export const PADDING = 8;
 
 export const getBarColors = (isDark: boolean) => ({
   purchase: isDark ? 'var(--dark-purple)' : 'var(--dark)',
