@@ -1,5 +1,6 @@
 'use client';
 import { tableGrid } from '@/shared/constants/styles/houses-performance-table';
+import { ROUTES } from '@/shared/routes';
 import TablePagination from '@/shared/ui/data-table/TablePagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
@@ -15,7 +16,11 @@ type Props<T> = {
 };
 
 export const HousesPerformanceTable = ({ table, limit, setLimit }: Props<HousePerformanceItem>) => {
-  const router = useRouter();
+  const { push } = useRouter();
+
+  const handleRouteToRenter = (renterId: string) => {
+    push(`${ROUTES.HOUSE}/${renterId}`);
+  };
   return (
     <div className="flex flex-col justify-between h-full">
       <Table>
@@ -34,9 +39,18 @@ export const HousesPerformanceTable = ({ table, limit, setLimit }: Props<HousePe
               key={row.original.id}
               className={cn(
                 tableGrid,
-                'cursor-pointer transition-colors duration-300 ease-out  hover:bg-dark-lightest',
+                'cursor-pointer transition-colors duration-300 ease-out hover:bg-muted-foreground text-text',
               )}
-              onClick={() => router.push(`/house/${row.original.id}`)}
+              onClick={() => handleRouteToRenter(row.original.id)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleRouteToRenter(row.original.id);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`View details for ${row.original.apartmentName}`}
             >
               {row.getVisibleCells().map(cell => (
                 <TableCell key={cell.id}>
