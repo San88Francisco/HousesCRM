@@ -1,3 +1,4 @@
+// @/components/RHF/RHFAutocomplete.tsx
 'use client';
 
 import { Button } from '@/shared/ui/button';
@@ -13,12 +14,13 @@ import { Label } from '@/shared/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { cn } from '@/shared/utils/cn';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, RefObject, useEffect, useState } from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
 
 export interface AutocompleteOption {
   value: string;
   label: string;
+  disabled?: boolean;
 }
 
 type Props = {
@@ -32,8 +34,11 @@ type Props = {
   options: AutocompleteOption[];
   onSearch?: (searchTerm: string) => void;
   onValueChange?: (value: string) => void;
+  onOpenChange?: (open: boolean) => void;
   loading?: boolean;
   disabled?: boolean;
+  hasMore?: boolean;
+  loadMoreRef?: RefObject<HTMLDivElement | null>;
 };
 
 const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
@@ -49,8 +54,11 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
       options = [],
       onSearch,
       onValueChange,
+      onOpenChange,
       loading = false,
       disabled = false,
+      hasMore = false,
+      loadMoreRef,
     },
     ref,
   ) => {
@@ -65,13 +73,21 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
     const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
 
-    useEffect(() => {
-      if (onSearch && searchTerm.length >= 2) {
-        const timeoutId = setTimeout(() => {
-          onSearch(searchTerm);
-        }, 300);
+    const handleOpenChange = (newOpen: boolean) => {
+      setOpen(newOpen);
+      onOpenChange?.(newOpen);
+    };
 
-        return () => clearTimeout(timeoutId);
+    useEffect(() => {
+      if (onSearch) {
+        if (searchTerm.length >= 2) {
+          const timeoutId = setTimeout(() => {
+            onSearch(searchTerm);
+          }, 500);
+          return () => clearTimeout(timeoutId);
+        } else if (searchTerm.length === 0) {
+          onSearch('');
+        }
       }
     }, [searchTerm, onSearch]);
 
@@ -97,7 +113,7 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
             const selectedOption = options.find(option => option.value === field.value);
 
             return (
-              <Popover open={open} onOpenChange={setOpen}>
+              <Popover open={open} onOpenChange={handleOpenChange}>
                 <PopoverTrigger asChild>
                   <Button
                     ref={ref}
@@ -130,21 +146,25 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
                       onValueChange={setSearchTerm}
                     />
                     <CommandList>
-                      {loading && (
+                      {loading && options.length === 0 && (
                         <div className="py-6 text-center text-sm text-muted-foreground">
                           Завантаження...
                         </div>
                       )}
-                      {!loading && (
+                      {!loading && options.length === 0 && (
+                        <CommandEmpty>{emptyMessage}</CommandEmpty>
+                      )}
+                      {options.length > 0 && (
                         <>
-                          <CommandEmpty>{emptyMessage}</CommandEmpty>
                           <CommandGroup>
                             {options.map(option => (
                               <CommandItem
                                 key={option.value}
                                 value={option.label}
                                 keywords={[option.value]}
+                                disabled={option.disabled}
                                 onSelect={() => {
+                                  if (option.disabled) return;
                                   const newValue = option.value === field.value ? '' : option.value;
                                   field.onChange(newValue);
                                   onValueChange?.(newValue);
@@ -161,6 +181,24 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
                               </CommandItem>
                             ))}
                           </CommandGroup>
+
+                          {/* Infinite scroll loader */}
+                          {loading && (
+                            <div className="py-2 text-center text-sm text-muted-foreground">
+                              Завантаження...
+                            </div>
+                          )}
+
+                          {/* Intersection observer target */}
+                          {hasMore && loadMoreRef && (
+                            <div ref={loadMoreRef} className="h-px" aria-hidden="true" />
+                          )}
+
+                          {!hasMore && !loading && (
+                            <div className="py-2 text-center text-xs text-muted-foreground">
+                              Всі результати завантажені
+                            </div>
+                          )}
                         </>
                       )}
                     </CommandList>

@@ -1,3 +1,6 @@
+import { ContractCreateUpdate } from '@/types/core/contract';
+import { ContractFormFields } from '@/types/model/form/contract';
+
 export type PdfContractRaw = {
   renterFirstName: string;
   renterLastName: string;
@@ -47,3 +50,11 @@ export type PdfContractModel = {
     hotWater: string;
   };
 };
+
+export type CreateContractResponse = ContractCreateUpdate;
+export type CreateContractRequest = ContractFormFields;
+
+export type UpdateContractResponse = ContractCreateUpdate;
+export type UpdateContractRequest = Partial<ContractFormFields> & { id: string };
+
+export type ContractByIdResponse = ContractCreateUpdate;

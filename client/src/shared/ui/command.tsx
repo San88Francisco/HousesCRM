@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { type DialogProps } from '@radix-ui/react-dialog';
 import { Command as CommandPrimitive } from 'cmdk';
 import { Search } from 'lucide-react';
-import { Dialog, DialogContent } from './dialog';
+import * as React from 'react';
 import { cn } from '../utils/cn';
+import { Dialog, DialogContent } from './dialog';
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -54,7 +54,13 @@ const CommandList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.List
     ref={ref}
-    className={cn('max-h-[300px] overflow-y-auto overflow-x-hidden bg-bg-input', className)}
+    onWheel={e => {
+      e.stopPropagation();
+    }}
+    className={cn(
+      'max-h-[300px] overflow-y-auto overflow-x-hidden overscroll-contain bg-bg-input',
+      className,
+    )}
     {...props}
   />
 ));
@@ -127,11 +133,11 @@ CommandShortcut.displayName = 'CommandShortcut';
 export {
   Command,
   CommandDialog,
-  CommandInput,
-  CommandList,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
-  CommandShortcut,
+  CommandList,
   CommandSeparator,
+  CommandShortcut,
 };

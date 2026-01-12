@@ -5,6 +5,13 @@ import {
   HousesPerformanceResponse,
 } from '@/types/core/houses-performance';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
+import {
+  ContractByIdResponse,
+  CreateContractRequest,
+  CreateContractResponse,
+  UpdateContractRequest,
+  UpdateContractResponse,
+} from '@/types/services/contracts';
 
 import {
   CreateHouseRequest,
@@ -102,6 +109,34 @@ export const housesApi = rootApi.injectEndpoints({
       }),
       providesTags: ['Houses'],
     }),
+
+    createContract: build.mutation<CreateContractResponse, CreateContractRequest>({
+      query: body => ({
+        url: '/contracts',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Contracts', 'Analytics', 'Houses', 'Renters'],
+    }),
+
+    updateContract: build.mutation<UpdateContractResponse, UpdateContractRequest>({
+      query: ({ id, ...body }) => ({
+        url: `/contracts/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Contracts', id },
+        'Analytics',
+        'Houses',
+        'Renters',
+      ],
+    }),
+
+    getContractById: build.query<ContractByIdResponse, string>({
+      query: id => `/contracts/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Contracts', id }],
+    }),
   }),
 });
 
@@ -118,4 +153,7 @@ export const {
   useUpdateRenterMutation,
   useGetHousesPerformanceQuery,
   useLazyGetHousesPerformanceQuery,
+  useCreateContractMutation,
+  useUpdateContractMutation,
+  useGetContractByIdQuery,
 } = housesApi;
