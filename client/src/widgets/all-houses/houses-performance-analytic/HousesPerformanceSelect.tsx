@@ -11,7 +11,7 @@ import { FC } from 'react';
 
 type Props = {
   limit: number;
-  setLimit: (limit: number) => void;
+  onLimitChange: (limit: number) => void;
 };
 
 const limits = [
@@ -21,9 +21,9 @@ const limits = [
   { label: 20, value: 20 },
 ];
 
-export const HousesPerformanceSelect: FC<Props> = ({ limit, setLimit }) => {
+export const HousesPerformanceSelect: FC<Props> = ({ limit, onLimitChange }) => {
   const handleOnValueChange = (selectedLimit: string) => {
-    setLimit(Number(selectedLimit));
+    onLimitChange(Number(selectedLimit));
   };
 
   return (

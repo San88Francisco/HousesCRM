@@ -6,25 +6,26 @@ import { HousesPerformanceTableColumns } from '@/shared/constants/apartment/hous
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { HousesPerformanceTable } from './HousesPerformanceTable';
 
 const PAGE_SIZE = 10;
+const START_PAGE = 0;
 
 export const HousesPerformanceAnalytic = () => {
-  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [pageIndex, setPageIndex] = useState<number>(START_PAGE);
   const [limit, setLimit] = useState<number>(PAGE_SIZE);
 
   const { data, trigger, pageCount, isLoading, isError, error, isEmpty } = useHousesPerformance();
 
-  useEffect(() => {
-    setPageIndex(0);
-
+  const onLimitChange = (limit: number) => {
+    setPageIndex(START_PAGE);
+    setLimit(limit);
     trigger({
-      pageIndex: 0,
+      pageIndex: START_PAGE,
       pageSize: limit,
     });
-  }, [limit]);
+  };
 
   const table = useReactTable({
     data: data ?? [],
@@ -68,7 +69,7 @@ export const HousesPerformanceAnalytic = () => {
       </CardHeader>
 
       <CardContent>
-        <HousesPerformanceTable table={table} limit={limit} setLimit={setLimit} />
+        <HousesPerformanceTable table={table} limit={limit} onLimitChange={onLimitChange} />
       </CardContent>
     </Card>
   );
