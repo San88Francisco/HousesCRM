@@ -11,6 +11,7 @@ import { Calendar as CalendarIcon, CircleAlert } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 
 type Props = {
+  id?: string;
   value?: Date | null;
   onChange?: (date: Date) => void;
   placeholder?: string;
@@ -27,6 +28,7 @@ type Props = {
 export const DateRangePicker = forwardRef<HTMLButtonElement, Props>(
   (
     {
+      id,
       value,
       onChange,
       placeholder = 'Оберіть дату',
@@ -65,6 +67,7 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, Props>(
           <PopoverTrigger asChild>
             <Button
               ref={ref}
+              id={id}
               type="button"
               variant="outline"
               className={cn(

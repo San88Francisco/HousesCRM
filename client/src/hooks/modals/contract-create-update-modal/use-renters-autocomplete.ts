@@ -1,128 +1,16 @@
-/* eslint-disable */
-import { AutocompleteOption } from '@/components/RHF/RHFAutocomplete';
-import {
-  AUTOCOMPLETE_INTERSECTION_ROOT_MARGIN,
-  AUTOCOMPLETE_PAGE_LIMIT,
-  useGetAllRentersQuery,
-} from '@/store/api/house-renter-api';
-
-import { useLazyGetAllSearchQuery } from '@/store/api/search-api';
-import { ContractStatus } from '@/types/core/status/status';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { getStatusLabel } from '@/shared/utils/create-update-contract-form/status-labels';
+import { useGetAllRentersQuery } from '@/store/api/paginated-api';
+import { Renter } from '@/types/core/renter';
+import { useEntityAutocomplete } from './use-entity-autocomplete';
 
 export const useRentersAutocomplete = () => {
-  const [page, setPage] = useState<number>(1);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  // Lazy query для пошуку
-  const [triggerSearch, { data: searchData, isFetching: isSearchFetching }] =
-    useLazyGetAllSearchQuery();
-
-  // Звичайний query для списку без пошуку (з пагінацією)
-  const { data: listData, isFetching: isListFetching } = useGetAllRentersQuery(
-    {
-      page,
-      limit: AUTOCOMPLETE_PAGE_LIMIT,
-      sortBy: 'occupied',
-      order: 'DESC',
-    },
-    {
-      skip: !isOpen || searchTerm.length > 0, // Skip якщо є пошук
-    },
-  );
-
-  // Визначаємо які дані використовувати
-  const isSearchMode = searchTerm.length > 0;
-  const renters = isSearchMode ? (searchData?.renters ?? []) : (listData?.data ?? []);
-  const hasMore = isSearchMode ? false : (listData?.meta?.hasNextPage ?? false);
-  const isFetching = isSearchMode ? isSearchFetching : isListFetching;
-
-  const getStatusLabel = (status: ContractStatus) => {
-    return status === ContractStatus.ACTIVE ? 'Активний' : 'Неактивний';
-  };
-
-  const options: AutocompleteOption[] = renters.map(renter => ({
-    value: renter.id,
-    label: `${renter.firstName} ${renter.lastName} - ${getStatusLabel(renter.status)}`,
-    disabled: false,
-  }));
-
-  const loadMore = useCallback(() => {
-    if (hasMore && !isFetching && !isSearchMode) {
-      setPage(prev => prev + 1);
-    }
-  }, [hasMore, isFetching, isSearchMode]);
-
-  const handleSearch = useCallback(
-    (search: string) => {
-      setSearchTerm(search);
-      if (search.length > 0) {
-        // Викликаємо search API
-        triggerSearch({ query: search });
-        setPage(1); // Скидаємо пагінацію при пошуку
-      } else {
-        // Повертаємось до звичайного списку
-        setPage(1);
-      }
-    },
-    [triggerSearch],
-  );
-
-  const handleOpenChange = useCallback((open: boolean) => {
-    setIsOpen(open);
-    if (!open) {
-      setSearchTerm('');
-      setPage(1);
-    }
-  }, []);
-
-  // Intersection Observer для інфінітного скролу (тільки для списку без пошуку)
-  useEffect(() => {
-    const target = loadMoreRef.current;
-
-    if (!target || !hasMore || isFetching || !isOpen || isSearchMode) {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
-      }
-      return;
-    }
-
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    observerRef.current = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
-      },
-      {
-        rootMargin: AUTOCOMPLETE_INTERSECTION_ROOT_MARGIN,
-        threshold: 0.1,
-      },
-    );
-
-    observerRef.current.observe(target);
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
-      }
-    };
-  }, [hasMore, isFetching, loadMore, isOpen, isSearchMode]);
-
-  return {
-    options,
-    isFetching,
-    hasMore,
-    loadMoreRef,
-    handleSearch,
-    handleOpenChange,
-  };
+  return useEntityAutocomplete<Renter>({
+    entityType: 'renters',
+    useListQuery: useGetAllRentersQuery,
+    formatOption: renter => ({
+      value: renter.id,
+      label: `${renter.firstName} ${renter.lastName} - ${getStatusLabel(renter.status)}`,
+      disabled: false,
+    }),
+  });
 };

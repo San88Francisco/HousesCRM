@@ -1,10 +1,10 @@
 import { ContractStatus } from '@/types/core/status/status';
 
 export type ContractFormFields = {
-  commencement: string;
-  termination: string;
+  commencement: Date | null;
+  termination: Date | null;
   status: ContractStatus;
-  monthlyPayment: number;
+  monthlyPayment: number | null;
   houseId: string;
   renterId: string;
 };

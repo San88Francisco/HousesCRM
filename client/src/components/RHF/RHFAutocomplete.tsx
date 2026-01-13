@@ -1,4 +1,3 @@
-// @/components/RHF/RHFAutocomplete.tsx
 'use client';
 
 import { Button } from '@/shared/ui/button';
@@ -72,6 +71,9 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
 
     const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
+
+    // Визначаємо чи це lazy loading mode
+    const isLazyLoadingMode = !!onSearch;
 
     const handleOpenChange = (newOpen: boolean) => {
       setOpen(newOpen);
@@ -182,19 +184,20 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
                             ))}
                           </CommandGroup>
 
-                          {/* Infinite scroll loader */}
-                          {loading && (
+                          {/* Показуємо loader тільки в lazy loading mode */}
+                          {isLazyLoadingMode && loading && (
                             <div className="py-2 text-center text-sm text-muted-foreground">
                               Завантаження...
                             </div>
                           )}
 
-                          {/* Intersection observer target */}
-                          {hasMore && loadMoreRef && (
+                          {/* Intersection observer target - тільки в lazy loading mode */}
+                          {isLazyLoadingMode && hasMore && loadMoreRef && (
                             <div ref={loadMoreRef} className="h-px" aria-hidden="true" />
                           )}
 
-                          {!hasMore && !loading && (
+                          {/* "Всі завантажені" - тільки в lazy loading mode */}
+                          {isLazyLoadingMode && !hasMore && !loading && (
                             <div className="py-2 text-center text-xs text-muted-foreground">
                               Всі результати завантажені
                             </div>

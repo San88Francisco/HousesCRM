@@ -1,4 +1,3 @@
-// ContractFormFields.tsx
 import { RHFAutocomplete } from '@/components/RHF/RHFAutocomplete';
 import { RHFDateRangePicker } from '@/components/RHF/RHFDateRangePicker';
 import { RHFInput } from '@/components/RHF/RHFInput';
@@ -11,6 +10,11 @@ import { Coins } from 'lucide-react';
 type Props = {
   isLoading: boolean;
 };
+
+const statusOptions = [
+  { value: ContractStatus.ACTIVE, label: 'Активний', disabled: false },
+  { value: ContractStatus.INACTIVE, label: 'Неактивний', disabled: false },
+];
 
 export const ContractFormFields = ({ isLoading }: Props) => {
   const {
@@ -30,11 +34,6 @@ export const ContractFormFields = ({ isLoading }: Props) => {
     handleSearch: handleRenterSearch,
     handleOpenChange: handleRenterOpenChange,
   } = useRentersAutocomplete();
-
-  const statusOptions = [
-    { value: ContractStatus.ACTIVE, label: 'Активний', disabled: false },
-    { value: ContractStatus.INACTIVE, label: 'Неактивний', disabled: false },
-  ];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

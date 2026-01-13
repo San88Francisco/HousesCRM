@@ -6,21 +6,11 @@ export const useContractCrud = () => {
   const [updateContract, updateState] = useUpdateContractMutation();
 
   const create = (data: ContractFormData) => {
-    const requestData = {
-      ...data,
-      commencement: data.commencement.toISOString(),
-      termination: data.termination.toISOString(),
-    };
-    return createContract(requestData).unwrap();
+    return createContract(data).unwrap();
   };
 
   const update = (id: string, data: Partial<ContractFormData>) => {
-    const requestData = {
-      ...data,
-      commencement: data.commencement?.toISOString(),
-      termination: data.termination?.toISOString(),
-    };
-    return updateContract({ id, ...requestData }).unwrap();
+    return updateContract({ id, ...data }).unwrap();
   };
 
   return {

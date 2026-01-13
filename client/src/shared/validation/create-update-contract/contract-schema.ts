@@ -27,4 +27,11 @@ export const contractSchema = yup.object({
   renterId: yup.string().required("Орендар обов'язковий").uuid('Невірний формат ID орендаря'),
 });
 
-export type ContractFormData = yup.InferType<typeof contractSchema>;
+export type ContractFormData = {
+  commencement: Date | null;
+  termination: Date | null;
+  status: ContractStatus;
+  monthlyPayment: number | null;
+  houseId: string;
+  renterId: string;
+};

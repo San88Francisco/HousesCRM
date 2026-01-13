@@ -1,7 +1,7 @@
 import { useContractCrud } from '@/hooks/modals/contract-create-update-modal/use-contract-crud';
-import { mapContractToFormData } from '@/shared/utils/create-update-contract/contract-form';
-import { contractFormToast } from '@/shared/utils/create-update-contract/contract-form-toast';
-import { defaultContractValues } from '@/shared/utils/create-update-contract/default-contract-values';
+import { mapContractToFormData } from '@/shared/utils/create-update-contract-form/contract-form';
+import { contractFormToast } from '@/shared/utils/create-update-contract-form/contract-form-toast';
+import { defaultContractValues } from '@/shared/utils/create-update-contract-form/default-contract-values';
 import { extractDirtyFormValues } from '@/shared/utils/helpers/extract-dirty-form-values';
 import {
   ContractFormData,
@@ -26,7 +26,7 @@ export const useContractForm = ({ isEditMode, contractToEdit, onSuccess }: Props
     defaultValues: defaultContractValues,
   });
 
-  const { reset, formState } = methods;
+  const { reset } = methods;
 
   useEffect(() => {
     reset(
@@ -41,7 +41,7 @@ export const useContractForm = ({ isEditMode, contractToEdit, onSuccess }: Props
       if (isEditMode) {
         if (!contractToEdit?.id) throw new Error('ID контракту не знайдено');
 
-        const changedData = extractDirtyFormValues(data, formState.dirtyFields);
+        const changedData = extractDirtyFormValues(data, methods.formState.dirtyFields);
         await update(contractToEdit.id, changedData);
       } else {
         await create(data);

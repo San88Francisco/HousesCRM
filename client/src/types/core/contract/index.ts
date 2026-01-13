@@ -9,12 +9,7 @@ export interface Contract {
   monthlyPayment: number;
   status: ContractStatus;
 }
-export interface ContractCreateUpdate {
-  id: string;
-  commencement: string;
-  termination: string;
-  monthlyPayment: number;
-  status: ContractStatus;
+export interface ContractCreateUpdate extends Contract {
   houseId?: string;
   renterId?: string;
   house?: House;

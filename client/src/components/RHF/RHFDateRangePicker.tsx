@@ -8,6 +8,7 @@ import { forwardRef } from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
 
 type Props = {
+  id?: string;
   startName: string;
   endName: string;
   startLabel?: string;
@@ -40,7 +41,6 @@ export const RHFDateRangePicker = forwardRef<HTMLDivElement, Props>(
       control,
       formState: { errors },
       watch,
-      setValue,
     } = useFormContext();
 
     const startError = get(errors, startName);
@@ -68,13 +68,10 @@ export const RHFDateRangePicker = forwardRef<HTMLDivElement, Props>(
                 )}
 
                 <DateRangePicker
+                  id={startName}
                   value={field.value}
                   onChange={date => {
                     field.onChange(date);
-                    // Якщо нова дата початку пізніше дати завершення, оновлюємо дату завершення
-                    if (endDate && date > endDate) {
-                      setValue(endName, date, { shouldValidate: true, shouldDirty: true });
-                    }
                   }}
                   placeholder={startPlaceholder}
                   disabled={disabled}
@@ -107,13 +104,10 @@ export const RHFDateRangePicker = forwardRef<HTMLDivElement, Props>(
                 )}
 
                 <DateRangePicker
+                  id={endName}
                   value={field.value}
                   onChange={date => {
                     field.onChange(date);
-                    // Якщо нова дата завершення раніше дати початку, оновлюємо дату початку
-                    if (startDate && date < startDate) {
-                      setValue(startName, date, { shouldValidate: true, shouldDirty: true });
-                    }
                   }}
                   placeholder={endPlaceholder}
                   disabled={disabled}
