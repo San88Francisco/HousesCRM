@@ -1,8 +1,8 @@
+import { RenterFormData } from '@/shared/validation/create-update-renter/renter-schema';
 import { Contract } from '@/types/core/contract';
 import { HousesPerformanceResponse } from '@/types/core/houses-performance';
 import { Metadata } from '@/types/core/metadata';
 import { Renter } from '@/types/core/renter';
-import { RenterFormFields } from '@/types/model/form/renter';
 
 export type RenterByIdResponse = {
   oneRenterReport: Renter;
@@ -26,7 +26,7 @@ export type RentersPaginatedRequest = {
 };
 
 export type CreateRenterResponse = Renter;
-export type CreateRenterRequest = RenterFormFields;
+export type CreateRenterRequest = RenterFormData;
 
 export type UpdateRenterResponse = Renter;
-export type UpdateRenterRequest = Partial<RenterFormFields> & { id: string };
+export type UpdateRenterRequest = Partial<RenterFormData> & { id: string };

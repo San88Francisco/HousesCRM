@@ -1,5 +1,5 @@
-import { EntityType } from '@/hooks/modals/contract-create-update-modal/use-entity-autocomplete';
-import { PaginatedResponse } from '@/store/api/paginated-api';
+import { EntityType } from '@/types/core/autocomplete-contract-form';
+import { PaginatedResponse } from '@/types/services/pagination';
 import { SearchResponse } from '@/types/services/search';
 
 export const getEntitiesFromSearch = <T>(

@@ -1,9 +1,7 @@
 import { rootApi } from '@/shared/api';
 import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart';
-import {
-  HousesPerformanceRequest,
-  HousesPerformanceResponse,
-} from '@/types/core/houses-performance';
+import { HousesPerformanceResponse } from '@/types/core/houses-performance';
+import { PaginationRequest } from '@/types/pagination';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 import {
   ContractByIdResponse,
@@ -97,7 +95,7 @@ export const housesApi = rootApi.injectEndpoints({
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Renters', id }, 'Analytics'],
     }),
 
-    getHousesPerformance: build.query<HousesPerformanceResponse, HousesPerformanceRequest>({
+    getHousesPerformance: build.query<HousesPerformanceResponse, PaginationRequest>({
       query: ({ page, limit, sortBy, order }) => ({
         url: '/houses-analytics/houses-performance-analytic',
         params: {

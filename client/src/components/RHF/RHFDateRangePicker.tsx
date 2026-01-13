@@ -8,7 +8,6 @@ import { forwardRef } from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
 
 type Props = {
-  id?: string;
   startName: string;
   endName: string;
   startLabel?: string;

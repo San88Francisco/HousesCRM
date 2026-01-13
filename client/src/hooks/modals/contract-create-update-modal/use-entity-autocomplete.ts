@@ -8,12 +8,11 @@ import {
 import {
   AUTOCOMPLETE_INTERSECTION_ROOT_MARGIN,
   AUTOCOMPLETE_PAGE_LIMIT,
-  PaginatedResponse,
 } from '@/store/api/paginated-api';
 import { useLazyGetAllSearchQuery } from '@/store/api/search-api';
+import { EntityType } from '@/types/core/autocomplete-contract-form';
+import { PaginatedResponse } from '@/types/services/pagination';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-export type EntityType = 'renters' | 'houses' | 'contracts';
 
 type ListQueryResult<T> = {
   data?: PaginatedResponse<T>;

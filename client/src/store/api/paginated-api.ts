@@ -1,26 +1,8 @@
 import { rootApi } from '@/shared/api';
 import { House } from '@/types/core/house';
-import { HousesPerformanceRequest } from '@/types/core/houses-performance';
-import { Metadata } from '@/types/core/metadata';
 import { Renter } from '@/types/core/renter';
-
-export type PaginatedResponse<T> = {
-  data: T[];
-  meta: Metadata;
-};
-
-import {
-  BaseQueryFn,
-  EndpointBuilder,
-  FetchArgs,
-  FetchBaseQueryError,
-} from '@reduxjs/toolkit/query/react';
-
-type ApiTagTypes = 'Auth' | 'Houses' | 'Analytics' | 'Renters' | 'Contracts';
-
-type ApiBaseQuery = BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>;
-
-type ApiEndpointBuilder = EndpointBuilder<ApiBaseQuery, ApiTagTypes, 'api'>;
+import { PaginationRequest } from '@/types/pagination';
+import { ApiEndpointBuilder, ApiTagTypes, PaginatedResponse } from '@/types/services/pagination';
 
 type CreatePaginatedEndpointConfig<T> = {
   url: string;
@@ -36,7 +18,7 @@ export function createPaginatedEndpoint<T>(
 ) {
   const { url, tagType, defaultSortBy, defaultOrder = 'DESC', getItemId } = config;
 
-  return build.query<PaginatedResponse<T>, HousesPerformanceRequest>({
+  return build.query<PaginatedResponse<T>, PaginationRequest>({
     query: ({ sortBy = defaultSortBy, order = defaultOrder, page, limit }) => ({
       url,
       params: { page, limit, sortBy, order },
@@ -46,10 +28,7 @@ export function createPaginatedEndpoint<T>(
 
     merge: (currentCache, newData, { arg }) => {
       if (arg.page === 1) {
-        if (!currentCache.data || currentCache.data.length === 0) {
-          return newData;
-        }
-        return currentCache;
+        return newData;
       }
 
       const existingIds = new Set(currentCache.data.map(getItemId));

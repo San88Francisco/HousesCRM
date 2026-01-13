@@ -32,7 +32,7 @@ export const useContractForm = ({ isEditMode, contractToEdit, onSuccess }: Props
     reset(
       isEditMode && contractToEdit ? mapContractToFormData(contractToEdit) : defaultContractValues,
     );
-  }, [isEditMode, contractToEdit, reset]);
+  }, [isEditMode, contractToEdit?.id, reset]);
 
   const onSubmit = async (data: ContractFormData) => {
     const toastId = contractFormToast.loading(isEditMode);

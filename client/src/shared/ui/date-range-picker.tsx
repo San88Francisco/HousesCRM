@@ -5,13 +5,14 @@ import { Calendar } from '@/shared/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { cn } from '@/shared/utils/cn';
 import { CalendarMode } from '@/types/core/calendar';
-import { format } from 'date-fns';
+import { format, Locale } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Calendar as CalendarIcon, CircleAlert } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 
 type Props = {
   id?: string;
+  locale?: Locale;
   value?: Date | null;
   onChange?: (date: Date) => void;
   placeholder?: string;
@@ -40,6 +41,7 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, Props>(
       ariaRequired = false,
       minDate,
       maxDate,
+      locale = uk,
     },
     ref,
   ) => {
@@ -78,7 +80,7 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, Props>(
                 '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4',
                 !value && 'text-muted-foreground',
                 disabled && 'cursor-not-allowed opacity-50',
-                isFocused && 'border-active-border',
+                (isFocused || open) && 'border-active-border',
                 error && 'border-red text-red focus-visible:ring-red',
               )}
               disabled={disabled}
@@ -96,7 +98,7 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, Props>(
                 aria-hidden="true"
               />
               <span className={cn('line-clamp-1', !value && 'text-muted')}>
-                {value ? format(value, 'dd MMMM yyyy', { locale: uk }) : placeholder}
+                {value ? format(value, 'dd MMMM yyyy', { locale }) : placeholder}
               </span>
               {error && iconWithError && <CircleAlert className="ml-auto text-red" />}
             </Button>
@@ -107,7 +109,7 @@ export const DateRangePicker = forwardRef<HTMLButtonElement, Props>(
               <Calendar
                 date={tempDate}
                 setDate={setTempDate}
-                lang={uk}
+                lang={locale}
                 mode={calendarMode}
                 minDate={minDate}
                 maxDate={maxDate}

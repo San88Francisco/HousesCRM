@@ -30,7 +30,7 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
 
   useEffect(() => {
     reset(isEditMode && renterToEdit ? mapRenterToFormData(renterToEdit) : defaultRenterValues);
-  }, [isEditMode, renterToEdit, reset]);
+  }, [isEditMode, renterToEdit?.id, reset]);
 
   const onSubmit = async (data: RenterFormData) => {
     const toastId = renterFormToast.loading(isEditMode);
