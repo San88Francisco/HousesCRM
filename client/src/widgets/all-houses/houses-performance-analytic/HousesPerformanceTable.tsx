@@ -8,19 +8,32 @@ import { HousePerformanceItem } from '@/types/core/houses-performance';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import { HousesPerformanceSelect } from './HousesPerformanceSelect';
+import { KeyboardEvent } from 'react';
 
 type Props<T> = {
   table: TableType<T>;
   limit: number;
-  setLimit: (limit: number) => void;
+  onLimitChange: (limit: number) => void;
 };
 
-export const HousesPerformanceTable = ({ table, limit, setLimit }: Props<HousePerformanceItem>) => {
+export const HousesPerformanceTable = ({
+  table,
+  limit,
+  onLimitChange,
+}: Props<HousePerformanceItem>) => {
   const { push } = useRouter();
 
   const handleRouteToHouse = (houseId: string) => {
     push(`${ROUTES.HOUSE}/${houseId}`);
   };
+
+  const handleRowKeyDown = (houseId: string) => (e: KeyboardEvent<HTMLTableRowElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleRouteToHouse(houseId);
+    }
+  };
+
   return (
     <div className="flex flex-col justify-between h-full">
       <Table>
@@ -42,12 +55,7 @@ export const HousesPerformanceTable = ({ table, limit, setLimit }: Props<HousePe
                 'cursor-pointer transition-colors duration-300 ease-out hover:bg-muted-foreground text-text',
               )}
               onClick={() => handleRouteToHouse(row.original.id)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleRouteToHouse(row.original.id);
-                }
-              }}
+              onKeyDown={handleRowKeyDown(row.original.id)}
               tabIndex={0}
               role="button"
               aria-label={`View details for ${row.original.apartmentName}`}
@@ -64,7 +72,7 @@ export const HousesPerformanceTable = ({ table, limit, setLimit }: Props<HousePe
 
       <div className="mt-4 flex justify-end">
         <div className="flex gap-3">
-          <HousesPerformanceSelect limit={limit} setLimit={setLimit} />
+          <HousesPerformanceSelect limit={limit} onLimitChange={onLimitChange} />
           <TablePagination table={table} />
         </div>
       </div>
