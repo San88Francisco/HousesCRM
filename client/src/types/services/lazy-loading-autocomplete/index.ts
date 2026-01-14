@@ -6,7 +6,7 @@ import {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query';
 
-export type PaginatedResponse<T> = {
+export type LazyLoadingAutocomplete<T> = {
   data: T[];
   meta: Metadata;
 };
@@ -16,3 +16,8 @@ export type ApiTagTypes = 'Auth' | 'Houses' | 'Analytics' | 'Renters' | 'Contrac
 export type ApiBaseQuery = BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>;
 
 export type ApiEndpointBuilder = EndpointBuilder<ApiBaseQuery, ApiTagTypes, 'api'>;
+
+export type AutoCompleteRequest = {
+  page: number;
+  limit: number;
+};

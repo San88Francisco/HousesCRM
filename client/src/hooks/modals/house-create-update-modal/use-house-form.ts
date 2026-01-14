@@ -27,7 +27,7 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
 
   useEffect(() => {
     reset(isEditMode && houseToEdit ? mapHouseToFormData(houseToEdit) : defaultHouseValues);
-  }, [isEditMode, houseToEdit?.id, reset]);
+  }, [isEditMode, houseToEdit, reset]);
 
   const onSubmit = async (data: HouseFormData) => {
     const toastId = houseFormToast.loading(isEditMode);

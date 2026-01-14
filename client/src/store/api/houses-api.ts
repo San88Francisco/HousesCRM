@@ -1,7 +1,7 @@
 import { rootApi } from '@/shared/api';
 import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart';
 import { HousesPerformanceResponse } from '@/types/core/houses-performance';
-import { PaginationRequest } from '@/types/pagination';
+import { PaginationRequest } from '@/types/core/pagination';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 import {
   ContractByIdResponse,

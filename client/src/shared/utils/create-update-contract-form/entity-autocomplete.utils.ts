@@ -1,5 +1,5 @@
 import { EntityType } from '@/types/core/autocomplete-contract-form';
-import { PaginatedResponse } from '@/types/services/pagination';
+import { LazyLoadingAutocomplete } from '@/types/services/lazy-loading-autocomplete';
 import { SearchResponse } from '@/types/services/search';
 
 export const getEntitiesFromSearch = <T>(
@@ -9,13 +9,13 @@ export const getEntitiesFromSearch = <T>(
   return (searchData?.[entityType] ?? []) as T[];
 };
 
-export const getEntitiesFromList = <T>(listData: PaginatedResponse<T> | undefined): T[] => {
+export const getEntitiesFromList = <T>(listData: LazyLoadingAutocomplete<T> | undefined): T[] => {
   return listData?.data ?? [];
 };
 
 export const getHasMorePages = <T>(
   isSearchMode: boolean,
-  listData: PaginatedResponse<T> | undefined,
+  listData: LazyLoadingAutocomplete<T> | undefined,
 ): boolean => {
   return isSearchMode ? false : (listData?.meta?.hasNextPage ?? false);
 };

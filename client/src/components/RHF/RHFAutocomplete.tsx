@@ -13,7 +13,7 @@ import { Label } from '@/shared/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { cn } from '@/shared/utils/cn';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { forwardRef, RefObject, useEffect, useState } from 'react';
+import { forwardRef, RefObject, useState } from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
 
 export interface AutocompleteOption {
@@ -67,37 +67,14 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
     } = useFormContext();
 
     const [open, setOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
 
     const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
-
-    // Визначаємо чи це lazy loading mode
-    const isLazyLoadingMode = !!onSearch;
 
     const handleOpenChange = (newOpen: boolean) => {
       setOpen(newOpen);
       onOpenChange?.(newOpen);
     };
-
-    useEffect(() => {
-      if (onSearch) {
-        if (searchTerm.length >= 2) {
-          const timeoutId = setTimeout(() => {
-            onSearch(searchTerm);
-          }, 500);
-          return () => clearTimeout(timeoutId);
-        } else if (searchTerm.length === 0) {
-          onSearch('');
-        }
-      }
-    }, [searchTerm, onSearch]);
-
-    useEffect(() => {
-      if (!open) {
-        setSearchTerm('');
-      }
-    }, [open]);
 
     return (
       <div className="space-y-2">
@@ -136,17 +113,13 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
                   >
                     {selectedOption ? selectedOption.label : placeholder}
                     <ChevronsUpDown
-                      className={cn('h-4 w-4 shrink-0 ', errorMessage && 'text-red')}
+                      className={cn('h-4 w-4 shrink-0', errorMessage && 'text-red')}
                     />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
                   <Command shouldFilter={!onSearch}>
-                    <CommandInput
-                      placeholder={searchPlaceholder}
-                      value={searchTerm}
-                      onValueChange={setSearchTerm}
-                    />
+                    <CommandInput placeholder={searchPlaceholder} onValueChange={onSearch} />
                     <CommandList>
                       {loading && options.length === 0 && (
                         <div className="py-6 text-center text-sm text-muted-foreground">
@@ -184,20 +157,17 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
                             ))}
                           </CommandGroup>
 
-                          {/* Показуємо loader тільки в lazy loading mode */}
-                          {isLazyLoadingMode && loading && (
+                          {onSearch && loading && (
                             <div className="py-2 text-center text-sm text-muted-foreground">
                               Завантаження...
                             </div>
                           )}
 
-                          {/* Intersection observer target - тільки в lazy loading mode */}
-                          {isLazyLoadingMode && hasMore && loadMoreRef && (
+                          {onSearch && hasMore && loadMoreRef && (
                             <div ref={loadMoreRef} className="h-px" aria-hidden="true" />
                           )}
 
-                          {/* "Всі завантажені" - тільки в lazy loading mode */}
-                          {isLazyLoadingMode && !hasMore && !loading && (
+                          {onSearch && !hasMore && !loading && options.length > 0 && (
                             <div className="py-2 text-center text-xs text-muted-foreground">
                               Всі результати завантажені
                             </div>
