@@ -1,0 +1,50 @@
+import { cn } from '@/shared/utils/cn';
+import { formatDate } from '@/shared/utils/format/format-date';
+import { contractDuration } from '@/shared/utils/table/contract-duration';
+import { Contract } from '@/types/core/contract';
+import { ColumnDef } from '@tanstack/react-table';
+
+export const AllRentersContractsTableColumns: ColumnDef<Contract>[] = [
+  {
+    accessorKey: 'commencement',
+    header: 'Початок',
+    cell: ctx => formatDate(ctx.getValue<string>()),
+  },
+  {
+    accessorKey: 'termination',
+    header: 'Завершення',
+    cell: ctx => formatDate(ctx.getValue<string>()),
+  },
+  {
+    header: 'Тривалість',
+    accessorFn: row => contractDuration(row.commencement, row.termination),
+  },
+  {
+    accessorKey: 'monthlyPayment',
+    header: 'Щомісячний платіж',
+    cell: ctx => `${ctx.getValue<number>().toLocaleString()} ₴`,
+  },
+  {
+    accessorKey: 'totalRevenue',
+    header: 'Загальний дохід',
+    cell: ctx => (
+      <span className="font-medium">{`${ctx.getValue<number>().toLocaleString()} ₴`}</span>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Статус',
+    cell: ctx => {
+      const status = ctx.getValue<'active' | 'inactive'>();
+      const isActive = status === 'active';
+
+      return (
+        <div
+          className={cn('font-medium text-right w-full', isActive ? 'text-yellow' : 'text-purple')}
+        >
+          {isActive ? 'Активний' : 'Неактивний'}
+        </div>
+      );
+    },
+  },
+];

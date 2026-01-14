@@ -6,4 +6,5 @@ export interface Contract {
   termination: string;
   monthlyPayment: number;
   status: ContractStatus;
+  totalRevenue?: number;
 }

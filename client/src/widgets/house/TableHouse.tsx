@@ -3,10 +3,10 @@
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { LoadingState } from '@/components/chart-states/LoadingState';
 import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
 import { PagePagination } from '@/components/page-pagination';
-import { apartmentColumns, PAGE_LIMIT } from '@/shared/constants/current-apartment';
+import { apartmentColumns } from '@/shared/constants/current-apartment';
+import { PAGE_SIZE } from '@/shared/constants/table/pagination';
 import { ROUTES } from '@/shared/routes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
@@ -17,6 +17,7 @@ import { useGetHouseByIdOccupancyQuery, useGetHouseByIdQuery } from '@/store/api
 import { OccupancyHouses } from '@/types/model/houses-occupancy';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { HousesPerformanceTableSkeleton } from '../skeletons/houses-performance-table-skeleton';
 
 export const TableHouse = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,7 +37,7 @@ export const TableHouse = () => {
     isLoading: paginatedLoading,
     error: paginatedError,
   } = useGetHouseByIdOccupancyQuery(
-    { id, page: currentPage!, limit: PAGE_LIMIT },
+    { id, page: currentPage!, limit: PAGE_SIZE },
     { skip: !id || currentPage === null },
   );
 
@@ -47,7 +48,7 @@ export const TableHouse = () => {
   const isLoading = currentPage === null ? initialLoading : paginatedLoading;
   const error = currentPage === null ? initialError : paginatedError;
 
-  if (isLoading) return <LoadingState className="min-h-[550px]" />;
+  if (isLoading) return <HousesPerformanceTableSkeleton />;
   if (error) return <ErrorState className="min-h-[550px]" error={error} />;
 
   const tableData =
@@ -123,7 +124,7 @@ export const TableHouse = () => {
                           onClick={() => handleRouteToRenter(item.id)}
                           className="w-full text-center"
                         >
-                          {formatDate(item.vacated)}
+                          {item.status === 'active' ? 'Наразі орендує' : formatDate(item.vacated!)}
                         </div>
                       </TableCell>
                       <TableCell className="text-text">

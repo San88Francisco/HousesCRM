@@ -7,5 +7,3 @@ export const apartmentColumns = [
   'Загальний дохід',
   'Статус',
 ];
-
-export const PAGE_LIMIT = 10;
