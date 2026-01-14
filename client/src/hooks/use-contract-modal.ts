@@ -1,5 +1,5 @@
 import { INTERSECTION_ROOT_MARGIN, PAGE_LIMIT } from '@/shared/constants/renter';
-import { useGetAllContractsByRenterIdQuery } from '@/store/renters-api';
+import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const useContractsModal = (

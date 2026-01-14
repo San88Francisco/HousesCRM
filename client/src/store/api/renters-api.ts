@@ -40,4 +40,5 @@ export const rentersApi = rootApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useGetAllContractsByRenterIdQuery } = rentersApi;
+export const { useGetAllContractsByRenterIdQuery, useLazyGetAllContractsByRenterIdQuery } =
+  rentersApi;

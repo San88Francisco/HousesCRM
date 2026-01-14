@@ -150,7 +150,7 @@ export const TableHouse = () => {
                             item.status === 'active' ? 'text-yellow' : 'text-purple',
                           )}
                         >
-                          {item.status === 'active' ? 'Активний' : 'Не активний'}
+                          {item.status === 'active' ? 'Активний' : 'Неактивний'}
                         </div>
                       </TableCell>
                     </TableRow>
