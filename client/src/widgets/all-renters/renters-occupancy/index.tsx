@@ -4,12 +4,12 @@ import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { RentersOccupancyTableColumns } from '@/shared/constants/apartment/renters-occupancy';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { useGetRentersQuery } from '@/store/api/houses-api';
 import { RentersOccupancyTableSkeleton } from '@/widgets/skeletons/renters-occupancy-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
 import { RentersOccupancyTable } from './RentersOccupancyTable';
 import { PAGE_SIZE } from '@/shared/constants/table/pagination';
+import { useGetRentersQuery } from '@/store/renters-api';
 
 export const RentersOccupancy = () => {
   const [pageIndex, setPageIndex] = useState(0);
@@ -53,7 +53,7 @@ export const RentersOccupancy = () => {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Орендарі</CardTitle>
+        <CardTitle>Всі Орендарі</CardTitle>
       </CardHeader>
 
       <CardContent>

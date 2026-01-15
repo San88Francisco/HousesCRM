@@ -8,7 +8,7 @@ import { cn } from '@/shared/utils/cn';
 import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
-import { HousesPerformanceSelect } from '../houses-performance-analytic/HousesPerformanceSelect';
+import { HousesPerformanceSelect } from '../../all-houses/houses-performance-analytic/HousesPerformanceSelect';
 
 type Props<T> = {
   table: TableType<T>;

@@ -4,7 +4,6 @@ import {
   HousesPerformanceRequest,
   HousesPerformanceResponse,
 } from '@/types/core/houses-performance';
-import { RentersOccupancyRequest, RentersOccupancyResponse } from '@/types/core/renters-occupancy';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
 import {
@@ -68,20 +67,6 @@ export const housesApi = rootApi.injectEndpoints({
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Analytics'],
     }),
 
-    getRenters: build.query<RentersOccupancyResponse, RentersOccupancyRequest>({
-      query: ({ page, limit, sortBy, order }) => ({
-        url: '/renters',
-        method: 'GET',
-        params: {
-          page,
-          limit,
-          sortBy,
-          order,
-        },
-      }),
-      providesTags: ['Renters'],
-    }),
-
     getRenterById: build.query<RenterByIdResponse, string>({
       query: id => `/renters/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Renters', id }],
@@ -133,5 +118,4 @@ export const {
   useUpdateRenterMutation,
   useGetHousesPerformanceQuery,
   useLazyGetHousesPerformanceQuery,
-  useGetRentersQuery,
 } = housesApi;
