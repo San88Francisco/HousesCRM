@@ -1,10 +1,9 @@
 'use client';
 
-import { PAGE_LIMIT } from '@/shared/constants/renter';
 import { Badge } from '@/shared/ui/badge';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
-import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
+import { useGetAllContractsByRenterIdPaginatedQuery } from '@/store/api/renters-api';
 import {
   CircleCheck,
   CircleDollarSign,
@@ -18,13 +17,9 @@ import { useParams } from 'next/navigation';
 export const HeaderRenter = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, isLoading, error } = useGetAllContractsByRenterIdQuery(
+  const { data, isLoading, error } = useGetAllContractsByRenterIdPaginatedQuery(
     {
       renterId: id,
-      page: 1,
-      limit: PAGE_LIMIT,
-      sortBy: 'commencement',
-      order: 'DESC',
     },
     {
       skip: !id,

@@ -36,9 +36,30 @@ export const rentersApi = rootApi.injectEndpoints({
         providesTags: (_result, _error, { renterId }) => [{ type: 'Renters', id: renterId }],
       },
     ),
+
+    getAllContractsByRenterIdPaginated: build.query<
+      AllContractsByRenterIdResponse,
+      RentersPaginatedRequest
+    >({
+      query: ({ renterId, sortBy, order, page, limit }) => ({
+        url: `/renters/${renterId}`,
+        params: {
+          page,
+          limit,
+          sortBy,
+          order,
+        },
+      }),
+
+      providesTags: (_result, _error, { renterId }) => [{ type: 'Renters', id: renterId }],
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllContractsByRenterIdQuery, useLazyGetAllContractsByRenterIdQuery } =
-  rentersApi;
+export const {
+  useGetAllContractsByRenterIdQuery,
+  useLazyGetAllContractsByRenterIdQuery,
+  useGetAllContractsByRenterIdPaginatedQuery,
+  useLazyGetAllContractsByRenterIdPaginatedQuery,
+} = rentersApi;
