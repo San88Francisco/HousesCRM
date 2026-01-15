@@ -1,3 +1,5 @@
+import { Currencies } from '@/types/core/currencies';
+
 export interface HousePaybackStats {
   purchasePriceUSD: number;
   totalIncomeUSD: number;
@@ -17,4 +19,6 @@ export interface PaybackChartData {
   purchaseDate: string;
   purchasePriceUSD: number;
   totalIncomeUSD: number;
+  currencyCode: Currencies;
+  currencySymbol: string;
 }

@@ -57,7 +57,7 @@ export const TableRenter = ({ table, limit, setLimit }: Props<Contract>) => {
 
       <div className="mt-4 flex justify-end">
         <div className="flex gap-3">
-          <HousesPerformanceSelect limit={limit} setLimit={setLimit} />
+          <HousesPerformanceSelect limit={limit} onLimitChange={setLimit} />
           <TablePagination table={table} />
         </div>
       </div>
