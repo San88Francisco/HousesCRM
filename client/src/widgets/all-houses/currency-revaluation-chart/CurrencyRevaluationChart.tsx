@@ -82,7 +82,7 @@ export const CurrencyRevaluationChart = () => {
                 dataKey="apartmentName"
                 tickFormatter={formatYAxisTick}
                 tick={{
-                  fontSize: 13,
+                  fontSize: 14,
                   fill: isDark ? 'var(--dark-light)' : 'var(--dark)',
                   fontWeight: 500,
                 }}

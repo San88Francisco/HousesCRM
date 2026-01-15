@@ -120,7 +120,7 @@ export const CurrencyRevaluationTooltip = ({
       }}
     >
       <div className="h-full overflow-y-auto pr-1 custom-scrollbar tooltip-scroll">
-        <p className="font-bold mb-2 text-xs" title={data.apartmentName ?? 'Без назви'}>
+        <p className="font-bold mb-1 text-sm" title={data.apartmentName ?? 'Без назви'}>
           {truncateText(data.apartmentName ?? 'Без назви', TOOLTIP_NAME_MAX_LENGTH)}
         </p>
 

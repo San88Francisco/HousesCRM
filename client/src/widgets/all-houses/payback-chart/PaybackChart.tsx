@@ -20,12 +20,14 @@ import {
   usePaybackChartData,
 } from '@/shared/utils/all-house/payback-chart/utils';
 import { CustomBar } from './CustomBar';
-import { CustomXAxisTick } from './CustomXAxisTick';
+import { LegendContent } from './LegendContent';
 import { PaybackChartTooltip } from './PaybackChartTooltip';
 
 const CHART_HEIGHT = 300;
-const CHART_MARGIN = { top: 20, right: 30, left: 20, bottom: 50 };
-const CHART_CURRENCY: Currencies = 'USD';
+const CHART_MARGIN = { top: 20, right: 30, left: 20, bottom: 30 };
+const LEGEND_MARGIN_TOP = -70;
+const LEGEND_HEIGHT = 80;
+const CHART_CURRENCY: Currencies = 'UAH';
 
 type ChartCoordinatesProps = {
   yAxis?: {
@@ -38,6 +40,7 @@ type ChartCoordinatesProps = {
 
 export const PaybackChart = () => {
   const [mounted, setMounted] = useState(false);
+  const [activeApartment, setActiveApartment] = useState<string | null>(null);
 
   const { data: analyticsData, isLoading, error } = useGetHousesAnalyticsQuery();
 
@@ -48,6 +51,14 @@ export const PaybackChart = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleApartmentClick = (id: string) => {
+    setActiveApartment(prev => (prev === id ? null : id));
+  };
+
+  const filteredChartData = activeApartment
+    ? chartData.filter(item => item.id === activeApartment)
+    : chartData;
 
   const horizontalCoordinatesGenerator = useCallback(
     (props: ChartCoordinatesProps) => {
@@ -68,6 +79,8 @@ export const PaybackChart = () => {
   if (!mounted) return null;
 
   const yAxisDomain: [number | string, number | string] = [yAxisMin, yAxisMax];
+  const totalChartHeight = CHART_HEIGHT + LEGEND_HEIGHT;
+  const chartMarginWithLegend = { ...CHART_MARGIN, bottom: LEGEND_HEIGHT };
 
   return (
     <Card className="w-full">
@@ -90,21 +103,15 @@ export const PaybackChart = () => {
           onPointerMove={handlePointerMove}
         >
           <div style={{ minWidth: `${minChartWidth}px` }}>
-            <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
-              <BarChart data={chartData} margin={CHART_MARGIN} barSize={20}>
+            <ResponsiveContainer width="100%" height={totalChartHeight}>
+              <BarChart data={filteredChartData} margin={chartMarginWithLegend} barSize={20}>
                 <CartesianGrid
                   stroke="var(--border)"
-                  strokeDasharray="3 3"
+                  strokeDasharray="0"
                   vertical={false}
                   horizontalCoordinatesGenerator={horizontalCoordinatesGenerator}
                 />
-                <XAxis
-                  dataKey="apartmentName"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={<CustomXAxisTick />}
-                  interval={0}
-                />
+                <XAxis dataKey="apartmentName" hide />
                 <YAxis
                   scale={scaleType}
                   domain={yAxisDomain}
@@ -122,6 +129,19 @@ export const PaybackChart = () => {
                 <Bar dataKey="purchasePriceUSD" shape={<CustomBar />} />
               </BarChart>
             </ResponsiveContainer>
+
+            <div
+              className="relative pointer-events-auto"
+              style={{ marginTop: LEGEND_MARGIN_TOP, zIndex: 10 }}
+              onPointerDown={e => e.stopPropagation()}
+              onPointerMove={e => e.stopPropagation()}
+            >
+              <LegendContent
+                apartmentsData={chartData}
+                activeApartment={activeApartment}
+                onApartmentClick={handleApartmentClick}
+              />
+            </div>
           </div>
         </div>
       </CardContent>

@@ -5,33 +5,7 @@ import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart'
 
 const FULL_PAYBACK_COEFFICIENT = 1;
 const COEFFICIENT_DECIMAL_PLACES = 2;
-const MILLION = 1_000_000;
-const THOUSAND = 1_000;
-const DEFAULT_CURRENCY: Currencies = 'USD';
-
-const formatLargeNumber = (abs: number, symbol: string, sign: string): string => {
-  if (abs >= MILLION) {
-    return `${sign}${symbol}${Math.round(abs / MILLION)}M`;
-  }
-
-  const k = Math.round(abs / THOUSAND);
-  return `${sign}${symbol}${k}k`;
-};
-
-const formatSmallNumber = (abs: number, symbol: string, sign: string): string => {
-  return abs === 0 ? `${symbol}0` : `${sign}${symbol}${abs}`;
-};
-
-const formatThousands = (thousands: number, symbol: string, sign: string): string => {
-  if (thousands >= 1000) {
-    return `${sign}${symbol}${((thousands * THOUSAND) / MILLION).toFixed(2)}M`;
-  }
-
-  const decimals = thousands >= 100 ? 1 : 2;
-  return Number.isInteger(thousands)
-    ? `${sign}${symbol}${thousands}k`
-    : `${sign}${symbol}${thousands.toFixed(decimals)}k`;
-};
+const DEFAULT_CURRENCY: Currencies = 'UAH';
 
 export const transformPaybackData = (
   stats: HousePaybackStats[],
@@ -71,11 +45,7 @@ export const formatYAxis = (value: number, currency: Currencies = DEFAULT_CURREN
   const sign = value < 0 ? '-' : '';
   const abs = Math.abs(value);
 
-  if (abs >= THOUSAND) {
-    return formatLargeNumber(abs, symbol, sign);
-  }
-
-  return formatSmallNumber(abs, symbol, sign);
+  return `${sign}${symbol}${Math.round(abs).toLocaleString('uk-UA')}`;
 };
 
 export const formatTooltipPrice = (
@@ -89,14 +59,5 @@ export const formatTooltipPrice = (
   const sign = value < 0 ? '-' : '';
   const abs = Math.abs(value);
 
-  if (abs >= MILLION) {
-    return `${sign}${symbol}${(abs / MILLION).toFixed(2)}M`;
-  }
-
-  if (abs >= THOUSAND) {
-    const thousands = abs / THOUSAND;
-    return formatThousands(thousands, symbol, sign);
-  }
-
-  return `${sign}${symbol}${abs}`;
+  return `${sign}${symbol}${Math.round(abs).toLocaleString('uk-UA')}`;
 };
