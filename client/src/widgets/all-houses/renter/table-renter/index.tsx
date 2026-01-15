@@ -64,7 +64,7 @@ export const RentersReport = () => {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Орендарі</CardTitle>
+        <CardTitle>Історія договорів орендаря</CardTitle>
       </CardHeader>
 
       <CardContent>
