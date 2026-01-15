@@ -10,8 +10,8 @@ type Props = {
 
 export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClick }: Props) => {
   return (
-    <div className="flex max-[420px]:flex-col max-[420px]:items-center justify-center py-3  px-1 ">
-      <div className="w-max mx-auto flex flex-wrap max-[420px]:flex-col items-start justify-center min-[420.5px]:gap-7 gap-3">
+    <div className="flex max-[420px]:flex-col max-[420px]:items-center justify-center py-3 px-1">
+      <div className="w-max mx-auto flex flex-wrap max-[420px]:flex-col items-start justify-center min-[421px]:gap-7 gap-3">
         {apartmentsData.map(apt => (
           <Button
             variant="icon"

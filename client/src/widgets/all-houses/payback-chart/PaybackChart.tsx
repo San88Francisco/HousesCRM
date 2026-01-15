@@ -52,9 +52,9 @@ export const PaybackChart = () => {
     setMounted(true);
   }, []);
 
-  const handleApartmentClick = (id: string) => {
+  const handleApartmentClick = useCallback((id: string) => {
     setActiveApartment(prev => (prev === id ? null : id));
-  };
+  }, []);
 
   const filteredChartData = activeApartment
     ? chartData.filter(item => item.id === activeApartment)

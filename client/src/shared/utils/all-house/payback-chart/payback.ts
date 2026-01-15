@@ -37,17 +37,6 @@ export const formatPaybackCoefficient = (coefficient: number): string => {
   return `x${coefficient.toFixed(COEFFICIENT_DECIMAL_PLACES)}`;
 };
 
-export const formatYAxis = (value: number, currency: Currencies = DEFAULT_CURRENCY): string => {
-  const symbol = getCurrencySymbol(currency);
-
-  if (!Number.isFinite(value)) return '—';
-
-  const sign = value < 0 ? '-' : '';
-  const abs = Math.abs(value);
-
-  return `${sign}${symbol}${Math.round(abs).toLocaleString('uk-UA')}`;
-};
-
 export const formatTooltipPrice = (
   value: number,
   currency: Currencies = DEFAULT_CURRENCY,
@@ -60,4 +49,8 @@ export const formatTooltipPrice = (
   const abs = Math.abs(value);
 
   return `${sign}${symbol}${Math.round(abs).toLocaleString('uk-UA')}`;
+};
+
+export const formatYAxis = (value: number, currency: Currencies = DEFAULT_CURRENCY): string => {
+  return formatTooltipPrice(value, currency);
 };
