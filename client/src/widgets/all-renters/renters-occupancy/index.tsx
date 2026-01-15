@@ -3,13 +3,13 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { RentersOccupancyTableColumns } from '@/shared/constants/apartment/renters-occupancy';
+import { PAGE_SIZE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { useGetRentersQuery } from '@/store/renters-api';
 import { RentersOccupancyTableSkeleton } from '@/widgets/skeletons/renters-occupancy-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
 import { RentersOccupancyTable } from './RentersOccupancyTable';
-import { PAGE_SIZE } from '@/shared/constants/table/pagination';
-import { useGetRentersQuery } from '@/store/renters-api';
 
 export const RentersOccupancy = () => {
   const [pageIndex, setPageIndex] = useState(0);
@@ -19,6 +19,10 @@ export const RentersOccupancy = () => {
     page: pageIndex + 1,
     limit,
   });
+
+  const onLimitChange = (limit: number) => {
+    setLimit(limit);
+  };
 
   const table = useReactTable({
     data: data?.data ?? [],
@@ -57,7 +61,7 @@ export const RentersOccupancy = () => {
       </CardHeader>
 
       <CardContent>
-        <RentersOccupancyTable table={table} limit={limit} setLimit={setLimit} />
+        <RentersOccupancyTable table={table} limit={limit} onLimitChange={onLimitChange} />
       </CardContent>
     </Card>
   );

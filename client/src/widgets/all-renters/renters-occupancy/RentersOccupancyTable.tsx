@@ -13,15 +13,27 @@ import { HousesPerformanceSelect } from '../../all-houses/houses-performance-ana
 type Props<T> = {
   table: TableType<T>;
   limit: number;
-  setLimit: (limit: number) => void;
+  onLimitChange: (limit: number) => void;
 };
 
-export const RentersOccupancyTable = ({ table, limit, setLimit }: Props<RentersOccupancyItem>) => {
+export const RentersOccupancyTable = ({
+  table,
+  limit,
+  onLimitChange,
+}: Props<RentersOccupancyItem>) => {
   const { push } = useRouter();
 
   const handleRouteToRenter = (renterId: string) => {
     push(`${ROUTES.RENTER}/${renterId}`);
   };
+
+  // const handleRowKeyDown = (renterID: string) => (e: KeyboardEvent<HTMLTableRowElement>) => {
+  //   if (e.key === 'Enter' || e.key === ' ') {
+  //     e.preventDefault();
+  //     handleRouteToRenter(renterID);
+  //   }
+  // };
+
   return (
     <div className="flex flex-col justify-between h-full">
       <Table>
@@ -66,7 +78,7 @@ export const RentersOccupancyTable = ({ table, limit, setLimit }: Props<RentersO
 
       <div className="mt-4 flex justify-end">
         <div className="flex gap-3">
-          <HousesPerformanceSelect limit={limit} setLimit={setLimit} />
+          <HousesPerformanceSelect limit={limit} onLimitChange={onLimitChange} />
           <TablePagination table={table} />
         </div>
       </div>
