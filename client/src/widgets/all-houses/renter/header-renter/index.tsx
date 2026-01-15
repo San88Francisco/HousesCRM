@@ -63,7 +63,7 @@ export const HeaderRenter = () => {
       </div>
       <div className="flex items-center gap-2 text-sm sm:text-base font-semibold">
         <StatusIcon className="w-4 h-4 sm:w-5 sm:h-5 text-text mt-[2px] opacity-90" />
-        <span className="text-gray-medium break-words">{statusText}</span>
+        <span className="text-text break-words opacity-75">{statusText}</span>
       </div>
       <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-muted-text">
         {items.map(({ Icon, text }) => (
