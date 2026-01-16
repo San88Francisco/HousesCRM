@@ -41,14 +41,8 @@ export const rentersApi = rootApi.injectEndpoints({
       AllContractsByRenterIdResponse,
       RentersPaginatedRequest
     >({
-      query: ({ renterId, sortBy, order, page, limit }) => ({
+      query: ({ renterId }) => ({
         url: `/renters/${renterId}`,
-        params: {
-          page,
-          limit,
-          sortBy,
-          order,
-        },
       }),
 
       providesTags: (_result, _error, { renterId }) => [{ type: 'Renters', id: renterId }],

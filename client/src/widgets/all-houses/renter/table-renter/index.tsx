@@ -22,10 +22,6 @@ export const RentersReport = () => {
   const { data, isLoading, isError, error } = useGetAllContractsByRenterIdPaginatedQuery(
     {
       renterId: id,
-      page: pageIndex + 1,
-      limit: limit,
-      sortBy: 'commencement',
-      order: 'DESC',
     },
     {
       skip: !id,

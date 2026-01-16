@@ -10,14 +10,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/shared/ui/sidebar';
-import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
+import { useGetHousesQuery } from '@/store/api/houses-api';
 import { MapPinHouse } from 'lucide-react';
 import { CollapsibleMenu } from './ColapsibleMenu';
 
 export const SidebarTablesGroup = () => {
-  const { data, error, isLoading } = useGetHousesAnalyticsQuery();
+  const { data, error, isLoading } = useGetHousesQuery();
   const colapsibleMenuItems =
-    data?.housesOverview?.map(house => ({
+    data?.data.map(house => ({
       title: house.apartmentName,
       url: `${ROUTES.HOUSE}/${house.id}`,
       icon: MapPinHouse,

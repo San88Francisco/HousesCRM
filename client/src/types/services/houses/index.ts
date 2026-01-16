@@ -33,3 +33,27 @@ export type OccupancyHousesRequest = {
 };
 
 export type CurrencyRevaluationResponse = CurrencyRevaluation[];
+
+export type HousesResponse = {
+  data: HousesDataResponse[];
+};
+
+export type HousesDataResponse = {
+  prices: Prices[];
+  id: string;
+  apartmentName: string;
+  roomsCount: number;
+  totalArea: number;
+  purchaseDate: string;
+  floor: number;
+  street: string;
+  apartmentType: string;
+  meta: Metadata;
+};
+
+export type Prices = {
+  id: string;
+  amount: string;
+  code: string;
+  exchangeRate: number;
+};
