@@ -22,7 +22,7 @@ type Props<T> = {
   entityType: EntityType;
   useListQuery: (
     args: { page: number; limit: number },
-    options: { skip: boolean },
+    options: { skip: boolean; refetchOnMountOrArgChange?: boolean | number },
   ) => ListQueryResult<T>;
   formatOption: (item: T) => AutocompleteOption;
   initialEntity?: T | null;
@@ -58,10 +58,17 @@ export const useEntityAutocomplete = <T extends { id: string }>({
   const [triggerSearch, { data: searchData, isFetching: isSearchFetching }] =
     useLazyGetAllSearchQuery();
 
+  // RTK Query автоматично кешує запити через keepUnusedDataFor (5 хвилин)
+  // Використовуємо refetchOnMountOrArgChange: true, щоб завжди робити запити при зміні аргументів
+  // Це забезпечує lazy loading для нових сторінок
+  // Кешування працює через keepUnusedDataFor в endpoint
   const { data: listData, isFetching: isListFetching } = useListQuery(
     { page, limit: PAGE_LIMIT },
     {
       skip: !isOpen || isSearchMode,
+      // Завжди робимо запит при зміні аргументів (page змінюється для lazy loading)
+      // RTK Query автоматично використає кеш якщо він актуальний через keepUnusedDataFor
+      refetchOnMountOrArgChange: true,
     },
   );
 

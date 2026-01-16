@@ -31,23 +31,12 @@ export function lazyLoadingAutocomplete<T>(build: ApiEndpointBuilder, config: Pr
       }
 
       const existingIds = new Set(currentCache?.data?.map(getItemId) ?? []);
-
       const newItems = newData.data.filter(item => !existingIds.has(getItemId(item)));
 
       return {
-        data: [...currentCache.data, ...newItems],
+        data: [...(currentCache?.data ?? []), ...newItems],
         meta: newData.meta,
       };
-    },
-
-    forceRefetch({ endpointState }) {
-      const cachedResponse = endpointState?.data as LazyLoadingAutocomplete<T> | undefined;
-
-      if (!cachedResponse || !cachedResponse.data?.length) {
-        return true;
-      }
-
-      return cachedResponse.meta?.hasNextPage ?? true;
     },
 
     providesTags: result =>

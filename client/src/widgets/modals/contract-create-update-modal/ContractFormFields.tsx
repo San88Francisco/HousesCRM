@@ -8,7 +8,7 @@ import { getStatusLabel } from '@/shared/utils/create-update-contract-form/statu
 import { House } from '@/types/core/house';
 import { Renter } from '@/types/core/renter';
 import { ContractStatus } from '@/types/core/status/status';
-import { Coins } from 'lucide-react';
+import { Building, Coins, User } from 'lucide-react';
 
 type Props = {
   isLoading: boolean;
@@ -52,6 +52,8 @@ export const ContractFormFields = ({ isLoading, initialHouse, initialRenter }: P
         placeholder="Оберіть будинок"
         searchPlaceholder="Пошук будинку..."
         emptyMessage="Будинки не знайдені"
+        icon={<Building className="w-4 h-4" />}
+        iconWithError
         options={houseOptions}
         onSearch={handleHouseSearch}
         onOpenChange={handleHouseOpenChange}
@@ -68,6 +70,8 @@ export const ContractFormFields = ({ isLoading, initialHouse, initialRenter }: P
         placeholder="Оберіть орендаря"
         searchPlaceholder="Пошук орендаря..."
         emptyMessage="Орендарі не знайдені"
+        icon={<User className="w-4 h-4" />}
+        iconWithError
         options={renterOptions}
         onSearch={handleRenterSearch}
         onOpenChange={handleRenterOpenChange}

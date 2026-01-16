@@ -33,6 +33,7 @@ export const ContractCreateUpdateModal = () => {
     <Modal
       triggers={isEditMode ? ModalTriggers.EDIT_CONTRACT : ModalTriggers.ADD_CONTRACT}
       className="max-w-2xl max-h-[90vh] overflow-y-auto"
+      onClose={handleClose}
     >
       <DialogHeader>
         <DialogTitle className="text-lg font-semibold">{modalContent.title}</DialogTitle>
