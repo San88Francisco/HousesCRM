@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query } from '@nestjs/common'
 import { AllRenterAnalyticDto } from 'src/analytics/renter-detail-analytics/dto/all-renter-analytic-response.dto'
 import { ContractQueryDto } from 'src/analytics/renter-detail-analytics/dto/contract-query.dto'
 import { ContractWithRevenueResponseDto } from 'src/analytics/renter-detail-analytics/dto/contract-with-revenue-response.dto'
@@ -29,7 +29,7 @@ export class RentersController {
   @Get(RENTERS_ROUTES.CONTRACTS_BY_RENTER_ID)
   @Auth()
   async getContractsByRenterId(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Query() dto: ContractQueryDto
   ): Promise<ContractWithRevenueResponseDto> {
     return await this.rentersAnalyticService.getAllContractsByRenterId(id, dto)
