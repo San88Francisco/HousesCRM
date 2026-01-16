@@ -40,7 +40,11 @@ export const ContractCreateUpdateModal = () => {
       </DialogHeader>
 
       <RHFForm form={methods} onSubmit={onSubmit}>
-        <ContractFormFields isLoading={isLoading} />
+        <ContractFormFields
+          isLoading={isLoading}
+          initialHouse={contractToEdit?.house}
+          initialRenter={contractToEdit?.renter}
+        />
 
         <DialogFooter className="gap-2">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>

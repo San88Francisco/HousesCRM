@@ -1,15 +1,20 @@
-import { useGetAllHousesAutocompleteQuery } from '@/store/api/lazy-loading-autocomplete';
+import { useGetHousesAutocompleteQuery } from '@/store/api/lazy-loading-autocomplete';
 import { House } from '@/types/core/house';
 import { useEntityAutocomplete } from './use-entity-autocomplete';
 
-export const useHousesAutocomplete = () => {
+type Props = {
+  initialHouse?: House | null;
+};
+
+export const useHousesAutocomplete = ({ initialHouse }: Props = {}) => {
   return useEntityAutocomplete<House>({
     entityType: 'houses',
-    useListQuery: useGetAllHousesAutocompleteQuery,
+    useListQuery: useGetHousesAutocompleteQuery,
     formatOption: house => ({
       value: house.id,
       label: `${house.apartmentName} - ${house.street}`,
       disabled: false,
     }),
+    initialEntity: initialHouse,
   });
 };

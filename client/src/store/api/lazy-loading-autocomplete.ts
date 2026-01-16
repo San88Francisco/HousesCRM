@@ -30,7 +30,8 @@ export function lazyLoadingAutocomplete<T>(build: ApiEndpointBuilder, config: Pr
         return newData;
       }
 
-      const existingIds = new Set(currentCache.data.map(getItemId));
+      const existingIds = new Set(currentCache?.data?.map(getItemId) ?? []);
+
       const newItems = newData.data.filter(item => !existingIds.has(getItemId(item)));
 
       return {
@@ -39,38 +40,35 @@ export function lazyLoadingAutocomplete<T>(build: ApiEndpointBuilder, config: Pr
       };
     },
 
-    forceRefetch({ currentArg, previousArg, endpointState }) {
+    forceRefetch({ endpointState }) {
       const cachedResponse = endpointState?.data as LazyLoadingAutocomplete<T> | undefined;
-      const hasCachedData = cachedResponse?.data && cachedResponse.data.length > 0;
 
-      if (currentArg?.page === 1 && hasCachedData) {
-        return false;
+      if (!cachedResponse || !cachedResponse.data?.length) {
+        return true;
       }
 
-      return currentArg?.page !== previousArg?.page;
+      return cachedResponse.meta?.hasNextPage ?? true;
     },
 
     providesTags: result =>
       result
         ? [
-            ...result.data.map(item => ({
-              type: tagType,
-              id: getItemId(item),
-            })),
+            ...result.data.map(item => ({ type: tagType, id: getItemId(item) })),
             { type: tagType, id: 'LIST' },
           ]
         : [{ type: tagType, id: 'LIST' }],
   });
 }
 
-export const housesApi = rootApi.injectEndpoints({
+export const autocompleteApi = rootApi.injectEndpoints({
   endpoints: build => ({
-    getAllHousesAutocomplete: lazyLoadingAutocomplete<House>(build, {
+    getHousesAutocomplete: lazyLoadingAutocomplete<House>(build, {
       url: '/houses',
       tagType: 'Houses',
       getItemId: house => house.id,
     }),
-    getAllRentersAutocomplete: lazyLoadingAutocomplete<Renter>(build, {
+
+    getRentersAutocomplete: lazyLoadingAutocomplete<Renter>(build, {
       url: '/renters',
       tagType: 'Renters',
       getItemId: renter => renter.id,
@@ -79,4 +77,4 @@ export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useGetAllHousesAutocompleteQuery, useGetAllRentersAutocompleteQuery } = housesApi;
+export const { useGetHousesAutocompleteQuery, useGetRentersAutocompleteQuery } = autocompleteApi;

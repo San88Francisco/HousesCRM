@@ -4,11 +4,15 @@ import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFSelect } from '@/components/RHF/RHFSelect';
 import { useHousesAutocomplete } from '@/hooks/modals/contract-create-update-modal/use-houses-autocomplete';
 import { useRentersAutocomplete } from '@/hooks/modals/contract-create-update-modal/use-renters-autocomplete';
+import { House } from '@/types/core/house';
+import { Renter } from '@/types/core/renter';
 import { ContractStatus } from '@/types/core/status/status';
 import { Coins } from 'lucide-react';
 
 type Props = {
   isLoading: boolean;
+  initialHouse?: House | null;
+  initialRenter?: Renter | null;
 };
 
 const statusOptions = [
@@ -16,7 +20,7 @@ const statusOptions = [
   { value: ContractStatus.INACTIVE, label: 'Неактивний', disabled: false },
 ];
 
-export const ContractFormFields = ({ isLoading }: Props) => {
+export const ContractFormFields = ({ isLoading, initialHouse, initialRenter }: Props) => {
   const {
     options: houseOptions,
     isFetching: isHousesFetching,
@@ -24,7 +28,7 @@ export const ContractFormFields = ({ isLoading }: Props) => {
     loadMoreRef: housesLoadMoreRef,
     handleSearch: handleHouseSearch,
     handleOpenChange: handleHouseOpenChange,
-  } = useHousesAutocomplete();
+  } = useHousesAutocomplete({ initialHouse });
 
   const {
     options: renterOptions,
@@ -33,7 +37,7 @@ export const ContractFormFields = ({ isLoading }: Props) => {
     loadMoreRef: rentersLoadMoreRef,
     handleSearch: handleRenterSearch,
     handleOpenChange: handleRenterOpenChange,
-  } = useRentersAutocomplete();
+  } = useRentersAutocomplete({ initialRenter });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

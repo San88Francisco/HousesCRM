@@ -19,13 +19,3 @@ export const getHasMorePages = <T>(
 ): boolean => {
   return isSearchMode ? false : (listData?.meta?.hasNextPage ?? false);
 };
-
-export const shouldSetupObserver = (
-  target: HTMLDivElement | null,
-  hasMore: boolean,
-  isFetching: boolean,
-  isOpen: boolean,
-  isSearchMode: boolean,
-): boolean => {
-  return !!(target && hasMore && !isFetching && isOpen && !isSearchMode);
-};

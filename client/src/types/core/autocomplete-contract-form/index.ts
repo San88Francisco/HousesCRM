@@ -1,1 +1,1 @@
-export type EntityType = 'renters' | 'houses' | 'contracts';
+export type EntityType = 'renters' | 'houses';

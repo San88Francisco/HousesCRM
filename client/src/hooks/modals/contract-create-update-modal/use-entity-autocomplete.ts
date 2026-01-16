@@ -3,79 +3,88 @@ import {
   getEntitiesFromList,
   getEntitiesFromSearch,
   getHasMorePages,
-  shouldSetupObserver,
 } from '@/shared/utils/create-update-contract-form/entity-autocomplete.utils';
 import { useLazyGetAllSearchQuery } from '@/store/api/search-api';
 import { EntityType } from '@/types/core/autocomplete-contract-form';
 import { LazyLoadingAutocomplete } from '@/types/services/lazy-loading-autocomplete';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-export const AUTOCOMPLETE_SEARCH_DEBOUNCE = 500;
-export const AUTOCOMPLETE_PAGE_LIMIT = 10;
-export const AUTOCOMPLETE_INTERSECTION_ROOT_MARGIN = '100px';
+const SEARCH_DEBOUNCE = 500;
+const PAGE_LIMIT = 10;
+const INTERSECTION_ROOT_MARGIN = '50px';
 
 type ListQueryResult<T> = {
   data?: LazyLoadingAutocomplete<T>;
   isFetching: boolean;
 };
 
-type UseEntityAutocompleteConfig<T> = {
+type Props<T> = {
   entityType: EntityType;
   useListQuery: (
     args: { page: number; limit: number },
     options: { skip: boolean },
   ) => ListQueryResult<T>;
   formatOption: (item: T) => AutocompleteOption;
+  initialEntity?: T | null; // ДОДАТИ
 };
 
-export const useEntityAutocomplete = <T>({
+export const useEntityAutocomplete = <T extends { id: string }>({
+  // ДОДАТИ generic constraint
   entityType,
   useListQuery,
   formatOption,
-}: UseEntityAutocompleteConfig<T>) => {
+  initialEntity, // ДОДАТИ
+}: Props<T>) => {
   const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [search, setSearch] = useState({ term: '', debounced: '' });
   const [isOpen, setIsOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-
-  const isSearchMode = debouncedSearch.length > 0;
+  const isSearchMode = search.debounced.length > 0;
 
   useEffect(() => {
-    if (searchTerm.length >= 2) {
-      const timeoutId = setTimeout(() => {
-        setDebouncedSearch(searchTerm);
-        setPage(1);
-      }, AUTOCOMPLETE_SEARCH_DEBOUNCE);
-      return () => clearTimeout(timeoutId);
-    } else if (searchTerm.length === 0) {
-      setDebouncedSearch('');
+    if (search.term.length < 2) {
+      setSearch(prev => ({ ...prev, debounced: '' }));
       setPage(1);
+      return;
     }
-  }, [searchTerm]);
+
+    const timeoutId = setTimeout(() => {
+      setSearch(prev => ({ ...prev, debounced: prev.term }));
+      setPage(1);
+    }, SEARCH_DEBOUNCE);
+
+    return () => clearTimeout(timeoutId);
+  }, [search.term]);
 
   const [triggerSearch, { data: searchData, isFetching: isSearchFetching }] =
     useLazyGetAllSearchQuery();
 
   const { data: listData, isFetching: isListFetching } = useListQuery(
-    { page, limit: AUTOCOMPLETE_PAGE_LIMIT },
-    { skip: !isOpen || isSearchMode },
+    { page, limit: PAGE_LIMIT },
+    {
+      skip: !isOpen || isSearchMode,
+    },
   );
 
   useEffect(() => {
-    if (debouncedSearch) {
-      triggerSearch({ query: debouncedSearch });
+    if (search.debounced) {
+      triggerSearch({ query: search.debounced });
     }
-  }, [debouncedSearch, triggerSearch]);
+  }, [search.debounced, triggerSearch]);
 
   const entities = isSearchMode
     ? getEntitiesFromSearch<T>(searchData, entityType)
     : getEntitiesFromList<T>(listData);
 
+  // ДОДАТИ: Включити initialEntity в список опцій
+  const allEntities = initialEntity
+    ? [initialEntity, ...entities.filter(entity => entity.id !== initialEntity.id)]
+    : entities;
+
   const hasMore = getHasMorePages(isSearchMode, listData);
   const isFetching = isSearchMode ? isSearchFetching : isListFetching;
-  const options: AutocompleteOption[] = entities.map(formatOption);
+  const options: AutocompleteOption[] = allEntities.map(formatOption); // ЗМІНИТИ з entities на allEntities
 
   const loadMore = useCallback(() => {
     if (hasMore && !isFetching && !isSearchMode) {
@@ -83,39 +92,34 @@ export const useEntityAutocomplete = <T>({
     }
   }, [hasMore, isFetching, isSearchMode]);
 
-  const handleSearch = useCallback((search: string) => {
-    setSearchTerm(search);
+  const handleSearch = useCallback((term: string) => {
+    setSearch(prev => ({ ...prev, term }));
   }, []);
 
   const handleOpenChange = useCallback((open: boolean) => {
     setIsOpen(open);
+    setPage(1);
+
     if (!open) {
-      setSearchTerm('');
-      setDebouncedSearch('');
-      setPage(1);
+      setSearch({ term: '', debounced: '' });
     }
   }, []);
 
   useEffect(() => {
     const target = loadMoreRef.current;
-    if (!shouldSetupObserver(target, hasMore, isFetching, isOpen, isSearchMode)) {
-      observerRef.current?.disconnect();
-      return;
-    }
+    if (!target || !hasMore || isFetching || !isOpen || isSearchMode) return;
 
-    observerRef.current?.disconnect();
-    observerRef.current = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       entries => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
+        if (entries[0].isIntersecting) loadMore();
       },
-      { rootMargin: AUTOCOMPLETE_INTERSECTION_ROOT_MARGIN, threshold: 0.1 },
+      { rootMargin: INTERSECTION_ROOT_MARGIN, threshold: 0.1 },
     );
 
-    if (target) observerRef.current.observe(target);
+    observer.observe(target);
+    observerRef.current = observer;
 
-    return () => observerRef.current?.disconnect();
+    return () => observer.disconnect();
   }, [hasMore, isFetching, loadMore, isOpen, isSearchMode]);
 
   return {
