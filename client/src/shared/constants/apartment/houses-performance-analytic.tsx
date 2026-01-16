@@ -7,7 +7,7 @@ export const HousesPerformanceTableColumns: ColumnDef<HousePerformanceItem>[] = 
   {
     accessorKey: 'apartmentName',
     header: 'Квартира',
-    cell: ctx => <span className="font-semibold">{ctx.getValue<number>()}</span>,
+    cell: ctx => <span className="font-semibold">{ctx.getValue<string>()}</span>,
   },
   {
     accessorKey: 'rentersCount',

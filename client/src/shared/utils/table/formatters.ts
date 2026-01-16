@@ -1,6 +1,9 @@
 import { FormatCurrencyArgs } from '@/types/core/table/formatters';
 
-export const formatCurrency = (amount: number, options: FormatCurrencyArgs = {}): string => {
+export const formatCurrency = (
+  amount: number | null | undefined,
+  options: FormatCurrencyArgs = {},
+): string => {
   const {
     currency = 'USD',
     locale = 'en-US',
@@ -8,10 +11,12 @@ export const formatCurrency = (amount: number, options: FormatCurrencyArgs = {})
     maximumFractionDigits = 2,
   } = options;
 
+  const safeAmount = amount ?? 0;
+
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
     currencyDisplay,
     maximumFractionDigits,
-  }).format(amount);
+  }).format(safeAmount);
 };

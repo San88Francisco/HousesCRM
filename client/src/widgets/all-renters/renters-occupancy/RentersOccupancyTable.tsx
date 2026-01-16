@@ -47,6 +47,7 @@ export const RentersOccupancyTable = ({ table, limit, onLimitChange }: Props) =>
               onClick={() => handleRouteToRenter(row.original.id)}
               onKeyDown={createRowKeyDown(() => handleRouteToRenter(row.original.id))}
               tabIndex={0}
+              role="button"
               aria-label={`View details for ${row.original.firstName} ${row.original.lastName}`}
             >
               {row.getVisibleCells().map(cell => (
