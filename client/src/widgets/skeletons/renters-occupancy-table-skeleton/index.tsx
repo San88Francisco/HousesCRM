@@ -1,6 +1,4 @@
-'use client';
-
-import { rentersOccupancyTablGrid } from '@/shared/constants/styles/renters-occupacy-table';
+import { rentersOccupancyTableGrid } from '@/shared/constants/styles/renters-occupancy-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
@@ -23,7 +21,7 @@ export const RentersOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
         <div className="w-full overflow-x-auto">
           <Table className="min-w-[900px]">
             <TableHeader>
-              <TableRow className={cn(rentersOccupancyTablGrid)}>
+              <TableRow className={cn(rentersOccupancyTableGrid)}>
                 <TableHead className="text-center">
                   <Skeleton className="h-4 w-40" />
                 </TableHead>
@@ -50,7 +48,7 @@ export const RentersOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
 
             <TableBody>
               {Array.from({ length: rows }).map((_, index) => (
-                <TableRow key={index} className={rentersOccupancyTablGrid}>
+                <TableRow key={index} className={rentersOccupancyTableGrid}>
                   <TableCell className="text-center">
                     <Skeleton className="h-6 w-6" />
                   </TableCell>

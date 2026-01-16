@@ -3,25 +3,26 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { RentersOccupancyTableColumns } from '@/shared/constants/all-renters/renters-occupancy';
-import { PAGE_SIZE, START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { useGetRentersQuery } from '@/store/renters-api';
 import { RentersOccupancyTableSkeleton } from '@/widgets/skeletons/renters-occupancy-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
 import { RentersOccupancyTable } from './RentersOccupancyTable';
+import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 
 export const RentersOccupancy = () => {
-  const [pageIndex, setPageIndex] = useState<number>(START_PAGE);
-  const [limit, setLimit] = useState<number>(PAGE_SIZE);
+  const [pageIndex, setPageIndex] = useState<number>(DEFAULT_START_PAGE);
+  const [limit, setLimit] = useState<number>(DEFAULT_PAGE_SIZE);
 
   const { data, isLoading, isError, error } = useGetRentersQuery({
     page: pageIndex + 1,
     limit,
   });
+  const isEmpty = !data?.data.length;
 
   const onLimitChange = (limit: number) => {
-    setPageIndex(START_PAGE);
+    setPageIndex(DEFAULT_START_PAGE);
     setLimit(limit);
   };
 
@@ -53,7 +54,7 @@ export const RentersOccupancy = () => {
 
   if (isError) return <ErrorState className="w-full" error={error} />;
 
-  if (!data?.data.length) return <EmptyState className="w-full" />;
+  if (isEmpty) return <EmptyState className="w-full" />;
 
   return (
     <Card className="h-full flex flex-col">

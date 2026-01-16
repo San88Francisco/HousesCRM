@@ -1,7 +1,7 @@
 'use client';
 
 import { TablePagination } from '@/components/table-pagination';
-import { rentersOccupancyTablGrid } from '@/shared/constants/styles/renters-occupacy-table';
+import { rentersOccupancyTableGrid } from '@/shared/constants/styles/renters-occupancy-table';
 import { ROUTES } from '@/shared/routes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
@@ -31,7 +31,7 @@ export const RentersOccupancyTable = ({
     <div className="flex flex-col justify-between h-full">
       <Table>
         <TableHeader>
-          <TableRow className={cn(rentersOccupancyTablGrid)}>
+          <TableRow className={cn(rentersOccupancyTableGrid)}>
             {table.getFlatHeaders().map(header => (
               <TableHead key={header.id}>
                 {flexRender(header.column.columnDef.header, header.getContext())}
@@ -45,7 +45,7 @@ export const RentersOccupancyTable = ({
             <TableRow
               key={row.original.id}
               className={cn(
-                rentersOccupancyTablGrid,
+                rentersOccupancyTableGrid,
                 'cursor-pointer transition-colors duration-300 ease-out hover:bg-muted-foreground text-text',
               )}
               onClick={() => handleRouteToRenter(row.original.id)}

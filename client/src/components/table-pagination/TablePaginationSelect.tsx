@@ -1,3 +1,4 @@
+import { PAGE_SIZE_OPTIONS } from '@/shared/constants/table/pagination';
 import {
   Select,
   SelectContent,
@@ -13,14 +14,6 @@ type Props = {
   limit: number;
   onLimitChange: (limit: number) => void;
 };
-
-const limits = [
-  { label: 5, value: 5 },
-  { label: 10, value: 10 },
-  { label: 15, value: 15 },
-  { label: 20, value: 20 },
-];
-
 export const TablePaginationSelect: FC<Props> = ({ limit, onLimitChange }) => {
   return (
     <Select
@@ -33,7 +26,7 @@ export const TablePaginationSelect: FC<Props> = ({ limit, onLimitChange }) => {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Ліміт</SelectLabel>
-          {limits.map(limit => (
+          {PAGE_SIZE_OPTIONS.map(limit => (
             <SelectItem key={limit.value} value={`${limit.value}`}>
               {limit.label}
             </SelectItem>

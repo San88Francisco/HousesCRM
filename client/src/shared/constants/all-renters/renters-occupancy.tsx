@@ -1,5 +1,6 @@
 import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
 import { cn } from '@/shared/utils/cn';
+import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
 import { ColumnDef } from '@tanstack/react-table';
@@ -8,11 +9,7 @@ export const RentersOccupancyTableColumns: ColumnDef<RentersOccupancyItem>[] = [
   {
     id: 'action',
     header: 'Договір',
-    cell: ctx => (
-      <span onClick={e => e.stopPropagation()}>
-        <ContractModalTrigger id={ctx.row.original.id} />
-      </span>
-    ),
+    cell: ctx => <ContractModalTrigger id={ctx.row.original.id} />,
   },
   {
     accessorFn: row => `${row.firstName} ${row.lastName}`,
@@ -22,12 +19,12 @@ export const RentersOccupancyTableColumns: ColumnDef<RentersOccupancyItem>[] = [
   {
     accessorKey: 'occupied',
     header: 'Заселення',
-    cell: ctx => new Date(ctx.getValue<string>()).toLocaleDateString('uk-UA'),
+    cell: ctx => formatDate(ctx.getValue<string>()),
   },
   {
     accessorKey: 'vacated',
     header: 'Виселення',
-    cell: ctx => new Date(ctx.getValue<string>()).toLocaleDateString('uk-UA'),
+    cell: ctx => formatDate(ctx.getValue<string>()),
   },
   {
     id: 'duration',

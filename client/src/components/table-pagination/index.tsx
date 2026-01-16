@@ -1,3 +1,5 @@
+'use client';
+
 import { PagePagination } from '@/components/page-pagination';
 import { cn } from '@/shared/utils/cn';
 import { Table } from '@tanstack/react-table';
