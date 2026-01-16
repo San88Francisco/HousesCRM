@@ -17,6 +17,7 @@ export const RentersOccupancyTableColumns: ColumnDef<RentersOccupancyItem>[] = [
   {
     accessorFn: row => `${row.firstName} ${row.lastName}`,
     header: 'Орендар',
+    cell: ctx => <span className="font-semibold">{ctx.getValue<string>()}</span>,
   },
   {
     accessorKey: 'occupied',
@@ -36,7 +37,7 @@ export const RentersOccupancyTableColumns: ColumnDef<RentersOccupancyItem>[] = [
   {
     accessorKey: 'totalIncome',
     header: 'Дохід',
-    cell: ctx => `${ctx.getValue<number>().toLocaleString()} ₴`,
+    cell: ctx => <span className="font-semibold">{ctx.getValue<number>().toLocaleString()} ₴</span>,
   },
   {
     accessorKey: 'status',
