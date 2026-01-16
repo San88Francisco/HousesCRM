@@ -3,14 +3,12 @@ import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { useHousesPerformance } from '@/hooks/all-house/houses-performance-analytic/use-houses-performance';
 import { HousesPerformanceTableColumns } from '@/shared/constants/apartment/houses-performance-analytic';
+import { PAGE_SIZE, START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
 import { HousesPerformanceTable } from './HousesPerformanceTable';
-
-const PAGE_SIZE = 10;
-const START_PAGE = 0;
 
 export const HousesPerformanceAnalytic = () => {
   const [pageIndex, setPageIndex] = useState<number>(START_PAGE);

@@ -2,8 +2,8 @@
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { RentersOccupancyTableColumns } from '@/shared/constants/apartment/renters-occupancy';
-import { PAGE_SIZE } from '@/shared/constants/table/pagination';
+import { RentersOccupancyTableColumns } from '@/shared/constants/all-renters/renters-occupancy';
+import { PAGE_SIZE, START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { useGetRentersQuery } from '@/store/renters-api';
 import { RentersOccupancyTableSkeleton } from '@/widgets/skeletons/renters-occupancy-table-skeleton';
@@ -12,8 +12,8 @@ import { useState } from 'react';
 import { RentersOccupancyTable } from './RentersOccupancyTable';
 
 export const RentersOccupancy = () => {
-  const [pageIndex, setPageIndex] = useState(0);
-  const [limit, setLimit] = useState(PAGE_SIZE);
+  const [pageIndex, setPageIndex] = useState<number>(START_PAGE);
+  const [limit, setLimit] = useState<number>(PAGE_SIZE);
 
   const { data, isLoading, isError, error } = useGetRentersQuery({
     page: pageIndex + 1,
@@ -21,7 +21,7 @@ export const RentersOccupancy = () => {
   });
 
   const onLimitChange = (limit: number) => {
-    setPageIndex(0);
+    setPageIndex(START_PAGE);
     setLimit(limit);
   };
 

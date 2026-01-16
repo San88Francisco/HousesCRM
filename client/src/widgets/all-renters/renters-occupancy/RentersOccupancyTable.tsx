@@ -5,6 +5,7 @@ import { rentersOccupancyTablGrid } from '@/shared/constants/styles/renters-occu
 import { ROUTES } from '@/shared/routes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
+import { createRowKeyDown } from '@/shared/utils/table/row-key-down-handler';
 import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
@@ -25,14 +26,6 @@ export const RentersOccupancyTable = ({
   const handleRouteToRenter = (renterId: string) => {
     push(`${ROUTES.RENTER}/${renterId}`);
   };
-
-  // TODO separate handleKeyDown to utils
-  // const handleRowKeyDown = (renterID: string) => (e: KeyboardEvent<HTMLTableRowElement>) => {
-  //   if (e.key === 'Enter' || e.key === ' ') {
-  //     e.preventDefault();
-  //     handleRouteToRenter(renterID);
-  //   }
-  // };
 
   return (
     <div className="flex flex-col justify-between h-full">
@@ -56,14 +49,8 @@ export const RentersOccupancyTable = ({
                 'cursor-pointer transition-colors duration-300 ease-out hover:bg-muted-foreground text-text',
               )}
               onClick={() => handleRouteToRenter(row.original.id)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleRouteToRenter(row.original.id);
-                }
-              }}
+              onKeyDown={createRowKeyDown(() => handleRouteToRenter(row.original.id))}
               tabIndex={0}
-              role="button"
               aria-label={`View details for ${row.original.firstName} ${row.original.lastName}`}
             >
               {row.getVisibleCells().map(cell => (

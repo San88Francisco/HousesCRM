@@ -4,10 +4,10 @@ import { tableGrid } from '@/shared/constants/styles/houses-performance-table';
 import { ROUTES } from '@/shared/routes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
+import { createRowKeyDown } from '@/shared/utils/table/row-key-down-handler';
 import { HousePerformanceItem } from '@/types/core/houses-performance';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
-import { KeyboardEvent } from 'react';
 
 type Props<T> = {
   table: TableType<T>;
@@ -24,13 +24,6 @@ export const HousesPerformanceTable = ({
 
   const handleRouteToHouse = (houseId: string) => {
     push(`${ROUTES.HOUSE}/${houseId}`);
-  };
-
-  const handleRowKeyDown = (houseId: string) => (e: KeyboardEvent<HTMLTableRowElement>) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleRouteToHouse(houseId);
-    }
   };
 
   return (
@@ -54,7 +47,7 @@ export const HousesPerformanceTable = ({
                 'cursor-pointer transition-colors duration-300 ease-out hover:bg-muted-foreground text-text',
               )}
               onClick={() => handleRouteToHouse(row.original.id)}
-              onKeyDown={handleRowKeyDown(row.original.id)}
+              onKeyDown={createRowKeyDown(() => handleRouteToHouse(row.original.id))}
               tabIndex={0}
               role="button"
               aria-label={`View details for ${row.original.apartmentName}`}
