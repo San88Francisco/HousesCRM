@@ -2,8 +2,10 @@ import { ContractModalTrigger } from '@/components/modals/contract-modal/Contrac
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
+import { formatCurrency } from '@/shared/utils/table/formatters';
 import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
 import { ColumnDef } from '@tanstack/react-table';
+import { formatCurrencyOptions } from '../currency/format-options';
 
 export const RentersOccupancyTableColumns: ColumnDef<RentersOccupancyItem>[] = [
   {
@@ -12,6 +14,7 @@ export const RentersOccupancyTableColumns: ColumnDef<RentersOccupancyItem>[] = [
     cell: ctx => <ContractModalTrigger id={ctx.row.original.id} />,
   },
   {
+    id: 'fullName',
     accessorFn: row => `${row.firstName} ${row.lastName}`,
     header: 'Орендар',
     cell: ctx => <span className="font-semibold">{ctx.getValue<string>()}</span>,
@@ -34,7 +37,11 @@ export const RentersOccupancyTableColumns: ColumnDef<RentersOccupancyItem>[] = [
   {
     accessorKey: 'totalIncome',
     header: 'Дохід',
-    cell: ctx => <span className="font-semibold">{ctx.getValue<number>().toLocaleString()} ₴</span>,
+    cell: ctx => (
+      <span className="font-semibold">
+        {formatCurrency(ctx.getValue<number>(), formatCurrencyOptions)}
+      </span>
+    ),
   },
   {
     accessorKey: 'status',

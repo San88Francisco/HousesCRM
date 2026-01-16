@@ -9,17 +9,13 @@ import { HousePerformanceItem } from '@/types/core/houses-performance';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 
-type Props<T> = {
-  table: TableType<T>;
+type Props = {
+  table: TableType<HousePerformanceItem>;
   limit: number;
   onLimitChange: (limit: number) => void;
 };
 
-export const HousesPerformanceTable = ({
-  table,
-  limit,
-  onLimitChange,
-}: Props<HousePerformanceItem>) => {
+export const HousesPerformanceTable = ({ table, limit, onLimitChange }: Props) => {
   const { push } = useRouter();
 
   const handleRouteToHouse = (houseId: string) => {

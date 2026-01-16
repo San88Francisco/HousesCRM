@@ -10,17 +10,13 @@ import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 
-type Props<T> = {
-  table: TableType<T>;
+type Props = {
+  table: TableType<RentersOccupancyItem>;
   limit: number;
   onLimitChange: (limit: number) => void;
 };
 
-export const RentersOccupancyTable = ({
-  table,
-  limit,
-  onLimitChange,
-}: Props<RentersOccupancyItem>) => {
+export const RentersOccupancyTable = ({ table, limit, onLimitChange }: Props) => {
   const { push } = useRouter();
 
   const handleRouteToRenter = (renterId: string) => {
