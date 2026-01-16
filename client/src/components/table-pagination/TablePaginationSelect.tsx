@@ -21,19 +21,18 @@ const limits = [
   { label: 20, value: 20 },
 ];
 
-export const HousesPerformanceSelect: FC<Props> = ({ limit, onLimitChange }) => {
-  const handleOnValueChange = (selectedLimit: string) => {
-    onLimitChange(Number(selectedLimit));
-  };
-
+export const TablePaginationSelect: FC<Props> = ({ limit, onLimitChange }) => {
   return (
-    <Select value={`${limit}`} onValueChange={handleOnValueChange}>
+    <Select
+      value={`${limit}`}
+      onValueChange={selectedLimit => onLimitChange(Number(selectedLimit))}
+    >
       <SelectTrigger className="w-auto border-[1px] border-solid rounded-[8px] max-h-[38px] flex gap-1">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Limit</SelectLabel>
+          <SelectLabel>Ліміт</SelectLabel>
           {limits.map(limit => (
             <SelectItem key={limit.value} value={`${limit.value}`}>
               {limit.label}

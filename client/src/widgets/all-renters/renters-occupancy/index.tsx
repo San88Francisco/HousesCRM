@@ -21,6 +21,7 @@ export const RentersOccupancy = () => {
   });
 
   const onLimitChange = (limit: number) => {
+    setPageIndex(0);
     setLimit(limit);
   };
 

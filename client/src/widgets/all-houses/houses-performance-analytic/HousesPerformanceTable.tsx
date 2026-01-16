@@ -1,13 +1,12 @@
 'use client';
+import { TablePagination } from '@/components/table-pagination';
 import { tableGrid } from '@/shared/constants/styles/houses-performance-table';
 import { ROUTES } from '@/shared/routes';
-import TablePagination from '@/shared/ui/data-table/TablePagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { HousePerformanceItem } from '@/types/core/houses-performance';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
-import { HousesPerformanceSelect } from './HousesPerformanceSelect';
 import { KeyboardEvent } from 'react';
 
 type Props<T> = {
@@ -71,10 +70,7 @@ export const HousesPerformanceTable = ({
       </Table>
 
       <div className="mt-4 flex justify-end">
-        <div className="flex gap-3">
-          <HousesPerformanceSelect limit={limit} onLimitChange={onLimitChange} />
-          <TablePagination table={table} />
-        </div>
+        <TablePagination table={table} limit={limit} onLimitChange={onLimitChange} />
       </div>
     </div>
   );

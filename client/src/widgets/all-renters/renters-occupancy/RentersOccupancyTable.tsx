@@ -1,14 +1,13 @@
 'use client';
 
+import { TablePagination } from '@/components/table-pagination';
 import { rentersOccupancyTablGrid } from '@/shared/constants/styles/renters-occupacy-table';
 import { ROUTES } from '@/shared/routes';
-import TablePagination from '@/shared/ui/data-table/TablePagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
-import { HousesPerformanceSelect } from '../../all-houses/houses-performance-analytic/HousesPerformanceSelect';
 
 type Props<T> = {
   table: TableType<T>;
@@ -27,6 +26,7 @@ export const RentersOccupancyTable = ({
     push(`${ROUTES.RENTER}/${renterId}`);
   };
 
+  // TODO separate handleKeyDown to utils
   // const handleRowKeyDown = (renterID: string) => (e: KeyboardEvent<HTMLTableRowElement>) => {
   //   if (e.key === 'Enter' || e.key === ' ') {
   //     e.preventDefault();
@@ -77,10 +77,7 @@ export const RentersOccupancyTable = ({
       </Table>
 
       <div className="mt-4 flex justify-end">
-        <div className="flex gap-3">
-          <HousesPerformanceSelect limit={limit} onLimitChange={onLimitChange} />
-          <TablePagination table={table} />
-        </div>
+        <TablePagination table={table} limit={limit} onLimitChange={onLimitChange} />
       </div>
     </div>
   );
