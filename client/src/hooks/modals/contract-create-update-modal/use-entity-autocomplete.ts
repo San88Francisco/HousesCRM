@@ -25,21 +25,19 @@ type Props<T> = {
     options: { skip: boolean },
   ) => ListQueryResult<T>;
   formatOption: (item: T) => AutocompleteOption;
-  initialEntity?: T | null; // ДОДАТИ
+  initialEntity?: T | null;
 };
 
 export const useEntityAutocomplete = <T extends { id: string }>({
-  // ДОДАТИ generic constraint
   entityType,
   useListQuery,
   formatOption,
-  initialEntity, // ДОДАТИ
+  initialEntity,
 }: Props<T>) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState({ term: '', debounced: '' });
   const [isOpen, setIsOpen] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
   const isSearchMode = search.debounced.length > 0;
 
   useEffect(() => {
@@ -77,14 +75,13 @@ export const useEntityAutocomplete = <T extends { id: string }>({
     ? getEntitiesFromSearch<T>(searchData, entityType)
     : getEntitiesFromList<T>(listData);
 
-  // ДОДАТИ: Включити initialEntity в список опцій
   const allEntities = initialEntity
     ? [initialEntity, ...entities.filter(entity => entity.id !== initialEntity.id)]
     : entities;
 
   const hasMore = getHasMorePages(isSearchMode, listData);
   const isFetching = isSearchMode ? isSearchFetching : isListFetching;
-  const options: AutocompleteOption[] = allEntities.map(formatOption); // ЗМІНИТИ з entities на allEntities
+  const options: AutocompleteOption[] = allEntities.map(formatOption);
 
   const loadMore = useCallback(() => {
     if (hasMore && !isFetching && !isSearchMode) {
@@ -117,7 +114,6 @@ export const useEntityAutocomplete = <T extends { id: string }>({
     );
 
     observer.observe(target);
-    observerRef.current = observer;
 
     return () => observer.disconnect();
   }, [hasMore, isFetching, loadMore, isOpen, isSearchMode]);
