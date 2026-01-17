@@ -20,11 +20,7 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
 
   const data: PaybackChartData = payload[0].payload;
 
-  if ('isEmpty' in data && (data as PaybackChartData & { isEmpty?: boolean }).isEmpty) {
-    return null;
-  }
-
-  if (!data.id || data.purchasePriceUSD === 0) {
+  if (data.isEmpty || !data.id || data.purchasePriceUSD === 0) {
     return null;
   }
 

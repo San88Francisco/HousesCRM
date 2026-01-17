@@ -1,3 +1,4 @@
+import { ChartCoordinatesProps } from '@/shared/utils/all-house/payback-chart/chartHelpers';
 import { formatYAxis } from '@/shared/utils/all-house/payback-chart/payback';
 import { cn } from '@/shared/utils/cn';
 import { Currencies } from '@/types/core/currencies';
@@ -8,15 +9,6 @@ import { CustomBar } from './CustomBar';
 import { PaybackChartTooltip } from './PaybackChartTooltip';
 
 const CHART_CURRENCY: Currencies = 'UAH';
-
-type ChartCoordinatesProps = {
-  yAxis?: {
-    scale?: {
-      ticks?: (count: number) => number[];
-      (value: number): number;
-    };
-  };
-};
 
 interface ChartContentProps {
   paddedChartData: PaybackChartData[];
