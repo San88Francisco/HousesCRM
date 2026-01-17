@@ -1,6 +1,6 @@
 'use client';
 
-interface CustomBarProps {
+type CustomBarProps = {
   x?: number;
   y?: number;
   width?: number;
@@ -13,7 +13,7 @@ interface CustomBarProps {
     isEmpty?: boolean;
   };
   activeApartment?: string | null;
-}
+};
 
 const BORDER_RADIUS = 4;
 const BACKGROUND_OPACITY = 0.25;
@@ -52,7 +52,7 @@ const PulseAnimation = () => (
   />
 );
 
-interface BarPathsProps {
+type BarPathsProps = {
   x: number;
   y: number;
   width: number;
@@ -61,7 +61,7 @@ interface BarPathsProps {
   color: string;
   isFullyPaidBack: boolean;
   id: string;
-}
+};
 
 const BarPaths = ({ x, y, width, height, fillY, color, isFullyPaidBack, id }: BarPathsProps) => {
   const backgroundPath = createRoundedRectPath(x, y, width, height);

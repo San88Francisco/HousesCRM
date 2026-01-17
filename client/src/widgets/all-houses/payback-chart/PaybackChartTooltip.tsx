@@ -8,10 +8,10 @@ import { cn } from '@/shared/utils/cn';
 import { truncateText } from '@/shared/utils/text';
 import { PaybackChartData } from '@/types/core/payback-chart';
 
-interface CustomTooltipProps {
+type CustomTooltipProps = {
   active?: boolean;
   payload?: Array<{ payload: PaybackChartData }>;
-}
+};
 
 const DEFAULT_LOCALE = 'uk-UA';
 

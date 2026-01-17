@@ -10,7 +10,7 @@ import { PaybackChartTooltip } from './PaybackChartTooltip';
 
 const CHART_CURRENCY: Currencies = 'UAH';
 
-interface ChartContentProps {
+type ChartContentProps = {
   paddedChartData: PaybackChartData[];
   chartMarginWithLegend: { top: number; right: number; left: number; bottom: number };
   scaleType: 'linear' | 'log';
@@ -18,7 +18,7 @@ interface ChartContentProps {
   horizontalCoordinatesGenerator: (props: ChartCoordinatesProps) => number[];
   activeApartment: string | null;
   totalChartHeight: number;
-}
+};
 
 export const ChartContent = ({
   paddedChartData,
@@ -66,7 +66,7 @@ export const ChartContent = ({
   </ResponsiveContainer>
 );
 
-interface ScrollContainerProps {
+type ScrollContainerProps = {
   scrollRef: React.RefObject<HTMLDivElement>;
   isScrollNeeded: boolean;
   isDragging: boolean;
@@ -74,7 +74,7 @@ interface ScrollContainerProps {
   handlePointerMove?: (e: React.PointerEvent) => void;
   minChartWidth: number;
   children: React.ReactNode;
-}
+};
 
 export const ScrollContainer = ({
   scrollRef,
