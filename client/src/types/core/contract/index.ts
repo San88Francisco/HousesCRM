@@ -1,3 +1,5 @@
+import { House } from '../house';
+import { Renter } from '../renter';
 import { ContractStatus } from '../status/status';
 
 export interface Contract {
@@ -6,4 +8,10 @@ export interface Contract {
   termination: string;
   monthlyPayment: number;
   status: ContractStatus;
+}
+export interface ContractCreateUpdate extends Contract {
+  houseId?: string;
+  renterId?: string;
+  house?: House;
+  renter?: Renter;
 }

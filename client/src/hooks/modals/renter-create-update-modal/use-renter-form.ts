@@ -26,7 +26,7 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
     defaultValues: defaultRenterValues,
   });
 
-  const { reset, formState } = methods;
+  const { reset } = methods;
 
   useEffect(() => {
     reset(isEditMode && renterToEdit ? mapRenterToFormData(renterToEdit) : defaultRenterValues);
@@ -39,7 +39,7 @@ export const useRenterForm = ({ isEditMode, renterToEdit, onSuccess }: Props) =>
       if (isEditMode) {
         if (!renterToEdit?.id) throw new Error('ID орендаря не знайдено');
 
-        const changedData = extractDirtyFormValues(data, formState.dirtyFields);
+        const changedData = extractDirtyFormValues(data, methods.formState.dirtyFields);
         await update(renterToEdit.id, changedData);
       } else {
         await create(data);

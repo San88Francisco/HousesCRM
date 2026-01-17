@@ -28,6 +28,7 @@ export const RenterCreateUpdateModal = () => {
     <Modal
       triggers={isEditMode ? ModalTriggers.EDIT_RENTER : ModalTriggers.ADD_RENTER}
       className="max-w-2xl max-h-[90vh] overflow-y-auto"
+      onClose={handleClose}
     >
       <DialogHeader>
         <DialogTitle className="text-lg font-semibold">{modalContent.title}</DialogTitle>

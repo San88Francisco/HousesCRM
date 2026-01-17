@@ -30,7 +30,7 @@ const Calendar: FC<ICalendarProps> = ({
   };
 
   return (
-    <div className="bg-background dark:bg-foreground rounded-lg shadow-lg p-4">
+    <div className="bg-bg-input rounded-lg shadow-lg p-2">
       <CalendarDisplay
         firstWeekDayNumber={firstWeekDayNumber}
         date={date}
@@ -41,11 +41,11 @@ const Calendar: FC<ICalendarProps> = ({
         maxDate={maxDate}
       />
       <div className="flex gap-2">
-        <Button type="submit" variant="default" className="w-full">
-          Ok
-        </Button>
         <Button onClick={handleCancel} variant="outline" className="w-full">
-          Cancel
+          Відмінити
+        </Button>
+        <Button type="submit" variant="default" className="w-full">
+          Зберегти
         </Button>
       </div>
     </div>

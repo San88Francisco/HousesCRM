@@ -2,19 +2,24 @@
 
 import Modal from '@/components/modals/modal-wrapper';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useHouseForm } from '@/hooks/modals/house-create-update-modal/use-house-form';
-import { useHouseModal } from '@/hooks/modals/house-create-update-modal/use-house-modal';
+import { useContractForm } from '@/hooks/modals/contract-create-update-modal/use-contract-form';
+import { useContractModal } from '@/hooks/modals/contract-create-update-modal/use-contract-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';
-import { HouseFormFields } from '@/widgets/modals/house-create-update-modal/HouseFormFields';
+import { ContractFormFields } from '@/widgets/modals/contract-create-update-modal/ContractFormFields';
 
-export const HouseCreateUpdateModal = () => {
-  const { isEditMode, houseToEdit, handleClose: getHandleClose, modalContent } = useHouseModal();
-
-  const { methods, onSubmit, isLoading, reset } = useHouseForm({
+export const ContractCreateUpdateModal = () => {
+  const {
     isEditMode,
-    houseToEdit,
+    contractToEdit,
+    handleClose: getHandleClose,
+    modalContent,
+  } = useContractModal();
+
+  const { methods, onSubmit, isLoading, reset } = useContractForm({
+    isEditMode,
+    contractToEdit,
     onSuccess: () => handleClose(),
   });
 
@@ -26,7 +31,7 @@ export const HouseCreateUpdateModal = () => {
 
   return (
     <Modal
-      triggers={isEditMode ? ModalTriggers.EDIT_HOUSE : ModalTriggers.ADD_HOUSE}
+      triggers={isEditMode ? ModalTriggers.EDIT_CONTRACT : ModalTriggers.ADD_CONTRACT}
       className="max-w-2xl max-h-[90vh] overflow-y-auto"
       onClose={handleClose}
     >
@@ -36,9 +41,13 @@ export const HouseCreateUpdateModal = () => {
       </DialogHeader>
 
       <RHFForm form={methods} onSubmit={onSubmit}>
-        <HouseFormFields isLoading={isLoading} />
+        <ContractFormFields
+          isLoading={isLoading}
+          initialHouse={contractToEdit?.house}
+          initialRenter={contractToEdit?.renter}
+        />
 
-        <DialogFooter className="!mt-10 gap-2">
+        <DialogFooter className="gap-2">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
             {modalContent.cancelText}
           </Button>
