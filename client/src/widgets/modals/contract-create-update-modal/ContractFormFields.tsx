@@ -4,10 +4,9 @@ import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFSelect } from '@/components/RHF/RHFSelect';
 import { useHousesAutocomplete } from '@/hooks/modals/contract-create-update-modal/use-houses-autocomplete';
 import { useRentersAutocomplete } from '@/hooks/modals/contract-create-update-modal/use-renters-autocomplete';
-import { getStatusLabel } from '@/shared/utils/create-update-contract-form/status-labels';
+import { statusOptions } from '@/shared/utils/create-update-contract-form/status-options';
 import { House } from '@/types/core/house';
 import { Renter } from '@/types/core/renter';
-import { ContractStatus } from '@/types/core/status/status';
 import { Building, Coins, User } from 'lucide-react';
 
 type Props = {
@@ -15,15 +14,6 @@ type Props = {
   initialHouse?: House | null;
   initialRenter?: Renter | null;
 };
-
-const statusOptions = [
-  { value: ContractStatus.ACTIVE, label: getStatusLabel(ContractStatus.ACTIVE), disabled: false },
-  {
-    value: ContractStatus.INACTIVE,
-    label: getStatusLabel(ContractStatus.INACTIVE),
-    disabled: false,
-  },
-];
 
 export const ContractFormFields = ({ isLoading, initialHouse, initialRenter }: Props) => {
   const {
