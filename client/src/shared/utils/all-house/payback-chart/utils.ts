@@ -146,6 +146,28 @@ export const useChartScroll = () => {
   };
 };
 
+export const useScrollNeeded = (realDataCount: number) => {
+  const [containerWidth, setContainerWidth] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
+  const requiredWidth = realDataCount * CHART_WIDTH_PER_ITEM;
+  const isScrollNeeded = requiredWidth > containerWidth;
+
+  return { containerRef, isScrollNeeded };
+};
+
 type ApiError = {
   status: number | string;
   data?: unknown;

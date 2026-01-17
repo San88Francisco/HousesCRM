@@ -19,6 +19,15 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
   if (!active || !payload?.length) return null;
 
   const data: PaybackChartData = payload[0].payload;
+
+  if ('isEmpty' in data && (data as PaybackChartData & { isEmpty?: boolean }).isEmpty) {
+    return null;
+  }
+
+  if (!data.id || data.purchasePriceUSD === 0) {
+    return null;
+  }
+
   const currentCurrency = data.currencyCode;
 
   const purchaseDate = (() => {
