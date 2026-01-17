@@ -1,16 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
-import { RentersService } from './renters.service'
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query } from '@nestjs/common'
+import { AllRenterAnalyticDto } from 'src/analytics/renter-detail-analytics/dto/all-renter-analytic-response.dto'
+import { ContractQueryDto } from 'src/analytics/renter-detail-analytics/dto/contract-query.dto'
+import { ContractWithRevenueResponseDto } from 'src/analytics/renter-detail-analytics/dto/contract-with-revenue-response.dto'
+import { RenterDetailAnalyticsService } from 'src/analytics/renter-detail-analytics/renter-detail-analytics.service'
+import { Auth } from 'src/common/decorators/auth.decorator'
 import { RENTERS_ROUTES } from './constants/renters.routes'
-import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
 import { CreateRenterDto } from './dto/create-renter.dto'
-import { UpdateRenterDto } from './dto/update-renter.dto'
 import { DeleteRenterDto } from './dto/delete-renter.dto'
 import { RenterQueryDto } from './dto/renter-query.dto'
 import { RenterResponseDto } from './dto/renter-response.dto'
-import { RenterDetailAnalyticsService } from 'src/analytics/renter-detail-analytics/renter-detail-analytics.service'
-import { AllRenterAnalyticDto } from 'src/analytics/renter-detail-analytics/dto/all-renter-analytic-response.dto'
-import { Auth } from 'src/common/decorators/auth.decorator'
-import { ContractQueryDto } from 'src/analytics/renter-detail-analytics/dto/contract-query.dto'
+import { RenterWithContractDto } from './dto/renter-with-contracts.dto'
+import { UpdateRenterDto } from './dto/update-renter.dto'
+import { RentersService } from './renters.service'
 
 @Controller(RENTERS_ROUTES.ROOT)
 export class RentersController {
@@ -23,6 +24,15 @@ export class RentersController {
   @Auth()
   async findAll(@Query() dto: RenterQueryDto): Promise<RenterResponseDto> {
     return this.rentersService.findAll(dto)
+  }
+
+  @Get(RENTERS_ROUTES.CONTRACTS_BY_RENTER_ID)
+  @Auth()
+  async getContractsByRenterId(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query() dto: ContractQueryDto
+  ): Promise<ContractWithRevenueResponseDto> {
+    return await this.rentersAnalyticService.getAllContractsByRenterId(id, dto)
   }
 
   @Get(RENTERS_ROUTES.BY_ID)

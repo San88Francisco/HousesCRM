@@ -11,3 +11,4 @@ build/
 package-lock.json
 .git/
 .storybook/**
+next-env.d.ts
