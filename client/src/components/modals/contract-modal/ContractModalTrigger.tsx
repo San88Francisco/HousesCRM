@@ -5,6 +5,7 @@ import { FileChartLineIcon } from '@/shared/ui/file-chart-line-icon-handle';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
+import { MouseEvent } from 'react';
 
 type Props = {
   id: string;
@@ -17,7 +18,8 @@ export const ContractModalTrigger = ({ id }: Props) => {
 
   const dispatch = useAppDispatch();
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     dispatch(
       openModal({
         trigger: ModalTriggers.OPEN_CONTRACTS_LIST,

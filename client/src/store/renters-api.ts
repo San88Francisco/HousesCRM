@@ -1,4 +1,5 @@
 import { rootApi } from '@/shared/api';
+import { RentersOccupancyRequest, RentersOccupancyResponse } from '@/types/core/renters-occupancy';
 import { AllContractsByRenterIdResponse, RentersPaginatedRequest } from '@/types/services/renters';
 
 export const rentersApi = rootApi.injectEndpoints({
@@ -36,8 +37,21 @@ export const rentersApi = rootApi.injectEndpoints({
         providesTags: (_result, _error, { renterId }) => [{ type: 'Renters', id: renterId }],
       },
     ),
+    getRenters: build.query<RentersOccupancyResponse, RentersOccupancyRequest>({
+      query: ({ page, limit, sortBy, order }) => ({
+        url: '/renters',
+        method: 'GET',
+        params: {
+          page,
+          limit,
+          sortBy,
+          order,
+        },
+      }),
+      providesTags: ['Renters'],
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllContractsByRenterIdQuery } = rentersApi;
+export const { useGetAllContractsByRenterIdQuery, useGetRentersQuery } = rentersApi;

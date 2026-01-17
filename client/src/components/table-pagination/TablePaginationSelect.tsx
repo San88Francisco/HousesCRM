@@ -1,3 +1,4 @@
+import { PAGE_SIZE_OPTIONS } from '@/shared/constants/table/pagination';
 import {
   Select,
   SelectContent,
@@ -13,28 +14,19 @@ type Props = {
   limit: number;
   onLimitChange: (limit: number) => void;
 };
-
-const limits = [
-  { label: 5, value: 5 },
-  { label: 10, value: 10 },
-  { label: 15, value: 15 },
-  { label: 20, value: 20 },
-];
-
-export const HousesPerformanceSelect: FC<Props> = ({ limit, onLimitChange }) => {
-  const handleOnValueChange = (selectedLimit: string) => {
-    onLimitChange(Number(selectedLimit));
-  };
-
+export const TablePaginationSelect: FC<Props> = ({ limit, onLimitChange }) => {
   return (
-    <Select value={`${limit}`} onValueChange={handleOnValueChange}>
+    <Select
+      value={`${limit}`}
+      onValueChange={selectedLimit => onLimitChange(Number(selectedLimit))}
+    >
       <SelectTrigger className="w-auto border-[1px] border-solid rounded-[8px] max-h-[38px] flex gap-1">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Limit</SelectLabel>
-          {limits.map(limit => (
+          <SelectLabel>Ліміт</SelectLabel>
+          {PAGE_SIZE_OPTIONS.map(limit => (
             <SelectItem key={limit.value} value={`${limit.value}`}>
               {limit.label}
             </SelectItem>
