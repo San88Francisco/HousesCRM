@@ -3,13 +3,13 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { RentersOccupancyTableColumns } from '@/shared/constants/all-renters/renters-occupancy';
+import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { useGetRentersQuery } from '@/store/renters-api';
+import { useGetRentersQuery } from '@/store/api/renters-api';
 import { RentersOccupancyTableSkeleton } from '@/widgets/skeletons/renters-occupancy-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
 import { RentersOccupancyTable } from './RentersOccupancyTable';
-import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 
 export const RentersOccupancy = () => {
   const [pageIndex, setPageIndex] = useState<number>(DEFAULT_START_PAGE);

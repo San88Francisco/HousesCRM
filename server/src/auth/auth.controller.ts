@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
 import type { Response } from 'express'
-import { Auth } from 'src/common/decorators/auth.decorator'
 import { Public } from 'src/common/decorators/public.decorator'
 import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
 import { CreateUserResponseDto } from 'src/users/dto/res/create-user-response.dto'
@@ -43,7 +42,7 @@ export class AuthController {
 
   @Public()
   @Post(AUTH_ROUTES.REGISTRATION)
-  @Auth()
+  // @Auth()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
     const user = await this.authService.registration(dto)

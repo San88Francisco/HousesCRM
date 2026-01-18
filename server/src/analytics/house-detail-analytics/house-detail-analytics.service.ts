@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common'
+import { ForbiddenException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { Contract } from 'src/contracts/entities/contract.entity'
 import { HouseOccupancyQueryDto } from 'src/houses/dto/house-occupancy-query.dto'
 import { HouseOccupancyReportResponseDto } from 'src/houses/dto/house-occupancy-report-response.dto'
+import { House } from 'src/houses/entities/house.entity'
 import { RenterDto } from 'src/renters/dto/renter.dto'
 import { Renter } from 'src/renters/entities/renter.entity'
 import { Repository } from 'typeorm'
@@ -18,14 +19,22 @@ export class HouseDetailAnalyticsService {
     @InjectRepository(Contract)
     private readonly contractsRepository: Repository<Contract>,
     @InjectRepository(Renter)
-    private readonly rentersRepository: Repository<Renter>
+    private readonly rentersRepository: Repository<Renter>,
+    @InjectRepository(House)
+    private readonly houseRepository: Repository<House>
   ) {}
 
   async getHouseOccupancyReport(id: string): Promise<RenterDto[]> {
     return this.buildHouseOccupancyReport(id)
   }
 
-  async getHouseOccupancyReportList(id: string, dto: HouseOccupancyQueryDto): Promise<HouseOccupancyReportResponseDto> {
+  async getHouseOccupancyReportList(
+    id: string,
+    dto: HouseOccupancyQueryDto,
+    userId: string
+  ): Promise<HouseOccupancyReportResponseDto> {
+    await this.verifyHouseOwnership(id, userId)
+
     const {
       page = QUERY_DEFAULTS.PAGE,
       limit = QUERY_DEFAULTS.LIMIT,
@@ -34,7 +43,7 @@ export class HouseDetailAnalyticsService {
     } = dto
 
     if (sortBy === 'totalIncome' || sortBy === 'status') {
-      return this.getHouseOccupancyReportSortedInMemory(id, page, limit, order, sortBy)
+      return this.getHouseOccupancyReportSortedInMemory(id, page, limit, order, sortBy, userId)
     }
 
     const orderField = this.validSortableFields.includes(sortBy) ? sortBy : 'firstName'
@@ -122,8 +131,11 @@ export class HouseDetailAnalyticsService {
     page: number,
     limit: number,
     order: string,
-    sortBy: string
+    sortBy: string,
+    userId: string
   ): Promise<HouseOccupancyReportResponseDto> {
+    await this.verifyHouseOwnership(id, userId)
+
     const contracts = await this.contractsRepository.find({
       where: { house: { id } },
       relations: { renter: true },
@@ -179,5 +191,15 @@ export class HouseDetailAnalyticsService {
     return plainToInstance(RenterDto, aggregateOccupancyReports(contractsByHouseId), {
       excludeExtraneousValues: true,
     })
+  }
+
+  private async verifyHouseOwnership(houseId: string, userId: string): Promise<void> {
+    const house = await this.houseRepository.findOne({
+      where: { id: houseId, userId },
+    })
+
+    if (!house) {
+      throw new ForbiddenException('You do not have access to this house')
+    }
   }
 }

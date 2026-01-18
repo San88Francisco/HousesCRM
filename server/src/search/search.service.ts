@@ -24,7 +24,7 @@ export class SearchService {
     private readonly rentersRepository: Repository<Renter>
   ) {}
 
-  async search({ term }: SearchQueryDto): Promise<SearchResponseDto> {
+  async search({ term }: SearchQueryDto, userId: string): Promise<SearchResponseDto> {
     const normalized = term?.trim()
 
     if (!normalized) {
@@ -39,9 +39,9 @@ export class SearchService {
     const lowerTerm = normalized.toLowerCase()
 
     const [houses, contracts, renters] = await Promise.all([
-      this.searchHouses(likeTerm),
-      this.searchContracts(likeTerm),
-      this.searchRenters(lowerTerm),
+      this.searchHouses(likeTerm, userId),
+      this.searchContracts(likeTerm, userId),
+      this.searchRenters(lowerTerm, userId),
     ])
 
     return plainToInstance(
@@ -55,15 +55,13 @@ export class SearchService {
     )
   }
 
-  private async searchHouses(term: string): Promise<HouseDto[]> {
+  private async searchHouses(term: string, userId: string): Promise<HouseDto[]> {
     const qb = this.housesRepository.createQueryBuilder('house')
 
-    qb.where('LOWER(house.apartmentName) LIKE :term', { term })
-      .orWhere('LOWER(house.street) LIKE :term', { term })
-      .orWhere('LOWER(CAST(house.apartmentType AS TEXT)) LIKE :term', { term })
-      .orWhere('LOWER(CAST(house.totalArea AS TEXT)) LIKE :term', { term })
-      .orWhere('LOWER(CAST(house.roomsCount AS TEXT)) LIKE :term', { term })
-      .orWhere('LOWER(CAST(house.purchaseDate AS TEXT)) LIKE :term', { term })
+    qb.where('house.userId = :userId', { userId }).andWhere(
+      '(LOWER(house.apartmentName) LIKE :term OR LOWER(house.street) LIKE :term OR LOWER(CAST(house.apartmentType AS TEXT)) LIKE :term OR LOWER(CAST(house.totalArea AS TEXT)) LIKE :term OR LOWER(CAST(house.roomsCount AS TEXT)) LIKE :term OR LOWER(CAST(house.purchaseDate AS TEXT)) LIKE :term)',
+      { term }
+    )
 
     const houses = await qb.getMany()
 
@@ -72,13 +70,15 @@ export class SearchService {
     })
   }
 
-  private async searchContracts(term: string): Promise<ContractDto[]> {
+  private async searchContracts(term: string, userId: string): Promise<ContractDto[]> {
     const qb = this.contractsRepository.createQueryBuilder('contract')
 
-    qb.where('LOWER(CAST(contract.commencement AS TEXT)) LIKE :term', { term })
-      .orWhere('LOWER(CAST(contract.termination AS TEXT)) LIKE :term', { term })
-      .orWhere('LOWER(CAST(contract.monthlyPayment AS TEXT)) LIKE :term', { term })
-      .orWhere('LOWER(CAST(contract.status AS TEXT)) LIKE :term', { term })
+    qb.innerJoin('contract.house', 'house')
+      .where('house.userId = :userId', { userId })
+      .andWhere(
+        '(LOWER(CAST(contract.commencement AS TEXT)) LIKE :term OR LOWER(CAST(contract.termination AS TEXT)) LIKE :term OR LOWER(CAST(contract.monthlyPayment AS TEXT)) LIKE :term OR LOWER(CAST(contract.status AS TEXT)) LIKE :term)',
+        { term }
+      )
 
     const contracts = await qb.getMany()
 
@@ -87,10 +87,13 @@ export class SearchService {
     })
   }
 
-  private async searchRenters(term: string): Promise<RenterDto[]> {
-    const renters = await this.rentersRepository.find({
-      relations: { contracts: true },
-    })
+  private async searchRenters(term: string, userId: string): Promise<RenterDto[]> {
+    const renters = await this.rentersRepository
+      .createQueryBuilder('renter')
+      .innerJoinAndSelect('renter.contracts', 'contract')
+      .innerJoin('contract.house', 'house')
+      .where('house.userId = :userId', { userId })
+      .getMany()
 
     const rentersWithStats = renters.map((renter) => {
       const contracts = renter.contracts ?? []
