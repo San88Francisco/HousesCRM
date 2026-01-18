@@ -18,8 +18,9 @@ import {
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { Currencies } from '@/types/core/currencies';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ChartContent, ScrollContainer } from './ChartComponents';
+import { ChartContent } from './ChartContent';
 import { LegendContent } from './LegendContent';
+import { ScrollContainer } from './ScrollContainer';
 
 const CHART_CURRENCY: Currencies = 'UAH';
 

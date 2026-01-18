@@ -1,9 +1,7 @@
 import { ChartCoordinatesProps } from '@/shared/utils/all-house/payback-chart/chartHelpers';
 import { formatYAxis } from '@/shared/utils/all-house/payback-chart/payback';
-import { cn } from '@/shared/utils/cn';
 import { Currencies } from '@/types/core/currencies';
 import { PaybackChartData } from '@/types/core/payback-chart';
-import React from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CustomBar } from './CustomBar';
 import { PaybackChartTooltip } from './PaybackChartTooltip';
@@ -64,39 +62,4 @@ export const ChartContent = ({
       />
     </BarChart>
   </ResponsiveContainer>
-);
-
-type ScrollContainerProps = {
-  scrollRef: React.RefObject<HTMLDivElement>;
-  isScrollNeeded: boolean;
-  isDragging: boolean;
-  handlePointerDown?: (e: React.PointerEvent) => void;
-  handlePointerMove?: (e: React.PointerEvent) => void;
-  minChartWidth: number;
-  children: React.ReactNode;
-};
-
-export const ScrollContainer = ({
-  scrollRef,
-  isScrollNeeded,
-  isDragging,
-  handlePointerDown,
-  handlePointerMove,
-  minChartWidth,
-  children,
-}: ScrollContainerProps) => (
-  <div
-    ref={scrollRef}
-    className={cn(
-      isScrollNeeded ? 'overflow-x-auto' : 'overflow-x-hidden',
-      'overflow-y-hidden',
-      isScrollNeeded && (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
-      'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200',
-      'dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800',
-    )}
-    onPointerDown={isScrollNeeded ? handlePointerDown : undefined}
-    onPointerMove={isScrollNeeded ? handlePointerMove : undefined}
-  >
-    <div style={{ minWidth: isScrollNeeded ? `${minChartWidth}px` : '100%' }}>{children}</div>
-  </div>
 );
