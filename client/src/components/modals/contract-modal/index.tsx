@@ -5,9 +5,9 @@ import { OBSERVER_RESET_DELAY } from '@/shared/constants/renter';
 import { DialogDescription, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { useAppSelector } from '@/store/hooks';
 import { ModalTriggers } from '@/types/model/modals';
+import { ContractListContent } from '@/widgets/modals/contract-modal/ContractListContent';
 import { useEffect, useState } from 'react';
 import Modal from '../modal-wrapper';
-import { ContractListContent } from './ContractListContent';
 
 export const ContractModal = () => {
   const { isOpen, trigger, payload } = useAppSelector(state => state.modal);

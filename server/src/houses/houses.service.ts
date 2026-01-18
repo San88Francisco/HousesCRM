@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { House } from './entities/house.entity'
-import { Between, EntityNotFoundError, Repository } from 'typeorm'
-import { CreateHouseDto } from './dto/create-house.dto'
 import { plainToInstance } from 'class-transformer'
-import { UpdateHouseDto } from './dto/update-house.dto'
-import { HousePriceService } from 'src/house-prices/house-price.service'
-import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
-import { HousePricesConverterService } from 'src/house-prices/house-prices.converter.service'
+import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
 import { Contract } from 'src/contracts/entities/contract.entity'
-import { HouseResponseDto } from './dto/houses-response.dto'
+import { HousePriceService } from 'src/house-prices/house-price.service'
+import { HousePricesConverterService } from 'src/house-prices/house-prices.converter.service'
+import { Between, EntityNotFoundError, Repository } from 'typeorm'
+import { HOUSE_QUERY_DEFAULTS } from './constants/house-query.constant'
+import { CreateHouseDto } from './dto/create-house.dto'
 import { HouseQueryDto } from './dto/house-query.dto'
 import { HouseWithPricesDto } from './dto/house-with-prices.dto'
-import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
-import { HOUSE_QUERY_DEFAULTS } from './constants/house-query.constant'
+import { HouseWithRelationsDto } from './dto/house-with-relations.dto'
+import { HouseResponseDto } from './dto/houses-response.dto'
+import { UpdateHouseDto } from './dto/update-house.dto'
+import { House } from './entities/house.entity'
 
 @Injectable()
 export class HousesService {
@@ -24,7 +24,7 @@ export class HousesService {
     private housePricesConverterService: HousePricesConverterService
   ) {}
 
-  async findAll(dto: HouseQueryDto): Promise<HouseResponseDto> {
+  async findAll(dto: HouseQueryDto, userId: string): Promise<HouseResponseDto> {
     const {
       page = QUERY_DEFAULTS.PAGE,
       limit = QUERY_DEFAULTS.LIMIT,
@@ -48,6 +48,7 @@ export class HousesService {
         [orderField]: order,
       },
       where: {
+        userId,
         ...filters,
         prices: {
           amount: Between(minPrice, maxPrice),
@@ -74,9 +75,9 @@ export class HousesService {
     })
   }
 
-  async findById(id: string): Promise<HouseWithRelationsDto> {
+  async findById(id: string, userId: string): Promise<HouseWithRelationsDto> {
     const house = await this.houseRepository.findOneOrFail({
-      where: { id },
+      where: { id, userId },
       relations: {
         prices: true,
       },
@@ -87,9 +88,10 @@ export class HousesService {
     })
   }
 
-  async create(dto: CreateHouseDto): Promise<HouseWithRelationsDto> {
+  async create(dto: CreateHouseDto, userId: string): Promise<HouseWithRelationsDto> {
     const houseToSave = this.houseRepository.create({
       ...dto,
+      userId,
       contracts: dto.contractIds?.map((id) => ({ id })),
     })
 
@@ -97,16 +99,16 @@ export class HousesService {
 
     const savedHouse = await this.houseRepository.save(houseToSave)
 
-    const houseWithRelations = await this.findById(savedHouse.id)
+    const houseWithRelations = await this.findById(savedHouse.id, userId)
 
     return plainToInstance(HouseWithRelationsDto, houseWithRelations, {
       excludeExtraneousValues: true,
     })
   }
 
-  async update(dto: UpdateHouseDto, id: string): Promise<HouseWithRelationsDto> {
+  async update(dto: UpdateHouseDto, id: string, userId: string): Promise<HouseWithRelationsDto> {
     const house = await this.houseRepository.findOneOrFail({
-      where: { id },
+      where: { id, userId },
       relations: { contracts: true, prices: true },
     })
 
@@ -124,18 +126,22 @@ export class HousesService {
 
     const updatedHouse = await this.houseRepository.save(house)
 
-    const houseWithRelations = await this.findById(updatedHouse.id)
+    const houseWithRelations = await this.findById(updatedHouse.id, userId)
 
     return plainToInstance(HouseWithRelationsDto, houseWithRelations, {
       excludeExtraneousValues: true,
     })
   }
 
-  async remove(id: string): Promise<void> {
-    const res = await this.houseRepository.delete(id)
+  async remove(id: string, userId: string): Promise<void> {
+    const house = await this.houseRepository.findOne({
+      where: { id, userId },
+    })
 
-    if (res.affected === 0) {
+    if (!house) {
       throw new EntityNotFoundError(House, id)
     }
+
+    await this.houseRepository.remove(house)
   }
 }
