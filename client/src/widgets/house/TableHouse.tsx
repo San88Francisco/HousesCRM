@@ -6,7 +6,7 @@ import { ErrorState } from '@/components/chart-states/ErrorState';
 import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
 import { PagePagination } from '@/components/page-pagination';
 import { apartmentColumns } from '@/shared/constants/current-apartment';
-import { PAGE_SIZE } from '@/shared/constants/table/pagination';
+import { DEFAULT_PAGE_SIZE } from '@/shared/constants/table/pagination';
 import { ROUTES } from '@/shared/routes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
@@ -37,7 +37,7 @@ export const TableHouse = () => {
     isLoading: paginatedLoading,
     error: paginatedError,
   } = useGetHouseByIdOccupancyQuery(
-    { id, page: currentPage!, limit: PAGE_SIZE },
+    { id, page: currentPage!, limit: DEFAULT_PAGE_SIZE },
     { skip: !id || currentPage === null },
   );
 

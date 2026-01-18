@@ -28,6 +28,7 @@ export const HouseCreateUpdateModal = () => {
     <Modal
       triggers={isEditMode ? ModalTriggers.EDIT_HOUSE : ModalTriggers.ADD_HOUSE}
       className="max-w-2xl max-h-[90vh] overflow-y-auto"
+      onClose={handleClose}
     >
       <DialogHeader>
         <DialogTitle className="text-lg font-semibold">{modalContent.title}</DialogTitle>

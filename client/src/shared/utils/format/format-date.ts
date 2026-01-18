@@ -1,12 +1,11 @@
-export const formatDate = (dateStr: string): string => {
-  if (!dateStr) return '';
+import { format, isValid, parseISO } from 'date-fns';
+import { uk } from 'date-fns/locale';
 
-  const date = new Date(dateStr);
-  if (isNaN(date.getTime())) return '';
+export const formatDate = (dateStr: string | null | undefined, placeholder = '–'): string => {
+  if (!dateStr) return placeholder;
 
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear();
+  const date = parseISO(dateStr);
+  if (!isValid(date)) return placeholder;
 
-  return `${day}.${month}.${year}`;
+  return format(date, 'dd.MM.yyyy', { locale: uk });
 };

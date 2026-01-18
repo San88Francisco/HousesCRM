@@ -2,6 +2,7 @@ import {
   useGetHousesAnalyticsQuery,
   useLazyGetHousesPerformanceQuery,
 } from '@/store/api/houses-api';
+import { PaginationSortBy, PaginationSortOrder } from '@/types/core/pagination';
 import { useMemo, useState } from 'react';
 
 type TriggerArgs = {
@@ -42,8 +43,8 @@ export const useHousesPerformance = () => {
     triggerRequest({
       page: pageIndex + 1,
       limit: pageSize,
-      sortBy: 'totalRevenue',
-      order: 'DESC',
+      sortBy: PaginationSortBy.TOTAL_REVENUE,
+      order: PaginationSortOrder.DESC,
     });
   };
 

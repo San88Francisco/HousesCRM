@@ -1,12 +1,12 @@
 'use client';
 
+import { TablePagination } from '@/components/table-pagination';
 import { rentersTableGrid } from '@/shared/constants/styles';
-import TablePagination from '@/shared/ui/data-table/TablePagination';
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { Contract } from '@/types/core/contract';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
-import { HousesPerformanceSelect } from '../../houses-performance-analytic/HousesPerformanceSelect';
 
 type Props<T> = {
   table: TableType<T>;
@@ -57,8 +57,7 @@ export const TableRenter = ({ table, limit, setLimit }: Props<Contract>) => {
 
       <div className="mt-4 flex justify-end">
         <div className="flex gap-3">
-          <HousesPerformanceSelect limit={limit} onLimitChange={setLimit} />
-          <TablePagination table={table} />
+          <TablePagination limit={limit} onLimitChange={setLimit} table={table} />
         </div>
       </div>
     </div>

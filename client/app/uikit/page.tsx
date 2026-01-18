@@ -1,5 +1,4 @@
 'use client';
-import { mockData } from '@/shared/constants/table/dataTable';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 import { ButtonComponent } from '@/widgets/uikit/button-component';
 import { CalendarComponent } from '@/widgets/uikit/calendar-component';
@@ -8,12 +7,12 @@ import { ControlButtons } from '@/widgets/uikit/control-buttons';
 import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 import { InputComponent } from '@/widgets/uikit/input-component';
 import { ModalTrigger } from '@/widgets/uikit/modal';
-import { PaymentTable } from '@/widgets/uikit/payment-table';
 import { SelectComponent } from '@/widgets/uikit/select-component';
 import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
 import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastComponent } from '@/widgets/uikit/toast-component';
+import UpdateContract from '@/widgets/uikit/update-contract';
 import UpdateHouse from '@/widgets/uikit/update-house';
 import UpdateRenter from '@/widgets/uikit/update-renter';
 
@@ -24,7 +23,6 @@ export default function Page() {
       <CardComponent />
       <ControlButtons />
       <TableComponent />
-      <PaymentTable data={mockData} />
       <TabsComponent />
       <InputComponent />
       <CalendarComponent />
@@ -36,6 +34,7 @@ export default function Page() {
       <ModalTrigger />
       <UpdateHouse />
       <UpdateRenter />
+      <UpdateContract />
     </div>
   );
 }

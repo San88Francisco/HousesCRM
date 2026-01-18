@@ -21,4 +21,5 @@ export interface PaybackChartData {
   totalIncomeUSD: number;
   currencyCode: Currencies;
   currencySymbol: string;
+  isEmpty?: boolean;
 }

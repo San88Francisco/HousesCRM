@@ -23,7 +23,7 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
     defaultValues: defaultHouseValues,
   });
 
-  const { reset, formState } = methods;
+  const { reset } = methods;
 
   useEffect(() => {
     reset(isEditMode && houseToEdit ? mapHouseToFormData(houseToEdit) : defaultHouseValues);
@@ -36,7 +36,7 @@ export const useHouseForm = ({ isEditMode, houseToEdit, onSuccess }: Props) => {
       if (isEditMode) {
         if (!houseToEdit?.id) throw new Error('ID квартири не знайдено');
 
-        const changedData = extractDirtyFormValues(data, formState.dirtyFields);
+        const changedData = extractDirtyFormValues(data, methods.formState.dirtyFields);
         await update(houseToEdit.id, changedData);
       } else {
         await create(data);

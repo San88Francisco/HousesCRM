@@ -1,4 +1,5 @@
 import { rootApi } from '@/shared/api';
+import { RentersOccupancyRequest, RentersOccupancyResponse } from '@/types/core/renters-occupancy';
 import { AllContractsByRenterIdResponse, RentersPaginatedRequest } from '@/types/services/renters';
 
 export const rentersApi = rootApi.injectEndpoints({
@@ -14,10 +15,8 @@ export const rentersApi = rootApi.injectEndpoints({
             order,
           },
         }),
-
-        serializeQueryArgs: ({ endpointName, queryArgs }) => {
-          return `${endpointName}-${queryArgs.renterId}`;
-        },
+        serializeQueryArgs: ({ endpointName, queryArgs }) =>
+          `${endpointName}-${queryArgs.renterId}`,
 
         merge: (currentCache, newData, { arg }) => {
           if (arg.page === 1) {
@@ -33,7 +32,7 @@ export const rentersApi = rootApi.injectEndpoints({
           return currentArg?.page !== previousArg?.page;
         },
 
-        providesTags: (_result, _error, { renterId }) => [{ type: 'Renters', id: renterId }],
+        providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
       },
     ),
 
@@ -45,7 +44,20 @@ export const rentersApi = rootApi.injectEndpoints({
         url: `/renters/${renterId}`,
       }),
 
-      providesTags: (_result, _error, { renterId }) => [{ type: 'Renters', id: renterId }],
+      providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
+    }),
+    getRenters: build.query<RentersOccupancyResponse, RentersOccupancyRequest>({
+      query: ({ page, limit, sortBy, order }) => ({
+        url: '/renters',
+        method: 'GET',
+        params: {
+          page,
+          limit,
+          sortBy,
+          order,
+        },
+      }),
+      providesTags: ['Renters'],
     }),
   }),
   overrideExisting: false,
@@ -56,4 +68,5 @@ export const {
   useLazyGetAllContractsByRenterIdQuery,
   useGetAllContractsByRenterIdPaginatedQuery,
   useLazyGetAllContractsByRenterIdPaginatedQuery,
+  useGetRentersQuery,
 } = rentersApi;

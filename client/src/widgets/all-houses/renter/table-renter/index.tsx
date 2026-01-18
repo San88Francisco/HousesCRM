@@ -3,12 +3,11 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 
-import { PAGE_SIZE } from '@/shared/constants/table/pagination';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { useGetAllContractsByRenterIdPaginatedQuery } from '@/store/api/renters-api';
 
 import { AllRentersContractsTableColumns } from '@/shared/constants/current-renter';
+import { DEFAULT_PAGE_SIZE } from '@/shared/constants/table/pagination';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
@@ -18,7 +17,7 @@ import { TableRenter } from './TableRenter';
 export const RentersReport = () => {
   const { id } = useParams<{ id: string }>();
   const [pageIndex, setPageIndex] = useState(0);
-  const [limit, setLimit] = useState(PAGE_SIZE);
+  const [limit, setLimit] = useState(DEFAULT_PAGE_SIZE);
   const { data, isLoading, isError, error } = useGetAllContractsByRenterIdPaginatedQuery(
     {
       renterId: id,
