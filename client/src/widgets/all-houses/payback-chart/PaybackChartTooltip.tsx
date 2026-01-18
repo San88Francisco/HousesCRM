@@ -8,10 +8,10 @@ import { cn } from '@/shared/utils/cn';
 import { truncateText } from '@/shared/utils/text';
 import { PaybackChartData } from '@/types/core/payback-chart';
 
-interface CustomTooltipProps {
+type CustomTooltipProps = {
   active?: boolean;
   payload?: Array<{ payload: PaybackChartData }>;
-}
+};
 
 const DEFAULT_LOCALE = 'uk-UA';
 
@@ -19,6 +19,11 @@ export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => 
   if (!active || !payload?.length) return null;
 
   const data: PaybackChartData = payload[0].payload;
+
+  if (data.isEmpty || !data.id || data.purchasePriceUSD === 0) {
+    return null;
+  }
+
   const currentCurrency = data.currencyCode;
 
   const purchaseDate = (() => {
