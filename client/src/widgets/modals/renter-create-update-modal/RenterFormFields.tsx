@@ -33,6 +33,7 @@ export const RenterFormFields = ({ isLoading }: Props) => {
           placeholder="25"
           icon={<Cake className="w-4 h-4" />}
           required
+          min={1}
           disabled={isLoading}
         />
       </div>

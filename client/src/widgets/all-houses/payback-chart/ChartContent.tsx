@@ -1,12 +1,8 @@
 import { ChartCoordinatesProps } from '@/shared/utils/all-house/payback-chart/chartHelpers';
-import { formatYAxis } from '@/shared/utils/all-house/payback-chart/payback';
-import { Currencies } from '@/types/core/currencies';
 import { PaybackChartData } from '@/types/core/payback-chart';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CustomBar } from './CustomBar';
 import { PaybackChartTooltip } from './PaybackChartTooltip';
-
-const CHART_CURRENCY: Currencies = 'UAH';
 
 type ChartContentProps = {
   paddedChartData: PaybackChartData[];
@@ -39,7 +35,7 @@ export const ChartContent = ({
       <YAxis
         scale={scaleType}
         domain={yAxisDomain}
-        tickFormatter={value => formatYAxis(value, CHART_CURRENCY)}
+        tickFormatter={(value: number) => value.toLocaleString('en-US').replace(/,/g, ' ')}
         axisLine={false}
         tickLine={false}
         width={65}

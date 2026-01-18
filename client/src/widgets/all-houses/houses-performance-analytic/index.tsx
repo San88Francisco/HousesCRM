@@ -3,12 +3,12 @@ import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { useHousesPerformance } from '@/hooks/all-house/houses-performance-analytic/use-houses-performance';
 import { HousesPerformanceTableColumns } from '@/shared/constants/apartment/houses-performance-analytic';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
 import { HousesPerformanceTable } from './HousesPerformanceTable';
-import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 
 export const HousesPerformanceAnalytic = () => {
   const [pageIndex, setPageIndex] = useState<number>(DEFAULT_START_PAGE);
@@ -63,7 +63,10 @@ export const HousesPerformanceAnalytic = () => {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Показники будинків</CardTitle>
+        <div className="flex flex-col gap-3">
+          <CardTitle>Огляд квартир</CardTitle>
+          <CardDescription>Зведений огляд результатів роботи кожної квартири</CardDescription>
+        </div>
       </CardHeader>
 
       <CardContent>
