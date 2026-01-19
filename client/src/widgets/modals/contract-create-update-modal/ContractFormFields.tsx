@@ -100,6 +100,7 @@ export const ContractFormFields = ({ isLoading, initialHouse, initialRenter }: P
         placeholder="5000"
         icon={<Coins className="w-4 h-4" />}
         required
+        min={1}
         disabled={isLoading}
       />
     </div>

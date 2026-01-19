@@ -4,6 +4,16 @@ export class Init1766746795696 implements MigrationInterface {
     name = 'Init1766746795696'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        const userTableExists = await queryRunner.query(`
+            SELECT 1 FROM information_schema.tables 
+            WHERE table_schema = 'public' AND table_name = 'user'
+        `);
+        
+        if (userTableExists && userTableExists.length > 0) {
+            console.log('Tables already exist, skipping Init migration');
+            return;
+        }
+
         await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" character varying NOT NULL, "username" character varying(50) NOT NULL, "password" character varying, "google_id" character varying, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "UQ_7adac5c0b28492eb292d4a93871" UNIQUE ("google_id"), CONSTRAINT "CHK_af1e74da4cf07055c5fe48a5ae" CHECK ("password" IS NOT NULL OR "google_id" IS NOT NULL), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "renter" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "first_name" character varying(15) NOT NULL, "last_name" character varying(20) NOT NULL, "age" character varying(100) NOT NULL, "occupied" TIMESTAMP, "vacated" TIMESTAMP, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_7d1963dd773c2a2a44fc93a956f" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "public"."contract_status_enum" AS ENUM('active', 'inactive')`);

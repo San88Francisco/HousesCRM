@@ -107,7 +107,7 @@ export function HouseRentalChart() {
                 interval={0}
                 allowDuplicatedCategory={false}
                 tickFormatter={formatTickDate}
-                tick={{ fontSize: isMobile ? 10 : 12 }}
+                tick={{ fontSize: isMobile ? 10 : 12, fill: '#fff', fontWeight: 500 }}
                 tickLine={false}
                 axisLine={{ stroke: 'var(--border)', strokeWidth: 2 }}
                 textAnchor="middle"
@@ -117,8 +117,13 @@ export function HouseRentalChart() {
                 domain={yDomain}
                 ticks={yTicks}
                 tickMargin={10}
-                tick={{ fontSize: isMobile ? 10 : 12, dy: isMobile ? -8 : -20 }}
-                tickFormatter={(value: number) => String(value)}
+                tick={{
+                  fontSize: isMobile ? 10 : 12,
+                  dy: isMobile ? -8 : -20,
+                  fill: '#fff',
+                  fontWeight: 500,
+                }}
+                tickFormatter={(value: number) => value.toLocaleString('en-US').replace(/,/g, ' ')}
                 axisLine={false}
                 tickLine={false}
               />

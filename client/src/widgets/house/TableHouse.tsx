@@ -3,12 +3,12 @@
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
+
 import { PagePagination } from '@/components/page-pagination';
 import { apartmentColumns } from '@/shared/constants/current-apartment';
 import { DEFAULT_PAGE_SIZE } from '@/shared/constants/table/pagination';
 import { ROUTES } from '@/shared/routes';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
@@ -16,6 +16,7 @@ import { addVacancyGaps } from '@/shared/utils/house/break-beetwen-contracts';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { useGetHouseByIdOccupancyQuery, useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { OccupancyHouses } from '@/types/model/houses-occupancy';
+import { ContractModalTrigger } from '@/widgets/modals/contract-modal/ContractModalTrigger';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { HousesPerformanceTableSkeleton } from '../skeletons/houses-performance-table-skeleton';
@@ -67,12 +68,16 @@ export const TableHouse = () => {
   };
 
   return (
-    <div className="w-full min-w-0">
+    <>
       <Card className="w-full overflow-hidden">
-        <CardHeader>
-          <CardTitle>Історія оренди</CardTitle>
+        <CardHeader className="items-center pb-0 mb-10">
+          <div className="flex flex-col gap-3">
+            <CardTitle>Історія оренди</CardTitle>
+            <CardDescription>
+              Хронологія орендних контрактів та їх фінансових результатів.
+            </CardDescription>
+          </div>
         </CardHeader>
-
         <CardContent>
           <div className="w-full overflow-x-auto pb-6">
             <Table className="min-h-[550px] min-w-[800px]">
@@ -173,6 +178,6 @@ export const TableHouse = () => {
           )}
         </CardContent>
       </Card>
-    </div>
+    </>
   );
 };

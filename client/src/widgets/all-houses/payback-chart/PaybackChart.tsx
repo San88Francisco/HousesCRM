@@ -3,7 +3,7 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import {
   LEGEND_MARGIN_TOP,
   useChartConfig,
@@ -59,9 +59,15 @@ export const PaybackChart = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-lg sm:text-xl md:text-2xl">
-          Статистика окупності квартир
-        </CardTitle>
+        <div className="flex flex-col gap-3">
+          <CardTitle className="text-lg sm:text-xl md:text-2xl">
+            Статистика окупності квартир
+          </CardTitle>
+          <CardDescription>
+            Графік відображає період окупності кожної квартири та дозволяє порівняти ефективність
+            інвестицій у різні об'єкти
+          </CardDescription>
+        </div>
       </CardHeader>
 
       <CardContent className="p-2 sm:p-4 md:p-6" ref={containerRef}>

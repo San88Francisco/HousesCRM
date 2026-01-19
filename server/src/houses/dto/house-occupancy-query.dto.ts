@@ -19,12 +19,12 @@ export const HOUSE_OCCUPANCY_SORT_BY_FIELDS: HouseOccupancySortBy[] = [
 export class HouseOccupancyQueryDto {
   @ApiPropertyOptional({
     enum: HOUSE_OCCUPANCY_SORT_BY_FIELDS,
-    example: 'totalIncome',
+    example: 'occupied',
     description: 'Field to sort by (fields from RenterDto except id)',
   })
   @IsOptional()
   @IsIn(HOUSE_OCCUPANCY_SORT_BY_FIELDS)
-  sortBy?: HouseOccupancySortBy = 'totalIncome'
+  sortBy?: HouseOccupancySortBy = 'occupied'
 
   @ApiPropertyOptional({
     enum: SortOrder,

@@ -3,7 +3,7 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { ChartList } from './ChartList';
@@ -22,7 +22,12 @@ export function ChartPieDonutText() {
   return (
     <Card className="w-full">
       <CardHeader className="items-center pb-0 mb-10">
-        <CardTitle>Загальний дохід по всіх квартирах</CardTitle>
+        <div className="flex flex-col gap-3">
+          <CardTitle>Загальний дохід по всіх квартирах</CardTitle>
+          <CardDescription>
+            Діаграма показує внесок кожної квартири у загальний дохід
+          </CardDescription>
+        </div>
       </CardHeader>
       <CardContent className="flex   gap-10 items-center ">
         <PieChartRevenue

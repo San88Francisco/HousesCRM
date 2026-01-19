@@ -498,7 +498,7 @@ const SidebarMenuItem = forwardRef<HTMLLIElement, ComponentProps<'li'>>(
       ref={ref}
       data-sidebar="menu-item"
       className={cn(
-        'group/menu-item relative transition-colors duration-200 flex items-center rounded-[12px] text-text',
+        'group/menu-item relative transition-colors duration-200 flex items-center rounded-[12px] text-text !p-0',
         className,
       )}
       {...props}

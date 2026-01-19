@@ -1,9 +1,9 @@
-import { ContractModalTrigger } from '@/components/modals/contract-modal/ContractModalTrigger';
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
 import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
+import { ContractModalTrigger } from '@/widgets/modals/contract-modal/ContractModalTrigger';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrencyOptions } from '../currency/format-options';
 

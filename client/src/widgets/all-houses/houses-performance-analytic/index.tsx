@@ -5,7 +5,7 @@ import { useHousesPerformance } from '@/hooks/all-house/houses-performance-analy
 
 import { HousesPerformanceTableColumns } from '@/shared/constants/apartment/houses-performance-analytic';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
@@ -64,7 +64,10 @@ export const HousesPerformanceAnalytic = () => {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Показники будинків</CardTitle>
+        <div className="flex flex-col gap-3">
+          <CardTitle>Огляд квартир</CardTitle>
+          <CardDescription>Зведений огляд результатів роботи кожної квартири</CardDescription>
+        </div>
       </CardHeader>
 
       <CardContent>

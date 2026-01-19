@@ -30,14 +30,14 @@ export class HousesAnalyticsService {
     private readonly houseRepository: Repository<House>
   ) {}
 
-  async getAllHousesAnalytics(): Promise<AllHousesAnalyticsDto> {
+  async getAllHousesAnalytics(userId: string): Promise<AllHousesAnalyticsDto> {
     const [housesOverview, revenueDistribution, housesPaybackStats, currencyRevaluation, housesPerformanceResult] =
       await Promise.all([
-        this.getHousesOverview(),
-        this.getRevenueDistribution(),
-        this.getHousePaybackStats(),
-        this.getCurrencyRevaluation(),
-        this.getHousesPerformance({ page: 1, limit: 10 }),
+        this.getHousesOverview(undefined, userId),
+        this.getRevenueDistribution(userId),
+        this.getHousePaybackStats(userId),
+        this.getCurrencyRevaluation(userId),
+        this.getHousesPerformance({ page: 1, limit: 10 }, userId),
       ])
 
     const transformedData = {
@@ -53,8 +53,8 @@ export class HousesAnalyticsService {
     })
   }
 
-  async getHousesOverview(dto?: HousesOverviewQueryDto): Promise<HouseOverviewDto[]> {
-    const qb = this.buildHousesOverviewQuery(dto)
+  async getHousesOverview(dto?: HousesOverviewQueryDto, userId?: string): Promise<HouseOverviewDto[]> {
+    const qb = this.buildHousesOverviewQuery(dto, userId)
 
     const houses = await qb.getMany()
 
@@ -63,7 +63,7 @@ export class HousesAnalyticsService {
     })
   }
 
-  private buildHousesOverviewQuery(dto?: HousesOverviewQueryDto): SelectQueryBuilder<House> {
+  private buildHousesOverviewQuery(dto?: HousesOverviewQueryDto, userId?: string): SelectQueryBuilder<House> {
     const dateFrom = dto?.dateFrom
     const dateTo = dto?.dateTo
 
@@ -83,6 +83,10 @@ export class HousesAnalyticsService {
         'renter.lastName',
       ])
 
+    if (userId) {
+      qb.where('house.userId = :userId', { userId })
+    }
+
     if (dateFrom && dateTo) {
       qb.andWhere('contract.commencement <= :dateTo', { dateTo }).andWhere(
         '(contract.termination IS NULL OR contract.termination >= :dateFrom)',
@@ -97,8 +101,9 @@ export class HousesAnalyticsService {
     return qb
   }
 
-  async getRevenueDistribution(): Promise<RevenueDistributionDto> {
+  async getRevenueDistribution(userId: string): Promise<RevenueDistributionDto> {
     const houses = await this.houseRepository.find({
+      where: { userId },
       relations: { contracts: true },
     })
 
@@ -110,8 +115,9 @@ export class HousesAnalyticsService {
     })
   }
 
-  async getHousePaybackStats(): Promise<HousePaybackStatsDto[]> {
+  async getHousePaybackStats(userId: string): Promise<HousePaybackStatsDto[]> {
     const houses = await this.houseRepository.find({
+      where: { userId },
       relations: { contracts: true, prices: true },
     })
 
@@ -122,9 +128,10 @@ export class HousesAnalyticsService {
     })
   }
 
-  async getCurrencyRevaluation(): Promise<CurrencyRevaluationDto[]> {
+  async getCurrencyRevaluation(userId: string): Promise<CurrencyRevaluationDto[]> {
     const [houses, exchangeRates] = await Promise.all([
       this.houseRepository.find({
+        where: { userId },
         relations: { prices: true },
       }),
       getExchangeRates(new Date()),
@@ -157,7 +164,7 @@ export class HousesAnalyticsService {
     })
   }
 
-  async getHousesPerformance(dto: QueryDto): Promise<HousePerformanceResponseDto> {
+  async getHousesPerformance(dto: QueryDto, userId: string): Promise<HousePerformanceResponseDto> {
     const {
       page = QUERY_DEFAULTS.PAGE,
       limit = QUERY_DEFAULTS.LIMIT,
@@ -168,9 +175,9 @@ export class HousesAnalyticsService {
     let result: PaginatedResult<HousePerformanceDto>
 
     if (isComputedSort(sortBy)) {
-      result = await this.getComputedPerformance({ page, limit, order, sortBy })
+      result = await this.getComputedPerformance({ page, limit, order, sortBy }, userId)
     } else {
-      result = await this.getDbSortedPerformance({ page, limit, order, sortBy })
+      result = await this.getDbSortedPerformance({ page, limit, order, sortBy }, userId)
     }
 
     const rawData = {
@@ -187,15 +194,19 @@ export class HousesAnalyticsService {
     })
   }
 
-  private async getComputedPerformance(params: {
-    page: number
-    limit: number
-    order: SortOrder
-    sortBy: ComputedSortBy
-  }): Promise<PaginatedResult<HousePerformanceDto>> {
+  private async getComputedPerformance(
+    params: {
+      page: number
+      limit: number
+      order: SortOrder
+      sortBy: ComputedSortBy
+    },
+    userId: string
+  ): Promise<PaginatedResult<HousePerformanceDto>> {
     const { page, limit, order, sortBy } = params
 
     const houses = await this.houseRepository.find({
+      where: { userId },
       relations: { contracts: { renter: true } },
     })
 
@@ -228,18 +239,22 @@ export class HousesAnalyticsService {
     return { data, total }
   }
 
-  private async getDbSortedPerformance(params: {
-    page: number
-    limit: number
-    order: SortOrder
-    sortBy: string
-  }): Promise<PaginatedResult<HousePerformanceDto>> {
+  private async getDbSortedPerformance(
+    params: {
+      page: number
+      limit: number
+      order: SortOrder
+      sortBy: string
+    },
+    userId: string
+  ): Promise<PaginatedResult<HousePerformanceDto>> {
     const { page, limit, order, sortBy } = params
 
     const qb = this.houseRepository
       .createQueryBuilder('house')
       .leftJoinAndSelect('house.contracts', 'contract')
       .leftJoinAndSelect('contract.renter', 'renter')
+      .where('house.userId = :userId', { userId })
       .orderBy(`house.${sortBy}`, order)
       .skip((page - 1) * limit)
       .take(limit)
