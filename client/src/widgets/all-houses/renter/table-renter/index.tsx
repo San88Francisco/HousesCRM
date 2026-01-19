@@ -3,58 +3,22 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 
+import { useRentersContracts } from '@/hooks/renters/use-renters-contracts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { useGetAllContractsByRenterIdPaginatedQuery } from '@/store/api/renters-api';
-
-import { AllRentersContractsTableColumns } from '@/shared/constants/current-renter';
-import { DEFAULT_PAGE_SIZE } from '@/shared/constants/table/pagination';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
 import { TableRenter } from './TableRenter';
 
 export const RentersReport = () => {
   const { id } = useParams<{ id: string }>();
-  const [pageIndex, setPageIndex] = useState(0);
-  const [limit, setLimit] = useState(DEFAULT_PAGE_SIZE);
-  const { data, isLoading, isError, error } = useGetAllContractsByRenterIdPaginatedQuery(
-    {
-      renterId: id,
-    },
-    {
-      skip: !id,
-    },
-  );
 
-  const table = useReactTable({
-    data: data?.allContractsByRenterId.data ?? [],
-    columns: AllRentersContractsTableColumns,
-
-    manualPagination: true,
-    pageCount: data?.allContractsByRenterId.meta?.totalPages ?? 1,
-    state: {
-      pagination: {
-        pageIndex,
-        pageSize: limit,
-      },
-    },
-
-    onPaginationChange: updater => {
-      const next =
-        typeof updater === 'function' ? updater({ pageIndex, pageSize: limit }) : updater;
-
-      setPageIndex(next.pageIndex);
-    },
-
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const { table, limit, setLimit, isLoading, isError, error, hasData } = useRentersContracts(id);
 
   if (isLoading) return <HousesPerformanceTableSkeleton />;
 
   if (isError) return <ErrorState className="w-full" error={error} />;
 
-  if (!data?.allContractsByRenterId.data.length) return <EmptyState className="w-full" />;
+  if (!hasData) return <EmptyState className="w-full" />;
 
   return (
     <Card className="h-full flex flex-col">

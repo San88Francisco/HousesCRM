@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
+import { addVacancyGaps } from '@/shared/utils/house/break-beetwen-contracts';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { useGetHouseByIdOccupancyQuery, useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { OccupancyHouses } from '@/types/model/houses-occupancy';
@@ -57,6 +58,8 @@ export const TableHouse = () => {
       : (paginatedData?.data ?? []);
   const meta = currentPage === null ? initialData?.occupancyReports?.meta : paginatedData?.meta;
 
+  const tableDataWithGap = addVacancyGaps(tableData);
+
   if (!tableData.length) return <EmptyState className="min-h-[550px]" />;
 
   const handleRouteToRenter = (renterId: string) => {
@@ -93,7 +96,7 @@ export const TableHouse = () => {
               </TableHeader>
 
               <TableBody>
-                {tableData.map((item: OccupancyHouses) => {
+                {tableDataWithGap.map((item: OccupancyHouses) => {
                   return (
                     <TableRow
                       key={item.id}

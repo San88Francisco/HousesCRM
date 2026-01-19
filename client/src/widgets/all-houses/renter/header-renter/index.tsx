@@ -3,7 +3,7 @@
 import { Badge } from '@/shared/ui/badge';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
-import { useGetAllContractsByRenterIdPaginatedQuery } from '@/store/api/renters-api';
+import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
 import {
   CircleCheck,
   CircleDollarSign,
@@ -17,7 +17,7 @@ import { useParams } from 'next/navigation';
 export const HeaderRenter = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, isLoading, error } = useGetAllContractsByRenterIdPaginatedQuery(
+  const { data, isLoading, error } = useGetAllContractsByRenterIdQuery(
     {
       renterId: id,
     },

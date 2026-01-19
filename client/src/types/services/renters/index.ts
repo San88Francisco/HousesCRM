@@ -11,10 +11,12 @@ export type RenterByIdResponse = {
 
 export type AllContractsByRenterIdResponse = {
   oneRenterReport: Renter;
-  allContractsByRenterId: {
-    data: Contract[];
-    meta: Metadata;
-  };
+  allContractsByRenterId: RentersIdContractsResponse;
+};
+
+export type RentersIdContractsResponse = {
+  data: Contract[];
+  meta: Metadata;
 };
 
 export type RentersPaginatedRequest = {
