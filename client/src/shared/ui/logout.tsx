@@ -48,9 +48,8 @@ export const LogoutIcon = forwardRef<LogoutIconHandle, LogoutIconProps>(
       (e: MouseEvent<HTMLDivElement>) => {
         if (!isControlledRef.current) {
           controls.start('animate');
-        } else {
-          onMouseEnter?.(e);
         }
+        onMouseEnter?.(e);
       },
       [controls, onMouseEnter],
     );
@@ -59,9 +58,8 @@ export const LogoutIcon = forwardRef<LogoutIconHandle, LogoutIconProps>(
       (e: MouseEvent<HTMLDivElement>) => {
         if (!isControlledRef.current) {
           controls.start('normal');
-        } else {
-          onMouseLeave?.(e);
         }
+        onMouseLeave?.(e);
       },
       [controls, onMouseLeave],
     );
