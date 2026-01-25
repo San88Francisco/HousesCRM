@@ -27,6 +27,7 @@ export const LogoutButton = () => {
 
   const button = (
     <button
+      type="button"
       onClick={handleLogout}
       disabled={isLoading}
       className={cn(
