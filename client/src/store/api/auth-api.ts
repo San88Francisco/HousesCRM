@@ -2,7 +2,7 @@ import { rootApi } from '@/shared/api';
 import { tokenStorage } from '@/shared/utils/auth/token';
 import type { LoginRequest, LoginResponse, RefreshResponse } from '@/types/services/auth';
 import { toast } from 'sonner';
-import { setUser } from '../slice/user-slice';
+import { clearUser, setUser } from '../slice/user-slice';
 
 export const authApi = rootApi.injectEndpoints({
   endpoints: build => ({
@@ -52,7 +52,26 @@ export const authApi = rootApi.injectEndpoints({
         }
       },
     }),
+
+    logout: build.mutation<{ ok: boolean }, void>({
+      query: () => ({
+        url: `/auth/logout`,
+        method: 'POST',
+      }),
+      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error('Вихід із системи не вдався:', error);
+        } finally {
+          tokenStorage.clearTokens();
+          dispatch(clearUser());
+
+          dispatch(rootApi.util.resetApiState());
+        }
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation, useRefreshMutation } = authApi;
+export const { useLoginMutation, useRefreshMutation, useLogoutMutation } = authApi;
