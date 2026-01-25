@@ -2,11 +2,17 @@
 -- Історія двох квартир з 2010 по 2025 рік
 -- Рентарі мінялися приблизно раз на рік, у кожного рентаря було 2-3 контракти
 
--- Вставка 2 квартир
-INSERT INTO "house" ("id", "apartment_name", "rooms_count", "total_area", "purchase_date", "floor", "street", "apartmentType", "created_at", "updated_at")
+-- Вставка користувача (власника квартир)
+-- Пароль: "string" (хешований через argon2)
+INSERT INTO "user" ("id", "email", "password", "username", "created_at", "updated_at")
 VALUES 
-  ('550e8400-e29b-41d4-a716-446655440001', 'Галицького', 2, 45.5, '2010-01-01', 3, 'Вулиця Шевченка, 10', 'new_build', NOW(), NOW()),
-  ('550e8400-e29b-41d4-a716-446655440002', 'Хасевича', 3, 65.0, '2012-01-01', 5, 'Вулиця Франка, 25', 'resale', NOW(), NOW());
+  ('6426ff01-8dad-4851-a207-9c8034437487', 'user@example.com', '$argon2id$v=19$m=65536,t=3,p=4$kj8zr40VjQ/7l+YXZORuUA$wGv0ihgT1yuVswk/NfGypcP1av+gHVl6LD96+7552QI', 'string', NOW(), NOW());
+
+-- Вставка 2 квартир
+INSERT INTO "house" ("id", "apartment_name", "rooms_count", "total_area", "purchase_date", "floor", "street", "apartmentType", "userId", "created_at", "updated_at")
+VALUES 
+  ('550e8400-e29b-41d4-a716-446655440001', 'Галицького', 2, 45.5, '2010-01-01', 3, 'Вулиця Шевченка, 10', 'new_build', '6426ff01-8dad-4851-a207-9c8034437487', NOW(), NOW()),
+  ('550e8400-e29b-41d4-a716-446655440002', 'Хасевича', 3, 65.0, '2012-01-01', 5, 'Вулиця Франка, 25', 'resale', '6426ff01-8dad-4851-a207-9c8034437487', NOW(), NOW());
 
 -- Вставка цін для квартир (обов'язково потрібна USD ціна)
 INSERT INTO "house_price" ("id", "amount", "exchange_rate", "code", "houseId", "created_at", "updated_at")
