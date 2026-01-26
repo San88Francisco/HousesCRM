@@ -1,4 +1,5 @@
 import { rootApi } from '@/shared/api';
+import { ROUTES } from '@/shared/routes';
 import { tokenStorage } from '@/shared/utils/auth/token';
 import type { LoginRequest, LoginResponse, RefreshResponse } from '@/types/services/auth';
 import { toast } from 'sonner';
@@ -55,19 +56,20 @@ export const authApi = rootApi.injectEndpoints({
 
     logout: build.mutation<{ ok: boolean }, void>({
       query: () => ({
-        url: `/auth/logout`,
+        url: '/auth/logout',
         method: 'POST',
       }),
       async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
           await queryFulfilled;
-        } catch (error) {
-          console.error('Вихід із системи не вдався:', error);
+        } catch {
+          toast.error('Упсс щось пішло не так!');
         } finally {
           tokenStorage.clearTokens();
           dispatch(clearUser());
-
           dispatch(rootApi.util.resetApiState());
+
+          window.location.replace(ROUTES.LOGIN);
         }
       },
     }),
