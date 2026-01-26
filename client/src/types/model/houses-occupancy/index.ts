@@ -1,6 +1,6 @@
 import { ContractStatus } from '@/types/core/status/status';
 
-export type OccupancyHouses = {
+export type HouseOccupancyItem = {
   totalIncome: number;
   status: ContractStatus;
   id: string;
