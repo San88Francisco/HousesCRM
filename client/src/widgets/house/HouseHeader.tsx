@@ -6,7 +6,7 @@ import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { Building2, DoorOpen, MapPin, PackagePlus, Ruler } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
-export const HeaderHouse = () => {
+export const HouseHeader = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading, error } = useGetHouseByIdQuery(id, {
