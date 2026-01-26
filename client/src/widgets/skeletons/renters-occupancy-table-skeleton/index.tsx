@@ -1,5 +1,5 @@
 import { rentersOccupancyTableGrid } from '@/shared/constants/styles/renters-occupancy-table';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
@@ -16,9 +16,7 @@ export const RentersOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
           <CardTitle>
             <Skeleton className="h-5 w-56" />
           </CardTitle>
-          <CardDescription>
-            <Skeleton className="h-4 w-[600px]" />
-          </CardDescription>
+          <Skeleton className="h-4 w-[600px]" />
         </div>
       </CardHeader>
 
