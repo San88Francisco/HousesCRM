@@ -2,10 +2,11 @@ import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
+import { ContractStatus } from '@/types/core/status/status';
+import { HouseOccupancyItem } from '@/types/model/houses-occupancy';
 import { ContractModalTrigger } from '@/widgets/modals/contract-modal/ContractModalTrigger';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrencyOptions } from '../currency/format-options';
-import { HouseOccupancyItem } from '@/types/model/houses-occupancy';
 
 export const HouseOccupancyTableColumns: ColumnDef<HouseOccupancyItem>[] = [
   {
@@ -47,8 +48,10 @@ export const HouseOccupancyTableColumns: ColumnDef<HouseOccupancyItem>[] = [
     accessorKey: 'status',
     header: 'Статус',
     cell: ctx => (
-      <span className={cn(ctx.getValue() === 'active' ? 'text-yellow' : 'text-purple')}>
-        {ctx.getValue() === 'active' ? 'Активний' : 'Не активний'}
+      <span
+        className={cn(ctx.getValue() === ContractStatus.ACTIVE ? 'text-yellow' : 'text-purple')}
+      >
+        {ctx.getValue() === ContractStatus.ACTIVE ? 'Активний' : 'Не активний'}
       </span>
     ),
   },
