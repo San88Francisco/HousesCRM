@@ -3,18 +3,13 @@
 import { LogoutIcon } from '@/shared/ui/logout';
 import { SidebarMenuButton } from '@/shared/ui/sidebar';
 import { useLogoutMutation } from '@/store/api/auth-api';
-import { useCallback } from 'react';
 
 export const LogoutButton = () => {
   const [logout, { isLoading }] = useLogoutMutation();
 
-  const handleLogout = useCallback(() => {
-    logout();
-  }, [logout]);
-
   return (
     <SidebarMenuButton
-      onClick={handleLogout}
+      onClick={() => logout()}
       disabled={isLoading}
       tooltip={{
         children: 'Вийти',
