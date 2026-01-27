@@ -12,11 +12,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
+
 import { addVacancyGaps } from '@/shared/utils/house/break-beetwen-contracts';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { useGetHouseByIdOccupancyQuery, useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { OccupancyHouses } from '@/types/model/houses-occupancy';
 import { ContractModalTrigger } from '@/widgets/modals/contract-modal/ContractModalTrigger';
+import { FileWarning } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { HousesPerformanceTableSkeleton } from '../skeletons/houses-performance-table-skeleton';
@@ -102,61 +104,76 @@ export const TableHouse = () => {
 
               <TableBody>
                 {tableDataWithGap.map((item: OccupancyHouses) => {
+                  const isVacancy = item.id.toString().startsWith('vacancy-');
+
                   return (
                     <TableRow
                       key={item.id}
                       style={{ gridTemplateColumns: '60px repeat(5, 1fr) 100px' }}
-                      className="hover:bg-muted-foreground duration-300 cursor-pointer"
+                      className={cn(
+                        'duration-300',
+                        isVacancy ? 'cursor-default' : 'hover:bg-muted-foreground cursor-pointer',
+                      )}
                     >
-                      <TableCell className="font-medium text-center text-text">
-                        <ContractModalTrigger id={item.id} />
+                      <TableCell className="font-medium text-center text-text flex items-center justify-center">
+                        {!isVacancy ? (
+                          <ContractModalTrigger id={item.id} />
+                        ) : (
+                          <div className="flex w-[24px] justify-center items-center">
+                            <FileWarning className="size-6" />
+                          </div>
+                        )}
                       </TableCell>
                       <TableCell className="font-medium text-center text-text">
                         <div
-                          onClick={() => handleRouteToRenter(item.id)}
-                          className="w-full text-center"
+                          onClick={() => !isVacancy && handleRouteToRenter(item.id)}
+                          className={cn('w-full text-center', isVacancy && 'text-text')}
                         >
                           {item.firstName} {item.lastName}
                         </div>
                       </TableCell>
                       <TableCell className="text-text">
                         <div
-                          onClick={() => handleRouteToRenter(item.id)}
-                          className="w-full text-center"
+                          onClick={() => !isVacancy && handleRouteToRenter(item.id)}
+                          className={cn('w-full text-center', isVacancy && 'text-text')}
                         >
                           {formatDate(item.occupied)}
                         </div>
                       </TableCell>
                       <TableCell className="text-text">
                         <div
-                          onClick={() => handleRouteToRenter(item.id)}
-                          className="w-full text-center"
+                          onClick={() => !isVacancy && handleRouteToRenter(item.id)}
+                          className={cn('w-full text-center', isVacancy && 'text-text')}
                         >
                           {item.status === 'active' ? 'Наразі орендує' : formatDate(item.vacated!)}
                         </div>
                       </TableCell>
                       <TableCell className="text-text">
                         <div
-                          onClick={() => handleRouteToRenter(item.id)}
-                          className="w-full text-center"
+                          onClick={() => !isVacancy && handleRouteToRenter(item.id)}
+                          className={cn('w-full text-center', isVacancy && 'text-text')}
                         >
                           {contractDuration(item.occupied, item.vacated)}
                         </div>
                       </TableCell>
                       <TableCell className="font-medium text-text">
                         <div
-                          onClick={() => handleRouteToRenter(item.id)}
-                          className="w-full text-center"
+                          onClick={() => !isVacancy && handleRouteToRenter(item.id)}
+                          className={cn('w-full text-center', isVacancy && 'text-text')}
                         >
                           {item.totalIncome} ₴
                         </div>
                       </TableCell>
                       <TableCell>
                         <div
-                          onClick={() => handleRouteToRenter(item.id)}
+                          onClick={() => !isVacancy && handleRouteToRenter(item.id)}
                           className={cn(
                             'font-medium text-right w-full',
-                            item.status === 'active' ? 'text-yellow' : 'text-purple',
+                            isVacancy
+                              ? 'text-purple'
+                              : item.status === 'active'
+                                ? 'text-yellow'
+                                : 'text-purple',
                           )}
                         >
                           {item.status === 'active' ? 'Активний' : 'Неактивний'}

@@ -8,13 +8,13 @@ export const addVacancyGaps = <T extends OccupancyBase>(data: T[]): T[] =>
       const next = arr[index + 1];
 
       const vacancy =
-        next && new Date(current.vacated).getTime() < new Date(next.occupied).getTime()
+        next && new Date(next.vacated).getTime() < new Date(current.occupied).getTime()
           ? ({
-              id: `vacancy-${current.vacated}-${next.occupied}`,
+              id: `vacancy-${next.vacated}-${current.occupied}`,
               firstName: 'Відсутній',
               lastName: 'Орендар',
-              occupied: current.vacated,
-              vacated: next.occupied,
+              occupied: next.vacated,
+              vacated: current.occupied,
               totalIncome: 0,
               status: ContractStatus.INACTIVE,
             } as T)

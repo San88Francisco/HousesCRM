@@ -1,4 +1,4 @@
-import { differenceInDays, differenceInMonths, differenceInWeeks } from 'date-fns';
+import { intervalToDuration } from 'date-fns';
 
 export const contractDuration = (occupied: string, vacated: string) => {
   if (!occupied) {
@@ -14,16 +14,25 @@ export const contractDuration = (occupied: string, vacated: string) => {
 
   const [start, end] = startDate > endDate ? [endDate, startDate] : [startDate, endDate];
 
-  const months = differenceInMonths(end, start);
+  const duration = intervalToDuration({ start, end });
+  const { years = 0, months = 0, days = 0 } = duration;
+
+  if (years > 0) {
+    return [`${years} р.`, months > 0 ? `${months} міс.` : ''].filter(Boolean).join(' ');
+  }
+
   if (months > 0) {
-    return `${months} міс`;
+    const weeks = Math.floor(days / 7);
+    return [`${months} міс.`, weeks > 0 ? `${weeks} тиж.` : ''].filter(Boolean).join(' ');
   }
 
-  const weeks = differenceInWeeks(end, start);
-  if (weeks > 0) {
-    return `${weeks} тиж.`;
+  if (days >= 7) {
+    const weeks = Math.floor(days / 7);
+    const remainingDays = days % 7;
+    return [`${weeks} тиж.`, remainingDays > 0 ? `${remainingDays} дн.` : '']
+      .filter(Boolean)
+      .join(' ');
   }
 
-  const days = differenceInDays(end, start);
   return `${days} дн.`;
 };
