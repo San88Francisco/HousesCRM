@@ -6,15 +6,15 @@ import { rentersTableGrid } from '@/shared/constants/styles';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { Contract } from '@/types/core/contract';
-import { flexRender, Table as TableType } from '@tanstack/react-table';
+import { Table as TableType, flexRender } from '@tanstack/react-table';
 
 type Props<T> = {
   table: TableType<T>;
   limit: number;
-  setLimit: (limit: number) => void;
+  onLimitChange: (limit: number) => void;
 };
 
-export const TableRenter = ({ table, limit, setLimit }: Props<Contract>) => {
+export const TableRenter = ({ table, limit, onLimitChange }: Props<Contract>) => {
   if (!table) return null;
 
   return (
@@ -57,7 +57,7 @@ export const TableRenter = ({ table, limit, setLimit }: Props<Contract>) => {
 
       <div className="mt-4 flex justify-end">
         <div className="flex gap-3">
-          <TablePagination limit={limit} onLimitChange={setLimit} table={table} />
+          <TablePagination limit={limit} onLimitChange={onLimitChange} table={table} />
         </div>
       </div>
     </div>

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 
-export const HeaderRenter = () => {
+export const RenterHeader = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading, error } = useGetAllContractsByRenterIdQuery(

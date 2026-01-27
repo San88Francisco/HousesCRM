@@ -2,23 +2,24 @@
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { useHouseOccupancy } from '@/hooks/house/house-occupancy/use-house-occupancy';
-import { HouseOccupancyTableColumns } from '@/shared/constants/house/house-occupancy';
+
+import { useRentersContracts } from '@/hooks/renters/use-renters-contracts';
+import { AllRentersContractsTableColumns } from '@/shared/constants/current-renter';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import { HouseOccupancyTableSkeleton } from '../skeletons/house-occupancy-table-skeleton';
-import { HouseOccupancyTable } from './HouseOccupancyTable';
+import { TableRenter } from './TableRenter';
 
-export const HouseOccupancy = () => {
+export const RenterReportCard = () => {
   const { id } = useParams<{ id: string }>();
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_START_PAGE);
   const [limit, setLimit] = useState(DEFAULT_PAGE_SIZE);
 
-  const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useHouseOccupancy(id);
+  const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useRentersContracts(id);
 
   const onLimitChange = (nextLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);
@@ -32,7 +33,7 @@ export const HouseOccupancy = () => {
 
   const table = useReactTable({
     data,
-    columns: HouseOccupancyTableColumns,
+    columns: AllRentersContractsTableColumns,
 
     manualPagination: true,
     pageCount,
@@ -59,23 +60,20 @@ export const HouseOccupancy = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <HouseOccupancyTableSkeleton rows={limit} />;
+  if (isLoading) return <HousesPerformanceTableSkeleton />;
+
   if (isError) return <ErrorState className="w-full" error={error} />;
+
   if (isEmpty) return <EmptyState className="w-full" />;
 
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <div className="flex flex-col gap-3">
-          <CardTitle>Історія оренди</CardTitle>
-          <CardDescription>
-            Хронологія орендних контрактів та їх фінансових результатів.
-          </CardDescription>
-        </div>
+        <CardTitle>Історія договорів орендаря</CardTitle>
       </CardHeader>
 
       <CardContent>
-        <HouseOccupancyTable table={table} limit={limit} onLimitChange={onLimitChange} />
+        <TableRenter table={table} limit={limit} onLimitChange={onLimitChange} />
       </CardContent>
     </Card>
   );

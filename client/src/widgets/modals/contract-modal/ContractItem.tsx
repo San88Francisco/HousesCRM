@@ -2,7 +2,7 @@
 
 import { KeyboardEvent, useState } from 'react';
 
-import { cn } from '@/shared/utils/cn';
+import { Badge } from '@/shared/ui/badge';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
@@ -52,14 +52,12 @@ export const ContractItem = ({ contract }: Props) => {
         </span>
         <span className="text-muted">Місячна оплата: {contract.monthlyPayment} грн.</span>
       </div>
-      <span
-        className={cn(
-          'absolute right-0 top-0 rounded-full px-2 py-0.5 text-xs font-semibold m-2 text-white ',
-          contract.status === 'active' ? 'bg-gold' : 'bg-purple',
-        )}
+      <Badge
+        className="absolute right-2 top-2"
+        variant={contract.status === 'active' ? 'active' : 'inactive'}
       >
         {contract.status === 'active' ? 'Активний' : 'Не активний'}
-      </span>
+      </Badge>
     </li>
   );
 };
