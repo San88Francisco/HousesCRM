@@ -4,7 +4,7 @@ import { Renter } from '@/types/core/renter';
 import { ContractStatus } from '@/types/core/status/status';
 import { CurrencyRevaluation } from '../../core/currency-revaluation-chart';
 import { Metadata } from '../../core/metadata';
-import { OccupancyHouses } from '../../model/houses-occupancy';
+import { HouseOccupancyItem } from '../../model/houses-occupancy';
 
 export type HouseByIdResponse = {
   houseDetail: House;
@@ -33,7 +33,7 @@ export type UpdateHouseResponse = House;
 export type UpdateHouseRequest = Partial<HouseFormData> & { id: string };
 
 export type OccupancyHousesPaginatedResponse = {
-  data: OccupancyHouses[];
+  data: HouseOccupancyItem[];
   meta: Metadata;
 };
 

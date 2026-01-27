@@ -149,6 +149,7 @@ export const {
   useLazyGetHousesAnalyticsQuery,
   useGetHouseByIdQuery,
   useGetHouseByIdOccupancyQuery,
+  useLazyGetHouseByIdOccupancyQuery,
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,

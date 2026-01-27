@@ -1,4 +1,6 @@
 import { Metadata } from '../metadata';
+import { PaginationSortBy, PaginationSortOrder } from '../pagination';
+import { ContractStatus } from '../status/status';
 
 export type RentersOccupancyItem = {
   id: string;
@@ -8,14 +10,14 @@ export type RentersOccupancyItem = {
   occupied: string;
   vacated: string;
   totalIncome: number;
-  status: 'active' | 'inactive';
+  status: ContractStatus;
 };
 
 export type RentersOccupancyRequest = {
   page: number;
   limit: number;
-  sortBy?: 'totalRevenue' | 'rentersCount' | 'currentPayment';
-  order?: 'ASC' | 'DESC';
+  sortBy?: PaginationSortBy;
+  order?: PaginationSortOrder;
 };
 
 export type RentersOccupancyResponse = {
