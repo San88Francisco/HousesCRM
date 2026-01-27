@@ -6,17 +6,17 @@ import { ROUTES } from '@/shared/routes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { createRowKeyDown } from '@/shared/utils/table/row-key-down-handler';
-import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
+import { HouseOccupancyItem } from '@/types/model/houses-occupancy';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 
 type Props = {
-  table: TableType<RentersOccupancyItem>;
+  table: TableType<HouseOccupancyItem>;
   limit: number;
   onLimitChange: (limit: number) => void;
 };
 
-export const RentersOccupancyTable = ({ table, limit, onLimitChange }: Props) => {
+export const HouseOccupancyTable = ({ table, limit, onLimitChange }: Props) => {
   const { push } = useRouter();
 
   const handleRouteToRenter = (renterId: string) => {
@@ -61,6 +61,7 @@ export const RentersOccupancyTable = ({ table, limit, onLimitChange }: Props) =>
           </TableBody>
         </Table>
       </div>
+
       <div className="mt-4 flex justify-end">
         <TablePagination table={table} limit={limit} onLimitChange={onLimitChange} />
       </div>
