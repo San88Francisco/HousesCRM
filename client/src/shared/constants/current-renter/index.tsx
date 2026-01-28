@@ -2,6 +2,7 @@ import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { ContractWithRevenue } from '@/types/core/contract';
+import { ContractStatus } from '@/types/core/status/status';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const AllRentersContractsTableColumns: ColumnDef<ContractWithRevenue>[] = [
@@ -35,8 +36,8 @@ export const AllRentersContractsTableColumns: ColumnDef<ContractWithRevenue>[] =
     accessorKey: 'status',
     header: 'Статус',
     cell: ctx => {
-      const status = ctx.getValue<'active' | 'inactive'>();
-      const isActive = status === 'active';
+      const status = ctx.getValue<ContractStatus>();
+      const isActive = status === ContractStatus.ACTIVE;
 
       return (
         <div

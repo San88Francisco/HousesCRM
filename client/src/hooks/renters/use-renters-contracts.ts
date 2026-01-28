@@ -24,7 +24,7 @@ export const useRentersContracts = (renterId: string) => {
     if (!renterId) return;
 
     setLimit(pageSize);
-    setCurrentPage(pageIndex + 1);
+    setCurrentPage(Math.max(1, pageIndex + 1));
   };
 
   const isEmpty = data.length === 0 && !query.isFetching && !query.isError;

@@ -38,15 +38,16 @@ export const RenterHeader = () => {
   const StatusIcon = isActive ? CircleCheck : CircleOff;
 
   const items = [
-    { Icon: UserRound, text: `${age} років.` },
+    { key: 'age', Icon: UserRound, text: `${age} років.` },
     {
+      key: 'dates',
       Icon: Clock,
       text: isActive
         ? `Проживає з ${formatDate(occupied)} до тепер`
         : `Проживав з ${formatDate(occupied)} по ${formatDate(vacated)}`,
     },
-    { Icon: Hourglass, text: `Загалом ${contractDuration(occupied, vacated)}` },
-    { Icon: CircleDollarSign, text: `Прибуток ${totalIncome} грн.` },
+    { key: 'duration', Icon: Hourglass, text: `Загалом ${contractDuration(occupied, vacated)}` },
+    { key: 'income', Icon: CircleDollarSign, text: `Прибуток ${totalIncome ?? 0} грн.` },
   ];
 
   return (
@@ -62,8 +63,8 @@ export const RenterHeader = () => {
         <span className="text-text break-words opacity-75">{statusText}</span>
       </div>
       <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-muted-text">
-        {items.map(({ Icon, text }) => (
-          <div key={text} className="flex items-center gap-1 rounded-full bg-muted/60 py-1">
+        {items.map(({ key, Icon, text }) => (
+          <div key={key} className="flex items-center gap-1 rounded-full bg-muted/60 py-1">
             <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text opacity-95" />
             <span className="text-text whitespace-nowrap opacity-75">{text}</span>
           </div>

@@ -46,16 +46,17 @@ export const rentersApi = rootApi.injectEndpoints({
       providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
     }),
 
-    getAllContractsByRenterId: build.query<AllContractsByRenterIdResponse, RentersPaginatedRequest>(
-      {
-        query: ({ renterId, limit }) => ({
-          url: `/renters/${renterId}`,
-          params: { limit },
-        }),
+    getAllContractsByRenterId: build.query<
+      AllContractsByRenterIdResponse,
+      { renterId: string; limit?: number }
+    >({
+      query: ({ renterId, limit }) => ({
+        url: `/renters/${renterId}`,
+        params: { limit },
+      }),
 
-        providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
-      },
-    ),
+      providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
+    }),
     getRenters: build.query<RentersOccupancyResponse, RentersOccupancyRequest>({
       query: ({ page, limit, sortBy, order }) => ({
         url: '/renters',

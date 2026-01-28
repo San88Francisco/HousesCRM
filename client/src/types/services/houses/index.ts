@@ -59,7 +59,7 @@ export type HousesDataResponse = {
   purchaseDate: string;
   floor: number;
   street: string;
-  apartmentType: string;
+  apartmentType: House['apartmentType'];
 };
 
 export type Prices = {
