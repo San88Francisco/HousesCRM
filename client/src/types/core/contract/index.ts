@@ -8,8 +8,12 @@ export interface Contract {
   termination: string;
   monthlyPayment: number;
   status: ContractStatus;
-  totalRevenue?: number;
 }
+
+export interface ContractWithRevenue extends Contract {
+  totalRevenue: number;
+}
+
 export interface ContractCreateUpdate extends Contract {
   houseId?: string;
   renterId?: string;

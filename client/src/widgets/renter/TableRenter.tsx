@@ -5,16 +5,16 @@ import { rentersTableGrid } from '@/shared/constants/styles';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
-import { Contract } from '@/types/core/contract';
+import { ContractWithRevenue } from '@/types/core/contract';
 import { Table as TableType, flexRender } from '@tanstack/react-table';
 
-type Props<T> = {
-  table: TableType<T>;
+type Props = {
+  table: TableType<ContractWithRevenue>;
   limit: number;
   onLimitChange: (limit: number) => void;
 };
 
-export const TableRenter = ({ table, limit, onLimitChange }: Props<Contract>) => {
+export const TableRenter = ({ table, limit, onLimitChange }: Props) => {
   if (!table) return null;
 
   return (

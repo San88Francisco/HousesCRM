@@ -1,10 +1,10 @@
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
-import { Contract } from '@/types/core/contract';
+import { ContractWithRevenue } from '@/types/core/contract';
 import { ColumnDef } from '@tanstack/react-table';
 
-export const AllRentersContractsTableColumns: ColumnDef<Contract>[] = [
+export const AllRentersContractsTableColumns: ColumnDef<ContractWithRevenue>[] = [
   {
     accessorKey: 'commencement',
     header: 'Початок',
@@ -40,7 +40,10 @@ export const AllRentersContractsTableColumns: ColumnDef<Contract>[] = [
 
       return (
         <div
-          className={cn('font-medium text-right w-full', isActive ? 'text-yellow' : 'text-purple')}
+          className={cn(
+            'font-medium text-center w-full ',
+            isActive ? 'text-yellow' : 'text-purple',
+          )}
         >
           {isActive ? 'Активний' : 'Неактивний'}
         </div>

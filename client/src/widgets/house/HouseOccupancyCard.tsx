@@ -6,7 +6,7 @@ import { useHouseOccupancy } from '@/hooks/house/house-occupancy/use-house-occup
 import { HouseOccupancyTableColumns } from '@/shared/constants/house/house-occupancy';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { breakBetweenContracts } from '@/shared/utils/house/break-beetwen-contracts';
+import { breakBetweenContracts } from '@/shared/utils/house/break-between-contracts';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -51,12 +51,25 @@ export const HouseOccupancyCard = () => {
       const next =
         typeof updater === 'function' ? updater({ pageIndex, pageSize: limit }) : updater;
 
-      setPageIndex(next.pageIndex);
+      if (next.pageSize !== limit) {
+        const firstItemIndex = pageIndex * limit;
+        const newPageIndex = Math.floor(firstItemIndex / next.pageSize);
 
-      trigger({
-        pageIndex: next.pageIndex,
-        pageSize: limit,
-      });
+        setPageIndex(newPageIndex);
+        setLimit(next.pageSize);
+
+        trigger({
+          pageIndex: newPageIndex,
+          pageSize: next.pageSize,
+        });
+      } else {
+        setPageIndex(next.pageIndex);
+
+        trigger({
+          pageIndex: next.pageIndex,
+          pageSize: limit,
+        });
+      }
     },
 
     getCoreRowModel: getCoreRowModel(),

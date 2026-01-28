@@ -1,5 +1,6 @@
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
+import { OccupancyWithVacancy } from '@/shared/utils/house/break-between-contracts';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
 import { ContractStatus } from '@/types/core/status/status';
@@ -9,15 +10,15 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { formatCurrencyOptions } from '../currency/format-options';
 
-export const HouseOccupancyTableColumns: ColumnDef<HouseOccupancyItem>[] = [
+export const HouseOccupancyTableColumns: ColumnDef<OccupancyWithVacancy<HouseOccupancyItem>>[] = [
   {
     id: 'action',
     header: 'Договір',
     cell: ctx => {
-      const isVacancy = ctx.row.original.id.startsWith('vacancy-');
+      const isVacancy = ctx.row.original.isVacancy;
 
       if (isVacancy) {
-        return <div className="flex items-center justify-center text-red font-bold">-</div>;
+        return <div className="flex items-center justify-center text-red">—</div>;
       }
 
       return <ContractModalTrigger id={ctx.row.original.id} />;
@@ -28,7 +29,7 @@ export const HouseOccupancyTableColumns: ColumnDef<HouseOccupancyItem>[] = [
     accessorFn: row => `${row.firstName} ${row.lastName}`,
     header: 'Орендар',
     cell: ctx => {
-      const isVacancy = ctx.row.original.id.startsWith('vacancy-');
+      const isVacancy = ctx.row.original.isVacancy;
       return (
         <span className={cn('font-semibold', isVacancy && 'text-red font-normal')}>
           {ctx.getValue<string>()}
@@ -40,44 +41,58 @@ export const HouseOccupancyTableColumns: ColumnDef<HouseOccupancyItem>[] = [
     accessorKey: 'occupied',
     header: 'Заселення',
     cell: ctx => {
-      const isVacancy = ctx.row.original.id.startsWith('vacancy-');
-      return (
-        <span className={cn(isVacancy && 'text-red')}>{formatDate(ctx.getValue<string>())}</span>
-      );
+      const isVacancy = ctx.row.original.isVacancy;
+      const value = ctx.getValue<string | null>();
+      return <span className={cn(isVacancy && 'text-red')}>{value ? formatDate(value) : '—'}</span>;
     },
   },
   {
     accessorKey: 'vacated',
     header: 'Виселення',
     cell: ctx => {
-      const isVacancy = ctx.row.original.id.startsWith('vacancy-');
-      return (
-        <span className={cn(isVacancy && 'text-red')}>{formatDate(ctx.getValue<string>())}</span>
-      );
+      const isVacancy = ctx.row.original.isVacancy;
+      const value = ctx.getValue<string | null>();
+      const status = ctx.row.original.status;
+
+      if (isVacancy) {
+        return <span className="text-red">{value ? formatDate(value) : '—'}</span>;
+      }
+
+      if (!value && status === ContractStatus.ACTIVE) {
+        return <span className="text-text">Наразі орендує</span>;
+      }
+
+      return <span>{value ? formatDate(value) : '—'}</span>;
     },
   },
   {
     id: 'duration',
     header: 'Тривалість',
     cell: ctx => {
-      const isVacancy = ctx.row.original.id.startsWith('vacancy-');
-      return (
-        <span className={cn(isVacancy && 'text-red')}>
-          {contractDuration(ctx.row.original.occupied, ctx.row.original.vacated)}
-        </span>
-      );
+      const isVacancy = ctx.row.original.isVacancy;
+      const { occupied, vacated } = ctx.row.original;
+
+      if (isVacancy) {
+        return <span className="text-red">—</span>;
+      }
+
+      if (occupied) {
+        return <span>{contractDuration(occupied, vacated || '')}</span>;
+      }
+
+      return <span>—</span>;
     },
   },
   {
     accessorKey: 'totalIncome',
     header: 'Дохід',
     cell: ctx => {
-      const isVacancy = ctx.row.original.id.startsWith('vacancy-');
+      const isVacancy = ctx.row.original.isVacancy;
       const value = ctx.getValue<number>();
 
       return (
         <span className={cn('font-semibold', isVacancy && 'text-red font-normal')}>
-          {value === 0 ? '-' : formatCurrency(value, formatCurrencyOptions)}
+          {isVacancy ? '—' : formatCurrency(value, formatCurrencyOptions)}
         </span>
       );
     },
@@ -86,10 +101,10 @@ export const HouseOccupancyTableColumns: ColumnDef<HouseOccupancyItem>[] = [
     accessorKey: 'status',
     header: 'Статус',
     cell: ctx => {
-      const isVacancy = ctx.row.original.id.startsWith('vacancy-');
+      const isVacancy = ctx.row.original.isVacancy;
 
       if (isVacancy) {
-        return <span className="text-red mr-9">-</span>;
+        return <span className="text-red">—</span>;
       }
 
       return (

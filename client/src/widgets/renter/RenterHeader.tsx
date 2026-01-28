@@ -1,9 +1,12 @@
 'use client';
 
+import { ErrorState } from '@/components/chart-states/ErrorState';
 import { Badge } from '@/shared/ui/badge';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
+import { ContractStatus } from '@/types/core/status/status';
 import {
   CircleCheck,
   CircleDollarSign,
@@ -26,18 +29,11 @@ export const RenterHeader = () => {
     },
   );
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error || !data) return <div>Щось пішло не так</div>;
-
+  if (isLoading) return <Skeleton className="h-32 w-full" />;
+  if (error || !data) return <ErrorState className="w-full" error={error} />;
   const { firstName, lastName, age, occupied, vacated, totalIncome, status } = data.oneRenterReport;
-  const rawDuration = contractDuration(occupied, vacated);
 
-  const monthsMatch = rawDuration.match(/(\d+)\s*міс/);
-  const months = monthsMatch ? Number(monthsMatch[1]) : 0;
-
-  const duration = months >= 12 ? `${Math.floor(months / 12)}р ${months % 12}м` : rawDuration;
-
-  const isActive = status === 'active';
+  const isActive = status === ContractStatus.ACTIVE;
   const statusText = isActive ? 'Активний' : 'Неактивний';
   const StatusIcon = isActive ? CircleCheck : CircleOff;
 
@@ -49,7 +45,7 @@ export const RenterHeader = () => {
         ? `Проживає з ${formatDate(occupied)} до тепер`
         : `Проживав з ${formatDate(occupied)} по ${formatDate(vacated)}`,
     },
-    { Icon: Hourglass, text: `Загалом ${duration}` },
+    { Icon: Hourglass, text: `Загалом ${contractDuration(occupied, vacated)}` },
     { Icon: CircleDollarSign, text: `Прибуток ${totalIncome} грн.` },
   ];
 

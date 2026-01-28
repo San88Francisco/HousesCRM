@@ -20,8 +20,8 @@ export type OccupancyBase = {
   id: string;
   firstName: string;
   lastName: string;
-  occupied: string;
-  vacated: string;
+  occupied: string | null;
+  vacated: string | null;
   totalIncome: number;
   status: ContractStatus;
 };
@@ -47,6 +47,7 @@ export type CurrencyRevaluationResponse = CurrencyRevaluation[];
 
 export type HousesResponse = {
   data: HousesDataResponse[];
+  meta: Metadata;
 };
 
 export type HousesDataResponse = {
@@ -59,12 +60,11 @@ export type HousesDataResponse = {
   floor: number;
   street: string;
   apartmentType: string;
-  meta: Metadata;
 };
 
 export type Prices = {
   id: string;
-  amount: string;
+  amount: number;
   code: string;
   exchangeRate: number;
 };

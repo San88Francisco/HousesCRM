@@ -7,7 +7,7 @@ type TriggerArgs = {
 };
 
 export const useRentersContracts = (renterId: string) => {
-  const [currentPage, setCurrentPage] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit, setLimit] = useState(10);
 
   const { query, data, meta } = useRenterContractsQuery({
@@ -24,7 +24,7 @@ export const useRentersContracts = (renterId: string) => {
     if (!renterId) return;
 
     setLimit(pageSize);
-    setCurrentPage(pageIndex > 0 ? pageIndex + 1 : null);
+    setCurrentPage(pageIndex + 1);
   };
 
   const isEmpty = data.length === 0 && !query.isFetching && !query.isError;

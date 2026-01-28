@@ -1,5 +1,5 @@
 import { RenterFormData } from '@/shared/validation/create-update-renter/renter-schema';
-import { Contract } from '@/types/core/contract';
+import { ContractWithRevenue } from '@/types/core/contract';
 import { HousesPerformanceResponse } from '@/types/core/houses-performance';
 import { Metadata } from '@/types/core/metadata';
 import { Renter } from '@/types/core/renter';
@@ -15,7 +15,7 @@ export type AllContractsByRenterIdResponse = {
 };
 
 export type RentersIdContractsResponse = {
-  data: Contract[];
+  data: ContractWithRevenue[];
   meta: Metadata;
 };
 

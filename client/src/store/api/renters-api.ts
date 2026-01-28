@@ -21,7 +21,8 @@ export const rentersApi = rootApi.injectEndpoints({
           order,
         },
       }),
-      serializeQueryArgs: ({ endpointName, queryArgs }) => `${endpointName}-${queryArgs.renterId}`,
+      serializeQueryArgs: ({ endpointName, queryArgs }) =>
+        `${endpointName}-${queryArgs.renterId}-${queryArgs.limit ?? 'default'}-${queryArgs.sortBy ?? 'default'}-${queryArgs.order ?? 'default'}`,
 
       merge: (currentCache, newData, { arg }) => {
         if (arg.page === 1) {
@@ -34,7 +35,12 @@ export const rentersApi = rootApi.injectEndpoints({
       },
 
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg?.page !== previousArg?.page;
+        return (
+          currentArg?.page !== previousArg?.page ||
+          currentArg?.limit !== previousArg?.limit ||
+          currentArg?.sortBy !== previousArg?.sortBy ||
+          currentArg?.order !== previousArg?.order
+        );
       },
 
       providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],

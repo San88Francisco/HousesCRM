@@ -1,34 +1,18 @@
-import {
-  useGetAllContractsByRenterIdPaginatedQuery,
-  useGetAllContractsByRenterIdQuery,
-} from '@/store/api/renters-api';
+import { useGetAllContractsByRenterIdPaginatedQuery } from '@/store/api/renters-api';
 
 type Props = {
   renterId: string;
-  page: number | null;
+  page: number;
   limit: number;
 };
 
 export const useRenterContractsQuery = ({ renterId, page, limit }: Props) => {
-  const isInitial = page === null;
-
-  const initial = useGetAllContractsByRenterIdQuery(
-    { renterId, limit },
-    { skip: !renterId || !isInitial },
-  );
+  const normalizedPage = Math.max(page, 1);
 
   const paginated = useGetAllContractsByRenterIdPaginatedQuery(
-    { renterId, page: page ?? 1, limit },
-    { skip: !renterId || isInitial },
+    { renterId, page: normalizedPage, limit },
+    { skip: !renterId },
   );
-
-  if (isInitial) {
-    return {
-      query: initial,
-      data: initial.data?.allContractsByRenterId?.data ?? [],
-      meta: initial.data?.allContractsByRenterId?.meta,
-    };
-  }
 
   return {
     query: paginated,

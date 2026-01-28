@@ -5,13 +5,14 @@ import { rentersOccupancyTableGrid } from '@/shared/constants/styles/renters-occ
 import { ROUTES } from '@/shared/routes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
+import { OccupancyWithVacancy } from '@/shared/utils/house/break-between-contracts';
 import { createRowKeyDown } from '@/shared/utils/table/row-key-down-handler';
 import { HouseOccupancyItem } from '@/types/model/houses-occupancy';
 import { Table as TableType, flexRender } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 
 type Props = {
-  table: TableType<HouseOccupancyItem>;
+  table: TableType<OccupancyWithVacancy<HouseOccupancyItem>>;
   limit: number;
   onLimitChange: (limit: number) => void;
 };
@@ -39,7 +40,7 @@ export const HouseOccupancyTable = ({ table, limit, onLimitChange }: Props) => {
 
           <TableBody>
             {table.getRowModel().rows.map(row => {
-              const isVacancy = row.original.id.startsWith('vacancy-');
+              const isVacancy = row.original.isVacancy === true;
 
               return (
                 <TableRow

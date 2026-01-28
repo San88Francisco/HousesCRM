@@ -32,7 +32,7 @@ export const RenterReportCard = () => {
   };
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns: AllRentersContractsTableColumns,
 
     manualPagination: true,
@@ -49,12 +49,25 @@ export const RenterReportCard = () => {
       const next =
         typeof updater === 'function' ? updater({ pageIndex, pageSize: limit }) : updater;
 
-      setPageIndex(next.pageIndex);
+      if (next.pageSize !== limit) {
+        const firstItemIndex = pageIndex * limit;
+        const newPageIndex = Math.floor(firstItemIndex / next.pageSize);
 
-      trigger({
-        pageIndex: next.pageIndex,
-        pageSize: limit,
-      });
+        setPageIndex(newPageIndex);
+        setLimit(next.pageSize);
+
+        trigger({
+          pageIndex: newPageIndex,
+          pageSize: next.pageSize,
+        });
+      } else {
+        setPageIndex(next.pageIndex);
+
+        trigger({
+          pageIndex: next.pageIndex,
+          pageSize: limit,
+        });
+      }
     },
 
     getCoreRowModel: getCoreRowModel(),
