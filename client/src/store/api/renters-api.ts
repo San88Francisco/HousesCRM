@@ -2,15 +2,15 @@ import { rootApi } from '@/shared/api';
 import { RentersOccupancyRequest, RentersOccupancyResponse } from '@/types/core/renters-occupancy';
 import {
   AllContractsByRenterIdResponse,
+  RenterContractsPaginatedRequest,
   RentersIdContractsResponse,
-  RentersPaginatedRequest,
 } from '@/types/services/renters';
 
 export const rentersApi = rootApi.injectEndpoints({
   endpoints: build => ({
     getAllContractsByRenterIdMerge: build.query<
       AllContractsByRenterIdResponse,
-      RentersPaginatedRequest
+      RenterContractsPaginatedRequest
     >({
       query: ({ renterId, sortBy, order, page, limit }) => ({
         url: `/renters/${renterId}`,
@@ -72,7 +72,7 @@ export const rentersApi = rootApi.injectEndpoints({
     }),
     getAllContractsByRenterIdPaginated: build.query<
       RentersIdContractsResponse,
-      RentersPaginatedRequest
+      RenterContractsPaginatedRequest
     >({
       query: ({ renterId, page, limit }) => ({
         url: `/renters/${renterId}/contracts`,

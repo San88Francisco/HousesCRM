@@ -19,7 +19,7 @@ export type RentersIdContractsResponse = {
   meta: Metadata;
 };
 
-export type RentersPaginatedRequest = {
+export type RenterContractsPaginatedRequest = {
   renterId: string;
   sortBy?: string;
   order?: string;
