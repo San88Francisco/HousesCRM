@@ -1,5 +1,5 @@
 import { RenterFormData } from '@/shared/validation/create-update-renter/renter-schema';
-import { Contract } from '@/types/core/contract';
+import { ContractWithRevenue } from '@/types/core/contract';
 import { HousesPerformanceResponse } from '@/types/core/houses-performance';
 import { Metadata } from '@/types/core/metadata';
 import { Renter } from '@/types/core/renter';
@@ -11,13 +11,15 @@ export type RenterByIdResponse = {
 
 export type AllContractsByRenterIdResponse = {
   oneRenterReport: Renter;
-  allContractsByRenterId: {
-    data: Contract[];
-    meta: Metadata;
-  };
+  allContractsByRenterId: RentersIdContractsResponse;
 };
 
-export type RentersPaginatedRequest = {
+export type RentersIdContractsResponse = {
+  data: ContractWithRevenue[];
+  meta: Metadata;
+};
+
+export type RenterContractsPaginatedRequest = {
   renterId: string;
   sortBy?: string;
   order?: string;

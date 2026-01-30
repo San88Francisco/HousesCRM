@@ -1,4 +1,3 @@
-/* eslint-disable */
 'use client';
 import { useHouseRental } from '@/hooks/all-house/houses-overview/use-house-rental';
 

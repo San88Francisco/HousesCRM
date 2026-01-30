@@ -44,7 +44,15 @@ export const RentersOccupancy = () => {
       const next =
         typeof updater === 'function' ? updater({ pageIndex, pageSize: limit }) : updater;
 
-      setPageIndex(next.pageIndex);
+      if (next.pageSize !== limit) {
+        const firstItemIndex = pageIndex * limit;
+        const newPageIndex = Math.floor(firstItemIndex / next.pageSize);
+
+        setPageIndex(newPageIndex);
+        setLimit(next.pageSize);
+      } else {
+        setPageIndex(next.pageIndex);
+      }
     },
 
     getCoreRowModel: getCoreRowModel(),

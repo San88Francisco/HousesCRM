@@ -1,6 +1,7 @@
 import { HouseFormData } from '@/shared/validation/create-update-house/house-schema';
 import { House } from '@/types/core/house';
 import { Renter } from '@/types/core/renter';
+import { ContractStatus } from '@/types/core/status/status';
 import { CurrencyRevaluation } from '../../core/currency-revaluation-chart';
 import { Metadata } from '../../core/metadata';
 import { HouseOccupancyItem } from '../../model/houses-occupancy';
@@ -13,6 +14,16 @@ export type HouseByIdResponse = {
 export type OccupancyReports = {
   data: Renter[];
   meta: Metadata;
+};
+
+export type OccupancyBase = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  occupied: string | null;
+  vacated: string | null;
+  totalIncome: number;
+  status: ContractStatus;
 };
 
 export type CreateHouseResponse = House;
@@ -33,3 +44,8 @@ export type OccupancyHousesRequest = {
 };
 
 export type CurrencyRevaluationResponse = CurrencyRevaluation[];
+
+export type HousesResponse = {
+  data: House[];
+  meta: Metadata;
+};

@@ -1,42 +1,62 @@
 import { rootApi } from '@/shared/api';
 import { RentersOccupancyRequest, RentersOccupancyResponse } from '@/types/core/renters-occupancy';
-import { AllContractsByRenterIdResponse, RentersPaginatedRequest } from '@/types/services/renters';
+import {
+  AllContractsByRenterIdResponse,
+  RenterContractsPaginatedRequest,
+  RentersIdContractsResponse,
+} from '@/types/services/renters';
 
 export const rentersApi = rootApi.injectEndpoints({
   endpoints: build => ({
-    getAllContractsByRenterId: build.query<AllContractsByRenterIdResponse, RentersPaginatedRequest>(
-      {
-        query: ({ renterId, sortBy, order, page, limit }) => ({
-          url: `/renters/${renterId}`,
-          params: {
-            page,
-            limit,
-            sortBy,
-            order,
-          },
-        }),
-
-        serializeQueryArgs: ({ endpointName, queryArgs }) => {
-          return `${endpointName}-${queryArgs.renterId}`;
+    getAllContractsByRenterIdMerge: build.query<
+      AllContractsByRenterIdResponse,
+      RenterContractsPaginatedRequest
+    >({
+      query: ({ renterId, sortBy, order, page, limit }) => ({
+        url: `/renters/${renterId}`,
+        params: {
+          page,
+          limit,
+          sortBy,
+          order,
         },
+      }),
+      serializeQueryArgs: ({ endpointName, queryArgs }) =>
+        `${endpointName}-${queryArgs.renterId}-${queryArgs.limit ?? 'default'}-${queryArgs.sortBy ?? 'default'}-${queryArgs.order ?? 'default'}`,
 
-        merge: (currentCache, newData, { arg }) => {
-          if (arg.page === 1) {
-            return newData;
-          }
+      merge: (currentCache, newData, { arg }) => {
+        if (arg.page === 1) {
+          return newData;
+        }
 
-          currentCache.allContractsByRenterId.data.push(...newData.allContractsByRenterId.data);
-          currentCache.allContractsByRenterId.meta = newData.allContractsByRenterId.meta;
-          currentCache.oneRenterReport = newData.oneRenterReport;
-        },
-
-        forceRefetch({ currentArg, previousArg }) {
-          return currentArg?.page !== previousArg?.page;
-        },
-
-        providesTags: (_result, _error, { renterId }) => [{ type: 'Renters', id: renterId }],
+        currentCache.allContractsByRenterId.data.push(...newData.allContractsByRenterId.data);
+        currentCache.allContractsByRenterId.meta = newData.allContractsByRenterId.meta;
+        currentCache.oneRenterReport = newData.oneRenterReport;
       },
-    ),
+
+      forceRefetch({ currentArg, previousArg }) {
+        return (
+          currentArg?.page !== previousArg?.page ||
+          currentArg?.limit !== previousArg?.limit ||
+          currentArg?.sortBy !== previousArg?.sortBy ||
+          currentArg?.order !== previousArg?.order
+        );
+      },
+
+      providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
+    }),
+
+    getAllContractsByRenterId: build.query<
+      AllContractsByRenterIdResponse,
+      { renterId: string; limit?: number }
+    >({
+      query: ({ renterId, limit }) => ({
+        url: `/renters/${renterId}`,
+        params: { limit },
+      }),
+
+      providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
+    }),
     getRenters: build.query<RentersOccupancyResponse, RentersOccupancyRequest>({
       query: ({ page, limit, sortBy, order }) => ({
         url: '/renters',
@@ -50,8 +70,27 @@ export const rentersApi = rootApi.injectEndpoints({
       }),
       providesTags: ['Renters'],
     }),
+    getAllContractsByRenterIdPaginated: build.query<
+      RentersIdContractsResponse,
+      RenterContractsPaginatedRequest
+    >({
+      query: ({ renterId, page, limit }) => ({
+        url: `/renters/${renterId}/contracts`,
+        params: {
+          page,
+          limit,
+        },
+      }),
+
+      providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllContractsByRenterIdQuery, useGetRentersQuery } = rentersApi;
+export const {
+  useGetAllContractsByRenterIdMergeQuery,
+  useGetAllContractsByRenterIdQuery,
+  useGetAllContractsByRenterIdPaginatedQuery,
+  useGetRentersQuery,
+} = rentersApi;

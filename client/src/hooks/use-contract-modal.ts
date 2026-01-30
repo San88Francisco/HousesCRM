@@ -1,5 +1,6 @@
 import { INTERSECTION_ROOT_MARGIN, PAGE_LIMIT } from '@/shared/constants/renter';
-import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
+import { useGetAllContractsByRenterIdMergeQuery } from '@/store/api/renters-api';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const useContractsModal = (
@@ -11,7 +12,7 @@ export const useContractsModal = (
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const { data, isFetching } = useGetAllContractsByRenterIdQuery(
+  const { data, isFetching } = useGetAllContractsByRenterIdMergeQuery(
     {
       renterId: renterId,
       page,

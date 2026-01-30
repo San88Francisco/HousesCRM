@@ -9,6 +9,11 @@ export interface Contract {
   monthlyPayment: number;
   status: ContractStatus;
 }
+
+export interface ContractWithRevenue extends Contract {
+  totalRevenue: number;
+}
+
 export interface ContractCreateUpdate extends Contract {
   houseId?: string;
   renterId?: string;

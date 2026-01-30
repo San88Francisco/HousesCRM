@@ -6,13 +6,14 @@ import { useHouseOccupancy } from '@/hooks/house/house-occupancy/use-house-occup
 import { HouseOccupancyTableColumns } from '@/shared/constants/house/house-occupancy';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { breakBetweenContracts } from '@/shared/utils/house/break-between-contracts';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { HouseOccupancyTableSkeleton } from '../skeletons/house-occupancy-table-skeleton';
 import { HouseOccupancyTable } from './HouseOccupancyTable';
 
-export const HouseOccupancy = () => {
+export const HouseOccupancyCard = () => {
   const { id } = useParams<{ id: string }>();
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_START_PAGE);
@@ -30,8 +31,10 @@ export const HouseOccupancy = () => {
     });
   };
 
+  const dataWithBreaks = breakBetweenContracts(data);
+
   const table = useReactTable({
-    data,
+    data: dataWithBreaks,
     columns: HouseOccupancyTableColumns,
 
     manualPagination: true,
@@ -48,12 +51,25 @@ export const HouseOccupancy = () => {
       const next =
         typeof updater === 'function' ? updater({ pageIndex, pageSize: limit }) : updater;
 
-      setPageIndex(next.pageIndex);
+      if (next.pageSize !== limit) {
+        const firstItemIndex = pageIndex * limit;
+        const newPageIndex = Math.floor(firstItemIndex / next.pageSize);
 
-      trigger({
-        pageIndex: next.pageIndex,
-        pageSize: limit,
-      });
+        setPageIndex(newPageIndex);
+        setLimit(next.pageSize);
+
+        trigger({
+          pageIndex: newPageIndex,
+          pageSize: next.pageSize,
+        });
+      } else {
+        setPageIndex(next.pageIndex);
+
+        trigger({
+          pageIndex: next.pageIndex,
+          pageSize: limit,
+        });
+      }
     },
 
     getCoreRowModel: getCoreRowModel(),

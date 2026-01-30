@@ -15,6 +15,7 @@ import {
   CreateHouseRequest,
   CreateHouseResponse,
   HouseByIdResponse,
+  HousesResponse,
   OccupancyHousesPaginatedResponse,
   OccupancyHousesRequest,
   UpdateHouseRequest,
@@ -31,6 +32,10 @@ import {
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
   endpoints: build => ({
+    getHouses: build.query<HousesResponse, void>({
+      query: () => '/houses',
+      providesTags: ['Analytics'],
+    }),
     getHousesAnalytics: build.query<AllAnalyticsResponse, void>({
       query: () => '/houses-analytics/all-analytics',
       providesTags: ['Analytics'],
@@ -139,6 +144,7 @@ export const housesApi = rootApi.injectEndpoints({
 });
 
 export const {
+  useGetHousesQuery,
   useGetHousesAnalyticsQuery,
   useLazyGetHousesAnalyticsQuery,
   useGetHouseByIdQuery,

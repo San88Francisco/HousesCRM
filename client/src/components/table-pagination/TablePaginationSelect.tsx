@@ -20,7 +20,7 @@ export const TablePaginationSelect: FC<Props> = ({ limit, onLimitChange }) => {
       value={`${limit}`}
       onValueChange={selectedLimit => onLimitChange(Number(selectedLimit))}
     >
-      <SelectTrigger className="w-auto border-[1px] border-solid rounded-[8px] max-h-[38px] flex gap-1">
+      <SelectTrigger className="w-auto border-[1px] border-solid rounded-[8px] max-h-[40px] flex gap-1">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

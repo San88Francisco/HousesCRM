@@ -1,37 +1,42 @@
 'use client';
+
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { useHousesPerformance } from '@/hooks/all-house/houses-performance-analytic/use-houses-performance';
 
-import { HousesPerformanceTableColumns } from '@/shared/constants/apartment/houses-performance-analytic';
+import { useRentersContracts } from '@/hooks/renters/use-renters-contracts';
+import { AllRentersContractsTableColumns } from '@/shared/constants/current-renter';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import { HousesPerformanceTable } from './HousesPerformanceTable';
+import { TableRenter } from './TableRenter';
 
-export const HousesPerformanceAnalytic = () => {
-  const [pageIndex, setPageIndex] = useState<number>(DEFAULT_START_PAGE);
-  const [limit, setLimit] = useState<number>(DEFAULT_PAGE_SIZE);
+export const RenterReportCard = () => {
+  const { id } = useParams<{ id: string }>();
 
-  const { data, trigger, pageCount, isLoading, isError, error, isEmpty } = useHousesPerformance();
+  const [pageIndex, setPageIndex] = useState(DEFAULT_START_PAGE);
+  const [limit, setLimit] = useState(DEFAULT_PAGE_SIZE);
 
-  const onLimitChange = (limit: number) => {
+  const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useRentersContracts(id);
+
+  const onLimitChange = (nextLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);
-    setLimit(limit);
+    setLimit(nextLimit);
+
     trigger({
       pageIndex: DEFAULT_START_PAGE,
-      pageSize: limit,
+      pageSize: nextLimit,
     });
   };
 
   const table = useReactTable({
     data: data ?? [],
-    columns: HousesPerformanceTableColumns,
+    columns: AllRentersContractsTableColumns,
 
     manualPagination: true,
-    pageCount: pageCount ?? 1,
+    pageCount,
 
     state: {
       pagination: {
@@ -68,7 +73,7 @@ export const HousesPerformanceAnalytic = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <HousesPerformanceTableSkeleton rows={limit} />;
+  if (isLoading) return <HousesPerformanceTableSkeleton />;
 
   if (isError) return <ErrorState className="w-full" error={error} />;
 
@@ -77,14 +82,11 @@ export const HousesPerformanceAnalytic = () => {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <div className="flex flex-col gap-3">
-          <CardTitle>Огляд квартир</CardTitle>
-          <CardDescription>Зведений огляд результатів роботи кожної квартири</CardDescription>
-        </div>
+        <CardTitle>Історія договорів орендаря</CardTitle>
       </CardHeader>
 
       <CardContent>
-        <HousesPerformanceTable table={table} limit={limit} onLimitChange={onLimitChange} />
+        <TableRenter table={table} limit={limit} onLimitChange={onLimitChange} />
       </CardContent>
     </Card>
   );
