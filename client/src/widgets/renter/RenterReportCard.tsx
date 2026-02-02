@@ -7,6 +7,7 @@ import { useRentersContracts } from '@/hooks/renters/use-renters-contracts';
 import { AllRentersContractsTableColumns } from '@/shared/constants/current-renter';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { isErrors } from '@/shared/utils/error/is-404-error';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
@@ -73,7 +74,9 @@ export const RenterReportCard = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <HousesPerformanceTableSkeleton />;
+  const isEntityDeleted = isErrors(error);
+
+  if (isLoading || isEntityDeleted) return <HousesPerformanceTableSkeleton />;
 
   if (isError) return <ErrorState className="w-full" error={error} />;
 

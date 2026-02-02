@@ -140,6 +140,14 @@ export const housesApi = rootApi.injectEndpoints({
       query: id => `/contracts/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Contracts', id }],
     }),
+
+    deleteHouse: build.mutation<void, string>({
+      query: id => ({
+        url: `/houses/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Analytics', 'Houses', 'Contracts'],
+    }),
   }),
 });
 
@@ -161,4 +169,5 @@ export const {
   useCreateContractMutation,
   useUpdateContractMutation,
   useGetContractByIdQuery,
+  useDeleteHouseMutation,
 } = housesApi;

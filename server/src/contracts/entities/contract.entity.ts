@@ -1,7 +1,7 @@
 import { House } from 'src/houses/entities/house.entity'
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
-import type { Relation } from 'typeorm'
 import { Renter } from 'src/renters/entities/renter.entity'
+import type { Relation } from 'typeorm'
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 export enum ContractStatus {
   ACTIVE = 'active',
@@ -40,6 +40,6 @@ export class Contract {
   @Column({ name: 'renterId' })
   renterId: string
 
-  @ManyToOne(() => Renter, (renter) => renter.contracts)
+  @ManyToOne(() => Renter, (renter) => renter.contracts, { onDelete: 'CASCADE' })
   renter: Relation<Renter>
 }

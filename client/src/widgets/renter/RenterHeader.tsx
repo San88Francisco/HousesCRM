@@ -1,10 +1,13 @@
 'use client';
 
 import { ErrorState } from '@/components/chart-states/ErrorState';
+import { formatCurrencyOptions } from '@/shared/constants/currency/format-options';
 import { Badge } from '@/shared/ui/badge';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { isErrors } from '@/shared/utils/error/is-404-error';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
+import { formatCurrency } from '@/shared/utils/table/formatters';
 import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
 import { ContractStatus } from '@/types/core/status/status';
 import {
@@ -20,7 +23,7 @@ import { useParams } from 'next/navigation';
 export const RenterHeader = () => {
   const { id } = useParams<{ id: string }>();
 
-  const { data, isLoading, error } = useGetAllContractsByRenterIdQuery(
+  const { data, isLoading, isError, error } = useGetAllContractsByRenterIdQuery(
     {
       renterId: id,
     },
@@ -29,8 +32,10 @@ export const RenterHeader = () => {
     },
   );
 
-  if (isLoading) return <Skeleton className="h-32 w-full" />;
-  if (error || !data) return <ErrorState className="w-full" error={error} />;
+  const isEntityDeleted = isErrors(error);
+
+  if (isLoading || isEntityDeleted) return <Skeleton className="h-32 w-full" />;
+  if (isError || !data) return <ErrorState className="w-full" error={error} />;
   const { firstName, lastName, age, occupied, vacated, totalIncome, status } = data.oneRenterReport;
 
   const isActive = status === ContractStatus.ACTIVE;
@@ -47,7 +52,11 @@ export const RenterHeader = () => {
         : `Проживав з ${formatDate(occupied)} по ${formatDate(vacated)}`,
     },
     { key: 'duration', Icon: Hourglass, text: `Загалом ${contractDuration(occupied, vacated)}` },
-    { key: 'income', Icon: CircleDollarSign, text: `Прибуток ${totalIncome ?? 0} грн.` },
+    {
+      key: 'income',
+      Icon: CircleDollarSign,
+      text: `Прибуток ${formatCurrency(totalIncome ?? 0, formatCurrencyOptions)}`,
+    },
   ];
 
   return (
