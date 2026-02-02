@@ -13,12 +13,13 @@ export default function NotFound() {
           На жаль, сторінка яку ви шукаєте не існує або була видалена.
         </p>
       </div>
-      <Link href={ROUTES.ALL_HOUSES}>
-        <Button variant="default" className="gap-2">
-          <Home className="w-4 h-4" />
+
+      <Button variant="default" asChild>
+        <Link className="flex items-center gap-2" href={ROUTES.ALL_HOUSES}>
+          <Home className="w-4 h-4" aria-hidden="true" />
           На головну
-        </Button>
-      </Link>
+        </Link>
+      </Button>
     </div>
   );
 }
