@@ -1,6 +1,7 @@
 'use client';
 
 import { PROPERTY_TYPE_MAP } from '@/shared/constants/apartment/apartment-type-map';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { isErrors } from '@/shared/utils/error/is-404-error';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
@@ -16,7 +17,7 @@ export const HouseHeader = () => {
 
   const isEntityDeleted = isErrors(error);
 
-  if (isLoading || isEntityDeleted) return <div>Loading...</div>;
+  if (isLoading || isEntityDeleted) return <Skeleton className="h-32 w-full" />;
   if (error || !data) return <div>Щось пішло не так</div>;
 
   const { street, roomsCount, totalArea, floor, apartmentName, purchaseDate, apartmentType } =

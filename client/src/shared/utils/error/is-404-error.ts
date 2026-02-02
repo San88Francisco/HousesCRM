@@ -7,7 +7,7 @@ export const isErrors = (error: RTKQueryError): boolean => {
   if (!error) return false;
 
   if ('status' in error && typeof error.status === 'number') {
-    return error.status === 404 || error.status === 500;
+    return error.status === 404;
   }
 
   return false;

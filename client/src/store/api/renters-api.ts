@@ -50,9 +50,8 @@ export const rentersApi = rootApi.injectEndpoints({
       AllContractsByRenterIdResponse,
       { renterId: string; limit?: number }
     >({
-      query: ({ renterId, limit }) => ({
+      query: ({ renterId }) => ({
         url: `/renters/${renterId}`,
-        params: { limit },
       }),
 
       serializeQueryArgs: ({ queryArgs }) => queryArgs.renterId,

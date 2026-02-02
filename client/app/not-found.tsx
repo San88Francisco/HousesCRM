@@ -1,5 +1,3 @@
-'use client';
-
 import { ROUTES } from '@/shared/routes';
 import { Button } from '@/shared/ui/button';
 import { Home } from 'lucide-react';

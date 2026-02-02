@@ -20,6 +20,7 @@ export const useRentersContracts = (renterId: string) => {
   const [triggerRequest, paginatedQuery] = useLazyGetAllContractsByRenterIdPaginatedQuery();
 
   const activeQuery = usePagination ? paginatedQuery : initialQuery;
+  const isFetching = activeQuery.isFetching || activeQuery.isLoading;
 
   const data = useMemo(() => {
     if (usePagination) {
@@ -49,14 +50,14 @@ export const useRentersContracts = (renterId: string) => {
     });
   };
 
-  const isEmpty = data.length === 0 && !activeQuery.isFetching && !activeQuery.isError;
+  const isEmpty = data.length === 0 && !isFetching && !activeQuery.isError;
 
   return {
     data,
     pageCount,
     trigger,
 
-    isLoading: activeQuery.isLoading,
+    isLoading: isFetching,
     isError: activeQuery.isError,
     error: activeQuery.error,
 

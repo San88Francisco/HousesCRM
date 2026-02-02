@@ -26,6 +26,7 @@ export const useConfirmDelete = () => {
     [DeleteAction.CONTRACT]: () => ({
       unwrap: async () => {
         toast.warning('Видалення контракту ще не реалізовано');
+        throw new Error('Not implemented');
       },
     }),
   };
@@ -36,14 +37,14 @@ export const useConfirmDelete = () => {
     if (!deleteAction || !entityId) return;
 
     try {
+      const mutation = deleteMutations[deleteAction];
+      await mutation(entityId).unwrap();
+
+      dispatch(closeModal());
+      toast.success(config?.successMessage ?? 'Успішно видалено!');
       if (config && 'redirectUrl' in config) {
         router.replace(config.redirectUrl as string);
       }
-      dispatch(closeModal());
-
-      const mutation = deleteMutations[deleteAction];
-      await mutation(entityId).unwrap();
-      toast.success(config?.successMessage ?? 'Успішно видалено!');
     } catch (error) {
       toast.error('Помилка при видаленні', {
         description: error instanceof Error ? error.message : 'Невідома помилка',

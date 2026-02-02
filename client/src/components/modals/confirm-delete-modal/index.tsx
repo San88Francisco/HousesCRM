@@ -24,7 +24,7 @@ export const ConfirmDeleteModal = () => {
           Скасувати
         </Button>
         <Button variant="destructive" onClick={handleConfirm} disabled={isLoading}>
-          Видалити
+          {isLoading ? 'Видалення...' : 'Видалити'}
         </Button>
       </DialogFooter>
     </Modal>

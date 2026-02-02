@@ -40,6 +40,7 @@ export const PdfContractTrigger = ({ id, isHovered }: Props) => {
     <Button
       variant="icon"
       className="p-0 text-text rounded-md [&_svg]:size-6 w-[24px]"
+      aria-label="View contract PDF"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={openPdf}
