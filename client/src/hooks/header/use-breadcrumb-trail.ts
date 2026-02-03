@@ -1,7 +1,7 @@
 'use client';
 
 import { getLevelByPath } from '@/shared/utils/header/header-breadcrumb';
-import { resolveBreadcrumbLabel } from '@/shared/utils/header/header-resolve-breadcrumb-lable';
+import { resolveBreadcrumbLabel } from '@/shared/utils/header/header-resolve-breadcrumb-label';
 import { localStorageService } from '@/shared/utils/header/header-storage-service';
 import { useLazyGetHouseByIdQuery, useLazyGetRenterByIdQuery } from '@/store/api/houses-api';
 import { Crumb } from '@/types/core/header/header-breadcrumb';
