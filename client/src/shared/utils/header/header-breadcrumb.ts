@@ -1,13 +1,19 @@
 import { LEVELS } from '@/shared/constants/header/header-breadcrumb';
 import { ROUTES } from '@/shared/routes';
 
-export const getLevelByPath = (pathname: string) => {
+const ROUTE_ORDER = [
+  ROUTES.ALL_HOUSES,
+  ROUTES.ALL_RENTERS,
+  ROUTES.UIKIT,
+  ROUTES.HOUSE,
+  ROUTES.RENTER,
+  ROUTES.CONTRACT,
+] as const;
+
+export const getLevelByPath = (pathname: string): number => {
   if (!pathname) return 1;
-  if (pathname.startsWith(ROUTES.ALL_HOUSES)) return LEVELS[ROUTES.ALL_HOUSES];
-  if (pathname.startsWith(ROUTES.ALL_RENTERS)) return LEVELS[ROUTES.ALL_RENTERS];
-  if (pathname.startsWith(ROUTES.UIKIT)) return LEVELS[ROUTES.UIKIT];
-  if (pathname.startsWith(ROUTES.HOUSE)) return LEVELS[ROUTES.HOUSE];
-  if (pathname.startsWith(ROUTES.RENTER)) return LEVELS[ROUTES.RENTER];
-  if (pathname.startsWith(ROUTES.CONTRACT)) return LEVELS[ROUTES.CONTRACT];
+  for (const route of ROUTE_ORDER) {
+    if (pathname.startsWith(route)) return LEVELS[route];
+  }
   return 1;
 };
