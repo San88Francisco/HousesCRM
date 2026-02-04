@@ -9,7 +9,7 @@ import { ModalTriggers } from '@/types/model/modals';
 import { useParams } from 'next/navigation';
 import { MouseEvent } from 'react';
 
-const UpdateHouse = () => {
+export const UpdateHouse = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
@@ -38,5 +38,3 @@ const UpdateHouse = () => {
     </div>
   );
 };
-
-export default UpdateHouse;

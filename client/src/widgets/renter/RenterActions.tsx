@@ -1,5 +1,5 @@
-import DeleteRenter from './DeleteRenter';
-import UpdateRenter from './UpdateRenter';
+import { DeleteRenter } from './DeleteRenter';
+import { UpdateRenter } from './UpdateRenter';
 
 export const RenterActions = () => {
   return (

@@ -9,7 +9,7 @@ import { ModalTriggers } from '@/types/model/modals';
 import { useParams } from 'next/navigation';
 import { MouseEvent } from 'react';
 
-const UpdateRenter = () => {
+export const UpdateRenter = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
@@ -38,5 +38,3 @@ const UpdateRenter = () => {
     </div>
   );
 };
-
-export default UpdateRenter;

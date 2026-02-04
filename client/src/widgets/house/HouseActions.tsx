@@ -1,5 +1,5 @@
-import DeleteHouse from './DeleteHouse';
-import UpdateHouse from './UpdateHouse';
+import { DeleteHouse } from './DeleteHouse';
+import { UpdateHouse } from './UpdateHouse';
 
 export const HouseActions = () => {
   return (

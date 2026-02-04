@@ -1,5 +1,5 @@
 'use client';
-import UpdateHouse from '@/widgets/house/UpdateHouse';
+import { UpdateHouse } from '@/widgets/house/UpdateHouse';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 import { ButtonComponent } from '@/widgets/uikit/button-component';
 import { CalendarComponent } from '@/widgets/uikit/calendar-component';
