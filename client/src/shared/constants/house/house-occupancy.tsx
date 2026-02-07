@@ -73,7 +73,7 @@ export const HouseOccupancyTableColumns: ColumnDef<OccupancyWithVacancy<HouseOcc
       const { occupied, vacated } = ctx.row.original;
 
       if (isVacancy) {
-        return <span className="text-red">—</span>;
+        return <span className="text-red">{contractDuration(occupied || '', vacated || '')}</span>;
       }
 
       if (occupied) {

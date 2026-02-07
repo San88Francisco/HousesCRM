@@ -1,4 +1,4 @@
-import { ConfirmDeleteModal } from './confirm-delete-modal/ConfirmDeleteModal';
+import { ConfirmDeleteModal } from './confirm-delete-modal';
 import { ContractCreateUpdateModal } from './contract-create-update-modal';
 import { ContractModal } from './contract-modal';
 import { HouseCreateUpdateModal } from './house-create-update-modal';

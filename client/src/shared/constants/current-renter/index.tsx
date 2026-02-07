@@ -1,11 +1,19 @@
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
+import { formatCurrency } from '@/shared/utils/table/formatters';
 import { ContractWithRevenue } from '@/types/core/contract';
 import { ContractStatus } from '@/types/core/status/status';
+import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 import { ColumnDef } from '@tanstack/react-table';
+import { formatCurrencyOptions } from '../currency/format-options';
 
 export const AllRentersContractsTableColumns: ColumnDef<ContractWithRevenue>[] = [
+  {
+    accessorKey: 'id',
+    header: 'Договір',
+    cell: ctx => <PdfContractTrigger id={ctx.getValue<string>()} />,
+  },
   {
     accessorKey: 'commencement',
     header: 'Початок',
@@ -23,13 +31,15 @@ export const AllRentersContractsTableColumns: ColumnDef<ContractWithRevenue>[] =
   {
     accessorKey: 'monthlyPayment',
     header: 'Щомісячний платіж',
-    cell: ctx => `${ctx.getValue<number>().toLocaleString()} ₴`,
+    cell: ctx => formatCurrency(ctx.getValue<number>(), formatCurrencyOptions),
   },
   {
     accessorKey: 'totalRevenue',
     header: 'Загальний дохід',
     cell: ctx => (
-      <span className="font-medium">{`${ctx.getValue<number>().toLocaleString()} ₴`}</span>
+      <span className="font-medium">
+        {formatCurrency(ctx.getValue<number>(), formatCurrencyOptions)}
+      </span>
     ),
   },
   {

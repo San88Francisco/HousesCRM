@@ -24,7 +24,6 @@ import {
 import {
   CreateRenterRequest,
   CreateRenterResponse,
-  RenterByIdResponse,
   UpdateRenterRequest,
   UpdateRenterResponse,
 } from '@/types/services/renters';
@@ -75,11 +74,6 @@ export const housesApi = rootApi.injectEndpoints({
         body,
       }),
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Analytics'],
-    }),
-
-    getRenterById: build.query<RenterByIdResponse, string>({
-      query: id => `/renters/${id}`,
-      providesTags: (_result, _error, id) => [{ type: 'Renters', id }],
     }),
 
     createRenter: build.mutation<CreateRenterResponse, CreateRenterRequest>({
@@ -140,6 +134,14 @@ export const housesApi = rootApi.injectEndpoints({
       query: id => `/contracts/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Contracts', id }],
     }),
+
+    deleteHouse: build.mutation<void, string>({
+      query: id => ({
+        url: `/houses/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Analytics', 'Houses', 'Contracts', 'Renters'],
+    }),
   }),
 });
 
@@ -153,7 +155,6 @@ export const {
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,
-  useGetRenterByIdQuery,
   useCreateRenterMutation,
   useUpdateRenterMutation,
   useGetHousesPerformanceQuery,
@@ -161,4 +162,5 @@ export const {
   useCreateContractMutation,
   useUpdateContractMutation,
   useGetContractByIdQuery,
+  useDeleteHouseMutation,
 } = housesApi;

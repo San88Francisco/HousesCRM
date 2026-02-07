@@ -1,5 +1,8 @@
+import {
+  useGetAllContractsByRenterIdQuery,
+  useLazyGetAllContractsByRenterIdPaginatedQuery,
+} from '@/store/api/renters-api';
 import { useMemo, useState } from 'react';
-import { useRenterContractsQuery } from './use-renter-contracts-query';
 
 type TriggerArgs = {
   pageIndex: number;
@@ -7,36 +10,56 @@ type TriggerArgs = {
 };
 
 export const useRentersContracts = (renterId: string) => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [limit, setLimit] = useState(10);
+  const [usePagination, setUsePagination] = useState(false);
 
-  const { query, data, meta } = useRenterContractsQuery({
-    renterId,
-    page: currentPage,
-    limit,
-  });
+  const initialQuery = useGetAllContractsByRenterIdQuery(
+    { renterId },
+    { skip: !renterId || usePagination },
+  );
+
+  const [triggerRequest, paginatedQuery] = useLazyGetAllContractsByRenterIdPaginatedQuery();
+
+  const activeQuery = usePagination ? paginatedQuery : initialQuery;
+  const isFetching = activeQuery.isFetching || activeQuery.isLoading;
+
+  const data = useMemo(() => {
+    if (usePagination) {
+      return paginatedQuery.data?.data ?? [];
+    }
+
+    return initialQuery.data?.allContractsByRenterId?.data ?? [];
+  }, [usePagination, paginatedQuery.data, initialQuery.data]);
 
   const pageCount = useMemo(() => {
-    return meta?.totalPages ?? 1;
-  }, [meta]);
+    if (usePagination) {
+      return paginatedQuery.data?.meta?.totalPages ?? 1;
+    }
+
+    return initialQuery.data?.allContractsByRenterId?.meta?.totalPages ?? 1;
+  }, [usePagination, paginatedQuery.data, initialQuery.data]);
 
   const trigger = ({ pageIndex, pageSize }: TriggerArgs) => {
     if (!renterId) return;
 
-    setLimit(pageSize);
-    setCurrentPage(Math.max(1, pageIndex + 1));
+    setUsePagination(true);
+
+    triggerRequest({
+      renterId,
+      page: pageIndex + 1,
+      limit: pageSize,
+    });
   };
 
-  const isEmpty = data.length === 0 && !query.isFetching && !query.isError;
+  const isEmpty = data.length === 0 && !isFetching && !activeQuery.isError;
 
   return {
     data,
     pageCount,
     trigger,
 
-    isLoading: query.isLoading,
-    isError: query.isError,
-    error: query.error,
+    isLoading: isFetching,
+    isError: activeQuery.isError,
+    error: activeQuery.error,
 
     isEmpty,
   };

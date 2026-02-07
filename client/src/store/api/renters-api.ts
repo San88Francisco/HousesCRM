@@ -50,10 +50,11 @@ export const rentersApi = rootApi.injectEndpoints({
       AllContractsByRenterIdResponse,
       { renterId: string; limit?: number }
     >({
-      query: ({ renterId, limit }) => ({
+      query: ({ renterId }) => ({
         url: `/renters/${renterId}`,
-        params: { limit },
       }),
+
+      serializeQueryArgs: ({ queryArgs }) => queryArgs.renterId,
 
       providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
     }),
@@ -84,6 +85,14 @@ export const rentersApi = rootApi.injectEndpoints({
 
       providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
     }),
+
+    deleteRenter: build.mutation<void, string>({
+      query: id => ({
+        url: `/renters/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Analytics', 'Houses', 'Renters'],
+    }),
   }),
   overrideExisting: false,
 });
@@ -92,5 +101,7 @@ export const {
   useGetAllContractsByRenterIdMergeQuery,
   useGetAllContractsByRenterIdQuery,
   useGetAllContractsByRenterIdPaginatedQuery,
+  useLazyGetAllContractsByRenterIdPaginatedQuery,
   useGetRentersQuery,
+  useDeleteRenterMutation,
 } = rentersApi;

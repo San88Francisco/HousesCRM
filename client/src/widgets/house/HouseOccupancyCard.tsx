@@ -6,6 +6,7 @@ import { useHouseOccupancy } from '@/hooks/house/house-occupancy/use-house-occup
 import { HouseOccupancyTableColumns } from '@/shared/constants/house/house-occupancy';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+
 import { breakBetweenContracts } from '@/shared/utils/house/break-between-contracts';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';

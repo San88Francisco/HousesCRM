@@ -1,4 +1,5 @@
 'use client';
+import { UpdateHouse } from '@/widgets/house/UpdateHouse';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 import { ButtonComponent } from '@/widgets/uikit/button-component';
 import { CalendarComponent } from '@/widgets/uikit/calendar-component';
@@ -13,8 +14,6 @@ import TabsComponent from '@/widgets/uikit/tabs-component';
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastComponent } from '@/widgets/uikit/toast-component';
 import UpdateContract from '@/widgets/uikit/update-contract';
-import UpdateHouse from '@/widgets/uikit/update-house';
-import UpdateRenter from '@/widgets/uikit/update-renter';
 
 export default function Page() {
   return (
@@ -33,7 +32,6 @@ export default function Page() {
       <PdfContractTrigger id="e9d638de-1872-4ac0-acc5-c4f767e9fa66" />
       <ModalTrigger />
       <UpdateHouse />
-      <UpdateRenter />
       <UpdateContract />
     </div>
   );
