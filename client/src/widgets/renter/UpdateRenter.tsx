@@ -35,7 +35,7 @@ export const UpdateRenter = () => {
 
   if (error)
     return (
-      <Button variant="outline" className="text-red" disabled={!id || !data?.oneRenterReport}>
+      <Button variant="outline" className="text-red" disabled>
         Помилка при завантаженні орендаря
       </Button>
     );
