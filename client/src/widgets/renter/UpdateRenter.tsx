@@ -9,15 +9,12 @@ import { openModal } from '@/store/slice/modal-slice';
 import { Renter } from '@/types/core/renter';
 import { ModalTriggers } from '@/types/model/modals';
 import { useParams } from 'next/navigation';
-import { MouseEvent } from 'react';
 
 export const UpdateRenter = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
-  const handleEdit = (e: MouseEvent<HTMLButtonElement>, renter?: Renter) => {
-    e.currentTarget.blur();
-
+  const handleEdit = (renter?: Renter) => {
     dispatch(
       openModal({
         trigger: ModalTriggers.EDIT_RENTER,
@@ -43,7 +40,7 @@ export const UpdateRenter = () => {
   return (
     <Button
       variant="outline"
-      onClick={e => handleEdit(e, data?.oneRenterReport)}
+      onClick={() => handleEdit(data?.oneRenterReport)}
       disabled={!data?.oneRenterReport}
     >
       Відредагувати орендаря

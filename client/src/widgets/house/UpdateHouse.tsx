@@ -8,16 +8,13 @@ import { openModal } from '@/store/slice/modal-slice';
 import { House } from '@/types/core/house';
 import { ModalTriggers } from '@/types/model/modals';
 import { useParams } from 'next/navigation';
-import { MouseEvent } from 'react';
 
 export const UpdateHouse = () => {
   const params = useParams<{ id: string }>();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const dispatch = useAppDispatch();
 
-  const handleEdit = (e: MouseEvent<HTMLButtonElement>, house?: House) => {
-    e.currentTarget.blur();
-
+  const handleEdit = (house?: House) => {
     dispatch(
       openModal({
         trigger: ModalTriggers.EDIT_HOUSE,
@@ -40,7 +37,7 @@ export const UpdateHouse = () => {
   return (
     <Button
       variant="outline"
-      onClick={e => handleEdit(e, data?.houseDetail)}
+      onClick={() => handleEdit(data?.houseDetail)}
       disabled={!data?.houseDetail}
     >
       Відредагувати квартиру
