@@ -12,6 +12,7 @@ export const DeleteRenter = () => {
   const dispatch = useAppDispatch();
 
   const handleDelete = () => {
+    if (!id) return;
     dispatch(
       openModal({
         trigger: ModalTriggers.CONFIRM_DELETE,

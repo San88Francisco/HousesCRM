@@ -6,7 +6,7 @@ import { useHouseOccupancy } from '@/hooks/house/house-occupancy/use-house-occup
 import { HouseOccupancyTableColumns } from '@/shared/constants/house/house-occupancy';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { isErrors } from '@/shared/utils/error/is-404-error';
+
 import { breakBetweenContracts } from '@/shared/utils/house/break-between-contracts';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
@@ -76,9 +76,7 @@ export const HouseOccupancyCard = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const isEntityDeleted = isErrors(error);
-
-  if (isLoading || isEntityDeleted) return <HouseOccupancyTableSkeleton rows={limit} />;
+  if (isLoading) return <HouseOccupancyTableSkeleton rows={limit} />;
   if (isError) return <ErrorState className="w-full" error={error} />;
   if (isEmpty) return <EmptyState className="w-full" />;
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/shared/ui/button';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
@@ -24,7 +25,16 @@ export const UpdateHouse = () => {
     );
   };
 
-  const { data } = useGetHouseByIdQuery(id);
+  const { data, isLoading, error } = useGetHouseByIdQuery(id);
+
+  if (isLoading) return <Skeleton className="h-10 w-40" />;
+
+  if (error)
+    return (
+      <Button disabled className="text-red" variant="outline">
+        Помилка завантаження
+      </Button>
+    );
 
   return (
     <div>

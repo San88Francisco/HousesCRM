@@ -24,7 +24,6 @@ import {
 import {
   CreateRenterRequest,
   CreateRenterResponse,
-  RenterByIdResponse,
   UpdateRenterRequest,
   UpdateRenterResponse,
 } from '@/types/services/renters';
@@ -75,11 +74,6 @@ export const housesApi = rootApi.injectEndpoints({
         body,
       }),
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Analytics'],
-    }),
-
-    getRenterById: build.query<RenterByIdResponse, string>({
-      query: id => `/renters/${id}`,
-      providesTags: (_result, _error, id) => [{ type: 'Renters', id }],
     }),
 
     createRenter: build.mutation<CreateRenterResponse, CreateRenterRequest>({
@@ -161,7 +155,6 @@ export const {
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,
-  useGetRenterByIdQuery,
   useCreateRenterMutation,
   useUpdateRenterMutation,
   useGetHousesPerformanceQuery,

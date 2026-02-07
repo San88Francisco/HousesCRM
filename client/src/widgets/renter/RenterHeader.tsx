@@ -4,7 +4,6 @@ import { ErrorState } from '@/components/chart-states/ErrorState';
 import { formatCurrencyOptions } from '@/shared/constants/currency/format-options';
 import { Badge } from '@/shared/ui/badge';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { isErrors } from '@/shared/utils/error/is-404-error';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
@@ -32,9 +31,7 @@ export const RenterHeader = () => {
     },
   );
 
-  const isEntityDeleted = isErrors(error);
-
-  if (isLoading || isEntityDeleted) return <Skeleton className="h-32 w-full" />;
+  if (isLoading) return <Skeleton className="h-32 w-full" />;
   if (isError || !data) return <ErrorState className="w-full" error={error} />;
   const { firstName, lastName, age, occupied, vacated, totalIncome, status } = data.oneRenterReport;
 

@@ -1,7 +1,9 @@
 'use client';
 
 import { Button } from '@/shared/ui/button';
-import { useGetRenterByIdQuery } from '@/store/api/houses-api';
+import { Skeleton } from '@/shared/ui/skeleton';
+import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
+
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
 import { Renter } from '@/types/core/renter';
@@ -24,7 +26,16 @@ export const UpdateRenter = () => {
     );
   };
 
-  const { data } = useGetRenterByIdQuery(id);
+  const { data, isLoading, error } = useGetAllContractsByRenterIdQuery({ renterId: id });
+
+  if (isLoading) return <Skeleton className="w-48 h-10" />;
+
+  if (error)
+    return (
+      <Button variant="outline" className="text-red" disabled>
+        Помилка при завантаженні орендаря
+      </Button>
+    );
 
   return (
     <div>

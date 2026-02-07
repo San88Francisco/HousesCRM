@@ -49,6 +49,7 @@ export const useConfirmDelete = () => {
         router.replace(config.redirectUrl as string);
       }
     } catch (error) {
+      if (error instanceof Error && error.message === 'Not implemented') return;
       toast.error('Помилка при видаленні', {
         description: error instanceof Error ? error.message : 'Невідома помилка',
       });
