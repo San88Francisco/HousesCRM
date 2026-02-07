@@ -25,7 +25,7 @@ export const UpdateHouse = () => {
     );
   };
 
-  const { data, isLoading, error } = useGetHouseByIdQuery(id);
+  const { data, isLoading, error } = useGetHouseByIdQuery(id, { skip: !id });
 
   if (isLoading) return <Skeleton className="h-10 w-40" />;
 
@@ -37,14 +37,12 @@ export const UpdateHouse = () => {
     );
 
   return (
-    <div>
-      <Button
-        variant="outline"
-        onClick={e => handleEdit(e, data?.houseDetail)}
-        disabled={!data?.houseDetail}
-      >
-        Відредагувати квартиру
-      </Button>
-    </div>
+    <Button
+      variant="outline"
+      onClick={e => handleEdit(e, data?.houseDetail)}
+      disabled={!data?.houseDetail}
+    >
+      Відредагувати квартиру
+    </Button>
   );
 };

@@ -140,7 +140,7 @@ export const housesApi = rootApi.injectEndpoints({
         url: `/houses/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Analytics', 'Houses', 'Contracts'],
+      invalidatesTags: ['Analytics', 'Houses', 'Contracts', 'Renters'],
     }),
   }),
 });

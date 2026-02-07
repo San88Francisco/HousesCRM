@@ -25,10 +25,8 @@ export const DeleteRenter = () => {
   };
 
   return (
-    <div>
-      <Button variant="destructive" onClick={handleDelete}>
-        Видалити
-      </Button>
-    </div>
+    <Button variant="destructive" onClick={handleDelete}>
+      Видалити
+    </Button>
   );
 };

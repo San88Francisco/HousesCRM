@@ -26,26 +26,27 @@ export const UpdateRenter = () => {
     );
   };
 
-  const { data, isLoading, error } = useGetAllContractsByRenterIdQuery({ renterId: id });
+  const { data, isLoading, error } = useGetAllContractsByRenterIdQuery(
+    { renterId: id },
+    { skip: !id },
+  );
 
   if (isLoading) return <Skeleton className="w-48 h-10" />;
 
   if (error)
     return (
-      <Button variant="outline" className="text-red" disabled>
+      <Button variant="outline" className="text-red" disabled={!id || !data?.oneRenterReport}>
         Помилка при завантаженні орендаря
       </Button>
     );
 
   return (
-    <div>
-      <Button
-        variant="outline"
-        onClick={e => handleEdit(e, data?.oneRenterReport)}
-        disabled={!data?.oneRenterReport}
-      >
-        Відредагувати орендаря
-      </Button>
-    </div>
+    <Button
+      variant="outline"
+      onClick={e => handleEdit(e, data?.oneRenterReport)}
+      disabled={!data?.oneRenterReport}
+    >
+      Відредагувати орендаря
+    </Button>
   );
 };
