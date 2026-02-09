@@ -52,7 +52,10 @@ export const ContractsTable = ({ table, limit, onLimitChange }: Props) => {
                 role="button"
               >
                 {row.getVisibleCells().map(cell => (
-                  <TableCell key={cell.id}>
+                  <TableCell
+                    key={cell.id}
+                    onClick={cell.column.id === 'action' ? e => e.stopPropagation() : undefined}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

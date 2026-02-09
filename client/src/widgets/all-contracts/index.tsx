@@ -21,9 +21,9 @@ export const AllContracts = () => {
   });
   const isEmpty = !data?.data.length;
 
-  const onLimitChange = (limit: number) => {
+  const onLimitChange = (newLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);
-    setLimit(limit);
+    setLimit(newLimit);
   };
 
   const table = useReactTable({

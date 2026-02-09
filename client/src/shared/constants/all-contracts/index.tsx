@@ -1,4 +1,3 @@
-import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
@@ -44,9 +43,7 @@ export const AllContractsTableColumns: ColumnDef<Contract>[] = [
     accessorKey: 'status',
     header: 'Статус',
     cell: ctx => (
-      <span
-        className={cn(ctx.getValue() === ContractStatus.ACTIVE ? 'text-yellow' : 'text-purple')}
-      >
+      <span className={ctx.getValue() === ContractStatus.ACTIVE ? 'text-yellow' : 'text-purple'}>
         {ctx.getValue() === ContractStatus.ACTIVE ? 'Активний' : 'Не активний'}
       </span>
     ),
