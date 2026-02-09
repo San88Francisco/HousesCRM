@@ -50,6 +50,7 @@ export const ContractsTable = ({ table, limit, onLimitChange }: Props) => {
                 onKeyDown={createRowKeyDown(() => handleRouteToContract(row.original.id))}
                 tabIndex={0}
                 role="button"
+                aria-label={`Перейти до договору ${row.original.id}`}
               >
                 {row.getVisibleCells().map(cell => (
                   <TableCell
