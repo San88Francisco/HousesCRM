@@ -4,7 +4,6 @@ import { TablePagination } from '@/components/table-pagination';
 import { contractsTableGrid } from '@/shared/constants/styles/contracts-table';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { cn } from '@/shared/utils/cn';
 import { Contract } from '@/types/core/contract';
 
 import { flexRender, Table as TableType } from '@tanstack/react-table';
@@ -21,7 +20,7 @@ export const ContractsTable = ({ table, limit, onLimitChange }: Props) => {
       <div className="w-full overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className={cn(contractsTableGrid)}>
+            <TableRow className={contractsTableGrid}>
               {table.getFlatHeaders().map(header => (
                 <TableHead key={header.id}>
                   {flexRender(header.column.columnDef.header, header.getContext())}
@@ -41,10 +40,7 @@ export const ContractsTable = ({ table, limit, onLimitChange }: Props) => {
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.original.id} className={contractsTableGrid}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell
-                      key={cell.id}
-                      onClick={cell.column.id === 'action' ? e => e.stopPropagation() : undefined}
-                    >
+                    <TableCell key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
