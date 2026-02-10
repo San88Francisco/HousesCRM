@@ -1,7 +1,4 @@
-import {
-  DELETE_ACTION_CONFIG,
-  DeleteAction,
-} from '@/shared/constants/delete-actions/delete-actions';
+import { DELETE_ACTION_CONFIG, DeleteAction } from '@/shared/constants/delete-actions';
 import { useDeleteHouseMutation } from '@/store/api/houses-api';
 import { useDeleteRenterMutation } from '@/store/api/renters-api';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';

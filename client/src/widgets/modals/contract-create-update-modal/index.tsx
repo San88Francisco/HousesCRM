@@ -2,8 +2,10 @@ import { RHFAutocomplete } from '@/components/RHF/RHFAutocomplete';
 import { RHFDateRangePicker } from '@/components/RHF/RHFDateRangePicker';
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFSelect } from '@/components/RHF/RHFSelect';
-import { useHousesAutocomplete } from '@/hooks/modals/contract-create-update-modal/use-houses-autocomplete';
-import { useRentersAutocomplete } from '@/hooks/modals/contract-create-update-modal/use-renters-autocomplete';
+import {
+  useHousesAutocomplete,
+  useRentersAutocomplete,
+} from '@/hooks/modals/contract-create-update-modal';
 import { statusOptions } from '@/shared/utils/create-update-contract-form/status-options';
 import { House } from '@/types/core/house';
 import { Renter } from '@/types/core/renter';

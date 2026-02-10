@@ -1,4 +1,4 @@
-import { PIE_COLORS } from '@/shared/constants/revenue-pie-chart/chart-pie-colors';
+import { PIE_COLORS } from '@/shared/constants/revenue-pie-chart';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
 type WithFill<T> = T & { fill: string };
@@ -12,10 +12,10 @@ type ChartMap = {
   housesPayback: AllAnalyticsResponse['housesPaybackStats'];
 };
 
-export function addFillToChartItems<K extends ChartKey>(
+export const addFillToChartItems = <K extends ChartKey>(
   res: Partial<AllAnalyticsResponse>,
   chart: K,
-): WithFill<ChartMap[K][number]>[] {
+): WithFill<ChartMap[K][number]>[] => {
   const dataExtractors: Record<
     ChartKey,
     (r: Partial<AllAnalyticsResponse>) => readonly unknown[] | undefined
@@ -34,4 +34,4 @@ export function addFillToChartItems<K extends ChartKey>(
     ...item,
     fill: PIE_COLORS[index % PIE_COLORS.length],
   }));
-}
+};

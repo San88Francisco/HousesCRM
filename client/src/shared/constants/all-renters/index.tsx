@@ -1,12 +1,12 @@
 import { cn } from '@/shared/utils/cn';
-import { formatDate } from '@/shared/utils/format/format-date';
+import { formatDate } from '@/shared/utils/format';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
 import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
-import { ContractStatus } from '@/types/core/status/status';
+import { ContractStatus } from '@/types/core/status';
 import { ContractModalTrigger } from '@/widgets/modals/contract-modal/ContractModalTrigger';
 import { ColumnDef } from '@tanstack/react-table';
-import { formatCurrencyOptions } from '../currency/format-options';
+import { formatCurrencyOptions } from '../currency';
 
 export const RentersOccupancyTableColumns: ColumnDef<RentersOccupancyItem>[] = [
   {

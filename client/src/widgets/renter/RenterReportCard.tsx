@@ -2,9 +2,10 @@
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { useRentersContracts } from '@/hooks/renters/use-renters-contracts';
+
+import { useRentersContracts } from '@/hooks/renters';
 import { AllRentersContractsTableColumns } from '@/shared/constants/current-renter';
-import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
+import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';

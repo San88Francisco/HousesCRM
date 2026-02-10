@@ -9,7 +9,7 @@ import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { ChartList } from './ChartList';
 import { PieChartRevenue } from './PieChartRevenue';
 
-export function ChartPieDonutText() {
+export const ChartPieDonutText = () => {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();
 
   if (isLoading) return <LoadingState />;
@@ -38,4 +38,4 @@ export function ChartPieDonutText() {
       </CardContent>
     </Card>
   );
-}
+};

@@ -1,4 +1,4 @@
-import { HouseFormData } from '@/shared/validation/create-update-house/house-schema';
+import { HouseFormData } from '@/shared/validation/create-update-house';
 import { useCreateHouseMutation, useUpdateHouseMutation } from '@/store/api/houses-api';
 
 export const useHouseCrud = () => {

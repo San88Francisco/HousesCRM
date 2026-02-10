@@ -7,11 +7,8 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { ROUTES } from '@/shared/routes';
 import { Button } from '@/shared/ui/button';
-import {
-  FavoriteItem,
-  isPathFavorite,
-  toggleFavoriteItem,
-} from '@/shared/utils/storage/favorites-storage';
+
+import { FavoriteItem, isPathFavorite, toggleFavoriteItem } from '@/shared/utils/storage';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 
 const FavoriteStar = () => {

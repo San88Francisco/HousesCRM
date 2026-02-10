@@ -1,7 +1,7 @@
-import { HouseFormData } from '@/shared/validation/create-update-house/house-schema';
+import { HouseFormData } from '@/shared/validation/create-update-house';
 import { House } from '@/types/core/house';
 import { Renter } from '@/types/core/renter';
-import { ContractStatus } from '@/types/core/status/status';
+import { ContractStatus } from '@/types/core/status';
 import { CurrencyRevaluation } from '../../core/currency-revaluation-chart';
 import { Metadata } from '../../core/metadata';
 import { HouseOccupancyItem } from '../../model/houses-occupancy';

@@ -3,7 +3,7 @@
 import { KeyboardEvent, useState } from 'react';
 
 import { Badge } from '@/shared/ui/badge';
-import { formatDate } from '@/shared/utils/format/format-date';
+import { formatDate } from '@/shared/utils/format';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
 import { Contract } from '@/types/core/contract';

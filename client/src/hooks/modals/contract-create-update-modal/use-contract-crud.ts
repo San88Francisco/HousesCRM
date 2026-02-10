@@ -1,4 +1,4 @@
-import { ContractFormData } from '@/shared/validation/create-update-contract/contract-schema';
+import { ContractFormData } from '@/shared/validation/create-update-contract';
 import { useCreateContractMutation, useUpdateContractMutation } from '@/store/api/houses-api';
 
 export const useContractCrud = () => {

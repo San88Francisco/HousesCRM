@@ -4,7 +4,7 @@ import {
   getChevronClasses,
   getCollapsibleHeaderClasses,
   SIDEBAR_STYLES,
-} from '@/shared/constants/styles';
+} from '@/shared/constants/styles/sidebar';
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
 import { SubNavItem } from '@/types/model/navigation';

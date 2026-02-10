@@ -1,11 +1,11 @@
 'use client';
-import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down';
+import { useIsMobile } from '@/hooks';
+import { ROUTES } from '@/shared/routes';
+import { ThemeSwitch } from '@/widgets/uikit/theme-drop-down/ThemeSwitch';
+import { usePathname } from 'next/navigation';
+import FavoriteStar from './FavoriteStar';
 import HeaderNavigation from './HeaderNavigation';
 import HeaderSearch from './HeaderSearch';
-import { usePathname } from 'next/navigation';
-import { ROUTES } from '@/shared/routes';
-import { useIsMobile } from '@/hooks';
-import FavoriteStar from './FavoriteStar';
 
 const Header = () => {
   const pathname = usePathname();

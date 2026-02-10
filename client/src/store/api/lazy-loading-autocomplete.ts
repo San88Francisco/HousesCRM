@@ -14,7 +14,7 @@ type Props<T> = {
   getItemId: (item: T) => string | number;
 };
 
-export function lazyLoadingAutocomplete<T>(build: ApiEndpointBuilder, config: Props<T>) {
+export const lazyLoadingAutocomplete = <T>(build: ApiEndpointBuilder, config: Props<T>) => {
   const { url, tagType, getItemId } = config;
 
   return build.query<LazyLoadingAutocomplete<T>, AutoCompleteRequest>({
@@ -47,7 +47,7 @@ export function lazyLoadingAutocomplete<T>(build: ApiEndpointBuilder, config: Pr
           ]
         : [{ type: tagType, id: 'LIST' }],
   });
-}
+};
 
 export const autocompleteApi = rootApi.injectEndpoints({
   endpoints: build => ({

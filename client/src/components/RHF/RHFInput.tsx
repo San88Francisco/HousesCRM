@@ -1,6 +1,6 @@
 'use client';
 
-import { useHotkeyForRef } from '@/hooks/use-hotkey-for-ref';
+import { useHotkeyForRef } from '@/hooks';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { cn } from '@/shared/utils/cn';
@@ -29,7 +29,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   className?: string;
 }
 
-const RHFInput = forwardRef<HTMLInputElement, Props>(
+export const RHFInput = forwardRef<HTMLInputElement, Props>(
   (
     {
       name,
@@ -136,5 +136,3 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
 );
 
 RHFInput.displayName = 'RHFInput';
-
-export { RHFInput };

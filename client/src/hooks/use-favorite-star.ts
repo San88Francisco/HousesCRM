@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { FavoriteItem, getFavoriteItems } from '@/shared/utils/storage/favorites-storage';
+import { FavoriteItem, getFavoriteItems } from '@/shared/utils/storage';
 
 export const useFavoriteStar = () => {
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);

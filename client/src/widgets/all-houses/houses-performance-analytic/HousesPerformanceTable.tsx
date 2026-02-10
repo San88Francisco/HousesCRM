@@ -1,5 +1,5 @@
 'use client';
-import { TablePagination } from '@/components/table-pagination';
+import { TablePagination } from '@/components/table-pagination/TablePagination';
 import { tableGrid } from '@/shared/constants/styles/houses-performance-table';
 import { ROUTES } from '@/shared/routes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';

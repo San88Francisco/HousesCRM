@@ -4,7 +4,7 @@ import {
   MOBILE_TABLET_TICKS,
   ONE_YEAR_MS,
   SMALL_MOBILE_TICKS,
-} from '@/shared/constants/line-chart/line-chart';
+} from '@/shared/constants/line-chart';
 import { TimeRangeEnum } from '@/types/core/time-range';
 import { ChartDataPoint } from '@/types/model/houses-overview';
 

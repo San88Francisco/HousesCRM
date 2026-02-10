@@ -7,7 +7,7 @@ type Props = {
 
 export const ChartContext = createContext<Props | null>(null);
 
-export function useChart() {
+export const useChart = () => {
   const context = useContext(ChartContext);
 
   if (!context) {
@@ -15,4 +15,4 @@ export function useChart() {
   }
 
   return context;
-}
+};
