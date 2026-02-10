@@ -1,6 +1,5 @@
 import { cn } from '@/shared/utils/cn';
 import { FC, ReactNode } from 'react';
-/* eslint-disable */
 
 type CellSize = 'small' | 'big';
 
@@ -20,10 +19,10 @@ interface ICalendarCellProps {
 }
 
 const baseStyles =
-  'w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest dark:hover:bg-dark';
+  'w-full rounded-[0.75rem] text-sm font-semibold transition-all duration-150 ease-in-out flex items-center justify-center cursor-pointer hover:bg-dark-lightest hover:text-dark';
 
 const currentDateStyle =
-  'text-gray rounded-[0.75rem] border border-solid border-gray hover:border-gray-medium hover:text-gray hover:bg-foreground dark:text-dark-medium dark:border-dark-medium';
+  'text-gray rounded-[0.75rem] border border-solid border-gray hover:border-gray-medium hover:text-gray';
 
 const CalendarCell: FC<ICalendarCellProps> = ({
   size = 'small',
@@ -45,7 +44,7 @@ const CalendarCell: FC<ICalendarCellProps> = ({
     <div
       className={cn(
         `${cellSize} ${baseStyles}`,
-        inRange && 'bg-dark-lightest rounded-[0] dark:bg-dark',
+        inRange && 'bg-dark-lightest rounded-[0]',
         isLeftSide && 'rounded-l-[0.75rem]',
         isRightSide && 'rounded-r-[0.75rem]',
       )}
@@ -65,10 +64,10 @@ const CalendarCell: FC<ICalendarCellProps> = ({
           isOutOfPeriod && 'text-dark-medium',
           isDisabled &&
             'opacity-50 text-dark-medium cursor-not-allowed pointer-events-none bg-transparent hover:bg-transparent',
-          inRange && 'rounded-[0]',
+          inRange && 'rounded-[0] text-dark',
           isCurrentDate && currentDateStyle,
           isSelected &&
-            'bg-gray border-none dark:bg-gray text-white hover:text-white hover:bg-gray-medium active:bg-gray active:border-dark-light dark:hover:text-white dark:hover:bg-gray dark:text-white',
+            'bg-gray border-none text-white hover:text-white hover:bg-gray-medium active:bg-gray active:border-dark-light',
           isLeftSide && 'rounded-l-[0.75rem]',
           isRightSide && 'rounded-r-[0.75rem]',
         )}
