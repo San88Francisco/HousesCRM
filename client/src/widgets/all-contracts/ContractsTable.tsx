@@ -5,6 +5,7 @@ import { contractsTableGrid } from '@/shared/constants/styles/contracts-table';
 import { ROUTES } from '@/shared/routes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
+import { formatDate } from '@/shared/utils/format/format-date';
 import { createRowKeyDown } from '@/shared/utils/table/row-key-down-handler';
 import { Contract } from '@/types/core/contract';
 
@@ -39,29 +40,37 @@ export const ContractsTable = ({ table, limit, onLimitChange }: Props) => {
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows.map(row => (
-              <TableRow
-                key={row.original.id}
-                className={cn(
-                  contractsTableGrid,
-                  'cursor-pointer transition-colors duration-300 ease-out hover:bg-muted-foreground text-text',
-                )}
-                onClick={() => handleRouteToContract(row.original.id)}
-                onKeyDown={createRowKeyDown(() => handleRouteToContract(row.original.id))}
-                tabIndex={0}
-                role="button"
-                aria-label={`Перейти до договору ${row.original.id}`}
-              >
-                {row.getVisibleCells().map(cell => (
-                  <TableCell
-                    key={cell.id}
-                    onClick={cell.column.id === 'action' ? e => e.stopPropagation() : undefined}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+            {table.getRowModel().rows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
+                  <p className="text-muted-foreground">Немає договорів для відображення</p>
+                </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              table.getRowModel().rows.map(row => (
+                <TableRow
+                  key={row.original.id}
+                  className={cn(
+                    contractsTableGrid,
+                    'cursor-pointer transition-colors duration-300 ease-out hover:bg-muted-foreground text-text',
+                  )}
+                  onClick={() => handleRouteToContract(row.original.id)}
+                  onKeyDown={createRowKeyDown(() => handleRouteToContract(row.original.id))}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Перейти до договору з ${formatDate(row.original.commencement)} по ${formatDate(row.original.termination)}`}
+                >
+                  {row.getVisibleCells().map(cell => (
+                    <TableCell
+                      key={cell.id}
+                      onClick={cell.column.id === 'action' ? e => e.stopPropagation() : undefined}
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
