@@ -5,7 +5,6 @@ import { contractsTableGrid } from '@/shared/constants/styles/contracts-table';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
-import { formatDate } from '@/shared/utils/format/format-date';
 import { Contract } from '@/types/core/contract';
 
 import { flexRender, Table as TableType } from '@tanstack/react-table';
@@ -40,13 +39,7 @@ export const ContractsTable = ({ table, limit, onLimitChange }: Props) => {
               </TableRow>
             ) : (
               table.getRowModel().rows.map(row => (
-                <TableRow
-                  key={row.original.id}
-                  className={contractsTableGrid}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`Перейти до договору з ${formatDate(row.original.commencement)} по ${formatDate(row.original.termination)}`}
-                >
+                <TableRow key={row.original.id} className={contractsTableGrid}>
                   {row.getVisibleCells().map(cell => (
                     <TableCell
                       key={cell.id}
