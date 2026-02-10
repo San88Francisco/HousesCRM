@@ -1,6 +1,6 @@
 import { House } from '../house';
 import { Renter } from '../renter';
-import { ContractStatus } from '../status/status';
+import { ContractStatus } from '../status';
 
 export interface Contract {
   id: string;

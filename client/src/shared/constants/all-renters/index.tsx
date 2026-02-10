@@ -3,6 +3,7 @@ import { formatDate } from '@/shared/utils/format';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
 import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
+
 import { ContractStatus } from '@/types/core/status';
 import { ContractModalTrigger } from '@/widgets/modals/contract-modal/ContractModalTrigger';
 import { ColumnDef } from '@tanstack/react-table';

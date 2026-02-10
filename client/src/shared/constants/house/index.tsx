@@ -3,6 +3,7 @@ import { formatDate } from '@/shared/utils/format';
 import { OccupancyWithVacancy } from '@/shared/utils/house/break-between-contracts';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
+
 import { ContractStatus } from '@/types/core/status';
 import { HouseOccupancyItem } from '@/types/model/houses-occupancy';
 import { ContractModalTrigger } from '@/widgets/modals/contract-modal/ContractModalTrigger';
