@@ -27,7 +27,6 @@ export const ScrollContainer = ({
       'overflow-y-hidden',
       isScrollNeeded && (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
       'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200',
-      'dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800',
     )}
     onPointerDown={isScrollNeeded ? handlePointerDown : undefined}
     onPointerMove={isScrollNeeded ? handlePointerMove : undefined}

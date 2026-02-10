@@ -14,8 +14,7 @@ export const LogoutButton = () => {
       tooltip={{
         children: 'Вийти',
         className: `
-          bg-white text-black
-          dark:bg-black dark:text-white
+          bg-foreground text-text
           border border-border
         `,
       }}

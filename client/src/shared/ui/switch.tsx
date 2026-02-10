@@ -15,7 +15,7 @@ const switchRoot = cva(
 const switchThumb = cva(
   'pointer-events-none block h-5 w-5 rounded-full shadow-lg ring-0 bg-background ' +
     'transition-transform duration-500 ease-in-out ' +
-    'data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 dark:data-[state=unchecked]:bg-white',
+    'data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 data-[state=unchecked]:bg-white',
 );
 
 const Switch = React.forwardRef<

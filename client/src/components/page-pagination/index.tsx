@@ -82,7 +82,7 @@ export const PagePagination = ({ currentPage, totalPages, onPageChange, classNam
               key={page}
               className={cn(
                 'cursor-pointer text-text',
-                isActive && 'bg-gray dark:bg-gray rounded-[8px] text-white border-gray',
+                isActive && 'bg-gray rounded-[8px] text-white border-gray',
               )}
             >
               <PaginationLink

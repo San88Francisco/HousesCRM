@@ -31,7 +31,7 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
       <button
         type="button"
         onClick={handlePrevPage}
-        className="p-1 hover:bg-dark-lightest rounded dark:hover:text-dark"
+        className="p-1 hover:bg-dark-lightest rounded hover:text-dark"
       >
         <MoveLeft className="w-5 h-5 text-gray-600" />
       </button>
@@ -72,7 +72,7 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
       <button
         type="button"
         onClick={handleNextPage}
-        className="p-1 hover:bg-dark-lightest rounded dark:hover:text-dark"
+        className="p-1 hover:bg-dark-lightest rounded hover:text-dark"
       >
         <MoveRight className="w-5 h-5 text-gray-600" />
       </button>
