@@ -1,9 +1,14 @@
 import { rootApi } from '@/shared/api';
-import { RentersOccupancyRequest, RentersOccupancyResponse } from '@/types/core/renters-occupancy';
 import {
   AllContractsByRenterIdResponse,
+  CreateRenterRequest,
+  CreateRenterResponse,
   RenterContractsPaginatedRequest,
   RentersIdContractsResponse,
+  RentersOccupancyRequest,
+  RentersOccupancyResponse,
+  UpdateRenterRequest,
+  UpdateRenterResponse,
 } from '@/types/services/renters';
 
 export const rentersApi = rootApi.injectEndpoints({
@@ -86,6 +91,22 @@ export const rentersApi = rootApi.injectEndpoints({
       providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
     }),
 
+    updateRenter: build.mutation<UpdateRenterResponse, UpdateRenterRequest>({
+      query: ({ id, ...body }) => ({
+        url: `/renters/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Renters', id }, 'Analytics'],
+    }),
+    createRenter: build.mutation<CreateRenterResponse, CreateRenterRequest>({
+      query: body => ({
+        url: '/renters',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Renters', 'Analytics'],
+    }),
     deleteRenter: build.mutation<void, string>({
       query: id => ({
         url: `/renters/${id}`,
@@ -103,5 +124,7 @@ export const {
   useGetAllContractsByRenterIdPaginatedQuery,
   useLazyGetAllContractsByRenterIdPaginatedQuery,
   useGetRentersQuery,
+  useUpdateRenterMutation,
+  useCreateRenterMutation,
   useDeleteRenterMutation,
 } = rentersApi;

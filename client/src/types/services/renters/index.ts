@@ -1,8 +1,11 @@
 import { RenterFormData } from '@/shared/validation/create-update-renter/renter-schema';
 import { ContractWithRevenue } from '@/types/core/contract';
-import { HousesPerformanceResponse } from '@/types/core/houses-performance';
+
 import { Metadata } from '@/types/core/metadata';
+import { PaginationSortBy, PaginationSortOrder } from '@/types/core/pagination';
 import { Renter } from '@/types/core/renter';
+import { RentersOccupancyItem } from '@/types/core/renters-occupancy';
+import { HousesPerformanceResponse } from '../houses';
 
 export type RenterByIdResponse = {
   oneRenterReport: Renter;
@@ -25,6 +28,18 @@ export type RenterContractsPaginatedRequest = {
   order?: string;
   page?: number;
   limit?: number;
+};
+
+export type RentersOccupancyRequest = {
+  page: number;
+  limit: number;
+  sortBy?: PaginationSortBy;
+  order?: PaginationSortOrder;
+};
+
+export type RentersOccupancyResponse = {
+  data: RentersOccupancyItem[];
+  meta: Metadata;
 };
 
 export type CreateRenterResponse = Renter;

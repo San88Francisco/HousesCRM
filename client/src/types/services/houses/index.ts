@@ -1,5 +1,6 @@
 import { HouseFormData } from '@/shared/validation/create-update-house/house-schema';
 import { House } from '@/types/core/house';
+import { HousePerformanceItem } from '@/types/core/houses-performance';
 import { Renter } from '@/types/core/renter';
 import { ContractStatus } from '@/types/core/status/status';
 import { CurrencyRevaluation } from '../../core/currency-revaluation-chart';
@@ -47,5 +48,10 @@ export type CurrencyRevaluationResponse = CurrencyRevaluation[];
 
 export type HousesResponse = {
   data: House[];
+  meta: Metadata;
+};
+
+export type HousesPerformanceResponse = {
+  data: HousePerformanceItem[];
   meta: Metadata;
 };
