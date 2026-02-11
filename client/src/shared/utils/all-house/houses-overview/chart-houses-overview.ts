@@ -1,5 +1,5 @@
 import { TimeRangeEnum } from '@/types/core/time-range';
-import { Apartment, ChartDataPoint, HousesOverviewContract } from '@/types/model/houses-overview';
+import { ChartDataPoint, House, HousesOverviewContract } from '@/types/model/houses-overview';
 
 const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.SIX_MONTHS]: date => {
@@ -35,20 +35,20 @@ const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.ALL_DATA]: date => date,
 };
 
-const getEarliestContractDate = (apartments: Apartment[], fallback: Date): Date =>
+const getEarliestContractDate = (apartments: House[], fallback: Date): Date =>
   apartments
     .flatMap(apt => apt.contract)
     .map(c => new Date(c.commencement))
     .reduce((earliest, curr) => (curr < earliest ? curr : earliest), fallback);
 
-const getStartDate = (timeRange: TimeRangeEnum, apartments: Apartment[], now: Date): Date => {
+const getStartDate = (timeRange: TimeRangeEnum, apartments: House[], now: Date): Date => {
   if (timeRange !== TimeRangeEnum.ALL_DATA) {
     return timeRangeMap[timeRange](now);
   }
   return getEarliestContractDate(apartments, now);
 };
 
-export function getPeriodRange(timeRange: TimeRangeEnum, apartments: Apartment[]) {
+export function getPeriodRange(timeRange: TimeRangeEnum, apartments: House[]) {
   const now = new Date();
   const startDate = getStartDate(timeRange, apartments, now);
 
@@ -59,7 +59,7 @@ export function getPeriodRange(timeRange: TimeRangeEnum, apartments: Apartment[]
 }
 
 export function findMinMaxRentWithFivePercent(
-  apartments: Apartment[],
+  apartments: House[],
   periodStart: string,
   periodEnd: string,
 ) {
@@ -80,7 +80,7 @@ export function findMinMaxRentWithFivePercent(
 }
 
 export function generateChartData(
-  apartments: (Apartment & { fill: string })[],
+  apartments: (House & { fill: string })[],
   timeRange: TimeRangeEnum,
 ): ChartDataPoint[] {
   const now = new Date();
