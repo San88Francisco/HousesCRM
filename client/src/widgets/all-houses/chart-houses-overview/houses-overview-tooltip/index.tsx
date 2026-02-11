@@ -1,7 +1,7 @@
 /* eslint-disable */
 import {
   findGapBetweenContracts,
-  isApartmentAcquired,
+  isHouseAcquired,
 } from '@/shared/utils/helpers/custom-tooltip-helper';
 import { NoContractTooltip } from './NoContractTooltip';
 
@@ -16,39 +16,33 @@ import { HouseItem } from './HouseItem';
 type Props = {
   active?: boolean;
   payload?: HouseOverviewTooltipPayload[];
-  lockedApartment: string | null;
-  apartmentsData: HouseOverviewChartDataItem[];
+  lockedHouse: string | null;
+  housesData: HouseOverviewChartDataItem[];
   cursorDate: string;
 };
 
-export const CustomTooltip = ({
-  active,
-  payload,
-  lockedApartment,
-  apartmentsData,
-  cursorDate,
-}: Props) => {
+export const CustomTooltip = ({ active, payload, lockedHouse, housesData, cursorDate }: Props) => {
   if (!active || !payload || payload.length === 0) return null;
 
   const allData = payload[0]?.payload;
   if (!allData) return null;
 
-  if (lockedApartment) {
-    const apartment = apartmentsData.find(apt => apt.id === lockedApartment);
+  if (lockedHouse) {
+    const apartment = housesData.find(apt => apt.id === lockedHouse);
     if (!apartment) return null;
 
-    if (!isApartmentAcquired(lockedApartment, apartmentsData, cursorDate)) {
+    if (!isHouseAcquired(lockedHouse, housesData, cursorDate)) {
       return null;
     }
 
-    const tooltipItem = payload.find(p => p.dataKey === lockedApartment);
+    const tooltipItem = payload.find(p => p.dataKey === lockedHouse);
     const color = apartment.fill;
 
-    const contractCandidate = allData[`${lockedApartment}_contract`];
-    const apartmentName = String(allData[`${lockedApartment}_apartment`] || '');
+    const contractCandidate = allData[`${lockedHouse}_contract`];
+    const apartmentName = String(allData[`${lockedHouse}_apartment`] || '');
 
     if (!isContract(contractCandidate)) {
-      const breakInContracts = findGapBetweenContracts(lockedApartment, apartmentsData, cursorDate);
+      const breakInContracts = findGapBetweenContracts(lockedHouse, housesData, cursorDate);
 
       return (
         <NoContractTooltip
@@ -67,21 +61,19 @@ export const CustomTooltip = ({
     );
   }
 
-  const acquiredApartments = apartmentsData.filter(apt =>
-    isApartmentAcquired(apt.id, apartmentsData, cursorDate),
-  );
+  const acquiredHouses = housesData.filter(apt => isHouseAcquired(apt.id, housesData, cursorDate));
 
-  if (acquiredApartments.length === 0) return null;
+  if (acquiredHouses.length === 0) return null;
 
   return (
     <div className="bg-background border border-border rounded-2xl p-3">
-      {acquiredApartments.map(apartment => (
+      {acquiredHouses.map(apartment => (
         <HouseItem
           key={apartment.id}
           apartment={apartment}
           color={apartment.fill}
           allData={allData}
-          apartmentsData={apartmentsData}
+          housesData={housesData}
           cursorDate={cursorDate}
         />
       ))}

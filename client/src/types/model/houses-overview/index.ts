@@ -12,13 +12,13 @@ export type HousesOverviewContract = {
   renter: HousesOverviewRenter;
 };
 
-export type House = {
+export type HouseOverview = {
   id: string;
   apartmentName: string;
   contract: HousesOverviewContract[];
 };
 
-export type HouseOverviewChartDataItem = House & {
+export type HouseOverviewChartDataItem = HouseOverview & {
   fill: string;
 };
 
