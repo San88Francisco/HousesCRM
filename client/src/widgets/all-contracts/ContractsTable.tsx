@@ -1,6 +1,6 @@
 'use client';
 
-import { TablePagination } from '@/components/table-pagination';
+import { TablePagination } from '@/components/table-pagination/TablePagination';
 import { contractsTableGrid } from '@/shared/constants/styles/contracts-table';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
