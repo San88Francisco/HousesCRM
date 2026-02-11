@@ -1,1 +1,1 @@
-export const THEMES = { light: '', dark: '.dark' } as const;
+export const CHART_THEMES = { light: '', dark: '.dark' } as const;

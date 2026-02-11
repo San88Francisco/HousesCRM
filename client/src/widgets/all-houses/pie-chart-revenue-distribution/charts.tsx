@@ -4,7 +4,8 @@
 import * as RechartsPrimitive from 'recharts';
 
 import { ChartContext, useChart } from '@/hooks/all-house/pie-chart';
-import { THEMES } from '@/shared/constants/pie-chart';
+
+import { CHART_THEMES } from '@/shared/constants/pie-chart';
 import { cn } from '@/shared/utils/cn';
 import { ChartPieConfig } from '@/types/core/revenue-distribution/chart-pie-config';
 import { ComponentProps, forwardRef, useId, useMemo } from 'react';
@@ -48,7 +49,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartPieConfig }) => {
   return (
     <style
       dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
+        __html: Object.entries(CHART_THEMES)
           .map(
             ([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
