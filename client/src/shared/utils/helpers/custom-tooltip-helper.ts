@@ -1,5 +1,4 @@
-import type { HousesOverviewContract } from '@/types/model/houses-overview';
-import { HouseOverview } from '@/types/model/houses-overview';
+import { HouseOverview, HousesOverviewContract } from '@/types/model/houses-overview';
 
 export const truncate = (text: string, maxLen: number): string => {
   if (maxLen <= 3) return text.slice(0, maxLen);
