@@ -24,8 +24,8 @@ export type RentersIdContractsResponse = {
 
 export type RenterContractsPaginatedRequest = {
   renterId: string;
-  sortBy?: string;
-  order?: string;
+  sortBy?: PaginationSortBy;
+  order?: PaginationSortOrder;
   page?: number;
   limit?: number;
 };

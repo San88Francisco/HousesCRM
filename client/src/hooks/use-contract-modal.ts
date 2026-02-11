@@ -1,5 +1,6 @@
 import { INTERSECTION_ROOT_MARGIN, PAGE_LIMIT } from '@/shared/constants/renter';
 import { useGetAllContractsByRenterIdMergeQuery } from '@/store/api/renters-api';
+import { PaginationSortBy, PaginationSortOrder } from '@/types/core/pagination';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -17,8 +18,8 @@ export const useContractsModal = (
       renterId: renterId,
       page,
       limit: PAGE_LIMIT,
-      sortBy: 'commencement',
-      order: 'DESC',
+      sortBy: PaginationSortBy.COMMENCEMENT,
+      order: PaginationSortOrder.DESC,
     },
     {
       skip: !renterId,
