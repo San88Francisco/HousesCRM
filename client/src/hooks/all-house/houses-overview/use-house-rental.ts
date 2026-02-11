@@ -57,12 +57,12 @@ export function useHouseRental(housesData: Partial<AllAnalyticsResponse>) {
   const housesDataWithFill = useMemo(
     () =>
       hasData && housesData.housesOverview ? addFillToChartItems(housesData, 'housesOverview') : [],
-    [hasData, housesData],
+    [housesData],
   );
 
   const chartData = useMemo(
     () => (hasData ? generateChartData(housesDataWithFill, timeRange) : []),
-    [hasData, housesDataWithFill, timeRange],
+    [housesDataWithFill, timeRange],
   );
 
   const periodRange = useMemo(
@@ -70,7 +70,7 @@ export function useHouseRental(housesData: Partial<AllAnalyticsResponse>) {
       hasData && housesData.housesOverview
         ? getPeriodRange(timeRange, housesData.housesOverview)
         : { periodStart: '', periodEnd: '' },
-    [hasData, timeRange, housesData],
+    [timeRange, housesData],
   );
 
   const minMax = useMemo(
@@ -82,7 +82,7 @@ export function useHouseRental(housesData: Partial<AllAnalyticsResponse>) {
             periodRange.periodEnd,
           )
         : null,
-    [hasData, housesData, periodRange.periodStart, periodRange.periodEnd],
+    [housesData, periodRange.periodStart, periodRange.periodEnd],
   );
 
   const yDomain = !minMax

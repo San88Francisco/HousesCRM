@@ -34,13 +34,13 @@ const isCursorInGap = (
 
 export const findGapBetweenContracts = (
   id: string | null,
-  apartments: HouseOverview[],
+  houses: HouseOverview[],
   currentDate: string,
 ): { start: string; end: string } | null => {
-  const apartment = findHouseById(apartments, id);
-  if (!apartment || apartment.contract.length < 2) return null;
+  const house = findHouseById(houses, id);
+  if (!house || house.contract.length < 2) return null;
 
-  const sortedContracts = [...apartment.contract].sort(
+  const sortedContracts = [...house.contract].sort(
     (a, b) => new Date(a.commencement).getTime() - new Date(b.commencement).getTime(),
   );
 
@@ -69,14 +69,14 @@ export const isHouseAcquired = (
   houses: HouseOverview[],
   currentDate: string,
 ): boolean => {
-  const apartment = findHouseById(houses, id);
-  if (!apartment || apartment.contract.length === 0) return false;
+  const house = findHouseById(houses, id);
+  if (!house || house.contract.length === 0) return false;
 
   const cursorTimestamp = new Date(currentDate).getTime();
   if (isNaN(cursorTimestamp)) return false;
 
   const firstContractStart = Math.min(
-    ...apartment.contract.map((c: HousesOverviewContract) => new Date(c.commencement).getTime()),
+    ...house.contract.map((c: HousesOverviewContract) => new Date(c.commencement).getTime()),
   );
 
   if (isNaN(firstContractStart)) return false;
