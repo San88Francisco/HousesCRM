@@ -1,10 +1,10 @@
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
 
-import { HouseOverviewChartDataItem } from '@/types/model/houses-overview';
+import { HouseOverviewDataItemChart } from '@/types/model/houses-overview';
 
 type Props = {
-  apartmentsData: HouseOverviewChartDataItem[];
+  apartmentsData: HouseOverviewDataItemChart[];
   activeApartment: string | null;
   onApartmentClick: (id: string) => void;
 };

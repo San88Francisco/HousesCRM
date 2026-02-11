@@ -7,13 +7,13 @@ import { ChartContext, useChart } from '@/hooks/all-house/pie-chart';
 
 import { CHART_THEMES } from '@/shared/constants/pie-chart';
 import { cn } from '@/shared/utils/cn';
-import { ChartPieConfig } from '@/types/core/revenue-distribution/chart-pie-config';
+import { PieConfigChart } from '@/types/core/revenue-distribution/chart-pie-config';
 import { ComponentProps, forwardRef, useId, useMemo } from 'react';
 
-const ChartContainer = forwardRef<
+const ContainerCharts = forwardRef<
   HTMLDivElement,
   ComponentProps<'div'> & {
-    config: ChartPieConfig;
+    config: PieConfigChart;
     children: ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>['children'];
   }
 >(({ id, className, children, config, ...props }, ref) => {
@@ -37,9 +37,9 @@ const ChartContainer = forwardRef<
     </ChartContext.Provider>
   );
 });
-ChartContainer.displayName = 'Chart';
+ContainerCharts.displayName = 'Chart';
 
-const ChartStyle = ({ id, config }: { id: string; config: ChartPieConfig }) => {
+const ChartStyle = ({ id, config }: { id: string; config: PieConfigChart }) => {
   const colorConfig = Object.entries(config).filter(([, config]) => config.theme || config.color);
 
   if (!colorConfig.length) {
@@ -211,7 +211,7 @@ const ChartTooltipContent = forwardRef<
 ChartTooltipContent.displayName = 'ChartTooltip';
 
 export const getPayloadConfigFromPayload = (
-  config: ChartPieConfig,
+  config: PieConfigChart,
   payload: unknown,
   key: string,
 ) => {
@@ -239,4 +239,4 @@ export const getPayloadConfigFromPayload = (
   return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config];
 };
 
-export { ChartContainer, ChartStyle, ChartTooltip, ChartTooltipContent };
+export { ChartStyle, ChartTooltip, ChartTooltipContent, ContainerCharts };

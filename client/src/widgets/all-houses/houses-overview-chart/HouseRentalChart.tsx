@@ -18,7 +18,7 @@ import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { useHouseRental } from '@/hooks/all-house/houses-overview';
 import { TimeRangeEnum } from '@/types/core/time-range';
-import { HouseOverviewChartDataItem } from '@/types/model/houses-overview';
+import { HouseOverviewDataItemChart } from '@/types/model/houses-overview';
 import { useCallback } from 'react';
 import {
   Legend,
@@ -146,7 +146,7 @@ export const HouseRentalChart = () => {
                 position={{ y: isMobile ? 170 : 0 }}
               />
 
-              {apartmentsDataWithFill.map((apt: HouseOverviewChartDataItem) => (
+              {apartmentsDataWithFill.map((apt: HouseOverviewDataItemChart) => (
                 <Line
                   key={apt.id + timeRange}
                   dataKey={apt.id}

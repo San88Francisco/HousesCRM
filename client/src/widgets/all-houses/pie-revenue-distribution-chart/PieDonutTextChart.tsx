@@ -6,10 +6,11 @@ import { LoadingState } from '@/components/chart-states/LoadingState';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
-import { ChartList } from './ChartList';
-import { PieChartRevenue } from './PieChartRevenue';
 
-export const ChartPieDonutText = () => {
+import { ListChart } from './ListChart';
+import { PieRevenueChart } from './PieRevenueChart';
+
+export const PieDonutTextChart = () => {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();
 
   if (isLoading) return <LoadingState />;
@@ -30,11 +31,11 @@ export const ChartPieDonutText = () => {
         </div>
       </CardHeader>
       <CardContent className="flex   gap-10 items-center ">
-        <PieChartRevenue
+        <PieRevenueChart
           grandApartmentTotalRevenue={grandApartmentTotalRevenue}
           adjustedData={adjustedData}
         />
-        <ChartList chartData={adjustedData} />
+        <ListChart chartData={adjustedData} />
       </CardContent>
     </Card>
   );

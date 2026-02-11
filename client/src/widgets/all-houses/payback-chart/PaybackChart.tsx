@@ -18,7 +18,7 @@ import {
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { Currencies } from '@/types/core/currencies';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ChartContent } from './ChartContent';
+import { ContentChart } from './ContentChart';
 import { LegendContent } from './LegendContent';
 import { ScrollContainer } from './ScrollContainer';
 
@@ -79,7 +79,7 @@ export const PaybackChart = () => {
           handlePointerMove={handlePointerMove}
           minChartWidth={minChartWidth}
         >
-          <ChartContent
+          <ContentChart
             paddedChartData={paddedChartData}
             chartMarginWithLegend={chartMarginWithLegend}
             scaleType={scaleType}

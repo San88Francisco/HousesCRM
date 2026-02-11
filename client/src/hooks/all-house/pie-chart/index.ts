@@ -1,8 +1,8 @@
-import { ChartPieConfig } from '@/types/core/revenue-distribution/chart-pie-config';
+import { PieConfigChart } from '@/types/core/revenue-distribution/chart-pie-config';
 import { createContext, useContext } from 'react';
 
 type Props = {
-  config: ChartPieConfig;
+  config: PieConfigChart;
 };
 
 export const ChartContext = createContext<Props | null>(null);

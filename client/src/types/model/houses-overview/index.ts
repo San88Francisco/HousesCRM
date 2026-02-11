@@ -18,7 +18,7 @@ export type Apartment = {
   contract: HousesOverviewContract[];
 };
 
-export type HouseOverviewChartDataItem = Apartment & {
+export type HouseOverviewDataItemChart = Apartment & {
   fill: string;
 };
 
@@ -26,7 +26,7 @@ export type PayloadData = {
   [key: string]: HousesOverviewContract | string | number | null | undefined;
 };
 
-export type ChartDataPoint = PayloadData & {
+export type DataPointChart = PayloadData & {
   date: number;
 };
 

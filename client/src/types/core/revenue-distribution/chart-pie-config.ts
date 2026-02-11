@@ -1,7 +1,7 @@
 import { CHART_THEMES } from '@/shared/constants/pie-chart';
 import { ComponentType, ReactNode } from 'react';
 
-export type ChartPieConfig = {
+export type PieConfigChart = {
   [k in string | number]: {
     label?: ReactNode;
     icon?: ComponentType;

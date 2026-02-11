@@ -8,13 +8,13 @@ import { ApartmentItem } from './ApartmentItem';
 import { NoContractTooltip } from './NoContractTooltip';
 
 import { isContract } from '@/shared/utils/all-house/houses-overview/chart-houses-overview';
-import { HouseOverviewChartDataItem, TooltipPayload } from '@/types/model/houses-overview';
+import { HouseOverviewDataItemChart, TooltipPayload } from '@/types/model/houses-overview';
 
 type Props = {
   active?: boolean;
   payload?: TooltipPayload[];
   lockedApartment: string | null;
-  apartmentsData: HouseOverviewChartDataItem[];
+  apartmentsData: HouseOverviewDataItemChart[];
   cursorDate: string;
 };
 

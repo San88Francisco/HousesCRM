@@ -6,7 +6,7 @@ import {
   SMALL_MOBILE_TICKS,
 } from '@/shared/constants/line-chart';
 import { TimeRangeEnum } from '@/types/core/time-range';
-import { ChartDataPoint } from '@/types/model/houses-overview';
+import { DataPointChart } from '@/types/model/houses-overview';
 
 export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: number) => {
   let timeoutId: ReturnType<typeof setTimeout>;
@@ -16,7 +16,7 @@ export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: numb
   };
 };
 
-export const getDataRange = (hasData: boolean, chartData: ChartDataPoint[]) => {
+export const getDataRange = (hasData: boolean, chartData: DataPointChart[]) => {
   if (!hasData || chartData.length === 0) {
     return { min: Date.now() - ONE_YEAR_MS, max: Date.now() };
   }
@@ -29,7 +29,7 @@ export const getDataRange = (hasData: boolean, chartData: ChartDataPoint[]) => {
 
 export const getOptimalTicks = (
   chartWidth: number,
-  chartData: ChartDataPoint[],
+  chartData: DataPointChart[],
   dataMin: number,
   dataMax: number,
   timeRange: TimeRangeEnum,

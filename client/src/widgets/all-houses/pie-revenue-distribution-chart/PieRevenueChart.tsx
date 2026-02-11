@@ -1,15 +1,15 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { createChartPieConfig } from '@/shared/utils/all-house/pie-chart/create-chart-pie-config';
-import { HouseDistributionChartDataItem } from '@/types/model/revenue-distribution';
+import { HouseDistributionDataItemChart } from '@/types/model/revenue-distribution';
 import { Label, Pie, PieChart } from 'recharts';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from './charts';
+import { ChartTooltip, ChartTooltipContent, ContainerCharts } from './ContainerCharts';
 
 type Props = {
-  adjustedData: HouseDistributionChartDataItem[];
+  adjustedData: HouseDistributionDataItemChart[];
   grandApartmentTotalRevenue: number;
 };
 
-export const PieChartRevenue = ({ adjustedData, grandApartmentTotalRevenue }: Props) => {
+export const PieRevenueChart = ({ adjustedData, grandApartmentTotalRevenue }: Props) => {
   const positiveRevenueCount = adjustedData.filter(d => d.apartmentTotalRevenue > 0).length;
 
   if (grandApartmentTotalRevenue === 0 || positiveRevenueCount === 0) return <EmptyState />;
@@ -17,7 +17,7 @@ export const PieChartRevenue = ({ adjustedData, grandApartmentTotalRevenue }: Pr
   const chartConfig = createChartPieConfig(adjustedData);
 
   return (
-    <ChartContainer config={chartConfig} className="flex-shrink-0 w-full lg:w-[50%] max-h-[400px]">
+    <ContainerCharts config={chartConfig} className="flex-shrink-0 w-full lg:w-[50%] max-h-[400px]">
       <PieChart>
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
         <Pie
@@ -53,6 +53,6 @@ export const PieChartRevenue = ({ adjustedData, grandApartmentTotalRevenue }: Pr
           />
         </Pie>
       </PieChart>
-    </ChartContainer>
+    </ContainerCharts>
   );
 };
