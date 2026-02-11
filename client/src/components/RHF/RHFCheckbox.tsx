@@ -15,7 +15,7 @@ interface Props extends VariantProps<typeof checkboxVariants> {
   onValueChange?: (checked: boolean) => void;
 }
 
-const RHFCheckbox = forwardRef<HTMLButtonElement, Props>(
+export const RHFCheckbox = forwardRef<HTMLButtonElement, Props>(
   (
     { name, label, disabled = false, className, variant = 'default', size = 'md', onValueChange },
     ref,
@@ -68,4 +68,3 @@ const RHFCheckbox = forwardRef<HTMLButtonElement, Props>(
 );
 
 RHFCheckbox.displayName = 'RHFCheckbox';
-export { RHFCheckbox };

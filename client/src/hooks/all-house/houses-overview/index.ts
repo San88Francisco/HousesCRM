@@ -1,4 +1,4 @@
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
@@ -6,7 +6,7 @@ import {
   DEFAULT_Y_MAX,
   DEFAULT_Y_MIN,
   Y_DOMAIN_STEP,
-} from '@/shared/constants/line-chart/line-chart';
+} from '@/shared/constants/line-chart';
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
 import {
   findMinMaxRentWithFivePercent,
@@ -21,7 +21,7 @@ import {
 import { TimeRangeEnum } from '@/types/core/time-range';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
-export function useHouseRental(apartmentsData: Partial<AllAnalyticsResponse>) {
+export const useHouseRental = (apartmentsData: Partial<AllAnalyticsResponse>) => {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ALL_DATA);
   const [lockedApartment, setLockedApartment] = useState<string | null>(null);
   const [cursorDate, setCursorDate] = useState<string>('');
@@ -130,4 +130,4 @@ export function useHouseRental(apartmentsData: Partial<AllAnalyticsResponse>) {
     apartmentsDataWithFill,
     chartMouseHandlers: { onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave },
   };
-}
+};

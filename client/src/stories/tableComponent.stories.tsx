@@ -1,4 +1,4 @@
-import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
+import { TableComponent } from '@/widgets/uikit/table-component';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof TableComponent> = {

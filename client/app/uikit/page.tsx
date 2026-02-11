@@ -9,13 +9,14 @@ import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 import { InputComponent } from '@/widgets/uikit/input-component';
 import { ModalTrigger } from '@/widgets/uikit/modal';
 import { SelectComponent } from '@/widgets/uikit/select-component';
-import { TableComponent } from '@/widgets/uikit/table-component/TableComponent';
-import TabsComponent from '@/widgets/uikit/tabs-component';
+import { TableComponent } from '@/widgets/uikit/table-component';
+import { TabsComponent } from '@/widgets/uikit/tabs-component';
+
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastComponent } from '@/widgets/uikit/toast-component';
 import UpdateContract from '@/widgets/uikit/update-contract';
 
-export default function Page() {
+const Page = () => {
   return (
     <div className="flex flex-col gap-2 min-w-screen">
       <ButtonComponent />
@@ -35,4 +36,6 @@ export default function Page() {
       <UpdateContract />
     </div>
   );
-}
+};
+
+export default Page;

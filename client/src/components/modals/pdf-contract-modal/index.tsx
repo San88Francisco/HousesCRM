@@ -2,7 +2,7 @@ import { scrollbarClasses } from '@/shared/constants/styles/scrollbar';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription } from '@/shared/ui/dialog';
 import { cn } from '@/shared/utils/cn';
-import { PdfContractAdapter } from '@/shared/utils/pdf-contract/pdf-contract-adapter';
+import { PdfContractAdapter } from '@/shared/utils/pdf-contract';
 import { useLazyGetContractPdfQuery } from '@/store/api/contracts-api';
 import { useAppSelector } from '@/store/hooks';
 import { ModalTriggers } from '@/types/model/modals';
@@ -12,7 +12,7 @@ import { PdfContractFile } from '@/widgets/modals/pdf-contract-content-modal/Pdf
 import { PdfContractSkeleton } from '@/widgets/skeletons/pdf-contract-modal-skeleton';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Fragment, useCallback, useEffect, useState } from 'react';
-import Modal from '../modal-wrapper';
+import { Modal } from '../modal-wrapper';
 
 export const PdfContractModal = () => {
   const { isOpen, trigger, payload } = useAppSelector(s => s.modal);

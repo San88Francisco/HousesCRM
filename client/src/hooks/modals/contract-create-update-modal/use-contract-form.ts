@@ -1,12 +1,10 @@
-import { useContractCrud } from '@/hooks/modals/contract-create-update-modal/use-contract-crud';
+import { useContractCrud } from '@/hooks/modals/contract-create-update-modal';
 import { mapContractToFormData } from '@/shared/utils/create-update-contract-form/contract-form';
 import { contractFormToast } from '@/shared/utils/create-update-contract-form/contract-form-toast';
 import { defaultContractValues } from '@/shared/utils/create-update-contract-form/default-contract-values';
 import { extractDirtyFormValues } from '@/shared/utils/helpers/extract-dirty-form-values';
-import {
-  ContractFormData,
-  contractSchema,
-} from '@/shared/validation/create-update-contract/contract-schema';
+import { ContractFormData, contractSchema } from '@/shared/validation/create-update-contract';
+
 import { ContractCreateUpdate } from '@/types/core/contract';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';

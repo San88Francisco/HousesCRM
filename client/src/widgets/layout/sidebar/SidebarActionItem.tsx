@@ -1,7 +1,7 @@
 'use client';
 
 import { useAnimatedIcon } from '@/hooks';
-import { getSidebarMenuItemClasses } from '@/shared/constants/styles';
+import { getSidebarMenuItemClasses } from '@/shared/constants/styles/sidebar';
 import { SidebarMenuButton, SidebarMenuItem } from '@/shared/ui/sidebar';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';

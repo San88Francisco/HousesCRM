@@ -1,4 +1,4 @@
-import { ContractStatus } from '@/types/core/status/status';
+import { ContractStatus } from '@/types/core/status';
 import * as yup from 'yup';
 
 export const contractSchema = yup.object({

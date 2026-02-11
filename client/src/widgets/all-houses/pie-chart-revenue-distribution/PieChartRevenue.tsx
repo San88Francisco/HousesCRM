@@ -9,7 +9,7 @@ type Props = {
   grandApartmentTotalRevenue: number;
 };
 
-export function PieChartRevenue({ adjustedData, grandApartmentTotalRevenue }: Props) {
+export const PieChartRevenue = ({ adjustedData, grandApartmentTotalRevenue }: Props) => {
   const positiveRevenueCount = adjustedData.filter(d => d.apartmentTotalRevenue > 0).length;
 
   if (grandApartmentTotalRevenue === 0 || positiveRevenueCount === 0) return <EmptyState />;
@@ -55,4 +55,4 @@ export function PieChartRevenue({ adjustedData, grandApartmentTotalRevenue }: Pr
       </PieChart>
     </ChartContainer>
   );
-}
+};

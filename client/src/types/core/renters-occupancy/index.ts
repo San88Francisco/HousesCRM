@@ -1,6 +1,6 @@
 import { Metadata } from '../metadata';
 import { PaginationSortBy, PaginationSortOrder } from '../pagination';
-import { ContractStatus } from '../status/status';
+import { ContractStatus } from '../status';
 
 export type RentersOccupancyItem = {
   id: string;

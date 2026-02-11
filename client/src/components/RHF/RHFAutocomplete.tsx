@@ -17,11 +17,7 @@ import { Check, ChevronsUpDown, CircleAlert } from 'lucide-react';
 import { forwardRef, ReactNode, RefObject, useState } from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
 
-export interface AutocompleteOption {
-  value: string;
-  label: string;
-  disabled?: boolean;
-}
+import type { AutocompleteOption } from '@/types/model/ui';
 
 type Props = {
   name: string;
@@ -43,7 +39,7 @@ type Props = {
   loadMoreRef?: RefObject<HTMLDivElement | null>;
 };
 
-const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
+export const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
   (
     {
       name,
@@ -232,5 +228,3 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
 );
 
 RHFAutocomplete.displayName = 'RHFAutocomplete';
-
-export { RHFAutocomplete };

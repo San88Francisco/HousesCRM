@@ -3,8 +3,8 @@
 import type { FormHTMLAttributes, ReactNode } from 'react';
 import {
   type FieldValues,
-  type UseFormReturn,
   type SubmitHandler,
+  type UseFormReturn,
   FormProvider,
 } from 'react-hook-form';
 
@@ -15,13 +15,13 @@ interface Props<T extends FieldValues>
   children: ReactNode;
 }
 
-export function RHFForm<T extends FieldValues>({
+export const RHFForm = <T extends FieldValues>({
   form,
   onSubmit,
   children,
   className = 'space-y-4',
   ...props
-}: Props<T>) {
+}: Props<T>) => {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={className} {...props}>
@@ -29,4 +29,4 @@ export function RHFForm<T extends FieldValues>({
       </form>
     </FormProvider>
   );
-}
+};

@@ -1,14 +1,12 @@
 import { ChangeEventHandler, useEffect, useMemo, useState } from 'react';
-/* eslint-disable */
-
 type ChangeHandler = ChangeEventHandler<HTMLTextAreaElement> | undefined;
 
-export function useTextareaCounter(
+export const useTextareaCounter = (
   maxLengthProp: number | string | undefined,
   value: unknown,
   defaultValue: unknown,
   onChange: ChangeHandler,
-) {
+) => {
   const initialLength = useMemo(() => {
     if (typeof value === 'string') return value.length;
     if (typeof defaultValue === 'string') return defaultValue.length;
@@ -24,7 +22,7 @@ export function useTextareaCounter(
   }, [value]);
 
   const normalizedMax = useMemo(() => {
-    if (maxLengthProp == null) return undefined;
+    if (maxLengthProp === null) return undefined;
     const n = Number(maxLengthProp);
     return Number.isFinite(n) && n > 0 ? n : undefined;
   }, [maxLengthProp]);
@@ -43,4 +41,4 @@ export function useTextareaCounter(
     showCounter,
     composedOnChange,
   } as const;
-}
+};

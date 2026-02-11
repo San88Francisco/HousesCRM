@@ -105,7 +105,7 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, CardDescriptionPr
 );
 CardDescription.displayName = 'CardDescription';
 
-function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
+const CardAction = ({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
       data-slot="card-action"
@@ -113,7 +113,7 @@ function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
       {...props}
     />
   );
-}
+};
 
 const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, variant = 'default', ...props }, ref) => (

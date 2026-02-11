@@ -1,6 +1,6 @@
 'use client';
 
-import { TablePagination } from '@/components/table-pagination';
+import { TablePagination } from '@/components/table-pagination/TablePagination';
 import { rentersOccupancyTableGrid } from '@/shared/constants/styles/renters-occupancy-table';
 import { ROUTES } from '@/shared/routes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';

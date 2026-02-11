@@ -1,7 +1,7 @@
 'use client';
 import { useIsMobile } from '@/hooks';
 
-export default function BackgroundLogo() {
+export const BackgroundLogo = () => {
   const { isMobile } = useIsMobile();
 
   if (isMobile) return null;
@@ -11,4 +11,4 @@ export default function BackgroundLogo() {
       <div className="relative w-[80vw] max-w-[950px] aspect-square bg-logo bg-center bg-contain bg-no-repeat opacity-[0.03]" />
     </div>
   );
-}
+};

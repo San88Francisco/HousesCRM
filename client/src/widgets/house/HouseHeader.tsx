@@ -2,7 +2,7 @@
 
 import { PROPERTY_TYPE_MAP } from '@/shared/constants/apartment/apartment-type-map';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { formatDate } from '@/shared/utils/format/format-date';
+import { formatDate } from '@/shared/utils/format';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { Building2, DoorOpen, MapPin, PackagePlus, Ruler } from 'lucide-react';
 import { useParams } from 'next/navigation';

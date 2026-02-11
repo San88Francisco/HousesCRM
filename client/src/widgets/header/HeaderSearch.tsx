@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useDebounce } from '@/hooks/use-debounce';
-import { searchDefaultValues, searchSchema } from '@/shared/validation/search/search';
+import { useDebounce } from '@/hooks';
+import { searchDefaultValues, searchSchema } from '@/shared/validation/search';
 import { useLazyGetAllSearchQuery } from '@/store/api/search-api';
 import { SearchRequest } from '@/types/services/search';
 import { SearchDropdown } from './SearchDropdown';

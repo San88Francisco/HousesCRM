@@ -1,6 +1,7 @@
 'use client';
 
-import { Calendar, CalendarRange } from '@/shared/ui/calendar';
+import Calendar from '@/shared/ui/calendar/Calendar';
+import CalendarRange from '@/shared/ui/calendar/CalendarRange';
 import { CalendarMode, DateRange } from '@/types/core/calendar';
 import { format, startOfToday } from 'date-fns';
 import { enUS, uk } from 'date-fns/locale';

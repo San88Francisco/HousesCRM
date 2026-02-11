@@ -1,8 +1,8 @@
-import { HouseRentalChart } from '@/widgets/all-houses/chart-houses-overview';
+import { HouseRentalChart } from '@/widgets/all-houses/chart-houses-overview/HouseRentalChart';
 import { CurrencyRevaluationChart } from '@/widgets/all-houses/currency-revaluation-chart/CurrencyRevaluationChart';
-import { HousesPerformanceAnalytic } from '@/widgets/all-houses/houses-performance-analytic';
+import { HousesPerformanceAnalytic } from '@/widgets/all-houses/houses-performance-analytic/HousesPerformanceAnalytic';
 import { PaybackChart } from '@/widgets/all-houses/payback-chart/PaybackChart';
-import { ChartPieDonutText } from '@/widgets/all-houses/pie-chart-revenue-distribution';
+import { ChartPieDonutText } from '@/widgets/all-houses/pie-chart-revenue-distribution/ChartPieDonutText';
 
 const Page = () => {
   return (
