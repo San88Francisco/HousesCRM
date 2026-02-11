@@ -30,7 +30,7 @@ export type ChartDataPoint = PayloadData & {
   date: number;
 };
 
-export type TooltipPayload = {
+export type HouseOverviewTooltipPayload = {
   dataKey: string;
   payload: PayloadData;
   stroke: string;

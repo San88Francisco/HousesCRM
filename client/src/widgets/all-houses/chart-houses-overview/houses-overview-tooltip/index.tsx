@@ -6,13 +6,16 @@ import {
 import { NoContractTooltip } from './NoContractTooltip';
 
 import { isContract } from '@/shared/utils/all-house/houses-overview/chart-houses-overview';
-import { HouseOverviewChartDataItem, TooltipPayload } from '@/types/model/houses-overview';
+import {
+  HouseOverviewChartDataItem,
+  HouseOverviewTooltipPayload,
+} from '@/types/model/houses-overview';
 import { LockedHouseTooltip } from '../LockedHouseTooltip';
 import { HouseItem } from './HouseItem';
 
 type Props = {
   active?: boolean;
-  payload?: TooltipPayload[];
+  payload?: HouseOverviewTooltipPayload[];
   lockedApartment: string | null;
   apartmentsData: HouseOverviewChartDataItem[];
   cursorDate: string;
