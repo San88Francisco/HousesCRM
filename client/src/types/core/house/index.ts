@@ -1,5 +1,9 @@
 import { Price } from '@/types/model/house-price';
-import { ApartmentType } from '../apartment-type';
+
+export enum HouseType {
+  NEW_BUILD = 'new_build',
+  RESALE = 'resale',
+}
 
 export interface House {
   id: string;
@@ -9,7 +13,7 @@ export interface House {
   purchaseDate: string;
   floor: number;
   street: string;
-  apartmentType: ApartmentType;
+  apartmentType: HouseType;
   prices: Price[];
   contractIds?: string[];
 }

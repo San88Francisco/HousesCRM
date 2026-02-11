@@ -1,4 +1,4 @@
-import { Apartment } from '@/types/model/houses-overview';
+import { House } from '@/types/model/houses-overview';
 
 export const truncate = (text: string, maxLen: number): string => {
   if (maxLen <= 3) return text.slice(0, maxLen);
@@ -18,7 +18,7 @@ export const formatDateRange = (start: string, end: string): string => {
   return `${startStr} – ${endStr}`;
 };
 
-export const findApartmentById = (apartments: Apartment[], id: string | null): Apartment | null => {
+export const findApartmentById = (apartments: House[], id: string | null): House | null => {
   if (!id) return null;
   return apartments.find(apt => apt.id === id) || null;
 };
@@ -33,7 +33,7 @@ const isCursorInGap = (
 
 export const findGapBetweenContracts = (
   id: string | null,
-  apartments: Apartment[],
+  apartments: House[],
   currentDate: string,
 ): { start: string; end: string } | null => {
   const apartment = findApartmentById(apartments, id);
@@ -65,7 +65,7 @@ export const findGapBetweenContracts = (
 
 export const isApartmentAcquired = (
   id: string | null,
-  apartments: Apartment[],
+  apartments: House[],
   currentDate: string,
 ): boolean => {
   const apartment = findApartmentById(apartments, id);

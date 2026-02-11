@@ -3,7 +3,7 @@ import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { useHousesPerformance } from '@/hooks/all-house/houses-performance-analytic/use-houses-performance';
 
-import { HousesPerformanceTableColumns } from '@/shared/constants/apartment/houses-performance-analytic';
+import { HousesPerformanceTableColumns } from '@/shared/constants/house/houses-performance-analytic';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';

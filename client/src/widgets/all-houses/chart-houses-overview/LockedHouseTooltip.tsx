@@ -7,7 +7,7 @@ type Props = {
   contract: HousesOverviewContract;
 };
 
-export const LockedApartmentTooltip = ({ color, apartmentName, contract }: Props) => {
+export const LockedHouseTooltip = ({ color, apartmentName, contract }: Props) => {
   const renterName = truncate(
     `${contract.renter.lastName ?? ''} ${contract.renter.firstName ?? ''}`.trim() || '—',
     20,

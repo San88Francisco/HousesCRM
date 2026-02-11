@@ -1,12 +1,6 @@
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import {
-  DEFAULT_CHART_WIDTH,
-  DEFAULT_Y_MAX,
-  DEFAULT_Y_MIN,
-  Y_DOMAIN_STEP,
-} from '@/shared/constants/line-chart/line-chart';
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
 import {
   findMinMaxRentWithFivePercent,
@@ -20,6 +14,11 @@ import {
 } from '@/shared/utils/all-house/houses-overview/chart-math';
 import { TimeRangeEnum } from '@/types/core/time-range';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
+
+const DEFAULT_CHART_WIDTH = 800;
+const DEFAULT_Y_MIN = 4000;
+const DEFAULT_Y_MAX = 8000;
+const Y_DOMAIN_STEP = 100;
 
 export function useHouseRental(apartmentsData: Partial<AllAnalyticsResponse>) {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ALL_DATA);

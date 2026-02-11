@@ -3,12 +3,12 @@ import {
   findGapBetweenContracts,
   isApartmentAcquired,
 } from '@/shared/utils/helpers/custom-tooltip-helper';
-import { LockedApartmentTooltip } from '../LockedApartmentTooltip';
-import { ApartmentItem } from './ApartmentItem';
 import { NoContractTooltip } from './NoContractTooltip';
 
 import { isContract } from '@/shared/utils/all-house/houses-overview/chart-houses-overview';
 import { HouseOverviewChartDataItem, TooltipPayload } from '@/types/model/houses-overview';
+import { LockedHouseTooltip } from '../LockedHouseTooltip';
+import { HouseItem } from './HouseItem';
 
 type Props = {
   active?: boolean;
@@ -56,7 +56,7 @@ export const CustomTooltip = ({
     }
 
     return (
-      <LockedApartmentTooltip
+      <LockedHouseTooltip
         color={tooltipItem?.stroke || color}
         apartmentName={apartmentName}
         contract={contractCandidate}
@@ -73,7 +73,7 @@ export const CustomTooltip = ({
   return (
     <div className="bg-background border border-border rounded-2xl p-3">
       {acquiredApartments.map(apartment => (
-        <ApartmentItem
+        <HouseItem
           key={apartment.id}
           apartment={apartment}
           color={apartment.fill}

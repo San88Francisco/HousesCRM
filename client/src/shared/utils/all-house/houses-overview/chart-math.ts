@@ -1,12 +1,11 @@
-import {
-  CHART_WIDTH_THRESHOLD,
-  DESKTOP_TICKS,
-  MOBILE_TABLET_TICKS,
-  ONE_YEAR_MS,
-  SMALL_MOBILE_TICKS,
-} from '@/shared/constants/line-chart/line-chart';
 import { TimeRangeEnum } from '@/types/core/time-range';
 import { ChartDataPoint } from '@/types/model/houses-overview';
+
+const CHART_WIDTH_THRESHOLD = 50;
+const SMALL_MOBILE_TICKS = 4;
+const MOBILE_TABLET_TICKS = 7;
+const DESKTOP_TICKS = 13;
+const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
 export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: number) => {
   let timeoutId: ReturnType<typeof setTimeout>;

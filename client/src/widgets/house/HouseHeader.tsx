@@ -1,6 +1,6 @@
 'use client';
 
-import { PROPERTY_TYPE_MAP } from '@/shared/constants/apartment/apartment-type-map';
+import { PROPERTY_TYPE_MAP } from '@/shared/constants/house/house-type-map';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
