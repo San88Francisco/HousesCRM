@@ -1,7 +1,7 @@
 'use client';
 
-import { useFavoriteStar } from '@/hooks/use-favorite-star';
-import { SIDEBAR_STYLES } from '@/shared/constants/styles';
+import { useFavoriteStar } from '@/hooks';
+import { SIDEBAR_STYLES } from '@/shared/constants/styles/sidebar';
 import { BookmarkIcon } from '@/shared/ui/bookmark';
 import {
   SidebarGroup,
@@ -9,7 +9,7 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
 } from '@/shared/ui/sidebar';
-import { makeTitle } from '@/shared/utils/favorite-start/formate-title';
+import { makeTitle } from '@/shared/utils/favorite-start';
 import { NavItem } from '@/types/model/navigation';
 import { useMemo } from 'react';
 import { SidebarMenuItem } from './SidebarMenuItem';

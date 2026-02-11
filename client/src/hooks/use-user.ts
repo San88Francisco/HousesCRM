@@ -1,4 +1,4 @@
-import { tokenStorage } from '@/shared/utils/auth/token';
+import { tokenStorage } from '@/shared/utils/auth';
 import { setUser } from '@/store/slice/user-slice';
 import { RootState } from '@/store/store';
 import { useEffect } from 'react';

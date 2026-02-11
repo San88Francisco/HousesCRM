@@ -2,7 +2,7 @@
 
 import { ModalRoot } from '@/components/modals';
 import { SidebarProvider } from '@/shared/ui/sidebar';
-import Header from '@/widgets/header';
+import Header from '@/widgets/header/Header';
 import { ReactNode, Suspense } from 'react';
 import { AppSidebar } from '../sidebar/AppSidebar';
 

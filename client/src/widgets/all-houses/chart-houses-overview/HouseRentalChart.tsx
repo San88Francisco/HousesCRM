@@ -1,5 +1,4 @@
 'use client';
-import { useHouseRental } from '@/hooks/all-house/houses-overview/use-house-rental';
 
 import {
   Card,
@@ -17,6 +16,7 @@ import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
+import { useHouseRental } from '@/hooks/all-house/houses-overview';
 import { TimeRangeEnum } from '@/types/core/time-range';
 import { HouseOverviewChartDataItem } from '@/types/model/houses-overview';
 import { useCallback } from 'react';
@@ -31,9 +31,9 @@ import {
   YAxis,
 } from 'recharts';
 import { LegendContent } from './LegendContent';
-import { CustomTooltip } from './houses-overview-tooltip';
+import { CustomTooltip } from './houses-overview-tooltip/CustomTooltip';
 
-export function HouseRentalChart() {
+export const HouseRentalChart = () => {
   const { data, error, isLoading } = useGetHousesAnalyticsQuery();
 
   const {
@@ -177,4 +177,4 @@ export function HouseRentalChart() {
       </CardContent>
     </Card>
   );
-}
+};

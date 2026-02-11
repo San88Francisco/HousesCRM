@@ -1,4 +1,4 @@
-import { HouseFormData } from '@/shared/validation/create-update-house/house-schema';
+import { HouseFormData } from '@/shared/validation/create-update-house';
 import { HouseType } from '@/types/core/house';
 
 export const defaultHouseValues: Partial<HouseFormData> = {

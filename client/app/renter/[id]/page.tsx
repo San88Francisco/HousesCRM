@@ -2,7 +2,7 @@ import { RenterActions } from '@/widgets/renter/RenterActions';
 import { RenterHeader } from '@/widgets/renter/RenterHeader';
 import { RenterReportCard } from '@/widgets/renter/RenterReportCard';
 
-export default function Page() {
+const Page = () => {
   return (
     <section className="flex flex-col justify-between gap-8 mb-5 h-full">
       <div className="flex flex-col md:gap-14 gap-8 mb-5">
@@ -12,4 +12,6 @@ export default function Page() {
       <RenterActions />
     </section>
   );
-}
+};
+
+export default Page;

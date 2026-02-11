@@ -1,12 +1,10 @@
-import { useRenterCrud } from '@/hooks/modals/renter-create-update-modal/use-renter-crud';
+import { useRenterCrud } from '@/hooks/modals/renter-create-update-modal';
 import { defaultRenterValues } from '@/shared/utils/create-update-renter-form/default-renter-values';
 import { mapRenterToFormData } from '@/shared/utils/create-update-renter-form/renter-form';
 import { renterFormToast } from '@/shared/utils/create-update-renter-form/renter-form-toast';
 import { extractDirtyFormValues } from '@/shared/utils/helpers/extract-dirty-form-values';
-import {
-  RenterFormData,
-  renterSchema,
-} from '@/shared/validation/create-update-renter/renter-schema';
+import { RenterFormData, renterSchema } from '@/shared/validation/create-update-renter';
+
 import { Renter } from '@/types/core/renter';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';

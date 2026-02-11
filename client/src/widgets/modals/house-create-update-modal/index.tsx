@@ -1,7 +1,7 @@
 import { RHFDatePicker } from '@/components/RHF/RHFDatePicker';
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFSelect } from '@/components/RHF/RHFSelect';
-import { HOUSE_TYPE_OPTIONS } from '@/shared/constants/house-form/house-form';
+import { HOUSE_TYPE_OPTIONS } from '@/shared/constants/house-form';
 import { Building, Coins, Hash, Home, MapPin, Square } from 'lucide-react';
 
 type Props = {

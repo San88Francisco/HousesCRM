@@ -1,11 +1,11 @@
-import './globals.css';
-import { ReactNode } from 'react';
-import { ThemeScript } from '@/scripts/ThemeScript';
+import { ThemeScript } from '@/scripts';
 import { Providers } from '@/shared/providers';
 import { Toaster } from '@/shared/ui/sonner';
-import { LayoutContent } from '@/widgets/layout/layout-content/LayoutContent';
+import { LayoutContent } from '@/widgets/layout/layout-content';
+import { ReactNode } from 'react';
+import './globals.css';
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -19,4 +19,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

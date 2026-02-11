@@ -1,4 +1,4 @@
-import { RenterFormData } from '@/shared/validation/create-update-renter/renter-schema';
+import { RenterFormData } from '@/shared/validation/create-update-renter';
 import { ContractWithRevenue } from '@/types/core/contract';
 
 import { Metadata } from '@/types/core/metadata';

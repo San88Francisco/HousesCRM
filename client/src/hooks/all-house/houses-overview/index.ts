@@ -1,4 +1,4 @@
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
@@ -20,7 +20,7 @@ const DEFAULT_Y_MIN = 4000;
 const DEFAULT_Y_MAX = 8000;
 const Y_DOMAIN_STEP = 100;
 
-export function useHouseRental(housesData: Partial<AllAnalyticsResponse>) {
+export const useHouseRental = (housesData: Partial<AllAnalyticsResponse>) => {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ALL_DATA);
   const [lockedHouse, setLockedHouse] = useState<string | null>(null);
   const [cursorDate, setCursorDate] = useState<string>('');
@@ -127,4 +127,4 @@ export function useHouseRental(housesData: Partial<AllAnalyticsResponse>) {
     housesDataWithFill,
     chartMouseHandlers: { onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave },
   };
-}
+};

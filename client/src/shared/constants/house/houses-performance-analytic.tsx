@@ -1,7 +1,7 @@
 import { formatCurrency } from '@/shared/utils/table/formatters';
 import { HousePerformanceItem } from '@/types/core/houses-performance';
 import { ColumnDef } from '@tanstack/react-table';
-import { formatCurrencyOptions } from '../currency/format-options';
+import { formatCurrencyOptions } from '../currency';
 
 export const HousesPerformanceTableColumns: ColumnDef<HousePerformanceItem>[] = [
   {

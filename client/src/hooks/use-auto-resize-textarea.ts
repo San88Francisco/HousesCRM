@@ -16,11 +16,11 @@ type Props = {
   handleInput: FormEventHandler<HTMLTextAreaElement>;
 };
 
-export function useAutoResizeTextarea(
+export const useAutoResizeTextarea = (
   forwardedRef: Ref<HTMLTextAreaElement> | undefined,
   onChange: ChangeHandler,
   value: string | number | readonly string[] | undefined,
-): Props {
+): Props => {
   const innerRef = useRef<HTMLTextAreaElement | null>(null);
   const rafIdRef = useRef<number | null>(null);
   const manualResizingRef = useRef<boolean>(false);
@@ -114,4 +114,4 @@ export function useAutoResizeTextarea(
   };
 
   return { setRef, handleChange, handleInput };
-}
+};

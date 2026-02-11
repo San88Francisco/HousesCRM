@@ -1,22 +1,22 @@
 'use client';
 /* eslint-disable */
 
-import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
 
+import { ChartContext, useChart } from '@/hooks/all-house/pie-chart';
+import { THEMES } from '@/shared/constants/pie-chart';
 import { cn } from '@/shared/utils/cn';
-import { ChartContext, useChart } from '@/hooks/all-house/pie-chart/useChart';
 import { ChartPieConfig } from '@/types/core/revenue-distribution/chart-pie-config';
-import { THEMES } from '@/shared/constants/pie-chart/chart-themes';
+import { ComponentProps, forwardRef, useId, useMemo } from 'react';
 
-const ChartContainer = React.forwardRef<
+const ChartContainer = forwardRef<
   HTMLDivElement,
-  React.ComponentProps<'div'> & {
+  ComponentProps<'div'> & {
     config: ChartPieConfig;
-    children: React.ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>['children'];
+    children: ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>['children'];
   }
 >(({ id, className, children, config, ...props }, ref) => {
-  const uniqueId = React.useId();
+  const uniqueId = useId();
   const chartId = `chart-${id || uniqueId.replace(/:/g, '')}`;
 
   return (
@@ -69,10 +69,10 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
 
-const ChartTooltipContent = React.forwardRef<
+const ChartTooltipContent = forwardRef<
   HTMLDivElement,
-  React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-    React.ComponentProps<'div'> & {
+  ComponentProps<typeof RechartsPrimitive.Tooltip> &
+    ComponentProps<'div'> & {
       hideLabel?: boolean;
       hideIndicator?: boolean;
       indicator?: 'line' | 'dot' | 'dashed';
@@ -100,7 +100,7 @@ const ChartTooltipContent = React.forwardRef<
   ) => {
     const { config } = useChart();
 
-    const tooltipLabel = React.useMemo(() => {
+    const tooltipLabel = useMemo(() => {
       if (hideLabel || !payload?.length) {
         return null;
       }
@@ -209,7 +209,11 @@ const ChartTooltipContent = React.forwardRef<
 );
 ChartTooltipContent.displayName = 'ChartTooltip';
 
-export function getPayloadConfigFromPayload(config: ChartPieConfig, payload: unknown, key: string) {
+export const getPayloadConfigFromPayload = (
+  config: ChartPieConfig,
+  payload: unknown,
+  key: string,
+) => {
   if (typeof payload !== 'object' || payload === null) {
     return undefined;
   }
@@ -232,6 +236,6 @@ export function getPayloadConfigFromPayload(config: ChartPieConfig, payload: unk
   }
 
   return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config];
-}
+};
 
-export { ChartContainer, ChartTooltip, ChartTooltipContent, ChartStyle };
+export { ChartContainer, ChartStyle, ChartTooltip, ChartTooltipContent };

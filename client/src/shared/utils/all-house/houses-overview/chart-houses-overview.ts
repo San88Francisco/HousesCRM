@@ -52,7 +52,7 @@ const getStartDate = (timeRange: TimeRangeEnum, apartments: HouseOverview[], now
   return getEarliestContractDate(apartments, now);
 };
 
-export function getPeriodRange(timeRange: TimeRangeEnum, apartments: HouseOverview[]) {
+export const getPeriodRange = (timeRange: TimeRangeEnum, apartments: HouseOverview[]) => {
   const now = new Date();
   const startDate = getStartDate(timeRange, apartments, now);
 
@@ -60,13 +60,13 @@ export function getPeriodRange(timeRange: TimeRangeEnum, apartments: HouseOvervi
     periodStart: startDate.toISOString().slice(0, 10),
     periodEnd: now.toISOString().slice(0, 10),
   };
-}
+};
 
-export function findMinMaxRentWithFivePercent(
+export const findMinMaxRentWithFivePercent = (
   apartments: HouseOverview[],
   periodStart: string,
   periodEnd: string,
-) {
+) => {
   const matchingPayments = apartments
     .flatMap(apt => apt.contract)
     .filter(c => c.termination >= periodStart && c.commencement <= periodEnd)
@@ -81,12 +81,12 @@ export function findMinMaxRentWithFivePercent(
     min: +(min * 0.95).toFixed(2),
     max: +(max * 1.05).toFixed(2),
   };
-}
+};
 
-export function generateChartData(
+export const generateChartData = (
   apartments: (HouseOverview & { fill: string })[],
   timeRange: TimeRangeEnum,
-): ChartDataPoint[] {
+): ChartDataPoint[] => {
   const now = new Date();
   const startDate = getStartDate(timeRange, apartments, now);
 
@@ -125,14 +125,14 @@ export function generateChartData(
 
     return point;
   });
-}
+};
 
-export function generateOptimalTicks(
+export const generateOptimalTicks = (
   minDate: number,
   maxDate: number,
   containerWidth: number,
   isMobile: boolean,
-): number[] {
+): number[] => {
   const startDate = new Date(minDate);
   startDate.setDate(1);
   startDate.setHours(0, 0, 0, 0);
@@ -169,16 +169,16 @@ export function generateOptimalTicks(
   }
 
   return ticks;
-}
+};
 
-export function formatTickDate(value: number): string {
+export const formatTickDate = (value: number): string => {
   return new Date(value)
     .toLocaleDateString('uk-UA', {
       month: 'short',
       year: '2-digit',
     })
     .replace(' р.', '');
-}
+};
 
 export const isContract = (value: unknown): value is HousesOverviewContract => {
   return (

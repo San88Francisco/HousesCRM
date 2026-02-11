@@ -3,7 +3,7 @@ import { Button } from '@/shared/ui/button';
 import { Home } from 'lucide-react';
 import Link from 'next/link';
 
-export default function NotFound() {
+const NotFound = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
       <div className="space-y-2">
@@ -22,4 +22,6 @@ export default function NotFound() {
       </Button>
     </div>
   );
-}
+};
+
+export default NotFound;

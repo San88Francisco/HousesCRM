@@ -1,14 +1,16 @@
 'use client';
 
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { formatCurrencyOptions } from '@/shared/constants/currency/format-options';
+import { formatCurrencyOptions } from '@/shared/constants/currency';
+
 import { Badge } from '@/shared/ui/badge';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { formatDate } from '@/shared/utils/format/format-date';
+import { formatDate } from '@/shared/utils/format';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
 import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
-import { ContractStatus } from '@/types/core/status/status';
+import { ContractStatus } from '@/types/core/status';
+
 import {
   CircleCheck,
   CircleDollarSign,

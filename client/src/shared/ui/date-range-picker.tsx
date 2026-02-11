@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/shared/ui/button';
-import { Calendar } from '@/shared/ui/calendar';
+import Calendar from '@/shared/ui/calendar/Calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { cn } from '@/shared/utils/cn';
 import { CalendarMode } from '@/types/core/calendar';

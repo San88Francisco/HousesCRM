@@ -1,4 +1,4 @@
-import { FavoriteItem } from '../storage/favorites-storage';
+import { FavoriteItem } from '../storage';
 
 export const makeTitle = (fav: FavoriteItem) => {
   if (fav.name.length <= 30) return fav.name;

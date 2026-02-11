@@ -1,4 +1,5 @@
 import { rootApi } from '@/shared/api';
+import { ContractsRequest, ContractsResponse } from '@/types/core/contract';
 import {
   ContractByIdResponse,
   CreateContractRequest,
@@ -38,6 +39,19 @@ export const contractsApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: ['Contracts', 'Analytics', 'Houses', 'Renters'],
     }),
+    getContracts: build.query<ContractsResponse, ContractsRequest>({
+      query: ({ page, limit, sortBy, order }) => ({
+        url: '/contracts',
+        method: 'GET',
+        params: {
+          page,
+          limit,
+          sortBy,
+          order,
+        },
+      }),
+      providesTags: ['Contracts'],
+    }),
   }),
   overrideExisting: false,
 });
@@ -47,4 +61,5 @@ export const {
   useGetContractByIdQuery,
   useUpdateContractMutation,
   useCreateContractMutation,
+  useGetContractsQuery,
 } = contractsApi;

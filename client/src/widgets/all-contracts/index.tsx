@@ -1,37 +1,37 @@
 'use client';
+
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { useHousesPerformance } from '@/hooks/all-house/houses-performance-analytic/use-houses-performance';
-
-import { HousesPerformanceTableColumns } from '@/shared/constants/house/houses-performance-analytic';
-import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
+import { AllContractsTableColumns } from '@/shared/constants/all-contracts';
+import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
+import { useGetContractsQuery } from '@/store/api/contracts-api';
+import { RentersOccupancyTableSkeleton } from '@/widgets/skeletons/renters-occupancy-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useState } from 'react';
-import { HousesPerformanceTable } from './HousesPerformanceTable';
+import { ContractsTable } from './ContractsTable';
 
-export const HousesPerformanceAnalytic = () => {
+export const AllContracts = () => {
   const [pageIndex, setPageIndex] = useState<number>(DEFAULT_START_PAGE);
   const [limit, setLimit] = useState<number>(DEFAULT_PAGE_SIZE);
 
-  const { data, trigger, pageCount, isLoading, isError, error, isEmpty } = useHousesPerformance();
+  const { data, isLoading, isError, error } = useGetContractsQuery({
+    page: pageIndex + 1,
+    limit,
+  });
+  const isEmpty = !data?.data.length;
 
-  const onLimitChange = (limit: number) => {
+  const onLimitChange = (newLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);
-    setLimit(limit);
-    trigger({
-      pageIndex: DEFAULT_START_PAGE,
-      pageSize: limit,
-    });
+    setLimit(newLimit);
   };
 
   const table = useReactTable({
-    data: data ?? [],
-    columns: HousesPerformanceTableColumns,
+    data: data?.data ?? [],
+    columns: AllContractsTableColumns,
 
     manualPagination: true,
-    pageCount: pageCount ?? 1,
+    pageCount: data?.meta?.totalPages ?? 1,
 
     state: {
       pagination: {
@@ -50,25 +50,15 @@ export const HousesPerformanceAnalytic = () => {
 
         setPageIndex(newPageIndex);
         setLimit(next.pageSize);
-
-        trigger({
-          pageIndex: newPageIndex,
-          pageSize: next.pageSize,
-        });
       } else {
         setPageIndex(next.pageIndex);
-
-        trigger({
-          pageIndex: next.pageIndex,
-          pageSize: limit,
-        });
       }
     },
 
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <HousesPerformanceTableSkeleton rows={limit} />;
+  if (isLoading) return <RentersOccupancyTableSkeleton rows={limit} />;
 
   if (isError) return <ErrorState className="w-full" error={error} />;
 
@@ -78,13 +68,15 @@ export const HousesPerformanceAnalytic = () => {
     <Card className="h-full flex flex-col">
       <CardHeader>
         <div className="flex flex-col gap-3">
-          <CardTitle>Огляд квартир</CardTitle>
-          <CardDescription>Зведений огляд результатів роботи кожної квартири</CardDescription>
+          <CardTitle>Всі Договори</CardTitle>
+          <CardDescription>
+            Хронологія орендних договорів та їх фінансових результатів.
+          </CardDescription>
         </div>
       </CardHeader>
 
       <CardContent>
-        <HousesPerformanceTable table={table} limit={limit} onLimitChange={onLimitChange} />
+        <ContractsTable table={table} limit={limit} onLimitChange={onLimitChange} />
       </CardContent>
     </Card>
   );
