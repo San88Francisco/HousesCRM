@@ -1,8 +1,8 @@
 import { clearUser } from '@/store/slice/user-slice';
+import type { RefreshResponse } from '@/types/services/auth';
 import type { Dispatch } from '@reduxjs/toolkit';
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { toast } from 'sonner';
 import { tokenStorage } from '../utils/auth';
 
 const rawBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '');
@@ -20,28 +20,8 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const handleTokenRefresh = async (): Promise<string | null> => {
-  try {
-    const refreshResult = await fetch(`${baseUrl}/auth/refresh`, {
-      method: 'POST',
-      credentials: 'include',
-    });
-
-    if (refreshResult.ok) {
-      const data = await refreshResult.json();
-      return data.accessToken || null;
-    }
-
-    return null;
-  } catch {
-    toast.error('Помилка оновлення сесії. Спробуйте увійти знову.');
-    return null;
-  }
-};
-
 const handleAuthError = (dispatch: Dispatch) => {
   tokenStorage.clearTokens();
-
   dispatch(clearUser());
 
   if (typeof window !== 'undefined') {
@@ -57,10 +37,15 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    const newAccessToken = await handleTokenRefresh();
+    const refreshResult = await baseQuery(
+      { url: '/auth/refresh', method: 'POST' },
+      api,
+      extraOptions,
+    );
 
-    if (newAccessToken) {
-      tokenStorage.setAccessToken(newAccessToken);
+    if (refreshResult.data) {
+      const { accessToken } = refreshResult.data as RefreshResponse;
+      tokenStorage.setAccessToken(accessToken);
       result = await baseQuery(args, api, extraOptions);
     } else {
       handleAuthError(api.dispatch);

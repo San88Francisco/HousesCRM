@@ -1,12 +1,12 @@
 import { ROUTES } from '@/shared/routes';
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('access_token')?.value ?? null;
   const pathname = request.nextUrl.pathname;
 
-  const PUBLIC_PATHS = [ROUTES.ALL_HOUSES];
+  const PUBLIC_PATHS: string[] = [];
 
   if (PUBLIC_PATHS.includes(pathname)) {
     return NextResponse.next();
