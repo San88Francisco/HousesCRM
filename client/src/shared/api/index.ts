@@ -5,6 +5,8 @@ import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolk
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { tokenStorage } from '../utils/auth';
 
+import { Mutex } from 'async-mutex';
+
 const rawBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '');
 const baseUrl = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl}/api`;
 
@@ -29,26 +31,39 @@ const handleAuthError = (dispatch: Dispatch) => {
   }
 };
 
+const mutex = new Mutex();
+
 const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,
   api,
   extraOptions,
 ) => {
+  await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    const refreshResult = await baseQuery(
-      { url: '/auth/refresh', method: 'POST' },
-      api,
-      extraOptions,
-    );
+    if (!mutex.isLocked()) {
+      const release = await mutex.acquire();
+      try {
+        const refreshResult = await baseQuery(
+          { url: '/auth/refresh', method: 'POST' },
+          api,
+          extraOptions,
+        );
 
-    if (refreshResult.data) {
-      const { accessToken } = refreshResult.data as RefreshResponse;
-      tokenStorage.setAccessToken(accessToken);
-      result = await baseQuery(args, api, extraOptions);
+        if (refreshResult.data) {
+          const { accessToken } = refreshResult.data as RefreshResponse;
+          tokenStorage.setAccessToken(accessToken);
+          result = await baseQuery(args, api, extraOptions);
+        } else {
+          handleAuthError(api.dispatch);
+        }
+      } finally {
+        release();
+      }
     } else {
-      handleAuthError(api.dispatch);
+      await mutex.waitForUnlock();
+      result = await baseQuery(args, api, extraOptions);
     }
   }
 

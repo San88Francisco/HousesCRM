@@ -84,7 +84,8 @@ export const getOptimalTicks = (
 
   if (ticks.length > 1) {
     const diff = ticks[1] - ticks[0];
-    const threshold = stepMonths * 15 * 24 * 60 * 60 * 1000;
+    const HALF_MONTH_MS = 15 * 24 * 60 * 60 * 1000;
+    const threshold = stepMonths * HALF_MONTH_MS;
     if (diff < threshold) {
       ticks.splice(1, 1);
     }

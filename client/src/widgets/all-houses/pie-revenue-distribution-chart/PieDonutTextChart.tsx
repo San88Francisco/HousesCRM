@@ -22,7 +22,7 @@ export const PieDonutTextChart = () => {
 
   return (
     <Card className="w-full">
-      <CardHeader className=" pb-0 mb-10">
+      <CardHeader className="pb-0 mb-10">
         <div className="flex flex-col gap-3 sm:text-left text-center">
           <CardTitle>Загальний дохід по всіх квартирах</CardTitle>
           <CardDescription>
@@ -30,17 +30,18 @@ export const PieDonutTextChart = () => {
           </CardDescription>
         </div>
       </CardHeader>
-      {(grandApartmentTotalRevenue === 0 || positiveRevenueCount === 0) && (
+      {grandApartmentTotalRevenue === 0 || positiveRevenueCount === 0 ? (
         <EmptyState className="max-h-52" />
+      ) : (
+        <CardContent className="flex gap-10 items-center relative">
+          <PieRevenueChart
+            grandApartmentTotalRevenue={grandApartmentTotalRevenue}
+            adjustedData={adjustedData}
+            positiveRevenueCount={positiveRevenueCount}
+          />
+          <ListChart chartData={adjustedData} />
+        </CardContent>
       )}
-      <CardContent className="flex flex-col lg:flex-row lg:items-center gap-10 relative">
-        <PieRevenueChart
-          grandApartmentTotalRevenue={grandApartmentTotalRevenue}
-          adjustedData={adjustedData}
-          positiveRevenueCount={positiveRevenueCount}
-        />
-        <ListChart chartData={adjustedData} />
-      </CardContent>
     </Card>
   );
 };

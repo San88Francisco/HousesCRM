@@ -35,7 +35,7 @@ export const RHFSwitch = ({ name, label, disabled, className, onValueChange, ref
             ref={ref}
           />
           {label && (
-            <Label htmlFor={name} className="cursor-pointer  text-text font-medium">
+            <Label htmlFor={name} className="cursor-pointer text-text font-medium">
               {label}
             </Label>
           )}
