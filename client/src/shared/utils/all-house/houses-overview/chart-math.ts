@@ -65,7 +65,7 @@ export const getOptimalTicks = (
     (endDate.getMonth() - startDate.getMonth());
 
   if (count <= 1 || totalMonths <= 0) {
-    return [dataMin, dataMax].filter((val, index, self) => self.indexOf(val) === index);
+    return Array.from(new Set([dataMin, dataMax]));
   }
 
   const stepMonths = Math.max(1, Math.ceil(totalMonths / (count - 1)));

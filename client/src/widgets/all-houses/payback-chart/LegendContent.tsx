@@ -10,8 +10,8 @@ type Props = {
 
 export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClick }: Props) => {
   return (
-    <div className="flex flex-col items-center justify-center py-3 px-1">
-      <div className="w-full max-w-full flex flex-wrap items-center justify-center gap-3 sm:gap-5 md:gap-7">
+    <div className="flex flex-col items-start justify-start py-3 px-1 w-full overflow-visible">
+      <div className="flex flex-nowrap items-center justify-start gap-4 min-w-max">
         {apartmentsData.map(apt => (
           <Button
             variant="icon"
@@ -19,7 +19,7 @@ export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClic
             onClick={() => onApartmentClick(apt.id)}
             className={cn(
               'flex items-center cursor-pointer transition-opacity duration-200 select-none p-0',
-              'min-w-0 flex-shrink',
+              'flex-shrink-0',
               activeApartment && activeApartment !== apt.id && 'opacity-30',
             )}
           >
@@ -30,7 +30,7 @@ export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClic
 
             <span
               className={cn(
-                'text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis',
+                'text-xs sm:text-sm whitespace-nowrap',
                 activeApartment === apt.id && 'font-semibold',
               )}
             >

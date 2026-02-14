@@ -31,7 +31,6 @@ export const PaybackChart = () => {
   const { data: analyticsData, isLoading, error } = useGetHousesAnalyticsQuery();
 
   const chartData = usePaybackChartData(analyticsData?.housesPaybackStats, CHART_CURRENCY);
-  const { containerRef, isScrollNeeded } = useScrollNeeded(chartData.length);
   const paddedChartData = usePaddedData(chartData, CHART_CURRENCY);
   const {
     yAxisMax,
@@ -41,6 +40,8 @@ export const PaybackChart = () => {
     chartMarginWithLegend,
     minChartWidth,
   } = useChartConfig(chartData);
+
+  const { containerRef, isScrollNeeded } = useScrollNeeded(minChartWidth);
   const { scrollRef, isDragging, handlePointerDown, handlePointerMove } = useChartScroll();
   const horizontalCoordinatesGenerator = useCoordinatesGenerator(yAxisMax);
 
@@ -56,14 +57,6 @@ export const PaybackChart = () => {
     () => chartData.every(item => item.totalIncomeUSD === 0),
     [chartData],
   );
-
-  const housesWithoutIncome = useMemo(
-    () => new Set(chartData.filter(item => item.totalIncomeUSD === 0).map(item => item.id)),
-    [chartData],
-  );
-
-  const showOverlay =
-    hasNoIncome || Boolean(activeApartment && housesWithoutIncome.has(activeApartment));
 
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
@@ -93,7 +86,7 @@ export const PaybackChart = () => {
           handlePointerMove={handlePointerMove}
           minChartWidth={minChartWidth}
         >
-          {showOverlay ? (
+          {hasNoIncome ? (
             <EmptyState className="translate-y-[-10px]" />
           ) : (
             <ContentChart

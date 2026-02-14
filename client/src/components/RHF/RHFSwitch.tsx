@@ -26,13 +26,14 @@ export const RHFSwitch = ({ name, label, disabled, className, onValueChange, ref
         <div className={cn('flex items-center space-x-2', className)}>
           <Switch
             id={name}
-            checked={field.value}
+            checked={!!field.value}
             onCheckedChange={checked => {
               field.onChange(checked);
               onValueChange?.(checked);
             }}
             disabled={disabled}
             ref={ref}
+            onBlur={field.onBlur}
           />
           {label && (
             <Label htmlFor={name} className="cursor-pointer text-text font-medium">
