@@ -156,7 +156,7 @@ export const HouseRentalChart = () => {
                     key={apt.id + timeRange}
                     dataKey={apt.id}
                     connectNulls={true}
-                    type="basis"
+                    type="monotone"
                     stroke={apt.fill}
                     strokeWidth={lockedApartment === apt.id ? 2.5 : 1.5}
                     strokeOpacity={lockedApartment && lockedApartment !== apt.id ? 0.15 : 1}
