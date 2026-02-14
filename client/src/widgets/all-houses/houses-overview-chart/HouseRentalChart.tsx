@@ -112,7 +112,7 @@ export const HouseRentalChart = () => {
                   interval={0}
                   allowDuplicatedCategory={false}
                   tickFormatter={formatTickDate}
-                  tick={{ fontSize: isMobile ? 10 : 12, fill: '#fff', fontWeight: 500 }}
+                  tick={{ fontSize: isMobile ? 10 : 12, fill: 'var(--text)', fontWeight: 500 }}
                   tickLine={false}
                   axisLine={{ stroke: 'var(--border)', strokeWidth: 2 }}
                   textAnchor="middle"
@@ -124,7 +124,7 @@ export const HouseRentalChart = () => {
                   tick={{
                     fontSize: isMobile ? 10 : 12,
                     dy: isMobile ? -8 : -20,
-                    fill: '#fff',
+                    fill: 'var(--text)',
                     fontWeight: 500,
                   }}
                   tickFormatter={(value: number) =>

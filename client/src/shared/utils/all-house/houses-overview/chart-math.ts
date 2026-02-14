@@ -82,6 +82,13 @@ export const getOptimalTicks = (
     ticks[0] = dataMin;
   }
 
-  // Deduplicate and sort to ensure valid XAxis domain/ticks
+  if (ticks.length > 1) {
+    const diff = ticks[1] - ticks[0];
+    const threshold = stepMonths * 15 * 24 * 60 * 60 * 1000;
+    if (diff < threshold) {
+      ticks.splice(1, 1);
+    }
+  }
+
   return Array.from(new Set(ticks)).sort((a, b) => a - b);
 };
