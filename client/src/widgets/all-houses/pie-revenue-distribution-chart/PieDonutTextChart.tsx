@@ -16,13 +16,13 @@ export const PieDonutTextChart = () => {
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
   if (!data?.revenueDistribution.data?.length) return <EmptyState />;
-
   const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;
   const adjustedData = addFillToChartItems(data, 'revenueDistribution');
+  const positiveRevenueCount = adjustedData.filter(d => d.apartmentTotalRevenue > 0).length;
 
   return (
     <Card className="w-full">
-      <CardHeader className="items-center pb-0 mb-10">
+      <CardHeader className=" pb-0 mb-10">
         <div className="flex flex-col gap-3">
           <CardTitle>Загальний дохід по всіх квартирах</CardTitle>
           <CardDescription>
@@ -30,10 +30,14 @@ export const PieDonutTextChart = () => {
           </CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="flex   gap-10 items-center ">
+      {(grandApartmentTotalRevenue === 0 || positiveRevenueCount === 0) && (
+        <EmptyState className="max-h-52" />
+      )}
+      <CardContent className="flex gap-10 items-center relative">
         <PieRevenueChart
           grandApartmentTotalRevenue={grandApartmentTotalRevenue}
           adjustedData={adjustedData}
+          positiveRevenueCount={positiveRevenueCount}
         />
         <ListChart chartData={adjustedData} />
       </CardContent>

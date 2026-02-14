@@ -1,4 +1,3 @@
-import { EmptyState } from '@/components/chart-states/EmptyState';
 import { createChartPieConfig } from '@/shared/utils/all-house/pie-chart/create-chart-pie-config';
 import { HouseDistributionDataItemChart } from '@/types/model/revenue-distribution';
 import { Label, Pie, PieChart } from 'recharts';
@@ -7,13 +6,14 @@ import { ChartTooltip, ChartTooltipContent, ContainerCharts } from './ContainerC
 type Props = {
   adjustedData: HouseDistributionDataItemChart[];
   grandApartmentTotalRevenue: number;
+  positiveRevenueCount: number;
 };
 
-export const PieRevenueChart = ({ adjustedData, grandApartmentTotalRevenue }: Props) => {
-  const positiveRevenueCount = adjustedData.filter(d => d.apartmentTotalRevenue > 0).length;
-
-  if (grandApartmentTotalRevenue === 0 || positiveRevenueCount === 0) return <EmptyState />;
-
+export const PieRevenueChart = ({
+  adjustedData,
+  grandApartmentTotalRevenue,
+  positiveRevenueCount,
+}: Props) => {
   const chartConfig = createChartPieConfig(adjustedData);
 
   return (

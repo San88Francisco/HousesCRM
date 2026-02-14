@@ -21,7 +21,6 @@ import { TimeRangeEnum } from '@/types/core/time-range';
 import { HouseOverviewDataItemChart } from '@/types/model/houses-overview';
 import { useCallback } from 'react';
 import {
-  Legend,
   Line,
   LineChart,
   ReferenceLine,
@@ -52,6 +51,8 @@ export const HouseRentalChart = () => {
     dataMax,
     isMobile,
     apartmentsDataWithFill,
+    hasNoContracts,
+    housesWithoutContracts,
   } = useHouseRental(data ?? {});
 
   const handleApartmentClick = useCallback(
@@ -92,88 +93,86 @@ export const HouseRentalChart = () => {
 
       <CardContent className={cn(isMobile && 'p-0')}>
         <div ref={chartRef} className="w-full h-[330px] relative">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              margin={{ top: 30, right: 25, bottom: 0, left: 0 }}
-              key={timeRange}
-              data={chartData}
-              {...chartMouseHandlers}
-            >
-              <XAxis
-                dataKey="date"
-                type="number"
-                domain={[dataMin, dataMax]}
-                ticks={optimalTicks}
-                interval={0}
-                allowDuplicatedCategory={false}
-                tickFormatter={formatTickDate}
-                tick={{ fontSize: isMobile ? 10 : 12, fill: '#fff', fontWeight: 500 }}
-                tickLine={false}
-                axisLine={{ stroke: 'var(--border)', strokeWidth: 2 }}
-                textAnchor="middle"
-              />
-
-              <YAxis
-                domain={yDomain}
-                ticks={yTicks}
-                tickMargin={10}
-                tick={{
-                  fontSize: isMobile ? 10 : 12,
-                  dy: isMobile ? -8 : -20,
-                  fill: '#fff',
-                  fontWeight: 500,
-                }}
-                tickFormatter={(value: number) => value.toLocaleString('en-US').replace(/,/g, ' ')}
-                axisLine={false}
-                tickLine={false}
-              />
-
-              <ReferenceLine y={yDomain[1]} stroke="var(--border)" strokeWidth={1} />
-              <ReferenceLine y={yTicks[1]} stroke="var(--border)" strokeWidth={1} />
-
-              <Tooltip
-                content={
-                  <CustomTooltip
-                    lockedApartment={lockedApartment}
-                    apartmentsData={apartmentsDataWithFill}
-                    cursorDate={cursorDate}
-                  />
-                }
-                cursor={{
-                  stroke: 'var(--border)',
-                  strokeWidth: 1,
-                }}
-                position={{ y: isMobile ? 170 : 0 }}
-              />
-
-              {apartmentsDataWithFill.map((apt: HouseOverviewDataItemChart) => (
-                <Line
-                  key={apt.id + timeRange}
-                  dataKey={apt.id}
-                  connectNulls={true}
-                  type="basis"
-                  stroke={apt.fill}
-                  strokeWidth={lockedApartment === apt.id ? 2.5 : 1.5}
-                  strokeOpacity={lockedApartment && lockedApartment !== apt.id ? 0.15 : 1}
-                  dot={false}
-                  activeDot={!lockedApartment || lockedApartment === apt.id}
+          {hasNoContracts ||
+          Boolean(lockedApartment && housesWithoutContracts.has(lockedApartment)) ? (
+            <EmptyState className="w-full max-h-48" />
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                margin={{ top: 30, right: 25, bottom: 0, left: 0 }}
+                key={timeRange}
+                data={chartData}
+                {...chartMouseHandlers}
+              >
+                <XAxis
+                  dataKey="date"
+                  type="number"
+                  domain={[dataMin, dataMax]}
+                  ticks={optimalTicks}
+                  interval={0}
+                  allowDuplicatedCategory={false}
+                  tickFormatter={formatTickDate}
+                  tick={{ fontSize: isMobile ? 10 : 12, fill: '#fff', fontWeight: 500 }}
+                  tickLine={false}
+                  axisLine={{ stroke: 'var(--border)', strokeWidth: 2 }}
+                  textAnchor="middle"
                 />
-              ))}
+                <YAxis
+                  domain={yDomain}
+                  ticks={yTicks}
+                  tickMargin={10}
+                  tick={{
+                    fontSize: isMobile ? 10 : 12,
+                    dy: isMobile ? -8 : -20,
+                    fill: '#fff',
+                    fontWeight: 500,
+                  }}
+                  tickFormatter={(value: number) =>
+                    value.toLocaleString('en-US').replace(/,/g, ' ')
+                  }
+                  axisLine={false}
+                  tickLine={false}
+                />
 
-              <Legend
-                verticalAlign="bottom"
-                align="center"
-                content={() => (
-                  <LegendContent
-                    apartmentsData={apartmentsDataWithFill}
-                    activeApartment={lockedApartment}
-                    onApartmentClick={handleApartmentClick}
+                <ReferenceLine y={yDomain[1]} stroke="var(--border)" strokeWidth={1} />
+                <ReferenceLine y={yTicks[1]} stroke="var(--border)" strokeWidth={1} />
+                <Tooltip
+                  content={
+                    <CustomTooltip
+                      lockedApartment={lockedApartment}
+                      apartmentsData={apartmentsDataWithFill}
+                      cursorDate={cursorDate}
+                    />
+                  }
+                  cursor={{
+                    stroke: 'var(--border)',
+                    strokeWidth: 1,
+                  }}
+                  position={{ y: isMobile ? 170 : 0 }}
+                />
+
+                {apartmentsDataWithFill.map((apt: HouseOverviewDataItemChart) => (
+                  <Line
+                    key={apt.id + timeRange}
+                    dataKey={apt.id}
+                    connectNulls={true}
+                    type="basis"
+                    stroke={apt.fill}
+                    strokeWidth={lockedApartment === apt.id ? 2.5 : 1.5}
+                    strokeOpacity={lockedApartment && lockedApartment !== apt.id ? 0.15 : 1}
+                    dot={false}
+                    activeDot={!lockedApartment || lockedApartment === apt.id}
                   />
-                )}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
+        <LegendContent
+          apartmentsData={apartmentsDataWithFill}
+          activeApartment={lockedApartment}
+          onApartmentClick={handleApartmentClick}
+        />
       </CardContent>
     </Card>
   );

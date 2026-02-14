@@ -55,6 +55,26 @@ export const useHouseRental = (apartmentsData: Partial<AllAnalyticsResponse>) =>
 
   const hasData: boolean = Boolean(apartmentsData?.housesOverview?.length);
 
+  const hasNoContracts = useMemo(
+    () =>
+      hasData && apartmentsData.housesOverview
+        ? apartmentsData.housesOverview.every(house => !house.contract.length)
+        : false,
+    [hasData, apartmentsData],
+  );
+
+  const housesWithoutContracts = useMemo(
+    () =>
+      hasData && apartmentsData.housesOverview
+        ? new Set(
+            apartmentsData.housesOverview
+              .filter(house => !house.contract.length)
+              .map(house => house.id),
+          )
+        : new Set<string>(),
+    [hasData, apartmentsData],
+  );
+
   const apartmentsDataWithFill = useMemo(
     () =>
       hasData && apartmentsData.housesOverview
@@ -99,17 +119,24 @@ export const useHouseRental = (apartmentsData: Partial<AllAnalyticsResponse>) =>
     ? [DEFAULT_Y_MIN, (DEFAULT_Y_MIN + DEFAULT_Y_MAX) / 2, DEFAULT_Y_MAX]
     : [yDomain[0], Math.round((yDomain[0] + yDomain[1]) / 2), yDomain[1]];
 
-  const { min: dataMin, max: dataMax } = getDataRange(hasData, chartData);
+  const { dataMin, dataMax } = useMemo(
+    () => getDataRange(hasData, chartData),
+    [hasData, chartData],
+  );
 
-  const optimalTicks = getOptimalTicks(
-    chartWidth,
-    chartData,
-    dataMin,
-    dataMax,
-    timeRange,
-    isMobile,
-    isTablet,
-    isSmallMobile,
+  const optimalTicks = useMemo(
+    () =>
+      getOptimalTicks(
+        chartWidth,
+        chartData,
+        dataMin,
+        dataMax,
+        timeRange,
+        isMobile,
+        isTablet,
+        isSmallMobile,
+      ),
+    [chartWidth, chartData, dataMin, dataMax, timeRange, isMobile, isTablet, isSmallMobile],
   );
 
   return {
@@ -128,6 +155,8 @@ export const useHouseRental = (apartmentsData: Partial<AllAnalyticsResponse>) =>
     dataMax,
     isMobile,
     apartmentsDataWithFill,
+    hasNoContracts,
+    housesWithoutContracts,
     chartMouseHandlers: { onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave },
   };
 };

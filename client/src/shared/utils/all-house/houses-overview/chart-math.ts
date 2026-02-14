@@ -18,13 +18,13 @@ export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: numb
 
 export const getDataRange = (hasData: boolean, chartData: DataPointChart[]) => {
   if (!hasData || chartData.length === 0) {
-    return { min: Date.now() - ONE_YEAR_MS, max: Date.now() };
+    return { dataMin: Date.now() - ONE_YEAR_MS, dataMax: Date.now() };
   }
   const dates = chartData.map(d => d.date);
-  const min = dates.reduce((a, b) => Math.min(a, b), dates[0]);
-  const max = dates.reduce((a, b) => Math.max(a, b), dates[0]);
+  const dataMin = dates.reduce((a, b) => Math.min(a, b), dates[0]);
+  const dataMax = dates.reduce((a, b) => Math.max(a, b), dates[0]);
 
-  return { min, max };
+  return { dataMin, dataMax };
 };
 
 export const getOptimalTicks = (
@@ -64,11 +64,11 @@ export const getOptimalTicks = (
     (endDate.getFullYear() - startDate.getFullYear()) * 12 +
     (endDate.getMonth() - startDate.getMonth());
 
-  if (count <= 1) {
-    return [dataMin];
+  if (count <= 1 || totalMonths <= 0) {
+    return [dataMin, dataMax].filter((val, index, self) => self.indexOf(val) === index);
   }
 
-  const stepMonths = Math.ceil(totalMonths / (count - 1));
+  const stepMonths = Math.max(1, Math.ceil(totalMonths / (count - 1)));
 
   const ticks = Array.from({ length: count }).map((_, i) => {
     const tickDate = new Date(endDate);
@@ -82,5 +82,6 @@ export const getOptimalTicks = (
     ticks[0] = dataMin;
   }
 
-  return ticks;
+  // Deduplicate and sort to ensure valid XAxis domain/ticks
+  return Array.from(new Set(ticks)).sort((a, b) => a - b);
 };
