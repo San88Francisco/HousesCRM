@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
-import { CHART_THEMES } from '../constants/pie-chart';
+
+import { CHART_THEMES } from '../constants/chart';
 import { cn } from '../utils/cn';
 
 /* eslint-disable */
