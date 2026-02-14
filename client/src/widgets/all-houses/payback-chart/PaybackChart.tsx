@@ -73,7 +73,7 @@ export const PaybackChart = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 sm:text-left text-center">
           <CardTitle className="text-lg sm:text-xl md:text-2xl">
             Статистика окупності квартир
           </CardTitle>
@@ -94,7 +94,7 @@ export const PaybackChart = () => {
           minChartWidth={minChartWidth}
         >
           {showOverlay ? (
-            <EmptyState className="translate-y-[-0px]" />
+            <EmptyState className="translate-y-[-10px]" />
           ) : (
             <ContentChart
               paddedChartData={paddedChartData}

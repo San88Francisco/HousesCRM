@@ -71,11 +71,11 @@ export const HouseRentalChart = () => {
   return (
     <Card>
       <CardHeader>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 sm:text-left text-center">
           <CardTitle>Історія оренди квартир</CardTitle>
           <CardDescription>Відображення цін на оренду за період: {timeRange}</CardDescription>
         </div>
-        <CardAction>
+        <CardAction className="w-full flex justify-center sm:w-auto">
           <Select value={timeRange} onValueChange={value => setTimeRange(value as TimeRangeEnum)}>
             <SelectTrigger className="w-44">
               <SelectValue placeholder="Вибери період" />

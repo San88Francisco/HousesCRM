@@ -38,7 +38,7 @@ export const ContentChart = ({
         tickFormatter={(value: number) => value.toLocaleString('en-US').replace(/,/g, ' ')}
         axisLine={false}
         tickLine={false}
-        width={65}
+        width={55}
         tick={{
           fontSize: 12,
           fill: 'var(--text)',

@@ -6,7 +6,7 @@ import { useCallback, useMemo } from 'react';
 const MIN_ITEMS_FOR_FULL_WIDTH = 8;
 const CHART_HEIGHT = 300;
 const LEGEND_HEIGHT = 80;
-const CHART_MARGIN = { top: 20, right: 30, left: 20, bottom: 30 };
+const CHART_MARGIN = { top: 0, right: 30, left: 0, bottom: 30 };
 export const LEGEND_MARGIN_TOP = -70;
 
 export type ChartCoordinatesProps = {
