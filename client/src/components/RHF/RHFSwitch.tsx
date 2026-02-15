@@ -3,7 +3,7 @@
 import { Label } from '@/shared/ui/label';
 import { Switch } from '@/shared/ui/switch';
 import { cn } from '@/shared/utils/cn';
-import { ReactNode, Ref } from 'react';
+import { ReactNode } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 interface Props {
@@ -12,10 +12,9 @@ interface Props {
   disabled?: boolean;
   className?: string;
   onValueChange?: (checked: boolean) => void;
-  ref?: Ref<HTMLButtonElement>;
 }
 
-export const RHFSwitch = ({ name, label, disabled, className, onValueChange, ref }: Props) => {
+export const RHFSwitch = ({ name, label, disabled, className, onValueChange }: Props) => {
   const { control } = useFormContext();
 
   return (
@@ -32,7 +31,7 @@ export const RHFSwitch = ({ name, label, disabled, className, onValueChange, ref
               onValueChange?.(checked);
             }}
             disabled={disabled}
-            ref={ref}
+            ref={field.ref}
             onBlur={field.onBlur}
           />
           {label && (

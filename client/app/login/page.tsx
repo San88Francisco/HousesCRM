@@ -1,4 +1,4 @@
-import { BackgroundLogo } from '@/widgets/login/background-logo';
+import { BackgroundLogo } from '@/shared/ui/background-logo';
 import { LoginForm } from '@/widgets/login/login-form';
 
 const Page = () => {
