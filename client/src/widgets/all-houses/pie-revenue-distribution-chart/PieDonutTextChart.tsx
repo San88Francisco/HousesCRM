@@ -33,7 +33,7 @@ export const PieDonutTextChart = () => {
       {grandApartmentTotalRevenue === 0 || positiveRevenueCount === 0 ? (
         <EmptyState className="max-h-52" />
       ) : (
-        <CardContent className="flex gap-10 items-center relative">
+        <CardContent className="flex flex-col lg:flex-row gap-10 items-center relative">
           <PieRevenueChart
             grandApartmentTotalRevenue={grandApartmentTotalRevenue}
             adjustedData={adjustedData}

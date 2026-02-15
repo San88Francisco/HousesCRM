@@ -7,7 +7,7 @@ import { BackgroundLogo } from '@/shared/ui/background-logo';
 
 const NotFound = () => {
   return (
-    <div className="relative h-screen flex items-center justify-center overflow-hidden bg-background">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden bg-background">
       <BackgroundLogo />
       <div className="relative z-10 flex flex-col items-center justify-center gap-6 text-center">
         <div className="space-y-2">
@@ -25,7 +25,7 @@ const NotFound = () => {
           </Link>
         </Button>
       </div>
-    </div>
+    </section>
   );
 };
 
