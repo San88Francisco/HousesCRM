@@ -70,7 +70,7 @@ export function HouseRentalChart() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-3">
           <CardTitle>Історія оренди квартир</CardTitle>
           <CardDescription>Відображення цін на оренду за період: {timeRange}</CardDescription>
         </div>

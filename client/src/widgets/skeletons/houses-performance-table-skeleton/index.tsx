@@ -10,7 +10,7 @@ type Props = {
 
 export const HousesPerformanceTableSkeleton = ({ rows = 10 }: Props) => {
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>
           <Skeleton className="h-6 w-56" />
