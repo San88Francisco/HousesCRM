@@ -1,24 +1,14 @@
 'use client';
-import { useAnimatedIcon } from '@/hooks';
+import { useAnimatedIcon, useThemeSwitcher } from '@/hooks';
+
 import { THEME_OPTIONS, themeIconMap } from '@/shared/constants/theme/theme-switcher';
 import { Button } from '@/shared/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
 import { SunMoonIcon } from '@/shared/ui/sunmoon';
-import { NextTheme } from '@/types/core/theme';
-import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
 import { ThemeOptionItem } from './ThemeOptionItem';
 
 export const ThemeSwitch = () => {
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
-
-  useEffect(() => setMounted(true), []);
-  const isValidTheme = (t: string | undefined): t is NextTheme => {
-    return t === NextTheme.Light || t === NextTheme.Dark || t === NextTheme.System;
-  };
-  const validTheme = theme && isValidTheme(theme) ? theme : NextTheme.System;
-  const CurrentIcon = themeIconMap[validTheme];
+  const { mounted, setSwitcherTheme, CurrentIcon } = useThemeSwitcher();
 
   const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(<CurrentIcon />);
 
@@ -45,12 +35,13 @@ export const ThemeSwitch = () => {
           {animatedIcon}
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="w-12">
         {THEME_OPTIONS.map(option => (
           <ThemeOptionItem
             key={option}
-            icon={themeIconMap[option]}
-            onClick={() => setTheme(option)}
+            icon={option in themeIconMap ? themeIconMap[option] : CurrentIcon}
+            onClick={() => setSwitcherTheme(option)}
           />
         ))}
       </DropdownMenuContent>

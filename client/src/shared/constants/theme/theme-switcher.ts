@@ -10,3 +10,5 @@ export const themeIconMap = {
   [NextTheme.Dark]: MoonIcon,
   [NextTheme.System]: SunMoonIcon,
 };
+
+export const SWITCHER_STORAGE_KEY = 'switcher-theme';
