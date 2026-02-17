@@ -10,6 +10,8 @@ export type PdfContractRaw = {
   monthlyPayment: number;
 };
 
+export type PdfContractResponse = PdfContractRaw;
+
 export type PdfContractModel = {
   landlord: {
     firstName: string;

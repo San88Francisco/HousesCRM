@@ -40,8 +40,8 @@ export const HouseRentalChart = () => {
     timeRange,
     setTimeRange,
     chartData,
-    lockedApartment,
-    setLockedApartment,
+    lockedHouse,
+    setLockedHouse,
     yDomain,
     yTicks,
     chartRef,
@@ -51,14 +51,14 @@ export const HouseRentalChart = () => {
     dataMin,
     dataMax,
     isMobile,
-    apartmentsDataWithFill,
+    housesDataWithFill,
   } = useHouseRental(data ?? {});
 
-  const handleApartmentClick = useCallback(
+  const handleHouseClick = useCallback(
     (id: string) => {
-      setLockedApartment(prev => (prev === id ? null : id));
+      setLockedHouse(prev => (prev === id ? null : id));
     },
-    [setLockedApartment],
+    [setLockedHouse],
   );
 
   if (isLoading) return <LoadingState className="w-full" />;
@@ -134,8 +134,8 @@ export const HouseRentalChart = () => {
               <Tooltip
                 content={
                   <CustomTooltip
-                    lockedApartment={lockedApartment}
-                    apartmentsData={apartmentsDataWithFill}
+                    lockedHouse={lockedHouse}
+                    housesData={housesDataWithFill}
                     cursorDate={cursorDate}
                   />
                 }
@@ -146,17 +146,17 @@ export const HouseRentalChart = () => {
                 position={{ y: isMobile ? 170 : 0 }}
               />
 
-              {apartmentsDataWithFill.map((apt: HouseOverviewChartDataItem) => (
+              {housesDataWithFill.map((apt: HouseOverviewChartDataItem) => (
                 <Line
                   key={apt.id + timeRange}
                   dataKey={apt.id}
                   connectNulls={true}
                   type="basis"
                   stroke={apt.fill}
-                  strokeWidth={lockedApartment === apt.id ? 2.5 : 1.5}
-                  strokeOpacity={lockedApartment && lockedApartment !== apt.id ? 0.15 : 1}
+                  strokeWidth={lockedHouse === apt.id ? 2.5 : 1.5}
+                  strokeOpacity={lockedHouse && lockedHouse !== apt.id ? 0.15 : 1}
                   dot={false}
-                  activeDot={!lockedApartment || lockedApartment === apt.id}
+                  activeDot={!lockedHouse || lockedHouse === apt.id}
                 />
               ))}
 
@@ -165,9 +165,9 @@ export const HouseRentalChart = () => {
                 align="center"
                 content={() => (
                   <LegendContent
-                    apartmentsData={apartmentsDataWithFill}
-                    activeApartment={lockedApartment}
-                    onApartmentClick={handleApartmentClick}
+                    housesData={housesDataWithFill}
+                    activeHouse={lockedHouse}
+                    onHouseClick={handleHouseClick}
                   />
                 )}
               />

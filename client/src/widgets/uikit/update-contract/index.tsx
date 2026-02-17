@@ -1,5 +1,5 @@
 import { Button } from '@/shared/ui/button';
-import { useGetContractByIdQuery } from '@/store/api/houses-api';
+import { useGetContractByIdQuery } from '@/store/api/contracts-api';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
 import { Contract } from '@/types/core/contract';

@@ -1,4 +1,4 @@
-import { ApartmentType } from '@/types/core/apartment-type';
+import { HouseType } from '@/types/core/house';
 import * as yup from 'yup';
 
 export const houseSchema = yup.object({
@@ -44,8 +44,8 @@ export const houseSchema = yup.object({
     .max(45, 'Вулиця не може перевищувати 45 символів'),
 
   apartmentType: yup
-    .mixed<ApartmentType>()
-    .oneOf(Object.values(ApartmentType), 'Невірний тип квартири')
+    .mixed<HouseType>()
+    .oneOf(Object.values(HouseType), 'Невірний тип квартири')
     .required("Тип квартири обов'язковий"),
 });
 
@@ -57,5 +57,5 @@ export type HouseFormData = {
   price: number | null;
   floor: number | null;
   street: string;
-  apartmentType: ApartmentType;
+  apartmentType: HouseType;
 };

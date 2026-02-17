@@ -1,12 +1,6 @@
 import { useIsMobile } from '@/hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import {
-  DEFAULT_CHART_WIDTH,
-  DEFAULT_Y_MAX,
-  DEFAULT_Y_MIN,
-  Y_DOMAIN_STEP,
-} from '@/shared/constants/line-chart';
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
 import {
   findMinMaxRentWithFivePercent,
@@ -21,9 +15,14 @@ import {
 import { TimeRangeEnum } from '@/types/core/time-range';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
 
-export const useHouseRental = (apartmentsData: Partial<AllAnalyticsResponse>) => {
+const DEFAULT_CHART_WIDTH = 800;
+const DEFAULT_Y_MIN = 4000;
+const DEFAULT_Y_MAX = 8000;
+const Y_DOMAIN_STEP = 100;
+
+export const useHouseRental = (housesData: Partial<AllAnalyticsResponse>) => {
   const [timeRange, setTimeRange] = useState<TimeRangeEnum>(TimeRangeEnum.ALL_DATA);
-  const [lockedApartment, setLockedApartment] = useState<string | null>(null);
+  const [lockedHouse, setLockedHouse] = useState<string | null>(null);
   const [cursorDate, setCursorDate] = useState<string>('');
   const [chartWidth, setChartWidth] = useState(DEFAULT_CHART_WIDTH);
 
@@ -53,39 +52,37 @@ export const useHouseRental = (apartmentsData: Partial<AllAnalyticsResponse>) =>
     setCursorDate('');
   }, []);
 
-  const hasData: boolean = Boolean(apartmentsData?.housesOverview?.length);
+  const hasData: boolean = Boolean(housesData?.housesOverview?.length);
 
-  const apartmentsDataWithFill = useMemo(
+  const housesDataWithFill = useMemo(
     () =>
-      hasData && apartmentsData.housesOverview
-        ? addFillToChartItems(apartmentsData, 'housesOverview')
-        : [],
-    [hasData, apartmentsData],
+      hasData && housesData.housesOverview ? addFillToChartItems(housesData, 'housesOverview') : [],
+    [housesData],
   );
 
   const chartData = useMemo(
-    () => (hasData ? generateChartData(apartmentsDataWithFill, timeRange) : []),
-    [hasData, apartmentsDataWithFill, timeRange],
+    () => (hasData ? generateChartData(housesDataWithFill, timeRange) : []),
+    [housesDataWithFill, timeRange],
   );
 
   const periodRange = useMemo(
     () =>
-      hasData && apartmentsData.housesOverview
-        ? getPeriodRange(timeRange, apartmentsData.housesOverview)
+      hasData && housesData.housesOverview
+        ? getPeriodRange(timeRange, housesData.housesOverview)
         : { periodStart: '', periodEnd: '' },
-    [hasData, timeRange, apartmentsData],
+    [timeRange, housesData],
   );
 
   const minMax = useMemo(
     () =>
-      hasData && apartmentsData.housesOverview
+      hasData && housesData.housesOverview
         ? findMinMaxRentWithFivePercent(
-            apartmentsData.housesOverview,
+            housesData.housesOverview,
             periodRange.periodStart,
             periodRange.periodEnd,
           )
         : null,
-    [hasData, apartmentsData, periodRange.periodStart, periodRange.periodEnd],
+    [housesData, periodRange.periodStart, periodRange.periodEnd],
   );
 
   const yDomain = !minMax
@@ -116,8 +113,8 @@ export const useHouseRental = (apartmentsData: Partial<AllAnalyticsResponse>) =>
     timeRange,
     setTimeRange,
     chartData,
-    lockedApartment,
-    setLockedApartment,
+    lockedHouse,
+    setLockedHouse,
     yDomain,
     yTicks,
     chartRef,
@@ -127,7 +124,7 @@ export const useHouseRental = (apartmentsData: Partial<AllAnalyticsResponse>) =>
     dataMin,
     dataMax,
     isMobile,
-    apartmentsDataWithFill,
+    housesDataWithFill,
     chartMouseHandlers: { onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave },
   };
 };

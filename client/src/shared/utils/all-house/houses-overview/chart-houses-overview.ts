@@ -1,5 +1,9 @@
 import { TimeRangeEnum } from '@/types/core/time-range';
-import { Apartment, ChartDataPoint, HousesOverviewContract } from '@/types/model/houses-overview';
+import {
+  ChartDataPoint,
+  HouseOverview,
+  HousesOverviewContract,
+} from '@/types/model/houses-overview';
 
 const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.SIX_MONTHS]: date => {
@@ -35,20 +39,20 @@ const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.ALL_DATA]: date => date,
 };
 
-const getEarliestContractDate = (apartments: Apartment[], fallback: Date): Date =>
+const getEarliestContractDate = (apartments: HouseOverview[], fallback: Date): Date =>
   apartments
     .flatMap(apt => apt.contract)
     .map(c => new Date(c.commencement))
     .reduce((earliest, curr) => (curr < earliest ? curr : earliest), fallback);
 
-const getStartDate = (timeRange: TimeRangeEnum, apartments: Apartment[], now: Date): Date => {
+const getStartDate = (timeRange: TimeRangeEnum, apartments: HouseOverview[], now: Date): Date => {
   if (timeRange !== TimeRangeEnum.ALL_DATA) {
     return timeRangeMap[timeRange](now);
   }
   return getEarliestContractDate(apartments, now);
 };
 
-export const getPeriodRange = (timeRange: TimeRangeEnum, apartments: Apartment[]) => {
+export const getPeriodRange = (timeRange: TimeRangeEnum, apartments: HouseOverview[]) => {
   const now = new Date();
   const startDate = getStartDate(timeRange, apartments, now);
 
@@ -59,7 +63,7 @@ export const getPeriodRange = (timeRange: TimeRangeEnum, apartments: Apartment[]
 };
 
 export const findMinMaxRentWithFivePercent = (
-  apartments: Apartment[],
+  apartments: HouseOverview[],
   periodStart: string,
   periodEnd: string,
 ) => {
@@ -80,7 +84,7 @@ export const findMinMaxRentWithFivePercent = (
 };
 
 export const generateChartData = (
-  apartments: (Apartment & { fill: string })[],
+  apartments: (HouseOverview & { fill: string })[],
   timeRange: TimeRangeEnum,
 ): ChartDataPoint[] => {
   const now = new Date();
