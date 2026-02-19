@@ -54,6 +54,26 @@ export const useHouseRental = (housesData: Partial<AllAnalyticsResponse>) => {
 
   const hasData: boolean = Boolean(housesData?.housesOverview?.length);
 
+  const hasNoContracts = useMemo(
+    () =>
+      hasData && housesData.housesOverview
+        ? housesData.housesOverview.every(house => !house.contract.length)
+        : false,
+    [hasData, housesData],
+  );
+
+  const housesWithoutContracts = useMemo(
+    () =>
+      hasData && housesData.housesOverview
+        ? new Set(
+            housesData.housesOverview
+              .filter(house => !house.contract.length)
+              .map(house => house.id),
+          )
+        : new Set<string>(),
+    [hasData, housesData],
+  );
+
   const housesDataWithFill = useMemo(
     () =>
       hasData && housesData.housesOverview ? addFillToChartItems(housesData, 'housesOverview') : [],
@@ -96,17 +116,24 @@ export const useHouseRental = (housesData: Partial<AllAnalyticsResponse>) => {
     ? [DEFAULT_Y_MIN, (DEFAULT_Y_MIN + DEFAULT_Y_MAX) / 2, DEFAULT_Y_MAX]
     : [yDomain[0], Math.round((yDomain[0] + yDomain[1]) / 2), yDomain[1]];
 
-  const { min: dataMin, max: dataMax } = getDataRange(hasData, chartData);
+  const { dataMin, dataMax } = useMemo(
+    () => getDataRange(hasData, chartData),
+    [hasData, chartData],
+  );
 
-  const optimalTicks = getOptimalTicks(
-    chartWidth,
-    chartData,
-    dataMin,
-    dataMax,
-    timeRange,
-    isMobile,
-    isTablet,
-    isSmallMobile,
+  const optimalTicks = useMemo(
+    () =>
+      getOptimalTicks(
+        chartWidth,
+        chartData,
+        dataMin,
+        dataMax,
+        timeRange,
+        isMobile,
+        isTablet,
+        isSmallMobile,
+      ),
+    [chartWidth, chartData, dataMin, dataMax, timeRange, isMobile, isTablet, isSmallMobile],
   );
 
   return {
@@ -125,6 +152,8 @@ export const useHouseRental = (housesData: Partial<AllAnalyticsResponse>) => {
     dataMax,
     isMobile,
     housesDataWithFill,
+    hasNoContracts,
+    housesWithoutContracts,
     chartMouseHandlers: { onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave },
   };
 };

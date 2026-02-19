@@ -17,8 +17,8 @@ import {
 } from '@/shared/utils/all-house/payback-chart/utils';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { Currencies } from '@/types/core/currencies';
-import React, { useCallback, useEffect, useState } from 'react';
-import { ChartContent } from './ChartContent';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { ContentChart } from './ContentChart';
 import { LegendContent } from './LegendContent';
 import { ScrollContainer } from './ScrollContainer';
 
@@ -29,8 +29,8 @@ export const PaybackChart = () => {
   const [activeApartment, setActiveApartment] = useState<string | null>(null);
 
   const { data: analyticsData, isLoading, error } = useGetHousesAnalyticsQuery();
+
   const chartData = usePaybackChartData(analyticsData?.housesPaybackStats, CHART_CURRENCY);
-  const { containerRef, isScrollNeeded } = useScrollNeeded(chartData.length);
   const paddedChartData = usePaddedData(chartData, CHART_CURRENCY);
   const {
     yAxisMax,
@@ -40,6 +40,8 @@ export const PaybackChart = () => {
     chartMarginWithLegend,
     minChartWidth,
   } = useChartConfig(chartData);
+
+  const { containerRef, isScrollNeeded } = useScrollNeeded(minChartWidth);
   const { scrollRef, isDragging, handlePointerDown, handlePointerMove } = useChartScroll();
   const horizontalCoordinatesGenerator = useCoordinatesGenerator(yAxisMax);
 
@@ -51,6 +53,11 @@ export const PaybackChart = () => {
     setActiveApartment(prev => (prev === id ? null : id));
   }, []);
 
+  const hasNoIncome = useMemo(
+    () => chartData.every(item => item.totalIncomeUSD === 0),
+    [chartData],
+  );
+
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
   if (!chartData?.length) return <EmptyState />;
@@ -59,7 +66,7 @@ export const PaybackChart = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 sm:text-left text-center">
           <CardTitle className="text-lg sm:text-xl md:text-2xl">
             Статистика окупності квартир
           </CardTitle>
@@ -70,7 +77,7 @@ export const PaybackChart = () => {
         </div>
       </CardHeader>
 
-      <CardContent className="p-2 sm:p-4 md:p-6" ref={containerRef}>
+      <CardContent className="p-2 sm:p-4 md:p-6 relative" ref={containerRef}>
         <ScrollContainer
           scrollRef={scrollRef as React.RefObject<HTMLDivElement>}
           isScrollNeeded={isScrollNeeded}
@@ -79,15 +86,19 @@ export const PaybackChart = () => {
           handlePointerMove={handlePointerMove}
           minChartWidth={minChartWidth}
         >
-          <ChartContent
-            paddedChartData={paddedChartData}
-            chartMarginWithLegend={chartMarginWithLegend}
-            scaleType={scaleType}
-            yAxisDomain={yAxisDomain}
-            horizontalCoordinatesGenerator={horizontalCoordinatesGenerator}
-            activeApartment={activeApartment}
-            totalChartHeight={totalChartHeight}
-          />
+          {hasNoIncome ? (
+            <EmptyState className="translate-y-[-10px]" />
+          ) : (
+            <ContentChart
+              paddedChartData={paddedChartData}
+              chartMarginWithLegend={chartMarginWithLegend}
+              scaleType={scaleType}
+              yAxisDomain={yAxisDomain}
+              horizontalCoordinatesGenerator={horizontalCoordinatesGenerator}
+              activeApartment={activeApartment}
+              totalChartHeight={totalChartHeight}
+            />
+          )}
 
           <div
             className="relative pointer-events-auto"

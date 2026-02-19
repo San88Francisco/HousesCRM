@@ -1,6 +1,6 @@
 import { TimeRangeEnum } from '@/types/core/time-range';
 import {
-  ChartDataPoint,
+  DataPointChart,
   HouseOverview,
   HousesOverviewContract,
 } from '@/types/model/houses-overview';
@@ -86,7 +86,7 @@ export const findMinMaxRentWithFivePercent = (
 export const generateChartData = (
   apartments: (HouseOverview & { fill: string })[],
   timeRange: TimeRangeEnum,
-): ChartDataPoint[] => {
+): DataPointChart[] => {
   const now = new Date();
   const startDate = getStartDate(timeRange, apartments, now);
 
@@ -104,7 +104,7 @@ export const generateChartData = (
   const uniqueSortedDates = allDates.sort((a, b) => a - b);
 
   return uniqueSortedDates.map(timestamp => {
-    const point: ChartDataPoint = { date: timestamp };
+    const point: DataPointChart = { date: timestamp };
     const currentDate = new Date(timestamp);
 
     apartments.forEach(apt => {

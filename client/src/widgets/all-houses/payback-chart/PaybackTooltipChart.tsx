@@ -15,7 +15,7 @@ type CustomTooltipProps = {
 
 const DEFAULT_LOCALE = 'uk-UA';
 
-export const PaybackChartTooltip = ({ active, payload }: CustomTooltipProps) => {
+export const PaybackTooltipChart = ({ active, payload }: CustomTooltipProps) => {
   if (!active || !payload?.length) return null;
 
   const data: PaybackChartData = payload[0].payload;

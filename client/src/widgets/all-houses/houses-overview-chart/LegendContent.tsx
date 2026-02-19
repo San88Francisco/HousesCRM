@@ -11,7 +11,7 @@ type Props = {
 
 export const LegendContent = ({ housesData, activeHouse, onHouseClick }: Props) => {
   return (
-    <div className="flex  max-[420px]:flex-col max-[420px]:items-center justify-center  sm:pt-10 pt-4 sm:px-10 px-1 pb-3">
+    <div className="flex max-[420px]:flex-col max-[420px]:items-center justify-center sm:pt-10 pt-4 sm:px-10 px-1 pb-3">
       <div className="w-max mx-auto flex flex-wrap max-[420px]:flex-col items-start justify-center min-[420.5px]:gap-7 gap-3">
         {housesData.map(apt => (
           <Button

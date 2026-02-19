@@ -2,9 +2,9 @@ import { ChartCoordinatesProps } from '@/shared/utils/all-house/payback-chart/ch
 import { PaybackChartData } from '@/types/core/payback-chart';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { CustomBar } from './CustomBar';
-import { PaybackChartTooltip } from './PaybackChartTooltip';
+import { PaybackTooltipChart } from './PaybackTooltipChart';
 
-type ChartContentProps = {
+type Props = {
   paddedChartData: PaybackChartData[];
   chartMarginWithLegend: { top: number; right: number; left: number; bottom: number };
   scaleType: 'linear' | 'log';
@@ -14,7 +14,7 @@ type ChartContentProps = {
   totalChartHeight: number;
 };
 
-export const ChartContent = ({
+export const ContentChart = ({
   paddedChartData,
   chartMarginWithLegend,
   scaleType,
@@ -22,7 +22,7 @@ export const ChartContent = ({
   horizontalCoordinatesGenerator,
   activeApartment,
   totalChartHeight,
-}: ChartContentProps) => (
+}: Props) => (
   <ResponsiveContainer width="100%" height={totalChartHeight}>
     <BarChart data={paddedChartData} margin={chartMarginWithLegend} barSize={20}>
       <CartesianGrid
@@ -46,7 +46,7 @@ export const ChartContent = ({
         }}
       />
       <Tooltip
-        content={<PaybackChartTooltip />}
+        content={<PaybackTooltipChart />}
         cursor={false}
         allowEscapeViewBox={{ x: false, y: false }}
       />
