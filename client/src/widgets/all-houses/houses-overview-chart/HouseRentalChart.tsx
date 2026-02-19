@@ -18,7 +18,7 @@ import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { useHouseRental } from '@/hooks/all-house/houses-overview';
 import { TimeRangeEnum } from '@/types/core/time-range';
-import { HouseOverviewDataItemChart } from '@/types/model/houses-overview';
+import { HouseOverviewChartDataItem } from '@/types/model/houses-overview';
 import { useCallback } from 'react';
 import {
   Line,
@@ -39,8 +39,8 @@ export const HouseRentalChart = () => {
     timeRange,
     setTimeRange,
     chartData,
-    lockedApartment,
-    setLockedApartment,
+    lockedHouse,
+    setLockedHouse,
     yDomain,
     yTicks,
     chartRef,
@@ -50,16 +50,16 @@ export const HouseRentalChart = () => {
     dataMin,
     dataMax,
     isMobile,
-    apartmentsDataWithFill,
+    housesDataWithFill,
     hasNoContracts,
     housesWithoutContracts,
   } = useHouseRental(data ?? {});
 
-  const handleApartmentClick = useCallback(
+  const handleHouseClick = useCallback(
     (id: string) => {
-      setLockedApartment(prev => (prev === id ? null : id));
+      setLockedHouse(prev => (prev === id ? null : id));
     },
-    [setLockedApartment],
+    [setLockedHouse],
   );
 
   if (isLoading) return <LoadingState className="w-full" />;
@@ -93,8 +93,7 @@ export const HouseRentalChart = () => {
 
       <CardContent className={cn(isMobile && 'p-0')}>
         <div ref={chartRef} className="w-full h-[330px] relative">
-          {hasNoContracts ||
-          Boolean(lockedApartment && housesWithoutContracts.has(lockedApartment)) ? (
+          {hasNoContracts || Boolean(lockedHouse && housesWithoutContracts.has(lockedHouse)) ? (
             <EmptyState className="w-full max-h-48" />
           ) : (
             <ResponsiveContainer width="100%" height="100%">
@@ -139,8 +138,8 @@ export const HouseRentalChart = () => {
                 <Tooltip
                   content={
                     <CustomTooltip
-                      lockedApartment={lockedApartment}
-                      apartmentsData={apartmentsDataWithFill}
+                      lockedHouse={lockedHouse}
+                      housesData={housesDataWithFill}
                       cursorDate={cursorDate}
                     />
                   }
@@ -151,17 +150,17 @@ export const HouseRentalChart = () => {
                   position={{ y: isMobile ? 170 : 0 }}
                 />
 
-                {apartmentsDataWithFill.map((apt: HouseOverviewDataItemChart) => (
+                {housesDataWithFill.map((apt: HouseOverviewChartDataItem) => (
                   <Line
                     key={apt.id + timeRange}
                     dataKey={apt.id}
                     connectNulls={true}
                     type="monotone"
                     stroke={apt.fill}
-                    strokeWidth={lockedApartment === apt.id ? 2.5 : 1.5}
-                    strokeOpacity={lockedApartment && lockedApartment !== apt.id ? 0.15 : 1}
+                    strokeWidth={lockedHouse === apt.id ? 2.5 : 1.5}
+                    strokeOpacity={lockedHouse && lockedHouse !== apt.id ? 0.15 : 1}
                     dot={false}
-                    activeDot={!lockedApartment || lockedApartment === apt.id}
+                    activeDot={!lockedHouse || lockedHouse === apt.id}
                   />
                 ))}
               </LineChart>
@@ -169,9 +168,9 @@ export const HouseRentalChart = () => {
           )}
         </div>
         <LegendContent
-          apartmentsData={apartmentsDataWithFill}
-          activeApartment={lockedApartment}
-          onApartmentClick={handleApartmentClick}
+          housesData={housesDataWithFill}
+          activeHouse={lockedHouse}
+          onHouseClick={handleHouseClick}
         />
       </CardContent>
     </Card>

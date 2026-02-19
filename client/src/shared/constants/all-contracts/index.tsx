@@ -1,12 +1,10 @@
+import { formatDate } from '@/shared/utils/format';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
-
-import { ColumnDef } from '@tanstack/react-table';
-
-import { formatDate } from '@/shared/utils/format';
 import { Contract } from '@/types/core/contract';
 import { ContractStatus } from '@/types/core/status';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
+import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrencyOptions } from '../currency';
 
 export const AllContractsTableColumns: ColumnDef<Contract>[] = [

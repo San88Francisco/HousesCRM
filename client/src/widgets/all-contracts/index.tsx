@@ -3,7 +3,6 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { AllContractsTableColumns } from '@/shared/constants/all-contracts';
-
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { useGetContractsQuery } from '@/store/api/contracts-api';

@@ -12,13 +12,13 @@ export type HousesOverviewContract = {
   renter: HousesOverviewRenter;
 };
 
-export type Apartment = {
+export type HouseOverview = {
   id: string;
   apartmentName: string;
   contract: HousesOverviewContract[];
 };
 
-export type HouseOverviewDataItemChart = Apartment & {
+export type HouseOverviewChartDataItem = HouseOverview & {
   fill: string;
 };
 
@@ -30,7 +30,7 @@ export type DataPointChart = PayloadData & {
   date: number;
 };
 
-export type TooltipPayload = {
+export type HouseOverviewTooltipPayload = {
   dataKey: string;
   payload: PayloadData;
   stroke: string;

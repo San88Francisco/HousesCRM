@@ -1,4 +1,4 @@
-import { Apartment } from '@/types/model/houses-overview';
+import { HouseOverview, HousesOverviewContract } from '@/types/model/houses-overview';
 
 export const truncate = (text: string, maxLen: number): string => {
   if (maxLen <= 3) return text.slice(0, maxLen);
@@ -18,9 +18,9 @@ export const formatDateRange = (start: string, end: string): string => {
   return `${startStr} – ${endStr}`;
 };
 
-export const findApartmentById = (apartments: Apartment[], id: string | null): Apartment | null => {
+export const findHouseById = (houses: HouseOverview[], id: string | null): HouseOverview | null => {
   if (!id) return null;
-  return apartments.find(apt => apt.id === id) || null;
+  return houses.find(house => house.id === id) || null;
 };
 
 const isCursorInGap = (
@@ -33,13 +33,13 @@ const isCursorInGap = (
 
 export const findGapBetweenContracts = (
   id: string | null,
-  apartments: Apartment[],
+  houses: HouseOverview[],
   currentDate: string,
 ): { start: string; end: string } | null => {
-  const apartment = findApartmentById(apartments, id);
-  if (!apartment || apartment.contract.length < 2) return null;
+  const house = findHouseById(houses, id);
+  if (!house || house.contract.length < 2) return null;
 
-  const sortedContracts = [...apartment.contract].sort(
+  const sortedContracts = [...house.contract].sort(
     (a, b) => new Date(a.commencement).getTime() - new Date(b.commencement).getTime(),
   );
 
@@ -63,19 +63,19 @@ export const findGapBetweenContracts = (
   };
 };
 
-export const isApartmentAcquired = (
+export const isHouseAcquired = (
   id: string | null,
-  apartments: Apartment[],
+  houses: HouseOverview[],
   currentDate: string,
 ): boolean => {
-  const apartment = findApartmentById(apartments, id);
-  if (!apartment || apartment.contract.length === 0) return false;
+  const house = findHouseById(houses, id);
+  if (!house || house.contract.length === 0) return false;
 
   const cursorTimestamp = new Date(currentDate).getTime();
   if (isNaN(cursorTimestamp)) return false;
 
   const firstContractStart = Math.min(
-    ...apartment.contract.map(c => new Date(c.commencement).getTime()),
+    ...house.contract.map((c: HousesOverviewContract) => new Date(c.commencement).getTime()),
   );
 
   if (isNaN(firstContractStart)) return false;

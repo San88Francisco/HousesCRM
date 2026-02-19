@@ -1,26 +1,26 @@
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
 
-import { HouseOverviewDataItemChart } from '@/types/model/houses-overview';
+import { HouseOverviewChartDataItem } from '@/types/model/houses-overview';
 
 type Props = {
-  apartmentsData: HouseOverviewDataItemChart[];
-  activeApartment: string | null;
-  onApartmentClick: (id: string) => void;
+  housesData: HouseOverviewChartDataItem[];
+  activeHouse: string | null;
+  onHouseClick: (id: string) => void;
 };
 
-export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClick }: Props) => {
+export const LegendContent = ({ housesData, activeHouse, onHouseClick }: Props) => {
   return (
     <div className="flex max-[420px]:flex-col max-[420px]:items-center justify-center sm:pt-10 pt-4 sm:px-10 px-1 pb-3">
       <div className="w-max mx-auto flex flex-wrap max-[420px]:flex-col items-start justify-center min-[420.5px]:gap-7 gap-3">
-        {apartmentsData.map(apt => (
+        {housesData.map(apt => (
           <Button
             variant="icon"
             key={apt.id}
-            onClick={() => onApartmentClick(apt.id)}
+            onClick={() => onHouseClick(apt.id)}
             className={cn(
               'flex items-center cursor-pointer transition-opacity duration-200 select-none p-0',
-              activeApartment && activeApartment !== apt.id && 'opacity-30',
+              activeHouse && activeHouse !== apt.id && 'opacity-30',
             )}
           >
             <div
@@ -28,9 +28,7 @@ export const LegendContent = ({ apartmentsData, activeApartment, onApartmentClic
               style={{ backgroundColor: apt.fill }}
             />
 
-            <span
-              className={cn('text-xs md:text-sm', activeApartment === apt.id && 'font-semibold')}
-            >
+            <span className={cn('text-xs md:text-sm', activeHouse === apt.id && 'font-semibold')}>
               {apt.apartmentName}
             </span>
           </Button>

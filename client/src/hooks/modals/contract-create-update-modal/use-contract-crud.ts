@@ -1,5 +1,5 @@
 import { ContractFormData } from '@/shared/validation/create-update-contract';
-import { useCreateContractMutation, useUpdateContractMutation } from '@/store/api/houses-api';
+import { useCreateContractMutation, useUpdateContractMutation } from '@/store/api/contracts-api';
 
 export const useContractCrud = () => {
   const [createContract, createState] = useCreateContractMutation();

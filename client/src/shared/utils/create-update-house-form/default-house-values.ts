@@ -1,5 +1,5 @@
 import { HouseFormData } from '@/shared/validation/create-update-house';
-import { ApartmentType } from '@/types/core/apartment-type';
+import { HouseType } from '@/types/core/house';
 
 export const defaultHouseValues: Partial<HouseFormData> = {
   apartmentName: '',
@@ -9,5 +9,5 @@ export const defaultHouseValues: Partial<HouseFormData> = {
   price: null,
   floor: null,
   street: '',
-  apartmentType: ApartmentType.NEW_BUILD,
+  apartmentType: HouseType.NEW_BUILD,
 };

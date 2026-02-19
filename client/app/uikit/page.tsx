@@ -9,9 +9,7 @@ import { DropDownComponent } from '@/widgets/uikit/drop-down-component';
 import { InputComponent } from '@/widgets/uikit/input-component';
 import { ModalTrigger } from '@/widgets/uikit/modal';
 import { SelectComponent } from '@/widgets/uikit/select-component';
-import { TableComponent } from '@/widgets/uikit/table-component';
 import { TabsComponent } from '@/widgets/uikit/tabs-component';
-
 import { TextareaComponent } from '@/widgets/uikit/textarea-component';
 import { ToastComponent } from '@/widgets/uikit/toast-component';
 import UpdateContract from '@/widgets/uikit/update-contract';
@@ -22,7 +20,6 @@ const Page = () => {
       <ButtonComponent />
       <CardComponent />
       <ControlButtons />
-      <TableComponent />
       <TabsComponent />
       <InputComponent />
       <CalendarComponent />
