@@ -6,12 +6,12 @@ import { useRentersContracts } from '@/hooks/renters/use-renters-contracts';
 import { AllRentersContractsTableColumns } from '@/shared/constants/current-renter';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table/pagination';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { TableRenter } from './TableRenter';
+import { RenterReportTableSkeleton } from '../skeletons/renter-skeleton/RenterReportTableSkeleton';
 
 export const RenterReportCard = () => {
   const { id } = useParams<{ id: string }>();
@@ -79,7 +79,7 @@ export const RenterReportCard = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <HousesPerformanceTableSkeleton />;
+  if (isLoading) return <RenterReportTableSkeleton />;
   if (isError) return <ErrorState className="w-full" error={error} />;
 
   if (isEmpty) return <EmptyState className="w-full" />;

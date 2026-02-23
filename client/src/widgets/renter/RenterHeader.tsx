@@ -3,7 +3,6 @@
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { formatCurrencyOptions } from '@/shared/constants/currency/format-options';
 import { Badge } from '@/shared/ui/badge';
-import { Skeleton } from '@/shared/ui/skeleton';
 import { formatDate } from '@/shared/utils/format/format-date';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
@@ -18,6 +17,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import { RenterHeaderSkeleton } from '../skeletons/renter-skeleton/RenterHeaderSkeleton';
 
 export const RenterHeader = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,7 +31,7 @@ export const RenterHeader = () => {
     },
   );
 
-  if (isLoading) return <Skeleton className="h-32 w-full" />;
+  if (isLoading) return <RenterHeaderSkeleton />;
   if (isError || !data) return <ErrorState className="w-full" error={error} />;
   const { firstName, lastName, age, occupied, vacated, totalIncome, status } = data.oneRenterReport;
 
