@@ -9,7 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { TableRenter } from './TableRenter';
 
 export const RenterReportCard = () => {
@@ -19,6 +20,12 @@ export const RenterReportCard = () => {
   const [limit, setLimit] = useState(DEFAULT_PAGE_SIZE);
 
   const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useRentersContracts(id);
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Невдалось завантажити таблицю історії договорів орендаря');
+    }
+  }, [error]);
 
   const onLimitChange = (nextLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);

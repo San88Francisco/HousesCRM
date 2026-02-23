@@ -18,6 +18,7 @@ import {
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { Currencies } from '@/types/core/currencies';
 import React, { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { ChartContent } from './ChartContent';
 import { LegendContent } from './LegendContent';
 import { ScrollContainer } from './ScrollContainer';
@@ -46,6 +47,12 @@ export const PaybackChart = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Невдалось завантажити cтатистику окупності квартир');
+    }
+  }, [error]);
 
   const handleApartmentClick = useCallback((id: string) => {
     setActiveApartment(prev => (prev === id ? null : id));

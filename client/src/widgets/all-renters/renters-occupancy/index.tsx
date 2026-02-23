@@ -8,7 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { useGetRentersQuery } from '@/store/api/renters-api';
 import { RentersOccupancyTableSkeleton } from '@/widgets/skeletons/renters-occupancy-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { RentersOccupancyTable } from './RentersOccupancyTable';
 
 export const RentersOccupancy = () => {
@@ -25,6 +26,12 @@ export const RentersOccupancy = () => {
     setPageIndex(DEFAULT_START_PAGE);
     setLimit(limit);
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Невдалось завантажити таблицю всіх орендарів');
+    }
+  }, [error]);
 
   const table = useReactTable({
     data: data?.data ?? [],

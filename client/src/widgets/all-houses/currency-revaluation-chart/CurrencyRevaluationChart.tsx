@@ -19,6 +19,7 @@ import {
   formatYAxisTick,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
+import { toast } from 'sonner';
 import { CurrencyRevaluationTooltip } from './CurrencyRevaluationTooltip';
 
 export const CurrencyRevaluationChart = () => {
@@ -32,6 +33,12 @@ export const CurrencyRevaluationChart = () => {
     useChartConfig(chartData);
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Невдалось завантажити переоцінку валюти');
+    }
+  }, [error]);
 
   if (!mounted) return null;
   if (isLoading) return <LoadingState />;

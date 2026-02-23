@@ -6,11 +6,19 @@ import { LoadingState } from '@/components/chart-states/LoadingState';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 import { ChartList } from './ChartList';
 import { PieChartRevenue } from './PieChartRevenue';
 
 export function ChartPieDonutText() {
   const { data, isLoading, error } = useGetHousesAnalyticsQuery();
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Невдалось завантажити загальний дохід по всіх квартирах');
+    }
+  }, [error]);
 
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;

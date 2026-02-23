@@ -19,7 +19,7 @@ import { ErrorState } from '@/components/chart-states/ErrorState';
 import { LoadingState } from '@/components/chart-states/LoadingState';
 import { TimeRangeEnum } from '@/types/core/time-range';
 import { HouseOverviewChartDataItem } from '@/types/model/houses-overview';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   Legend,
   Line,
@@ -30,6 +30,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { toast } from 'sonner';
 import { LegendContent } from './LegendContent';
 import { CustomTooltip } from './houses-overview-tooltip';
 
@@ -60,6 +61,12 @@ export function HouseRentalChart() {
     },
     [setLockedApartment],
   );
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Невдалось завантажити Історію оренди квартир');
+    }
+  }, [error]);
 
   if (isLoading) return <LoadingState className="w-full" />;
 

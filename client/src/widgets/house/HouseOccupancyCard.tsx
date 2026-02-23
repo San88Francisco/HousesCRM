@@ -10,7 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { breakBetweenContracts } from '@/shared/utils/house/break-between-contracts';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { HouseOccupancyTableSkeleton } from '../skeletons/house-occupancy-table-skeleton';
 import { HouseOccupancyTable } from './HouseOccupancyTable';
 
@@ -21,6 +22,12 @@ export const HouseOccupancyCard = () => {
   const [limit, setLimit] = useState(DEFAULT_PAGE_SIZE);
 
   const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useHouseOccupancy(id);
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Невдалось завантажити таблицю істроії оренди');
+    }
+  }, [error]);
 
   const onLimitChange = (nextLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);
