@@ -1,7 +1,7 @@
-import { ChartPieConfig } from '@/types/core/revenue-distribution/chart-pie-config';
-import { HouseDistributionChartDataItem } from '@/types/model/revenue-distribution';
+import { PieConfigChart } from '@/types/core/revenue-distribution/chart-pie-config';
+import { HouseDistributionDataItemChart } from '@/types/model/revenue-distribution';
 
-export function createChartPieConfig(data: HouseDistributionChartDataItem[]): ChartPieConfig {
+export const createChartPieConfig = (data: HouseDistributionDataItemChart[]): PieConfigChart => {
   const entries = data.map((item, index) => [
     index,
     {
@@ -10,5 +10,5 @@ export function createChartPieConfig(data: HouseDistributionChartDataItem[]): Ch
     },
   ]);
 
-  return Object.fromEntries(entries) as ChartPieConfig;
-}
+  return Object.fromEntries(entries) as PieConfigChart;
+};

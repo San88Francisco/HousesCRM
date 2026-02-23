@@ -1,4 +1,4 @@
-import { PIE_COLORS } from '@/shared/constants/revenue-pie-chart/chart-pie-colors';
+import { PIE_COLORS } from '@/shared/constants/revenue-pie-chart';
 import { getCurrencySymbol } from '@/shared/utils/getCurrencySymbol';
 import { Currencies } from '@/types/core/currencies';
 import { HousePaybackStats, PaybackChartData } from '@/types/core/payback-chart';

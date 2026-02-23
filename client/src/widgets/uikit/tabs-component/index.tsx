@@ -1,6 +1,6 @@
 'use client';
 
-import { TabsContent, Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
 const tabData = [
   { value: 'account', label: 'Account', content: 'Account Management' },
@@ -10,7 +10,7 @@ const tabData = [
   { value: 'analytics', label: 'Analytics', content: 'Analytics & Reports' },
 ];
 
-export default function TabsComponent() {
+export const TabsComponent = () => {
   return (
     <main className="mx-auto max-w-4xl p-6 space-y-8">
       <section>
@@ -51,4 +51,4 @@ export default function TabsComponent() {
       </section>
     </main>
   );
-}
+};

@@ -1,15 +1,15 @@
 'use client';
 
-import Image from 'next/image';
-import { cn } from '@/shared/utils/cn';
+import { useUser } from '@/hooks';
 import {
-  SidebarTrigger,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
+  SidebarTrigger,
   useSidebar,
 } from '@/shared/ui/sidebar';
-import { useUser } from '@/hooks/use-user';
+import { cn } from '@/shared/utils/cn';
+import Image from 'next/image';
 
 export const SidebarHeaderComponent = () => {
   const { email } = useUser();

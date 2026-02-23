@@ -1,6 +1,4 @@
-import { Metadata } from '../metadata';
-import { PaginationSortBy, PaginationSortOrder } from '../pagination';
-import { ContractStatus } from '../status/status';
+import { ContractStatus } from '../status';
 
 export type RentersOccupancyItem = {
   id: string;
@@ -11,16 +9,4 @@ export type RentersOccupancyItem = {
   vacated: string;
   totalIncome: number;
   status: ContractStatus;
-};
-
-export type RentersOccupancyRequest = {
-  page: number;
-  limit: number;
-  sortBy?: PaginationSortBy;
-  order?: PaginationSortOrder;
-};
-
-export type RentersOccupancyResponse = {
-  data: RentersOccupancyItem[];
-  meta: Metadata;
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/shared/ui/button';
-import { Calendar } from '@/shared/ui/calendar';
+import Calendar from '@/shared/ui/calendar/Calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
@@ -76,7 +76,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, Props>(
                 '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4',
                 !value && 'text-muted-foreground',
                 disabled && 'cursor-not-allowed opacity-50',
-                isFocused && 'border-active-border',
+                (isFocused || open) && 'border-active-border',
                 error && 'border-red text-red focus-visible:ring-red',
               )}
               disabled={disabled}
@@ -88,7 +88,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, Props>(
               <CalendarIcon
                 className={cn(
                   'transition-all duration-200 ease-in-out text-muted',
-                  isFocused && 'text-active-border',
+                  (isFocused || open) && 'text-active-border',
                   error && 'text-red',
                 )}
                 aria-hidden="true"

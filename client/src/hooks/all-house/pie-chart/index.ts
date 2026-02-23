@@ -1,0 +1,18 @@
+import { PieConfigChart } from '@/types/core/revenue-distribution/chart-pie-config';
+import { createContext, useContext } from 'react';
+
+type Props = {
+  config: PieConfigChart;
+};
+
+export const ChartContext = createContext<Props | null>(null);
+
+export const useChart = () => {
+  const context = useContext(ChartContext);
+
+  if (!context) {
+    throw new Error('useChart must be used within a <ChartContainer />');
+  }
+
+  return context;
+};

@@ -146,7 +146,7 @@ export const useChartScroll = () => {
   };
 };
 
-export const useScrollNeeded = (realDataCount: number) => {
+export const useScrollNeeded = (minChartWidth: number) => {
   const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -162,8 +162,7 @@ export const useScrollNeeded = (realDataCount: number) => {
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
-  const requiredWidth = realDataCount * CHART_WIDTH_PER_ITEM;
-  const isScrollNeeded = requiredWidth > containerWidth;
+  const isScrollNeeded = minChartWidth > containerWidth;
 
   return { containerRef, isScrollNeeded };
 };

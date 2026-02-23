@@ -8,6 +8,7 @@ export const ROUTES = {
   RENTER: '/renter',
   CONTRACT: '/contract',
   UIKIT: '/uikit',
+  ALL_CONTRACTS: '/all-contracts',
 };
 
 export type RouteKey = keyof typeof ROUTES;
@@ -21,4 +22,5 @@ export const SIDEBAR_PATTERNS = [
   /^\/renter/,
   /^\/all-renters/,
   /^\/contract/,
+  /^\/all-contracts/,
 ] as const;

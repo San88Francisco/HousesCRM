@@ -6,7 +6,7 @@ import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { useChartConfig, useChartData } from '@/hooks/all-house/currency-revaluation-chart/hooks';
+import { useChartConfig, useChartData } from '@/hooks/all-house/currency-revaluation-chart';
 import {
   BAR_RADIUS,
   BAR_SIZE,

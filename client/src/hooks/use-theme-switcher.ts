@@ -1,4 +1,4 @@
-import { SWITCHER_STORAGE_KEY, themeIconMap } from '@/shared/constants/theme/theme-switcher';
+import { SWITCHER_STORAGE_KEY, themeIconMap } from '@/shared/constants/theme';
 import { NextTheme } from '@/types/core/theme';
 import { getHours } from 'date-fns';
 import { useTheme } from 'next-themes';

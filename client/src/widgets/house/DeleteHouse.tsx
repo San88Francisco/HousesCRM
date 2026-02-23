@@ -1,6 +1,6 @@
 'use client';
 
-import { DeleteAction } from '@/shared/constants/delete-actions/delete-actions';
+import { DeleteAction } from '@/shared/constants/delete-actions';
 import { Button } from '@/shared/ui/button';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useAnimatedIcon } from '@/hooks';
-import { getSidebarMenuItemClasses } from '@/shared/constants/styles';
+import { getSidebarMenuItemClasses } from '@/shared/constants/styles/sidebar';
 import { SidebarMenuItem as ShadcnSidebarMenuItem, SidebarMenuButton } from '@/shared/ui/sidebar';
 import { isActiveItem } from '@/shared/utils/sidebar/navigation';
 import { NavItem } from '@/types/model/navigation';

@@ -1,4 +1,4 @@
-import { PAGE_SIZE_OPTIONS } from '@/shared/constants/table/pagination';
+import { PAGE_SIZE_OPTIONS } from '@/shared/constants/table';
 import {
   Select,
   SelectContent,

@@ -1,7 +1,7 @@
 'use client';
 
-import Modal from '@/components/modals/modal-wrapper';
-import { useConfirmDelete } from '@/hooks/modals/confirm-delete-modal/use-confirm-delete';
+import { Modal } from '@/components/modals/modal-wrapper';
+import { useConfirmDelete } from '@/hooks/modals/confirm-delete-modal/index';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';

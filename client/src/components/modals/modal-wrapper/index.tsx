@@ -13,7 +13,7 @@ interface ModalProps extends ComponentProps<typeof DialogContent> {
   onClose?: () => void;
 }
 
-export default function Modal({ children, triggers, className, onClose, ...props }: ModalProps) {
+export const Modal = ({ children, triggers, className, onClose, ...props }: ModalProps) => {
   const dispatch = useAppDispatch();
 
   const isOpen = useAppSelector(state => state.modal.isOpen);
@@ -59,4 +59,4 @@ export default function Modal({ children, triggers, className, onClose, ...props
       </DialogContent>
     </Dialog>
   );
-}
+};

@@ -1,4 +1,4 @@
-import { ContractStatus } from '@/types/core/status/status';
+import { ContractStatus } from '@/types/core/status';
 import { getStatusLabel } from './status-labels';
 
 export const statusOptions = [

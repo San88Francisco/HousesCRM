@@ -1,5 +1,9 @@
 import { TimeRangeEnum } from '@/types/core/time-range';
-import { Apartment, ChartDataPoint, HousesOverviewContract } from '@/types/model/houses-overview';
+import {
+  DataPointChart,
+  HouseOverview,
+  HousesOverviewContract,
+} from '@/types/model/houses-overview';
 
 const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.SIX_MONTHS]: date => {
@@ -35,20 +39,20 @@ const timeRangeMap: Record<TimeRangeEnum, (date: Date) => Date> = {
   [TimeRangeEnum.ALL_DATA]: date => date,
 };
 
-const getEarliestContractDate = (apartments: Apartment[], fallback: Date): Date =>
+const getEarliestContractDate = (apartments: HouseOverview[], fallback: Date): Date =>
   apartments
     .flatMap(apt => apt.contract)
     .map(c => new Date(c.commencement))
     .reduce((earliest, curr) => (curr < earliest ? curr : earliest), fallback);
 
-const getStartDate = (timeRange: TimeRangeEnum, apartments: Apartment[], now: Date): Date => {
+const getStartDate = (timeRange: TimeRangeEnum, apartments: HouseOverview[], now: Date): Date => {
   if (timeRange !== TimeRangeEnum.ALL_DATA) {
     return timeRangeMap[timeRange](now);
   }
   return getEarliestContractDate(apartments, now);
 };
 
-export function getPeriodRange(timeRange: TimeRangeEnum, apartments: Apartment[]) {
+export const getPeriodRange = (timeRange: TimeRangeEnum, apartments: HouseOverview[]) => {
   const now = new Date();
   const startDate = getStartDate(timeRange, apartments, now);
 
@@ -56,13 +60,13 @@ export function getPeriodRange(timeRange: TimeRangeEnum, apartments: Apartment[]
     periodStart: startDate.toISOString().slice(0, 10),
     periodEnd: now.toISOString().slice(0, 10),
   };
-}
+};
 
-export function findMinMaxRentWithFivePercent(
-  apartments: Apartment[],
+export const findMinMaxRentWithFivePercent = (
+  apartments: HouseOverview[],
   periodStart: string,
   periodEnd: string,
-) {
+) => {
   const matchingPayments = apartments
     .flatMap(apt => apt.contract)
     .filter(c => c.termination >= periodStart && c.commencement <= periodEnd)
@@ -77,12 +81,12 @@ export function findMinMaxRentWithFivePercent(
     min: +(min * 0.95).toFixed(2),
     max: +(max * 1.05).toFixed(2),
   };
-}
+};
 
-export function generateChartData(
-  apartments: (Apartment & { fill: string })[],
+export const generateChartData = (
+  apartments: (HouseOverview & { fill: string })[],
   timeRange: TimeRangeEnum,
-): ChartDataPoint[] {
+): DataPointChart[] => {
   const now = new Date();
   const startDate = getStartDate(timeRange, apartments, now);
 
@@ -100,7 +104,7 @@ export function generateChartData(
   const uniqueSortedDates = allDates.sort((a, b) => a - b);
 
   return uniqueSortedDates.map(timestamp => {
-    const point: ChartDataPoint = { date: timestamp };
+    const point: DataPointChart = { date: timestamp };
     const currentDate = new Date(timestamp);
 
     apartments.forEach(apt => {
@@ -121,14 +125,14 @@ export function generateChartData(
 
     return point;
   });
-}
+};
 
-export function generateOptimalTicks(
+export const generateOptimalTicks = (
   minDate: number,
   maxDate: number,
   containerWidth: number,
   isMobile: boolean,
-): number[] {
+): number[] => {
   const startDate = new Date(minDate);
   startDate.setDate(1);
   startDate.setHours(0, 0, 0, 0);
@@ -165,16 +169,16 @@ export function generateOptimalTicks(
   }
 
   return ticks;
-}
+};
 
-export function formatTickDate(value: number): string {
+export const formatTickDate = (value: number): string => {
   return new Date(value)
     .toLocaleDateString('uk-UA', {
       month: 'short',
       year: '2-digit',
     })
     .replace(' р.', '');
-}
+};
 
 export const isContract = (value: unknown): value is HousesOverviewContract => {
   return (

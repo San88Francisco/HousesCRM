@@ -1,11 +1,10 @@
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
+
+import { CHART_THEMES } from '../constants/chart';
 import { cn } from '../utils/cn';
 
 /* eslint-disable */
-
-// Format: { THEME_NAME: CSS_SELECTOR }
-const THEMES = { light: '', dark: '.dark' } as const;
 
 export type ChartConfig = {
   [k in string]: {
@@ -13,7 +12,7 @@ export type ChartConfig = {
     icon?: React.ComponentType;
   } & (
     | { color?: string; theme?: never }
-    | { color?: never; theme: Record<keyof typeof THEMES, string> }
+    | { color?: never; theme: Record<keyof typeof CHART_THEMES, string> }
   );
 };
 
@@ -23,7 +22,7 @@ type ChartContextProps = {
 
 const ChartContext = React.createContext<ChartContextProps | null>(null);
 
-function useChart() {
+const useChart = () => {
   const context = React.useContext(ChartContext);
 
   if (!context) {
@@ -31,7 +30,7 @@ function useChart() {
   }
 
   return context;
-}
+};
 
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
@@ -72,7 +71,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   return (
     <style
       dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
+        __html: Object.entries(CHART_THEMES)
           .map(
             ([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
@@ -293,7 +292,7 @@ const ChartLegendContent = React.forwardRef<
 ChartLegendContent.displayName = 'ChartLegend';
 
 // Helper to extract item config from a payload.
-function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
+const getPayloadConfigFromPayload = (config: ChartConfig, payload: unknown, key: string) => {
   if (typeof payload !== 'object' || payload === null) {
     return undefined;
   }
@@ -316,13 +315,13 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
   }
 
   return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config];
-}
+};
 
 export {
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
+  ChartTooltip,
+  ChartTooltipContent,
 };

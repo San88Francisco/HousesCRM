@@ -4,16 +4,10 @@ export enum PaginationSortBy {
   RENTERS_COUNT = 'rentersCount',
   CURRENT_PAYMENT = 'currentPayment',
   CREATED_AT = 'createdAt',
+  COMMENCEMENT = 'commencement',
 }
 
 export enum PaginationSortOrder {
   ASC = 'ASC',
   DESC = 'DESC',
 }
-
-export type PaginationRequest = {
-  page: number;
-  limit: number;
-  sortBy?: PaginationSortBy;
-  order?: PaginationSortOrder;
-};

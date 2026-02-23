@@ -1,6 +1,6 @@
 'use client';
 
-import { SIDEBAR_STYLES } from '@/shared/constants/styles';
+import { SIDEBAR_STYLES } from '@/shared/constants/styles/sidebar';
 import { ROUTES } from '@/shared/routes';
 import {
   SidebarGroup,

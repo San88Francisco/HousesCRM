@@ -1,3 +1,4 @@
+import { scrollbarClasses } from '@/shared/constants/styles/scrollbar';
 import { cn } from '@/shared/utils/cn';
 import React from 'react';
 
@@ -26,7 +27,7 @@ export const ScrollContainer = ({
       isScrollNeeded ? 'overflow-x-auto' : 'overflow-x-hidden',
       'overflow-y-hidden',
       isScrollNeeded && (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
-      'scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200',
+      scrollbarClasses,
     )}
     onPointerDown={isScrollNeeded ? handlePointerDown : undefined}
     onPointerMove={isScrollNeeded ? handlePointerMove : undefined}

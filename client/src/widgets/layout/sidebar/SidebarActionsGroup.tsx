@@ -1,14 +1,14 @@
 'use client';
 
-import { SIDEBAR_STYLES } from '@/shared/constants/styles';
+import { actionItems } from '@/shared/constants/sidebar/sidebar-action-items';
+import { SIDEBAR_STYLES } from '@/shared/constants/styles/sidebar';
 import {
-  SidebarMenu,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarMenu,
 } from '@/shared/ui/sidebar';
 import { SidebarActionItem } from './SidebarActionItem';
-import { actionItems } from '@/shared/constants/sidebar/sidebar-action-items';
 
 export const SidebarActionsGroup = () => {
   return (

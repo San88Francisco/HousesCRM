@@ -1,7 +1,7 @@
 'use client';
 
 import { itemsNav } from '@/shared/constants/sidebar/sidebar-nav-items';
-import { SIDEBAR_STYLES } from '@/shared/constants/styles';
+import { SIDEBAR_STYLES } from '@/shared/constants/styles/sidebar';
 import {
   SidebarGroup,
   SidebarGroupContent,
