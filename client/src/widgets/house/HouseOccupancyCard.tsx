@@ -12,7 +12,7 @@ import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { HouseOccupancyTableSkeleton } from '../skeletons/house-occupancy-table-skeleton';
+import { HouseOccupancyTableSkeleton } from '../skeletons/house-occupancy/HouseOccupancyTableSkeleton';
 import { HouseOccupancyTable } from './HouseOccupancyTable';
 
 export const HouseOccupancyCard = () => {
