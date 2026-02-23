@@ -13,45 +13,62 @@ import {
   toggleFavoriteItem,
 } from '@/shared/utils/storage/favorites-storage';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
+import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
 
 const FavoriteStar = () => {
   const pathname = usePathname();
   const { id } = useParams<{ id: string }>();
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const { data } = useGetHouseByIdQuery(id, {
-    skip: !id,
-  });
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const { data: houseData } = useGetHouseByIdQuery(id, { skip: !id });
+
+  const { data: renterData } = useGetAllContractsByRenterIdQuery(
+    { renterId: id },
+    { skip: !id || !pathname?.startsWith(`${ROUTES.RENTER}/`) },
+  );
 
   const favoriteItem: FavoriteItem | null = useMemo(() => {
     if (!pathname) return null;
-    if (!data) return null;
 
-    const isApartmentPage = pathname.startsWith(`${ROUTES.HOUSE}/`);
-    if (!isApartmentPage) return null;
+    const allowedRoutes = [ROUTES.HOUSE, ROUTES.RENTER];
+    const isAllowed = allowedRoutes.some(route => pathname.startsWith(`${route}/`));
+    if (!isAllowed) return null;
 
     const segments = pathname.split(ROUTES.ROOT).filter(Boolean);
+    const itemId = segments[1];
 
-    return {
-      id: segments[1],
-      path: pathname,
-      type: 'apartment',
-      name: data?.houseDetail.apartmentName,
-    };
-  }, [pathname, data]);
+    if (pathname.startsWith(`${ROUTES.HOUSE}/`) && houseData) {
+      return {
+        id: itemId,
+        path: pathname,
+        type: 'apartment',
+        name: houseData.houseDetail.apartmentName,
+      };
+    }
+
+    if (pathname.startsWith(`${ROUTES.RENTER}/`) && renterData) {
+      const renterName = `${renterData.oneRenterReport?.firstName} ${renterData.oneRenterReport?.lastName}`;
+      return {
+        id: itemId,
+        path: pathname,
+        type: 'renter',
+        name: renterName,
+      };
+    }
+
+    return null;
+  }, [pathname, houseData, renterData]);
 
   useEffect(() => {
     if (!favoriteItem) {
       setIsFavorite(false);
       return;
     }
-
     setIsFavorite(isPathFavorite(favoriteItem.path));
   }, [favoriteItem]);
 
   const handleToggle = () => {
     if (!favoriteItem) return;
-
     const { isFavorite: next } = toggleFavoriteItem(favoriteItem);
     setIsFavorite(next);
   };
