@@ -1,13 +1,12 @@
 'use client';
 
-import Modal from '@/components/modals/modal-wrapper';
+import { Modal } from '@/components/modals/modal-wrapper';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useContractForm } from '@/hooks/modals/contract-create-update-modal/use-contract-form';
-import { useContractModal } from '@/hooks/modals/contract-create-update-modal/use-contract-modal';
+import { useContractForm, useContractModal } from '@/hooks/modals/contract-create-update-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';
-import { ContractFormFields } from '@/widgets/modals/contract-create-update-modal/ContractFormFields';
+import { ContractFormFields } from '@/widgets/modals/contract-create-update-modal';
 
 export const ContractCreateUpdateModal = () => {
   const {

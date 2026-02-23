@@ -1,7 +1,7 @@
-import BackgroundLogo from '@/widgets/login/background-logo/BackgroundLogo';
+import { BackgroundLogo } from '@/shared/ui/background-logo';
 import { LoginForm } from '@/widgets/login/login-form';
 
-export default function Page() {
+const Page = () => {
   return (
     <div className="relative h-screen flex items-center justify-center overflow-hidden bg-background">
       <BackgroundLogo />
@@ -11,4 +11,6 @@ export default function Page() {
       </div>
     </div>
   );
-}
+};
+
+export default Page;

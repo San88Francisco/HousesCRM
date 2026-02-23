@@ -1,33 +1,19 @@
 import { rootApi } from '@/shared/api';
-import { CurrencyRevaluation } from '@/types/core/currency-revaluation-chart';
-import { HousesPerformanceResponse } from '@/types/core/houses-performance';
-import { PaginationRequest } from '@/types/core/pagination';
 import { AllAnalyticsResponse } from '@/types/services/all-analytics';
-import {
-  ContractByIdResponse,
-  CreateContractRequest,
-  CreateContractResponse,
-  UpdateContractRequest,
-  UpdateContractResponse,
-} from '@/types/services/contracts';
+import { PaginationRequest } from '@/types/services/pagination';
 
 import {
   CreateHouseRequest,
   CreateHouseResponse,
+  CurrencyRevaluationResponse,
   HouseByIdResponse,
+  HousesPerformanceResponse,
   HousesResponse,
   OccupancyHousesPaginatedResponse,
   OccupancyHousesRequest,
   UpdateHouseRequest,
   UpdateHouseResponse,
 } from '@/types/services/houses/index';
-import {
-  CreateRenterRequest,
-  CreateRenterResponse,
-  RenterByIdResponse,
-  UpdateRenterRequest,
-  UpdateRenterResponse,
-} from '@/types/services/renters';
 
 export const housesApi = rootApi.injectEndpoints({
   overrideExisting: false,
@@ -54,7 +40,7 @@ export const housesApi = rootApi.injectEndpoints({
       providesTags: (_result, _error, { id }) => [{ type: 'Houses', id }],
     }),
 
-    getCurrencyRevaluation: build.query<CurrencyRevaluation[], void>({
+    getCurrencyRevaluation: build.query<CurrencyRevaluationResponse, void>({
       query: () => '/houses-analytics/currency-revaluation-analytic',
       providesTags: ['Analytics'],
     }),
@@ -77,29 +63,6 @@ export const housesApi = rootApi.injectEndpoints({
       invalidatesTags: (_result, _error, { id }) => [{ type: 'Houses', id }, 'Analytics'],
     }),
 
-    getRenterById: build.query<RenterByIdResponse, string>({
-      query: id => `/renters/${id}`,
-      providesTags: (_result, _error, id) => [{ type: 'Renters', id }],
-    }),
-
-    createRenter: build.mutation<CreateRenterResponse, CreateRenterRequest>({
-      query: body => ({
-        url: '/renters',
-        method: 'POST',
-        body,
-      }),
-      invalidatesTags: ['Renters', 'Analytics'],
-    }),
-
-    updateRenter: build.mutation<UpdateRenterResponse, UpdateRenterRequest>({
-      query: ({ id, ...body }) => ({
-        url: `/renters/${id}`,
-        method: 'PATCH',
-        body,
-      }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Renters', id }, 'Analytics'],
-    }),
-
     getHousesPerformance: build.query<HousesPerformanceResponse, PaginationRequest>({
       query: ({ page, limit, sortBy, order }) => ({
         url: '/houses-analytics/houses-performance-analytic',
@@ -113,32 +76,12 @@ export const housesApi = rootApi.injectEndpoints({
       providesTags: ['Houses'],
     }),
 
-    createContract: build.mutation<CreateContractResponse, CreateContractRequest>({
-      query: body => ({
-        url: '/contracts',
-        method: 'POST',
-        body,
+    deleteHouse: build.mutation<void, string>({
+      query: id => ({
+        url: `/houses/${id}`,
+        method: 'DELETE',
       }),
-      invalidatesTags: ['Contracts', 'Analytics', 'Houses', 'Renters'],
-    }),
-
-    updateContract: build.mutation<UpdateContractResponse, UpdateContractRequest>({
-      query: ({ id, ...body }) => ({
-        url: `/contracts/${id}`,
-        method: 'PATCH',
-        body,
-      }),
-      invalidatesTags: (_result, _error, { id }) => [
-        { type: 'Contracts', id },
-        'Analytics',
-        'Houses',
-        'Renters',
-      ],
-    }),
-
-    getContractById: build.query<ContractByIdResponse, string>({
-      query: id => `/contracts/${id}`,
-      providesTags: (_result, _error, id) => [{ type: 'Contracts', id }],
+      invalidatesTags: ['Analytics', 'Houses', 'Contracts', 'Renters'],
     }),
   }),
 });
@@ -154,13 +97,7 @@ export const {
   useGetCurrencyRevaluationQuery,
   useCreateHouseMutation,
   useUpdateHouseMutation,
-  useGetRenterByIdQuery,
-  useLazyGetRenterByIdQuery,
-  useCreateRenterMutation,
-  useUpdateRenterMutation,
   useGetHousesPerformanceQuery,
   useLazyGetHousesPerformanceQuery,
-  useCreateContractMutation,
-  useUpdateContractMutation,
-  useGetContractByIdQuery,
+  useDeleteHouseMutation,
 } = housesApi;

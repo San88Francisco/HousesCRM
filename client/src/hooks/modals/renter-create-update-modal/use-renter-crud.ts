@@ -1,5 +1,5 @@
-import { RenterFormData } from '@/shared/validation/create-update-renter/renter-schema';
-import { useCreateRenterMutation, useUpdateRenterMutation } from '@/store/api/houses-api';
+import { RenterFormData } from '@/shared/validation/create-update-renter';
+import { useCreateRenterMutation, useUpdateRenterMutation } from '@/store/api/renters-api';
 
 export const useRenterCrud = () => {
   const [createRenter, createState] = useCreateRenterMutation();

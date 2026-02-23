@@ -1,4 +1,4 @@
-import { ContractStatus } from '@/types/core/status/status';
+import { ContractStatus } from '@/types/core/status';
 import { OccupancyBase } from '@/types/services/houses';
 
 export type OccupancyWithVacancy<T extends OccupancyBase> =

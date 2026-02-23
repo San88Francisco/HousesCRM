@@ -1,5 +1,5 @@
-import { ContractFormData } from '@/shared/validation/create-update-contract/contract-schema';
-import { ContractStatus } from '@/types/core/status/status';
+import { ContractFormData } from '@/shared/validation/create-update-contract';
+import { ContractStatus } from '@/types/core/status';
 
 export const defaultContractValues: ContractFormData = {
   commencement: null,

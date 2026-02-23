@@ -1,13 +1,12 @@
 'use client';
 
-import Modal from '@/components/modals/modal-wrapper';
+import { Modal } from '@/components/modals/modal-wrapper';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useRenterForm } from '@/hooks/modals/renter-create-update-modal/use-renter-form';
-import { useRenterModal } from '@/hooks/modals/renter-create-update-modal/use-renter-modal';
+import { useRenterForm, useRenterModal } from '@/hooks/modals/renter-create-update-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';
-import { RenterFormFields } from '@/widgets/modals/renter-create-update-modal/RenterFormFields';
+import { RenterFormFields } from '@/widgets/modals/renter-create-update-modal';
 
 export const RenterCreateUpdateModal = () => {
   const { isEditMode, renterToEdit, handleClose: getHandleClose, modalContent } = useRenterModal();

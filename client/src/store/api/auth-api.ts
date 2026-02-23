@@ -1,7 +1,7 @@
 import { rootApi } from '@/shared/api';
 import { ROUTES } from '@/shared/routes';
-import { tokenStorage } from '@/shared/utils/auth/token';
-import type { LoginRequest, LoginResponse, RefreshResponse } from '@/types/services/auth';
+import { tokenStorage } from '@/shared/utils/auth';
+import type { LoginRequest, LoginResponse } from '@/types/services/auth';
 import { toast } from 'sonner';
 import { clearUser, setUser } from '../slice/user-slice';
 
@@ -37,23 +37,6 @@ export const authApi = rootApi.injectEndpoints({
       },
     }),
 
-    refresh: build.mutation<RefreshResponse, void>({
-      query: () => ({
-        url: `/auth/refresh`,
-        method: 'POST',
-      }),
-      async onQueryStarted(_arg, { queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          if (data.accessToken) {
-            tokenStorage.setAccessToken(data.accessToken);
-          }
-        } catch {
-          toast.error('Упсс щось пішло не так!');
-        }
-      },
-    }),
-
     logout: build.mutation<{ ok: boolean }, void>({
       query: () => ({
         url: '/auth/logout',
@@ -76,4 +59,4 @@ export const authApi = rootApi.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useRefreshMutation, useLogoutMutation } = authApi;
+export const { useLoginMutation, useLogoutMutation } = authApi;

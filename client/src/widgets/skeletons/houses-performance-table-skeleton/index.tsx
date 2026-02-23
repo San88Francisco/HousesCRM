@@ -1,4 +1,4 @@
-import { tableGrid } from '@/shared/constants/styles';
+import { tableGrid } from '@/shared/constants/styles/houses-performance-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';

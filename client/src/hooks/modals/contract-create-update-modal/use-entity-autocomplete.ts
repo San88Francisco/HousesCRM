@@ -1,4 +1,3 @@
-import { AutocompleteOption } from '@/components/RHF/RHFAutocomplete';
 import {
   getEntitiesFromList,
   getEntitiesFromSearch,
@@ -6,6 +5,7 @@ import {
 } from '@/shared/utils/create-update-contract-form/entity-autocomplete.utils';
 import { useLazyGetAllSearchQuery } from '@/store/api/search-api';
 import { EntityType } from '@/types/core/autocomplete-contract-form';
+import type { AutocompleteOption } from '@/types/model/ui';
 import { LazyLoadingAutocomplete } from '@/types/services/lazy-loading-autocomplete';
 import { useCallback, useEffect, useRef, useState } from 'react';
 

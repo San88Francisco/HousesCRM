@@ -1,6 +1,7 @@
 import { STATIC_LABELS } from '@/shared/constants/header/header-breadcrumb';
 import { ROUTES } from '@/shared/routes';
-import { useLazyGetHouseByIdQuery, useLazyGetRenterByIdQuery } from '@/store/api/houses-api';
+import { useLazyGetHouseByIdQuery } from '@/store/api/houses-api';
+import { useLazyGetRenterByIdQuery } from '@/store/api/renters-api';
 
 const HOUSE_SEGMENT = ROUTES.HOUSE.slice(1);
 const RENTER_SEGMENT = ROUTES.RENTER.slice(1);

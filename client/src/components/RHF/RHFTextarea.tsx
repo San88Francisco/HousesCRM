@@ -16,7 +16,7 @@ interface Props extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'maxLe
   className?: string;
 }
 
-const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
+export const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
   (
     {
       name,
@@ -80,4 +80,3 @@ const RHFTextarea = forwardRef<HTMLTextAreaElement, Props>(
 );
 
 RHFTextarea.displayName = 'RHFTextarea';
-export { RHFTextarea };

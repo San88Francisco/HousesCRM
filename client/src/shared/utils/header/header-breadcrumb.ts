@@ -8,6 +8,7 @@ const ROUTE_ORDER = [
   ROUTES.HOUSE,
   ROUTES.RENTER,
   ROUTES.CONTRACT,
+  ROUTES.ALL_CONTRACTS,
 ] as const;
 
 export const getLevelByPath = (pathname: string): number => {

@@ -5,6 +5,6 @@ export type PieRevenueItem = {
   apartmentName: string;
 };
 
-export type HouseDistributionChartDataItem = PieRevenueItem & {
+export type HouseDistributionDataItemChart = PieRevenueItem & {
   fill: string;
 };

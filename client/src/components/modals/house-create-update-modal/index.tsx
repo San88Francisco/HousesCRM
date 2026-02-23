@@ -1,13 +1,12 @@
 'use client';
 
-import Modal from '@/components/modals/modal-wrapper';
+import { Modal } from '@/components/modals/modal-wrapper';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useHouseForm } from '@/hooks/modals/house-create-update-modal/use-house-form';
-import { useHouseModal } from '@/hooks/modals/house-create-update-modal/use-house-modal';
+import { useHouseForm, useHouseModal } from '@/hooks/modals/house-create-update-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';
-import { HouseFormFields } from '@/widgets/modals/house-create-update-modal/HouseFormFields';
+import { HouseFormFields } from '@/widgets/modals/house-create-update-modal';
 
 export const HouseCreateUpdateModal = () => {
   const { isEditMode, houseToEdit, handleClose: getHandleClose, modalContent } = useHouseModal();

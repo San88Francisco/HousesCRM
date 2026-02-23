@@ -4,7 +4,7 @@
 -- Перевірка/створення користувача
 INSERT INTO "user" ("id", "email", "username", "password", "created_at", "updated_at")
 VALUES 
-  ('3ca5d3be-402e-41c4-ab59-ac856f23d17d', 'user2@example.com', 'user', '$argon2id$v=19$m=65536,t=3,p=4$822tGJ0oAWBdyeLUIvjodA$itF47O6pckkS3A/ZwpjCbtL/KM3gOwRXRGaji2nzTgo', NOW(), NOW())
+  ('3ca5d3be-402e-41c4-ab59-ac856f23d17d', 'user@example.com', 'user', '$argon2id$v=19$m=65536,t=3,p=4$K7ILizdwf3OIsYjzS9uq3A$5jazT8dtIgm875yEHldwuLdBSfNstSxKyw90w83E+dE', NOW(), NOW())
 ON CONFLICT ("id") DO UPDATE SET 
   "email" = EXCLUDED."email",
   "username" = EXCLUDED."username";

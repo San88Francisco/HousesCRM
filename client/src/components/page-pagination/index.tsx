@@ -1,5 +1,5 @@
 'use client';
-import useVisiblePages from '@/hooks/use-visible-pages';
+import { useVisiblePages } from '@/hooks';
 import {
   Pagination,
   PaginationContent,

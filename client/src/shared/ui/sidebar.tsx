@@ -1,7 +1,6 @@
 'use client';
 
-import { useAnimatedIcon } from '@/hooks';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useAnimatedIcon, useIsMobile } from '@/hooks';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Separator } from '@/shared/ui/separator';
@@ -47,14 +46,14 @@ type SidebarContext = {
 
 const SidebarContext = createContext<SidebarContext | null>(null);
 
-function useSidebar() {
+const useSidebar = () => {
   const context = useContext(SidebarContext);
   if (!context) {
     throw new Error('useSidebar must be used within a SidebarProvider.');
   }
 
   return context;
-}
+};
 
 const SidebarProvider = forwardRef<
   HTMLDivElement,

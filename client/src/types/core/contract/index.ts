@@ -1,6 +1,8 @@
 import { House } from '../house';
+import { Metadata } from '../metadata';
+import { PaginationSortBy, PaginationSortOrder } from '../pagination';
 import { Renter } from '../renter';
-import { ContractStatus } from '../status/status';
+import { ContractStatus } from '../status';
 
 export interface Contract {
   id: string;
@@ -20,3 +22,15 @@ export interface ContractCreateUpdate extends Contract {
   house?: House;
   renter?: Renter;
 }
+
+export type ContractsRequest = {
+  page: number;
+  limit: number;
+  sortBy?: PaginationSortBy;
+  order?: PaginationSortOrder;
+};
+
+export type ContractsResponse = {
+  data: Contract[];
+  meta: Metadata;
+};

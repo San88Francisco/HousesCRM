@@ -1,4 +1,4 @@
-import { ContractStatus } from '../status/status';
+import { ContractStatus } from '../status';
 
 export interface Renter {
   id: string;

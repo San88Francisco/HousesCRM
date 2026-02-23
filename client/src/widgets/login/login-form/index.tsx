@@ -2,7 +2,7 @@
 
 import { RHFInput } from '@/components/RHF/RHFInput';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useLogin } from '@/hooks/use-login';
+import { useLogin } from '@/hooks';
 import { Button } from '@/shared/ui/button';
 import { GoogleLoginButton } from '../google-auth-button';
 export const LoginForm = () => {
