@@ -2,7 +2,6 @@
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { LoadingState } from '@/components/chart-states/LoadingState';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import {
   LEGEND_MARGIN_TOP,
@@ -17,6 +16,7 @@ import {
 } from '@/shared/utils/all-house/payback-chart/utils';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { Currencies } from '@/types/core/currencies';
+import { PaybackChartSkeleton } from '@/widgets/skeletons/payback-chart-skeleton';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ChartContent } from './ChartContent';
@@ -58,7 +58,7 @@ export const PaybackChart = () => {
     setActiveApartment(prev => (prev === id ? null : id));
   }, []);
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <PaybackChartSkeleton />;
   if (error) return <ErrorState error={error} />;
   if (!chartData?.length) return <EmptyState />;
   if (!mounted) return null;

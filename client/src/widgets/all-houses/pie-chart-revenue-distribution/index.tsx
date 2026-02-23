@@ -2,10 +2,10 @@
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { LoadingState } from '@/components/chart-states/LoadingState';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
+import { ChartPieDonutTextSkeleton } from '@/widgets/skeletons/chart-pie-donut-text-skeleton';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { ChartList } from './ChartList';
@@ -20,7 +20,7 @@ export function ChartPieDonutText() {
     }
   }, [error]);
 
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <ChartPieDonutTextSkeleton />;
   if (error) return <ErrorState error={error} />;
   if (!data?.revenueDistribution.data?.length) return <EmptyState />;
 

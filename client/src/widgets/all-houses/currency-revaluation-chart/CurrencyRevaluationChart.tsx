@@ -6,7 +6,6 @@ import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { LoadingState } from '@/components/chart-states/LoadingState';
 import { useChartConfig, useChartData } from '@/hooks/all-house/currency-revaluation-chart/hooks';
 import {
   BAR_RADIUS,
@@ -19,6 +18,7 @@ import {
   formatYAxisTick,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
+import { CurrencyRevaluationChartSkeleton } from '@/widgets/skeletons/currency-revaluation-chart-skeleton';
 import { toast } from 'sonner';
 import { CurrencyRevaluationTooltip } from './CurrencyRevaluationTooltip';
 
@@ -40,10 +40,10 @@ export const CurrencyRevaluationChart = () => {
     }
   }, [error]);
 
-  if (!mounted) return null;
-  if (isLoading) return <LoadingState />;
+  if (isLoading) return <CurrencyRevaluationChartSkeleton />;
   if (error) return <ErrorState error={error} />;
   if (chartData.length === 0) return <EmptyState />;
+  if (!mounted) return null;
 
   const renderCells = (fill: string, customOpacity?: (index: number) => number) =>
     chartData.map((_, index) => (
