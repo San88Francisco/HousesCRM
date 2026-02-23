@@ -21,11 +21,13 @@ export const useBreadcrumbTrail = (pathname: string) => {
 
   useEffect(() => {
     if (!pathname) return;
+    let isCurrent = true;
 
     const segments = pathname.split('/').filter(Boolean);
     const level = getLevelByPath(pathname);
 
     resolveBreadcrumbLabel(segments, triggerHouse, triggerRenter).then(label => {
+      if (!isCurrent) return;
       setCrumbs(prev => {
         const newCrumbs = prev.filter(c => c.level < level);
         newCrumbs.push({ label, href: pathname, level });
@@ -33,6 +35,10 @@ export const useBreadcrumbTrail = (pathname: string) => {
         return newCrumbs;
       });
     });
+
+    return () => {
+      isCurrent = false;
+    };
   }, [pathname, triggerHouse, triggerRenter]);
 
   return crumbs;
