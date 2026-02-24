@@ -9,15 +9,14 @@ import { Crumb } from '@/types/core/header/header-breadcrumb';
 import { useEffect, useState } from 'react';
 
 export const useBreadcrumbTrail = (pathname: string) => {
-  const [crumbs, setCrumbs] = useState<Crumb[]>([]);
+  const [crumbs, setCrumbs] = useState<Crumb[]>(() => localStorageService.load());
 
   const [triggerHouse] = useLazyGetHouseByIdQuery();
   const [triggerRenter] = useLazyGetRenterByIdQuery();
 
   useEffect(() => {
-    const stored = localStorageService.load();
-    setCrumbs(stored);
-  }, []);
+    localStorageService.save(crumbs);
+  }, [crumbs]);
 
   useEffect(() => {
     if (!pathname) return;
@@ -31,7 +30,6 @@ export const useBreadcrumbTrail = (pathname: string) => {
       setCrumbs(prev => {
         const newCrumbs = prev.filter(c => c.level < level);
         newCrumbs.push({ label, href: pathname, level });
-        localStorageService.save(newCrumbs);
         return newCrumbs;
       });
     });
