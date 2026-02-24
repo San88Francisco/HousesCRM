@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (token && pathname === ROUTES.LOGIN) {
+  if (token && (pathname === ROUTES.LOGIN || pathname === ROUTES.ROOT)) {
     return NextResponse.redirect(new URL(ROUTES.ALL_HOUSES, request.url));
   }
 

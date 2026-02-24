@@ -8,6 +8,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
+  useSidebar,
 } from '@/shared/ui/sidebar';
 import { makeTitle } from '@/shared/utils/favorite-start';
 import { NavItem } from '@/types/model/navigation';
@@ -16,6 +17,7 @@ import { SidebarMenuItem } from './SidebarMenuItem';
 
 export const SidebarFavoritesGroup = () => {
   const favorites = useFavoriteStar();
+  const { state } = useSidebar();
 
   const favoriteNavItems: NavItem[] = useMemo(
     () =>
@@ -27,7 +29,7 @@ export const SidebarFavoritesGroup = () => {
     [favorites],
   );
 
-  if (favoriteNavItems.length === 0) return null;
+  if (favoriteNavItems.length === 0 || state === 'collapsed') return null;
 
   return (
     <SidebarGroup className={SIDEBAR_STYLES.sidebarGroup.base}>
