@@ -3,16 +3,16 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 
+import { useToastOnError } from '@/hooks';
 import { useRentersContracts } from '@/hooks/renters';
 import { AllRentersContractsTableColumns } from '@/shared/constants/current-renter';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { TableRenter } from './TableRenter';
+import { useState } from 'react';
 import { RenterReportTableSkeleton } from '../skeletons/renter-skeleton/RenterReportTableSkeleton';
+import { TableRenter } from './TableRenter';
 
 export const RenterReportCard = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,11 +22,7 @@ export const RenterReportCard = () => {
 
   const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useRentersContracts(id);
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Невдалось завантажити таблицю історії договорів орендаря');
-    }
-  }, [error]);
+  useToastOnError(isError, 'Не вдалось завантажити таблицю історії оренди');
 
   const onLimitChange = (nextLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);

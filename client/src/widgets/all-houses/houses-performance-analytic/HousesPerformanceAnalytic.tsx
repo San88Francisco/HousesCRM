@@ -3,13 +3,13 @@ import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { useHousesPerformance } from '@/hooks/all-house/houses-performance-analytic';
 
+import { useToastOnError } from '@/hooks';
 import { HousesPerformanceTableColumns } from '@/shared/constants/house/houses-performance-analytic';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { useState } from 'react';
 import { HousesPerformanceTable } from './HousesPerformanceTable';
 
 export const HousesPerformanceAnalytic = () => {
@@ -18,11 +18,7 @@ export const HousesPerformanceAnalytic = () => {
 
   const { data, trigger, pageCount, isLoading, isError, error, isEmpty } = useHousesPerformance();
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Невдалось завантажити таблицю огляду квартир');
-    }
-  }, [error]);
+  useToastOnError(isError, 'Не вдалось завантажити таблицю огляду квартир');
 
   const onLimitChange = (limit: number) => {
     setPageIndex(DEFAULT_START_PAGE);

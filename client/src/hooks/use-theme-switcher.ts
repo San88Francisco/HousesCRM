@@ -29,14 +29,14 @@ export const useThemeSwitcher = () => {
   useEffect(() => {
     if (!mounted) return;
 
-    let realTheme = switcherTheme;
+    let activeTheme = switcherTheme;
 
     if (switcherTheme === NextTheme.System) {
       const hour = getHours(new Date());
-      realTheme = hour >= 5 && hour < 18 ? NextTheme.Light : NextTheme.Dark;
+      activeTheme = hour >= 5 && hour < 18 ? NextTheme.Light : NextTheme.Dark;
     }
 
-    setTheme(realTheme);
+    setTheme(activeTheme);
   }, [switcherTheme, mounted, setTheme]);
 
   const CurrentIcon = themeIconMap[switcherTheme];
@@ -46,6 +46,6 @@ export const useThemeSwitcher = () => {
     switcherTheme,
     setSwitcherTheme: updateSwitcherTheme,
     CurrentIcon,
-    realTheme: theme,
+    activeTheme: theme,
   };
 };

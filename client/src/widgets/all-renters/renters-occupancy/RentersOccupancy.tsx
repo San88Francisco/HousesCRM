@@ -3,14 +3,14 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 
+import { useToastOnError } from '@/hooks';
 import { RentersOccupancyTableColumns } from '@/shared/constants/all-renters';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { useGetRentersQuery } from '@/store/api/renters-api';
 import { RentersOccupancyTableSkeleton } from '@/widgets/skeletons/renters-occupancy-table-skeleton';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { useState } from 'react';
 import { RentersOccupancyTable } from './RentersOccupancyTable';
 
 export const RentersOccupancy = () => {
@@ -28,11 +28,7 @@ export const RentersOccupancy = () => {
     setLimit(limit);
   };
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Невдалось завантажити таблицю всіх орендарів');
-    }
-  }, [error]);
+  useToastOnError(isError, 'Не вдалось завантажити таблицю всіх орендарів');
 
   const table = useReactTable({
     data: data?.data ?? [],

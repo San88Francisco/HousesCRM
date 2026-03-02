@@ -3,7 +3,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 
 export const HouseRentalChartSkeleton = () => {
   return (
-    <Card>
+    <Card aria-busy="true" aria-label="Завантаження...">
       <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex flex-col gap-3 w-full">
           <Skeleton className="h-6 sm:h-7 w-64" />

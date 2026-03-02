@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 import { ROUTES } from '@/shared/routes';
 import { Button } from '@/shared/ui/button';
@@ -17,7 +18,9 @@ const FavoriteStar = () => {
   const { id } = useParams<{ id: string }>();
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const { data: houseData } = useGetHouseByIdQuery(id, { skip: !id });
+  const { data: houseData } = useGetHouseByIdQuery(id, {
+    skip: !id || !pathname?.startsWith(`${ROUTES.HOUSE}/`),
+  });
 
   const { data: renterData } = useGetAllContractsByRenterIdQuery(
     { renterId: id },
@@ -43,8 +46,15 @@ const FavoriteStar = () => {
       };
     }
 
-    if (pathname.startsWith(`${ROUTES.RENTER}/`) && renterData) {
-      const renterName = `${renterData.oneRenterReport?.firstName} ${renterData.oneRenterReport?.lastName}`;
+    if (pathname.startsWith(`${ROUTES.RENTER}/`) && renterData?.oneRenterReport) {
+      const { firstName, lastName } = renterData.oneRenterReport;
+      const renterName = [firstName, lastName].filter(Boolean).join(' ');
+
+      if (!renterName) {
+        toast.error('Не вдалося додати орендаря до обраного: відсутнє ім’я');
+        return null;
+      }
+
       return {
         id: itemId,
         path: pathname,

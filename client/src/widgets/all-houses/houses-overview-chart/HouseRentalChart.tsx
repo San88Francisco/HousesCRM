@@ -15,11 +15,12 @@ import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
+import { useToastOnError } from '@/hooks';
 import { useHouseRental } from '@/hooks/all-house/houses-overview';
 import { TimeRangeEnum } from '@/types/core/time-range';
 import { HouseOverviewChartDataItem } from '@/types/model/houses-overview';
 import { HouseRentalChartSkeleton } from '@/widgets/skeletons/house-rental-chart-skeleton';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import {
   Line,
   LineChart,
@@ -29,12 +30,11 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { toast } from 'sonner';
 import { LegendContent } from './LegendContent';
 import { CustomTooltip } from './houses-overview-tooltip/CustomTooltip';
 
 export const HouseRentalChart = () => {
-  const { data, error, isLoading } = useGetHousesAnalyticsQuery();
+  const { data, error, isError, isLoading } = useGetHousesAnalyticsQuery();
 
   const {
     timeRange,
@@ -63,15 +63,11 @@ export const HouseRentalChart = () => {
     [setLockedHouse],
   );
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Невдалось завантажити Історію оренди квартир');
-    }
-  }, [error]);
+  useToastOnError(isError, 'Не вдалось завантажити таблицю огляду квартир');
 
   if (isLoading) return <HouseRentalChartSkeleton />;
 
-  if (error) return <ErrorState className="w-full" error={error} />;
+  if (isError) return <ErrorState className="w-full" error={error} />;
 
   if (!data?.housesOverview?.length) return <EmptyState className="w-full" />;
 

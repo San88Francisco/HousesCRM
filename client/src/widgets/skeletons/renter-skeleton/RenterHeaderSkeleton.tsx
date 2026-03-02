@@ -2,7 +2,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 
 export const RenterHeaderSkeleton = () => {
   return (
-    <div className="space-y-2 sm:space-y-3">
+    <div className="space-y-2 sm:space-y-3" aria-busy="true" aria-label="Завантаження...">
       <div className="flex justify-between items-center">
         <Skeleton className="h-6 sm:h-7 w-40 sm:w-52" />
         <Skeleton className="h-5 sm:h-6 w-20 sm:w-24" />

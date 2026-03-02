@@ -3,7 +3,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 
 export const ChartPieDonutTextSkeleton = () => {
   return (
-    <Card className="w-full">
+    <Card className="w-full" aria-busy="true" aria-label="Завантаження...">
       <CardHeader className="items-center pb-0 mb-10">
         <div className="flex flex-col gap-3">
           <Skeleton className="h-7 w-72" />

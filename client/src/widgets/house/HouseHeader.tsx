@@ -5,7 +5,7 @@ import { formatDate } from '@/shared/utils/format';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { Building2, DoorOpen, MapPin, PackagePlus, Ruler } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import { HouseOccupancyHeaderSkeleton } from '../skeletons/house-occupancy/RenterHeaderSkeleton';
+import { HouseOccupancyHeaderSkeleton } from '../skeletons/house-occupancy/HouseOccupancyHeaderSkeleton';
 
 export const HouseHeader = () => {
   const { id } = useParams<{ id: string }>();

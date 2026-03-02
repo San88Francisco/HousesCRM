@@ -3,7 +3,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 
 export const CurrencyRevaluationChartSkeleton = () => {
   return (
-    <Card className="w-full mx-auto">
+    <Card className="w-full mx-auto" aria-busy="true" aria-label="Завантаження...">
       <CardHeader className="pb-4">
         <Skeleton className="h-6 w-48" />
       </CardHeader>
