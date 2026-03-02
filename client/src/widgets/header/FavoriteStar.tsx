@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 
 import { ROUTES } from '@/shared/routes';
 import { Button } from '@/shared/ui/button';
-
 import { FavoriteItem, isPathFavorite, toggleFavoriteItem } from '@/shared/utils/storage';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
@@ -21,7 +20,6 @@ const FavoriteStar = () => {
   const { data: houseData } = useGetHouseByIdQuery(id, {
     skip: !id || !pathname?.startsWith(`${ROUTES.HOUSE}/`),
   });
-
   const { data: renterData } = useGetAllContractsByRenterIdQuery(
     { renterId: id },
     { skip: !id || !pathname?.startsWith(`${ROUTES.RENTER}/`) },
@@ -31,8 +29,7 @@ const FavoriteStar = () => {
     if (!pathname) return null;
 
     const allowedRoutes = [ROUTES.HOUSE, ROUTES.RENTER];
-    const isAllowed = allowedRoutes.some(route => pathname.startsWith(`${route}/`));
-    if (!isAllowed) return null;
+    if (!allowedRoutes.some(route => pathname.startsWith(`${route}/`))) return null;
 
     const segments = pathname.split(ROUTES.ROOT).filter(Boolean);
     const itemId = segments[1];
@@ -49,12 +46,7 @@ const FavoriteStar = () => {
     if (pathname.startsWith(`${ROUTES.RENTER}/`) && renterData?.oneRenterReport) {
       const { firstName, lastName } = renterData.oneRenterReport;
       const renterName = [firstName, lastName].filter(Boolean).join(' ');
-
-      if (!renterName) {
-        toast.error('Не вдалося додати орендаря до обраного: відсутнє ім’я');
-        return null;
-      }
-
+      if (!renterName) return null;
       return {
         id: itemId,
         path: pathname,
@@ -65,6 +57,19 @@ const FavoriteStar = () => {
 
     return null;
   }, [pathname, houseData, renterData]);
+
+  const hasMissingRenterName =
+    pathname?.startsWith(`${ROUTES.RENTER}/`) &&
+    !!renterData?.oneRenterReport &&
+    ![renterData.oneRenterReport.firstName, renterData.oneRenterReport.lastName]
+      .filter(Boolean)
+      .join('');
+
+  useEffect(() => {
+    if (hasMissingRenterName) {
+      toast.error('Не вдалося додати орендаря до обраного: відсутнє ім’я');
+    }
+  }, [hasMissingRenterName]);
 
   useEffect(() => {
     if (!favoriteItem) {

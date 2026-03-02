@@ -34,7 +34,7 @@ export const CurrencyRevaluationChart = () => {
 
   useEffect(() => setMounted(true), []);
 
-  useToastOnError(isError, 'Не вдалось завантажити переоцінку валюти');
+  useToastOnError(isError, 'Не вдалось завантажити переоцінку валюти', 'CurrencyRevaluationChart');
 
   if (isLoading || !mounted) return <CurrencyRevaluationChartSkeleton />;
   if (isError) return <ErrorState error={error} />;

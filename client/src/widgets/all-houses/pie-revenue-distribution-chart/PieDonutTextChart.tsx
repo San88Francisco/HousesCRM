@@ -13,7 +13,11 @@ import { PieRevenueChart } from './PieRevenueChart';
 export const PieDonutTextChart = () => {
   const { data, isLoading, error, isError } = useGetHousesAnalyticsQuery();
 
-  useToastOnError(isError, 'Не вдалось завантажити загальний дохід по всіх квартирах');
+  useToastOnError(
+    isError,
+    'Не вдалось завантажити загальний дохід по всіх квартирах',
+    'PieDonutTextChart',
+  );
 
   if (isLoading) return <ChartPieDonutTextSkeleton />;
   if (isError) return <ErrorState error={error} />;

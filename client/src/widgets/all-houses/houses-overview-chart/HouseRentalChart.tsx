@@ -63,7 +63,7 @@ export const HouseRentalChart = () => {
     [setLockedHouse],
   );
 
-  useToastOnError(isError, 'Не вдалось завантажити таблицю огляду квартир');
+  useToastOnError(isError, 'Не вдалось завантажити таблицю огляду квартир', 'HouseRentalChart');
 
   if (isLoading) return <HouseRentalChartSkeleton />;
 

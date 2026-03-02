@@ -4,7 +4,8 @@ import { PdfContractSkeletonSection } from './PdfContractSkeletonSection';
 
 export const PdfContractSkeleton = () => {
   return (
-    <div className="text-text" aria-busy="true" aria-label="Завантаження...">
+    <div className="text-text" role="status" aria-busy="true" aria-live="polite">
+      <span className="sr-only">Завантаження...</span>
       <DialogTitle>
         <Skeleton className="h-4 mb-2 w-full" />
       </DialogTitle>

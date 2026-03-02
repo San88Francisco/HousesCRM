@@ -18,7 +18,11 @@ export const HousesPerformanceAnalytic = () => {
 
   const { data, trigger, pageCount, isLoading, isError, error, isEmpty } = useHousesPerformance();
 
-  useToastOnError(isError, 'Не вдалось завантажити таблицю огляду квартир');
+  useToastOnError(
+    isError,
+    'Не вдалось завантажити таблицю огляду квартир',
+    'HousesPerformanceAnalytic',
+  );
 
   const onLimitChange = (limit: number) => {
     setPageIndex(DEFAULT_START_PAGE);

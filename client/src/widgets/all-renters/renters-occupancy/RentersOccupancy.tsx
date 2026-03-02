@@ -28,7 +28,7 @@ export const RentersOccupancy = () => {
     setLimit(limit);
   };
 
-  useToastOnError(isError, 'Не вдалось завантажити таблицю всіх орендарів');
+  useToastOnError(isError, 'Не вдалось завантажити таблицю всіх орендарів', 'RentersOccupancy');
 
   const table = useReactTable({
     data: data?.data ?? [],

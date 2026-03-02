@@ -24,7 +24,7 @@ export const HouseOccupancyCard = () => {
 
   const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useHouseOccupancy(id);
 
-  useToastOnError(isError, 'Не вдалось завантажити таблицю історії оренди');
+  useToastOnError(isError, 'Не вдалось завантажити таблицю історії оренди', 'HouseOccupancyCard');
 
   const onLimitChange = (nextLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);

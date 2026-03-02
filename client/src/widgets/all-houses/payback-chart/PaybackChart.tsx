@@ -50,7 +50,7 @@ export const PaybackChart = () => {
     setMounted(true);
   }, []);
 
-  useToastOnError(isError, 'Не вдалось завантажити статистику окупності квартир');
+  useToastOnError(isError, 'Не вдалось завантажити статистику окупності квартир', 'PaybackChart');
 
   const handleApartmentClick = useCallback((id: string) => {
     setActiveApartment(prev => (prev === id ? null : id));

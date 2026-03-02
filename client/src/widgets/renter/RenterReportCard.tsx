@@ -22,7 +22,7 @@ export const RenterReportCard = () => {
 
   const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useRentersContracts(id);
 
-  useToastOnError(isError, 'Не вдалось завантажити таблицю історії оренди');
+  useToastOnError(isError, 'Не вдалось завантажити таблицю історії оренди', 'RenterReportCard');
 
   const onLimitChange = (nextLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);

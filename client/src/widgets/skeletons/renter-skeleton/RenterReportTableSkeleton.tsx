@@ -15,7 +15,7 @@ export const RenterReportTableSkeleton = ({ rows = 10 }: Props) => {
           <CardTitle>
             <Skeleton className="h-5 w-56" />
           </CardTitle>
-          <Skeleton className="w-full max-w-[600px]" />
+          <Skeleton className="h-4 w-full max-w-[600px]" />
         </div>
       </CardHeader>
 
