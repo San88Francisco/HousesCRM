@@ -1,8 +1,8 @@
+import { ContractStatusLabel } from '@/components/contract-status-label';
 import { formatDate } from '@/shared/utils/format';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
 import { Contract } from '@/types/core/contract';
-import { ContractStatus } from '@/types/core/status';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrencyOptions } from '../currency';
@@ -40,10 +40,6 @@ export const AllContractsTableColumns: ColumnDef<Contract>[] = [
   {
     accessorKey: 'status',
     header: 'Статус',
-    cell: ctx => (
-      <span className={ctx.getValue() === ContractStatus.ACTIVE ? 'text-yellow' : 'text-purple'}>
-        {ctx.getValue() === ContractStatus.ACTIVE ? 'Активний' : 'Не активний'}
-      </span>
-    ),
+    cell: ctx => <ContractStatusLabel status={ctx.row.original.status} />,
   },
 ];

@@ -2,7 +2,7 @@
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { type KeyboardEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { RHFInput } from '@/components/RHF/RHFInput';
@@ -41,6 +41,20 @@ const HeaderSearch = () => {
       .catch(() => setOpen(false));
   }, [debouncedQuery, triggerSearch]);
 
+  const handleQueryKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const term = form.getValues('query')?.trim();
+    if (!term) {
+      setOpen(false);
+      return;
+    }
+    triggerSearch({ query: term })
+      .unwrap()
+      .then(() => setOpen(true))
+      .catch(() => setOpen(false));
+  };
+
   return (
     <div className="relative w-full max-w-md">
       <RHFForm form={form} onSubmit={() => undefined}>
@@ -51,20 +65,7 @@ const HeaderSearch = () => {
           hotkey="k"
           hotkeyCtrl
           icon={<Search />}
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              const term = form.getValues('query')?.trim();
-              if (!term) {
-                setOpen(false);
-                return;
-              }
-              triggerSearch({ query: term })
-                .unwrap()
-                .then(() => setOpen(true))
-                .catch(() => setOpen(false));
-            }
-          }}
+          onKeyDown={handleQueryKeyDown}
         />
       </RHFForm>
 

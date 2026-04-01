@@ -40,7 +40,7 @@
   --green: #a1e3cb;
   --green-light: #baedbd;
 
-  --yellow: #ffe999;
+  --yellow: #ffd84d;
   --gold: #f5c542;
   --red: #e24d4d;
 
@@ -73,6 +73,7 @@
   --chart-pie-14: #4faf68;
   --chart-pie-15: #c8a045;
   --bg-logo: url('/logo/light-logo.png');
+  --dot-grid-color: rgb(28 28 28 / 0.08);
 }
 
 .dark {
@@ -140,10 +141,14 @@
   --chart-pie-14: #6dd48a;
   --chart-pie-15: #e2bd6b;
   --bg-logo: url('/logo/dark-logo.png');
+  --dot-grid-color: rgb(255 255 255 / 0.05);
 }
 
+/* min-height замість height: 100% — body росте разом з контентом, фон із точками на всю висоту */
 html,
-body,
+body {
+  min-height: 100%;
+}
 main {
   height: 100%;
 }
@@ -159,11 +164,19 @@ body {
     sans-serif;
 
   color: var(--text);
-  background: var(--background);
 
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
+}
+
+html {
+  background-color: var(--background);
+}
+
+/* прозорий body — фон сторінки на html (на всю висоту контенту), точки — окремий fixed-шар */
+body {
+  background-color: transparent;
 }
 
 html {
@@ -211,7 +224,26 @@ html.dark {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* Фіксовані точки (viewport), без background-attachment: fixed — стабільніше при довгому контенті */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: radial-gradient(var(--dot-grid-color) 0.8px, transparent 0.8px);
+    background-size: 22.5px 22.5px;
+  }
+
+  @media (prefers-contrast: more) {
+    body::before {
+      background-image: none;
+    }
   }
 }
 

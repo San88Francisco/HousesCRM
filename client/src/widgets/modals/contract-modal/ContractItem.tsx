@@ -3,10 +3,12 @@
 import { KeyboardEvent, useState } from 'react';
 
 import { Badge } from '@/shared/ui/badge';
+import { getStatusLabel } from '@/shared/utils/create-update-contract-form/status-labels';
 import { formatDate } from '@/shared/utils/format';
 import { useAppDispatch } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
 import { Contract } from '@/types/core/contract';
+import { ContractStatus } from '@/types/core/status';
 import { ModalTriggers } from '@/types/model/modals';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 
@@ -54,9 +56,13 @@ export const ContractItem = ({ contract }: Props) => {
       </div>
       <Badge
         className="absolute right-2 top-2"
-        variant={contract.status === 'active' ? 'active' : 'inactive'}
+        variant={
+          contract.status === ContractStatus.ACTIVE
+            ? ContractStatus.ACTIVE
+            : ContractStatus.INACTIVE
+        }
       >
-        {contract.status === 'active' ? 'Активний' : 'Не активний'}
+        {getStatusLabel(contract.status)}
       </Badge>
     </li>
   );

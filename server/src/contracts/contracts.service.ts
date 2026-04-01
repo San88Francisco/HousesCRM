@@ -26,6 +26,7 @@ export class ContractsService {
     const [contracts, total] = await this.contractsRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
+      order: { commencement: 'DESC' },
     })
 
     const contractsDto = plainToInstance(ContractDto, contracts, {

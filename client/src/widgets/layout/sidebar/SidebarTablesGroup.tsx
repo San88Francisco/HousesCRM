@@ -5,7 +5,6 @@ import { ROUTES } from '@/shared/routes';
 import {
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -25,7 +24,6 @@ export const SidebarTablesGroup = () => {
 
   return (
     <SidebarGroup className={SIDEBAR_STYLES.sidebarGroup.hidden}>
-      <SidebarGroupLabel>Таблиці</SidebarGroupLabel>
       <SidebarGroupContent>
         {isLoading && <div>Loading...</div>}
         {error && <div>Щось пішло не так</div>}

@@ -118,7 +118,7 @@ export const RHFInput = forwardRef<HTMLInputElement, Props>(
                 }}
               />
               {hotkeyHint && !isFocused && (
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-bg-button dark:text-drop-down-hover pointer-events-none">
                   {hotkeyHint}
                 </div>
               )}

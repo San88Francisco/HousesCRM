@@ -11,22 +11,14 @@ export const LogoutButton = () => {
     <SidebarMenuButton
       onClick={() => logout()}
       disabled={isLoading}
-      tooltip={{
-        children: 'Вийти',
-        className: `
-          bg-foreground text-text
-          border border-border
-        `,
-      }}
       className="
         text-red
         hover:bg-bg-input
-        data-[active=true]:text-red
-        [&>span]:text-red
+        text-center
       "
     >
       <LogoutIcon size={16} />
-      <span>Вийти</span>
+      Вийти
     </SidebarMenuButton>
   );
 };

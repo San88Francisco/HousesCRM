@@ -33,6 +33,11 @@ const handleAuthError = (dispatch: Dispatch) => {
 
 const mutex = new Mutex();
 
+function isAuthLoginRequest(args: string | FetchArgs): boolean {
+  const url = typeof args === 'string' ? args : args.url;
+  return url === '/auth/login' || url.endsWith('/auth/login');
+}
+
 const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,
   api,
@@ -40,6 +45,10 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 ) => {
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
+
+  if (result.error && result.error.status === 401 && isAuthLoginRequest(args)) {
+    return result;
+  }
 
   if (result.error && result.error.status === 401) {
     if (!mutex.isLocked()) {

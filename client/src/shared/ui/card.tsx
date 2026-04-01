@@ -28,7 +28,7 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const cardVariants = {
   default: {
-    base: 'bg-foreground ',
+    base: 'bg-[color-mix(in_srgb,var(--foreground)_50%,transparent)]',
     title: 'text-text',
     description: 'text-muted',
     content: 'text-text',
@@ -42,7 +42,7 @@ const cardVariants = {
     footer: 'text-dark',
   },
   purple: {
-    base: 'bg-purple-lightest',
+    base: 'bg-[color-mix(in_srgb,var(--purple-lightest)_50%,transparent)]',
     title: 'text-dark',
     description: 'text-muted',
     content: 'text-dark',

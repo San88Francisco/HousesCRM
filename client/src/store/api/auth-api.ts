@@ -3,7 +3,7 @@ import { ROUTES } from '@/shared/routes';
 import { tokenStorage } from '@/shared/utils/auth';
 import type { LoginRequest, LoginResponse } from '@/types/services/auth';
 import { toast } from 'sonner';
-import { clearUser, setUser } from '../slice/user-slice';
+import { clearUser } from '../slice/user-slice';
 
 export const authApi = rootApi.injectEndpoints({
   endpoints: build => ({
@@ -13,28 +13,6 @@ export const authApi = rootApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
-        try {
-          const { data } = await queryFulfilled;
-
-          if (data.accessToken) {
-            tokenStorage.setAccessToken(data.accessToken);
-          }
-
-          if (data.email) {
-            const userData = {
-              email: data.email,
-              username: data.username,
-            };
-
-            tokenStorage.setUserData(userData);
-
-            dispatch(setUser(userData));
-          }
-        } catch {
-          toast.error('Невірні облікові дані або помилка авторизації');
-        }
-      },
     }),
 
     logout: build.mutation<{ ok: boolean }, void>({

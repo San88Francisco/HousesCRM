@@ -1,3 +1,4 @@
+import { ContractStatusLabel } from '@/components/contract-status-label';
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format';
 import { OccupancyWithVacancy } from '@/shared/utils/house/break-between-contracts';
@@ -107,13 +108,7 @@ export const HouseOccupancyTableColumns: ColumnDef<OccupancyWithVacancy<HouseOcc
         return <span className="text-red">—</span>;
       }
 
-      return (
-        <span
-          className={cn(ctx.getValue() === ContractStatus.ACTIVE ? 'text-yellow' : 'text-purple')}
-        >
-          {ctx.getValue() === ContractStatus.ACTIVE ? 'Активний' : 'Не активний'}
-        </span>
-      );
+      return <ContractStatusLabel status={ctx.row.original.status} />;
     },
   },
 ];
