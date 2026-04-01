@@ -1,6 +1,5 @@
 'use client';
 
-import { scrollbarClasses } from '@/shared/constants/styles/scrollbar';
 import { Button } from '@/shared/ui/button';
 import {
   Command,
@@ -155,7 +154,7 @@ export const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
                 <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
                   <Command shouldFilter={!onSearch}>
                     <CommandInput placeholder={searchPlaceholder} onValueChange={onSearch} />
-                    <CommandList className={cn(scrollbarClasses)}>
+                    <CommandList>
                       {loading && options.length === 0 && (
                         <div className="py-6 text-center text-sm text-muted-foreground">
                           Завантаження...

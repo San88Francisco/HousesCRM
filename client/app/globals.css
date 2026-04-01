@@ -293,3 +293,18 @@ input:-webkit-autofill:active {
   caret-color: var(--text);
   transition: background-color 5000s ease-in-out 0s;
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--muted-text);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}

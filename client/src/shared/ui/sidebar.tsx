@@ -21,7 +21,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { scrollbarClasses } from '../constants/styles/scrollbar';
+
 import { cn } from '../utils/cn';
 import { ChevronLeftIcon } from './chevron-left';
 import { ChevronRightIcon } from './chevron-right';
@@ -403,7 +403,6 @@ const SidebarContent = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
         ref={ref}
         data-sidebar="content"
         className={cn(
-          scrollbarClasses,
           'relative flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto group-data-[collapsible=icon]:overflow-hidden',
           className,
         )}
