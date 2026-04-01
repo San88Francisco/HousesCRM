@@ -144,7 +144,6 @@
   --dot-grid-color: rgb(255 255 255 / 0.05);
 }
 
-/* min-height замість height: 100% — body росте разом з контентом, фон із точками на всю висоту */
 html,
 body {
   min-height: 100%;
@@ -174,7 +173,6 @@ html {
   background-color: var(--background);
 }
 
-/* прозорий body — фон сторінки на html (на всю висоту контенту), точки — окремий fixed-шар */
 body {
   background-color: transparent;
 }
@@ -229,7 +227,6 @@ html.dark {
     isolation: isolate;
   }
 
-  /* Фіксовані точки (viewport), без background-attachment: fixed — стабільніше при довгому контенті */
   body::before {
     content: '';
     position: fixed;
