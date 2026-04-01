@@ -91,6 +91,7 @@ export const {
   useGetHousesAnalyticsQuery,
   useLazyGetHousesAnalyticsQuery,
   useGetHouseByIdQuery,
+  useLazyGetHouseByIdQuery,
   useGetHouseByIdOccupancyQuery,
   useLazyGetHouseByIdOccupancyQuery,
   useGetCurrencyRevaluationQuery,

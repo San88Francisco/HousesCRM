@@ -3,6 +3,7 @@ import {
   AllContractsByRenterIdResponse,
   CreateRenterRequest,
   CreateRenterResponse,
+  RenterByIdResponse,
   RenterContractsPaginatedRequest,
   RentersIdContractsResponse,
   RentersOccupancyRequest,
@@ -63,6 +64,11 @@ export const rentersApi = rootApi.injectEndpoints({
 
       providesTags: (_r, _e, { renterId }) => [{ type: 'Renters', id: renterId }],
     }),
+    getRenterById: build.query<RenterByIdResponse, string>({
+      query: id => `/renters/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'Renters', id }],
+    }),
+
     getRenters: build.query<RentersOccupancyResponse, RentersOccupancyRequest>({
       query: ({ page, limit, sortBy, order }) => ({
         url: '/renters',
@@ -123,6 +129,7 @@ export const {
   useGetAllContractsByRenterIdQuery,
   useGetAllContractsByRenterIdPaginatedQuery,
   useLazyGetAllContractsByRenterIdPaginatedQuery,
+  useLazyGetRenterByIdQuery,
   useGetRentersQuery,
   useUpdateRenterMutation,
   useCreateRenterMutation,
