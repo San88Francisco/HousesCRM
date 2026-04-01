@@ -3,6 +3,7 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 
+import { useToastOnError } from '@/hooks';
 import { RentersOccupancyTableColumns } from '@/shared/constants/all-renters';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -26,6 +27,8 @@ export const RentersOccupancy = () => {
     setPageIndex(DEFAULT_START_PAGE);
     setLimit(limit);
   };
+
+  useToastOnError(isError, 'Не вдалось завантажити таблицю всіх орендарів', 'RentersOccupancy');
 
   const table = useReactTable({
     data: data?.data ?? [],

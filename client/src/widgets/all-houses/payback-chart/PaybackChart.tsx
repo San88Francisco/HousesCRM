@@ -2,7 +2,7 @@
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { LoadingState } from '@/components/chart-states/LoadingState';
+import { useToastOnError } from '@/hooks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import {
   LEGEND_MARGIN_TOP,
@@ -17,6 +17,7 @@ import {
 } from '@/shared/utils/all-house/payback-chart/utils';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { Currencies } from '@/types/core/currencies';
+import { PaybackChartSkeleton } from '@/widgets/skeletons/payback-chart-skeleton';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ContentChart } from './ContentChart';
 import { LegendContent } from './LegendContent';
@@ -28,7 +29,7 @@ export const PaybackChart = () => {
   const [mounted, setMounted] = useState(false);
   const [activeApartment, setActiveApartment] = useState<string | null>(null);
 
-  const { data: analyticsData, isLoading, error } = useGetHousesAnalyticsQuery();
+  const { data: analyticsData, isLoading, error, isError } = useGetHousesAnalyticsQuery();
 
   const chartData = usePaybackChartData(analyticsData?.housesPaybackStats, CHART_CURRENCY);
   const paddedChartData = usePaddedData(chartData, CHART_CURRENCY);
@@ -49,6 +50,8 @@ export const PaybackChart = () => {
     setMounted(true);
   }, []);
 
+  useToastOnError(isError, 'Не вдалось завантажити статистику окупності квартир', 'PaybackChart');
+
   const handleApartmentClick = useCallback((id: string) => {
     setActiveApartment(prev => (prev === id ? null : id));
   }, []);
@@ -58,10 +61,9 @@ export const PaybackChart = () => {
     [chartData],
   );
 
-  if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState error={error} />;
+  if (isLoading || !mounted) return <PaybackChartSkeleton />;
+  if (isError) return <ErrorState error={error} />;
   if (!chartData?.length) return <EmptyState />;
-  if (!mounted) return null;
 
   return (
     <Card className="w-full">

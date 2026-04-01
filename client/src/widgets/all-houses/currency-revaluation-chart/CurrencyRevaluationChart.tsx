@@ -6,8 +6,7 @@ import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { LoadingState } from '@/components/chart-states/LoadingState';
-
+import { useToastOnError } from '@/hooks';
 import { useChartConfig, useChartData } from '@/hooks/all-house/currency-revaluation-chart';
 import {
   BAR_RADIUS,
@@ -20,10 +19,11 @@ import {
   formatYAxisTick,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
+import { CurrencyRevaluationChartSkeleton } from '@/widgets/skeletons/currency-revaluation-chart-skeleton';
 import { CurrencyRevaluationTooltip } from './CurrencyRevaluationTooltip';
 
 export const CurrencyRevaluationChart = () => {
-  const { data, isLoading, error } = useGetHousesAnalyticsQuery();
+  const { data, isLoading, error, isError } = useGetHousesAnalyticsQuery();
   const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const chartContainerRef = useRef<HTMLDivElement>(null);
@@ -34,9 +34,10 @@ export const CurrencyRevaluationChart = () => {
 
   useEffect(() => setMounted(true), []);
 
-  if (!mounted) return null;
-  if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState error={error} />;
+  useToastOnError(isError, 'Не вдалось завантажити переоцінку валюти', 'CurrencyRevaluationChart');
+
+  if (isLoading || !mounted) return <CurrencyRevaluationChartSkeleton />;
+  if (isError) return <ErrorState error={error} />;
   if (chartData.length === 0) return <EmptyState />;
 
   const renderCells = (fill: string, customOpacity?: (index: number) => number) =>

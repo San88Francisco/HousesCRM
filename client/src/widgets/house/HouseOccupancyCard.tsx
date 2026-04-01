@@ -5,6 +5,7 @@ import { ErrorState } from '@/components/chart-states/ErrorState';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 
+import { useToastOnError } from '@/hooks';
 import { useHouseOccupancy } from '@/hooks/house/house-occupancy';
 import { HouseOccupancyTableColumns } from '@/shared/constants/house';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
@@ -12,7 +13,7 @@ import { breakBetweenContracts } from '@/shared/utils/house/break-between-contra
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import { HouseOccupancyTableSkeleton } from '../skeletons/house-occupancy-table-skeleton';
+import { HouseOccupancyTableSkeleton } from '../skeletons/house-occupancy/HouseOccupancyTableSkeleton';
 import { HouseOccupancyTable } from './HouseOccupancyTable';
 
 export const HouseOccupancyCard = () => {
@@ -22,6 +23,8 @@ export const HouseOccupancyCard = () => {
   const [limit, setLimit] = useState(DEFAULT_PAGE_SIZE);
 
   const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useHouseOccupancy(id);
+
+  useToastOnError(isError, 'Не вдалось завантажити таблицю історії оренди', 'HouseOccupancyCard');
 
   const onLimitChange = (nextLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);

@@ -8,7 +8,6 @@ import CalendarDaysLevel from './CalendarDaysLevel';
 import CalendarHeader from './CalendarHeader';
 import CalendarMonthsLevel from './CalendarMonthsLevel';
 import CalendarYearsLevel from './CalendarYearsLevel';
-/* eslint-disable */
 
 type Props = {
   lang: Locale;

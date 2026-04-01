@@ -2,19 +2,25 @@
 
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
-import { LoadingState } from '@/components/chart-states/LoadingState';
+import { useToastOnError } from '@/hooks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { addFillToChartItems } from '@/shared/utils/all-house/add-fill-to-charts-items';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
-
+import { ChartPieDonutTextSkeleton } from '@/widgets/skeletons/chart-pie-donut-text-skeleton';
 import { ListChart } from './ListChart';
 import { PieRevenueChart } from './PieRevenueChart';
 
 export const PieDonutTextChart = () => {
-  const { data, isLoading, error } = useGetHousesAnalyticsQuery();
+  const { data, isLoading, error, isError } = useGetHousesAnalyticsQuery();
 
-  if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState error={error} />;
+  useToastOnError(
+    isError,
+    'Не вдалось завантажити загальний дохід по всіх квартирах',
+    'PieDonutTextChart',
+  );
+
+  if (isLoading) return <ChartPieDonutTextSkeleton />;
+  if (isError) return <ErrorState error={error} />;
   if (!data?.revenueDistribution.data?.length) return <EmptyState />;
   const grandApartmentTotalRevenue = data.revenueDistribution.grandTotal;
   const adjustedData = addFillToChartItems(data, 'revenueDistribution');

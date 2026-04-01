@@ -3,14 +3,15 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 
+import { useToastOnError } from '@/hooks';
 import { useRentersContracts } from '@/hooks/renters';
 import { AllRentersContractsTableColumns } from '@/shared/constants/current-renter';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { HousesPerformanceTableSkeleton } from '@/widgets/skeletons/houses-performance-table-skeleton';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
+import { RenterReportTableSkeleton } from '../skeletons/renter-skeleton/RenterReportTableSkeleton';
 import { TableRenter } from './TableRenter';
 
 export const RenterReportCard = () => {
@@ -20,6 +21,8 @@ export const RenterReportCard = () => {
   const [limit, setLimit] = useState(DEFAULT_PAGE_SIZE);
 
   const { data, pageCount, trigger, isLoading, isError, error, isEmpty } = useRentersContracts(id);
+
+  useToastOnError(isError, 'Не вдалось завантажити таблицю історії оренди', 'RenterReportCard');
 
   const onLimitChange = (nextLimit: number) => {
     setPageIndex(DEFAULT_START_PAGE);
@@ -73,7 +76,8 @@ export const RenterReportCard = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <HousesPerformanceTableSkeleton />;
+  if (isLoading) return <RenterReportTableSkeleton />;
+
   if (isError) return <ErrorState className="w-full" error={error} />;
 
   if (isEmpty) return <EmptyState className="w-full" />;
@@ -82,6 +86,9 @@ export const RenterReportCard = () => {
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Історія договорів орендаря</CardTitle>
+        <CardDescription>
+          Хронологія орендних договорів орендаря та їх фінансових результатів.
+        </CardDescription>
       </CardHeader>
 
       <CardContent>

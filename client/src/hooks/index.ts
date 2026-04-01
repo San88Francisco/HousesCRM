@@ -7,5 +7,7 @@ export { useHotkeyForRef } from './use-hotkey-for-ref';
 export { useLogin } from './use-login';
 export { useIsMobile } from './use-mobile';
 export { useTextareaCounter } from './use-textarea-counter';
+export { useThemeSwitcher } from './use-theme-switcher';
+export { useToastOnError } from './use-toast-on-error';
 export { useUser } from './use-user';
 export { default as useVisiblePages } from './use-visible-pages';

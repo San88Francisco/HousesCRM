@@ -1,11 +1,11 @@
 'use client';
 
 import { PROPERTY_TYPE_MAP } from '@/shared/constants/house/house-type-map';
-import { Skeleton } from '@/shared/ui/skeleton';
 import { formatDate } from '@/shared/utils/format';
 import { useGetHouseByIdQuery } from '@/store/api/houses-api';
 import { Building2, DoorOpen, MapPin, PackagePlus, Ruler } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import { HouseOccupancyHeaderSkeleton } from '../skeletons/house-occupancy/HouseOccupancyHeaderSkeleton';
 
 export const HouseHeader = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +14,7 @@ export const HouseHeader = () => {
     skip: !id,
   });
 
-  if (isLoading) return <Skeleton className="h-32 w-full" />;
+  if (isLoading) return <HouseOccupancyHeaderSkeleton />;
   if (error || !data) return <div>Щось пішло не так</div>;
 
   const { street, roomsCount, totalArea, floor, apartmentName, purchaseDate, apartmentType } =

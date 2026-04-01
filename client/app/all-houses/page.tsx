@@ -6,7 +6,7 @@ import { PieDonutTextChart } from '@/widgets/all-houses/pie-revenue-distribution
 
 const Page = () => {
   return (
-    <div className="flex flex-col gap-7 w-full mb-7">
+    <div className="flex flex-col gap-5 w-full mb-7">
       <HouseRentalChart />
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 w-full">
         <PieDonutTextChart />

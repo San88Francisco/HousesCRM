@@ -8,7 +8,7 @@ type Props = {
   rows?: number;
 };
 
-export const RentersOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
+export const HouseOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
   return (
     <Card className="w-full" aria-busy="true" aria-label="Завантаження...">
       <CardHeader>
