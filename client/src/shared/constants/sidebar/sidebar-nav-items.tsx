@@ -3,7 +3,6 @@ import { FileStackIcon } from '@/shared/ui/file-stack';
 import { HomeIcon } from '@/shared/ui/home';
 import { UsersIcon } from '@/shared/ui/users';
 import { NavItem } from '@/types/model/navigation';
-import { Cookie } from 'lucide-react';
 
 export const itemsNav: NavItem[] = [
   {
@@ -21,9 +20,9 @@ export const itemsNav: NavItem[] = [
     url: ROUTES.ALL_CONTRACTS,
     icon: <FileStackIcon size={16} />,
   },
-  {
-    title: 'UI Kit',
-    url: ROUTES.UIKIT,
-    icon: <Cookie size={16} />,
-  },
+  // {
+  //   title: 'UI Kit',
+  //   url: ROUTES.UIKIT,
+  //   icon: <Cookie size={16} />,
+  // },
 ];

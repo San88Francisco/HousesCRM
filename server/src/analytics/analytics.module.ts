@@ -4,10 +4,9 @@ import { House } from 'src/houses/entities/house.entity'
 import { HouseDetailAnalyticsService } from './house-detail-analytics/house-detail-analytics.service'
 import { HousesAnalyticsService } from './houses-analytics/houses-analytics.service'
 import { Contract } from 'src/contracts/entities/contract.entity'
+import { Renter } from 'src/renters/entities/renter.entity'
 import { RenterDetailAnalyticsService } from './renter-detail-analytics/renter-detail-analytics.service'
 import { HousesAnalyticsController } from './houses-analytics/houses-analytics.controller'
-import { Renter } from 'src/renters/entities/renter.entity'
-
 @Module({
   imports: [TypeOrmModule.forFeature([House, Contract, Renter])],
   providers: [HousesAnalyticsService, HouseDetailAnalyticsService, RenterDetailAnalyticsService],

@@ -113,19 +113,16 @@ export class AuthController {
     const frontendDevURL = this.config.getOrThrow<string>('FRONTEND_DEV_URL')
     const frontendProdURL = this.config.getOrThrow<string>('FRONTEND_PROD_URL')
     const clientURL = nodeEnv === 'development' ? frontendDevURL : frontendProdURL
-    const cookieName = this.config.getOrThrow<string>('JWT_ACCESS_COOKIE')
 
     const { accessToken, refreshToken } = await this.authService.login(req.user, userAgent)
 
     this.setRefreshCookie(res, refreshToken)
 
-    res.cookie(cookieName, accessToken, {
-      httpOnly: false,
-      path: '/',
-      maxAge: 15 * 60 * 1000,
-      sameSite: 'none',
-    })
+    // Access JWT must land on the frontend origin (Vercel). Set-Cookie from this API host is not visible to
+    // Next.js middleware on another domain, so pass token in URL hash (not sent to server).
+    const base = clientURL.replace(/\/$/, '')
+    const redirectUrl = `${base}/login#accessToken=${encodeURIComponent(accessToken)}`
 
-    return res.redirect(clientURL)
+    return res.redirect(redirectUrl)
   }
 }
