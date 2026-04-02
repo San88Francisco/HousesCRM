@@ -39,7 +39,7 @@ jobs:
             -d text="❌ Тести не пройшли у *${{ github.ref_name }}* 🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
   deploy:
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/main'
     needs: test
     runs-on: ubuntu-latest
     steps:
