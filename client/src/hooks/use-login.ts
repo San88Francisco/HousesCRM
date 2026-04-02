@@ -1,3 +1,4 @@
+import { rootApi } from '@/shared/api';
 import { ROUTES } from '@/shared/routes';
 import { tokenStorage } from '@/shared/utils/auth';
 import { loginDefaultValues } from '@/shared/validation/login/defaultValues';
@@ -30,6 +31,7 @@ export const useLogin = () => {
 
       if (res.accessToken) {
         tokenStorage.setAccessToken(res.accessToken);
+        dispatch(rootApi.util.resetApiState());
       }
       if (res.email) {
         const userData = { email: res.email, username: res.username };

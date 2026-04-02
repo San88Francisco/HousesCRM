@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import { QueryDto } from 'src/common/dto/query.dto'
+import { House } from 'src/houses/entities/house.entity'
 import { RentersService } from 'src/renters/renters.service'
 import { EntityNotFoundError, Repository } from 'typeorm'
 import { ContractPdfFileDto } from './dto/contract-pdf-file.dto'
@@ -17,17 +18,32 @@ export class ContractsService {
   constructor(
     @InjectRepository(Contract)
     private contractsRepository: Repository<Contract>,
+    @InjectRepository(House)
+    private houseRepository: Repository<House>,
     private rentersService: RentersService
   ) {}
 
-  async findAll(dto: QueryDto): Promise<ContractResponseDto> {
+  private async assertHouseOwnedByUser(houseId: string, userId: string): Promise<void> {
+    const owned = await this.houseRepository.exist({ where: { id: houseId, userId } })
+    if (!owned) {
+      throw new NotFoundException('House not found')
+    }
+  }
+
+  async findAll(dto: QueryDto, userId: string): Promise<ContractResponseDto> {
     const { page = 1, limit = 10 } = dto
 
-    const [contracts, total] = await this.contractsRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { commencement: 'DESC' },
-    })
+    const qb = this.contractsRepository
+      .createQueryBuilder('contract')
+      .innerJoin('contract.house', 'house')
+      .where('house.userId = :userId', { userId })
+      .orderBy('contract.commencement', 'DESC')
+
+    const total = await qb.getCount()
+    const contracts = await qb
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getMany()
 
     const contractsDto = plainToInstance(ContractDto, contracts, {
       excludeExtraneousValues: true,
@@ -47,22 +63,30 @@ export class ContractsService {
     })
   }
 
-  async findById(id: string): Promise<ContractWithRelationsDto> {
-    const contract = await this.contractsRepository.findOneOrFail({
-      where: { id },
+  async findById(id: string, userId: string): Promise<ContractWithRelationsDto> {
+    const contract = await this.contractsRepository.findOne({
+      where: { id, house: { userId } },
       relations: { renter: true, house: true },
     })
+
+    if (!contract) {
+      throw new NotFoundException('Contract not found')
+    }
 
     return plainToInstance(ContractWithRelationsDto, contract, {
       excludeExtraneousValues: true,
     })
   }
 
-  async getPdfFileData(id: string): Promise<ContractPdfFileDto> {
-    const contract = await this.contractsRepository.findOneOrFail({
-      where: { id },
+  async getPdfFileData(id: string, userId: string): Promise<ContractPdfFileDto> {
+    const contract = await this.contractsRepository.findOne({
+      where: { id, house: { userId } },
       relations: { renter: true, house: true },
     })
+
+    if (!contract) {
+      throw new NotFoundException('Contract not found')
+    }
 
     return plainToInstance(
       ContractPdfFileDto,
@@ -80,7 +104,16 @@ export class ContractsService {
     )
   }
 
-  async create(dto: CreateContractDto): Promise<ContractWithRelationsDto> {
+  async create(dto: CreateContractDto, userId: string): Promise<ContractWithRelationsDto> {
+    if (!dto.houseId) {
+      throw new BadRequestException('houseId is required')
+    }
+    if (!dto.renterId) {
+      throw new BadRequestException('renterId is required')
+    }
+
+    await this.assertHouseOwnedByUser(dto.houseId, userId)
+
     const contractToSave = this.contractsRepository.create({
       ...dto,
       house: { id: dto.houseId },
@@ -93,20 +126,32 @@ export class ContractsService {
       await this.rentersService.updateRenterDates(dto.renterId)
     }
 
-    const contractWithRelations = await this.findById(savedContract.id)
+    const contractWithRelations = await this.findById(savedContract.id, userId)
 
     return plainToInstance(ContractWithRelationsDto, contractWithRelations, {
       excludeExtraneousValues: true,
     })
   }
 
-  async update(dto: UpdateContractDto, id: string): Promise<ContractWithRelationsDto> {
-    const oldContract = await this.contractsRepository.findOne({ where: { id } })
+  async update(dto: UpdateContractDto, id: string, userId: string): Promise<ContractWithRelationsDto> {
+    const oldContract = await this.contractsRepository.findOne({
+      where: { id },
+      relations: { house: true },
+    })
+
+    if (!oldContract || oldContract.house.userId !== userId) {
+      throw new NotFoundException('Contract not found')
+    }
+
+    const houseId = dto.houseId ?? oldContract.houseId
+    if (houseId !== oldContract.houseId) {
+      await this.assertHouseOwnedByUser(houseId, userId)
+    }
 
     const contractToUpdate = await this.contractsRepository.preload({
       id,
-      house: { id: dto.houseId },
-      renter: { id: dto.renterId },
+      house: { id: houseId },
+      renter: { id: dto.renterId ?? oldContract.renterId },
       ...dto,
     })
 
@@ -125,15 +170,22 @@ export class ContractsService {
       await this.rentersService.updateRenterDates(oldContract.renterId)
     }
 
-    const contractWithRelations = await this.findById(savedContract.id)
+    const contractWithRelations = await this.findById(savedContract.id, userId)
 
     return plainToInstance(ContractWithRelationsDto, contractWithRelations, {
       excludeExtraneousValues: true,
     })
   }
 
-  async remove(id: string): Promise<void> {
-    const contract = await this.contractsRepository.findOne({ where: { id } })
+  async remove(id: string, userId: string): Promise<void> {
+    const contract = await this.contractsRepository.findOne({
+      where: { id },
+      relations: { house: true },
+    })
+
+    if (!contract || contract.house.userId !== userId) {
+      throw new NotFoundException('Contract not found')
+    }
 
     const res = await this.contractsRepository.delete(id)
 

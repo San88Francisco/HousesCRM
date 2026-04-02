@@ -2,7 +2,7 @@
 
 import { Button, ButtonProps } from '@/shared/ui/button';
 import { cn } from '@/shared/utils/cn';
-import { redirect, RedirectType } from 'next/navigation';
+import { getGoogleOAuthStartUrl } from '@/shared/utils/backend-url';
 
 export const GoogleLoginButton = ({
   variant = 'outline',
@@ -12,7 +12,14 @@ export const GoogleLoginButton = ({
   ...props
 }: Omit<ButtonProps, 'onClick'>) => {
   const handleGoogleLogin = () => {
-    redirect(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`, RedirectType.replace);
+    const url = getGoogleOAuthStartUrl();
+    if (!url) {
+      console.error(
+        'Google sign-in: set NEXT_PUBLIC_API_BASE_URL to your API origin (e.g. http://localhost:8000).',
+      );
+      return;
+    }
+    window.location.assign(url);
   };
 
   return (

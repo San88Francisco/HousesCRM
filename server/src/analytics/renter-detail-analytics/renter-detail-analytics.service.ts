@@ -2,9 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
-import { Contract, ContractStatus } from 'src/contracts/entities/contract.entity'
+import { Contract } from 'src/contracts/entities/contract.entity'
 import { RenterDto } from 'src/renters/dto/renter.dto'
-import { Renter } from 'src/renters/entities/renter.entity'
 import { Repository } from 'typeorm'
 import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
 import { calculateContractRevenue } from '../helpers/revenue.helpers'
@@ -18,15 +17,13 @@ export class RenterDetailAnalyticsService {
 
   constructor(
     @InjectRepository(Contract)
-    private readonly contractRepository: Repository<Contract>,
-    @InjectRepository(Renter)
-    private readonly renterRepository: Repository<Renter>
+    private readonly contractRepository: Repository<Contract>
   ) {}
 
-  async getAllRenterAnalytic(id: string, dto?: ContractQueryDto): Promise<AllRenterAnalyticDto> {
+  async getAllRenterAnalytic(id: string, userId: string, dto?: ContractQueryDto): Promise<AllRenterAnalyticDto> {
     const [oneRenterReport, allContractsByRenterId] = await Promise.all([
-      this.getOneRenterReport(id),
-      this.getAllContractsByRenterId(id, dto),
+      this.getOneRenterReport(id, userId),
+      this.getAllContractsByRenterId(id, userId, dto),
     ])
 
     const transformedData = {
@@ -37,34 +34,25 @@ export class RenterDetailAnalyticsService {
     return plainToInstance(AllRenterAnalyticDto, transformedData, { excludeExtraneousValues: true })
   }
 
-  async getOneRenterReport(id: string): Promise<RenterDto> {
+  async getOneRenterReport(id: string, userId: string): Promise<RenterDto> {
     const contractsByRenterId = await this.contractRepository.find({
-      where: { renter: { id } },
+      where: { renter: { id }, house: { userId } },
       relations: { renter: true },
     })
 
-    const reports = aggregateOccupancyReports(contractsByRenterId)
-    if (reports.length === 0) {
-      const renter = await this.renterRepository.findOne({
-        where: { id },
-      })
-
-      if (!renter) {
-        throw new NotFoundException(`Renter with id ${id} not found`)
-      }
-
-      const renterData = {
-        ...renter,
-        totalIncome: 0,
-        status: ContractStatus.INACTIVE,
-      }
-
-      return plainToInstance(RenterDto, renterData, { excludeExtraneousValues: true })
+    if (contractsByRenterId.length === 0) {
+      throw new NotFoundException(`Renter with id ${id} not found`)
     }
+
+    const reports = aggregateOccupancyReports(contractsByRenterId)
     return plainToInstance(RenterDto, reports[0], { excludeExtraneousValues: true })
   }
 
-  async getAllContractsByRenterId(id: string, dto?: ContractQueryDto): Promise<ContractWithRevenueResponseDto> {
+  async getAllContractsByRenterId(
+    id: string,
+    userId: string,
+    dto?: ContractQueryDto
+  ): Promise<ContractWithRevenueResponseDto> {
     const {
       page = QUERY_DEFAULTS.PAGE,
       limit = QUERY_DEFAULTS.LIMIT,
@@ -73,15 +61,17 @@ export class RenterDetailAnalyticsService {
     } = dto ?? {}
 
     if (sortBy === 'totalRevenue') {
-      return this.getAllContractsSortedByRevenue(id, page, limit, order)
+      return this.getAllContractsSortedByRevenue(id, userId, page, limit, order)
     }
 
     const orderField = this.validSortableFields.includes(sortBy) ? sortBy : 'commencement'
 
     const [contracts, total] = await this.contractRepository
       .createQueryBuilder('contract')
-      .leftJoin('contract.renter', 'renter')
+      .innerJoin('contract.renter', 'renter')
+      .innerJoin('contract.house', 'house')
       .where('renter.id = :id', { id })
+      .andWhere('house.userId = :userId', { userId })
       .orderBy(`contract.${orderField}`, order)
       .skip((page - 1) * limit)
       .take(limit)
@@ -106,14 +96,17 @@ export class RenterDetailAnalyticsService {
 
   private async getAllContractsSortedByRevenue(
     id: string,
+    userId: string,
     page: number,
     limit: number,
     order: string
   ): Promise<ContractWithRevenueResponseDto> {
     const [contracts, total] = await this.contractRepository
       .createQueryBuilder('contract')
-      .leftJoin('contract.renter', 'renter')
+      .innerJoin('contract.renter', 'renter')
+      .innerJoin('contract.house', 'house')
       .where('renter.id = :id', { id })
+      .andWhere('house.userId = :userId', { userId })
       .getManyAndCount()
 
     const contractsWithRevenue = contracts.map<ContractWithRevenueDto>((contract) => ({
