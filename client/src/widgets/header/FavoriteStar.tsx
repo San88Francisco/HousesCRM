@@ -1,57 +1,86 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useParams, usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
+import { useParams, usePathname } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
-import { Button } from '@/shared/ui/button';
-import {
-  FavoriteItem,
-  isPathFavorite,
-  toggleFavoriteItem,
-} from '@/shared/utils/storage/favorites-storage';
 import { ROUTES } from '@/shared/routes';
-import { useGetHouseByIdQuery } from '@/store/houses-api';
+import { Button } from '@/shared/ui/button';
+import { FavoriteItem, isPathFavorite, toggleFavoriteItem } from '@/shared/utils/storage';
+import { useGetHouseByIdQuery } from '@/store/api/houses-api';
+import { useGetAllContractsByRenterIdQuery } from '@/store/api/renters-api';
 
 const FavoriteStar = () => {
   const pathname = usePathname();
   const { id } = useParams<{ id: string }>();
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const { data } = useGetHouseByIdQuery(id, {
-    skip: !id,
+  const { data: houseData } = useGetHouseByIdQuery(id, {
+    skip: !id || !pathname?.startsWith(`${ROUTES.HOUSE}/`),
   });
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const { data: renterData } = useGetAllContractsByRenterIdQuery(
+    { renterId: id },
+    { skip: !id || !pathname?.startsWith(`${ROUTES.RENTER}/`) },
+  );
 
   const favoriteItem: FavoriteItem | null = useMemo(() => {
     if (!pathname) return null;
-    if (!data) return null;
 
-    const isApartmentPage = pathname.startsWith(`${ROUTES.APARTMENT}/`);
-    if (!isApartmentPage) return null;
+    const allowedRoutes = [ROUTES.HOUSE, ROUTES.RENTER];
+    if (!allowedRoutes.some(route => pathname.startsWith(`${route}/`))) return null;
 
     const segments = pathname.split(ROUTES.ROOT).filter(Boolean);
+    const itemId = segments[1];
 
-    return {
-      id: segments[1],
-      path: pathname,
-      type: 'apartment',
-      name: data?.houseDetail.apartmentName,
-    };
-  }, [pathname, data]);
+    if (pathname.startsWith(`${ROUTES.HOUSE}/`) && houseData) {
+      return {
+        id: itemId,
+        path: pathname,
+        type: 'apartment',
+        name: houseData.houseDetail.apartmentName,
+      };
+    }
+
+    if (pathname.startsWith(`${ROUTES.RENTER}/`) && renterData?.oneRenterReport) {
+      const { firstName, lastName } = renterData.oneRenterReport;
+      const renterName = [firstName, lastName].filter(Boolean).join(' ');
+      if (!renterName) return null;
+      return {
+        id: itemId,
+        path: pathname,
+        type: 'renter',
+        name: renterName,
+      };
+    }
+
+    return null;
+  }, [pathname, houseData, renterData]);
+
+  const hasMissingRenterName =
+    pathname?.startsWith(`${ROUTES.RENTER}/`) &&
+    !!renterData?.oneRenterReport &&
+    ![renterData.oneRenterReport.firstName, renterData.oneRenterReport.lastName]
+      .filter(Boolean)
+      .join('');
+
+  useEffect(() => {
+    if (hasMissingRenterName) {
+      toast.error('Не вдалося додати орендаря до обраного: відсутнє ім’я');
+    }
+  }, [hasMissingRenterName]);
 
   useEffect(() => {
     if (!favoriteItem) {
       setIsFavorite(false);
       return;
     }
-
     setIsFavorite(isPathFavorite(favoriteItem.path));
   }, [favoriteItem]);
 
   const handleToggle = () => {
     if (!favoriteItem) return;
-
     const { isFavorite: next } = toggleFavoriteItem(favoriteItem);
     setIsFavorite(next);
   };

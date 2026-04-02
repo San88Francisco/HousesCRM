@@ -57,6 +57,7 @@ export default {
         'green-light': 'var(--green-light)',
 
         yellow: 'var(--yellow)',
+        gold: 'var(--gold)',
 
         dark: 'var(--dark)',
         'dark-medium': 'var(--dark-medium)',

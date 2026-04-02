@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common'
 import { HouseDetailAnalyticsService } from 'src/analytics/house-detail-analytics/house-detail-analytics.service'
+import type { AuthenticatedRequest } from 'src/auth/types'
 import { Auth } from 'src/common/decorators/auth.decorator'
+import type { JwtPayload } from 'types/jwt/jwt.types'
 import { HOUSES_ROUTES } from './constants/houses.routes'
 import { CreateHouseDto } from './dto/create-house.dto'
 import { DeleteHouseDto } from './dto/delete-house.dto'
@@ -22,25 +24,30 @@ export class HousesController {
 
   @Get()
   @Auth()
-  findAll(@Query() dto: HouseQueryDto): Promise<HouseResponseDto> {
-    return this.housesService.findAll(dto)
+  findAll(@Query() dto: HouseQueryDto, @Req() req: AuthenticatedRequest<JwtPayload>): Promise<HouseResponseDto> {
+    return this.housesService.findAll(dto, req.user.sub)
   }
 
   @Get(HOUSES_ROUTES.BY_ID_OCCUPANCY)
   @Auth()
   async getHouseOccupancyReport(
     @Param('id') id: string,
-    @Query() dto: HouseOccupancyQueryDto
+    @Query() dto: HouseOccupancyQueryDto,
+    @Req() req: AuthenticatedRequest<JwtPayload>
   ): Promise<HouseOccupancyReportResponseDto> {
-    return this.houseDetailAnalytics.getHouseOccupancyReportList(id, dto)
+    return this.houseDetailAnalytics.getHouseOccupancyReportList(id, dto, req.user.sub)
   }
 
   @Get(HOUSES_ROUTES.BY_ID)
   @Auth()
-  async findById(@Param('id') id: string, @Query() dto: HouseOccupancyQueryDto): Promise<HouseWithOccupancyReports> {
+  async findById(
+    @Param('id') id: string,
+    @Query() dto: HouseOccupancyQueryDto,
+    @Req() req: AuthenticatedRequest<JwtPayload>
+  ): Promise<HouseWithOccupancyReports> {
     const [houseDetail, occupancyReports] = await Promise.all([
-      this.housesService.findById(id),
-      this.houseDetailAnalytics.getHouseOccupancyReportList(id, dto),
+      this.housesService.findById(id, req.user.sub),
+      this.houseDetailAnalytics.getHouseOccupancyReportList(id, dto, req.user.sub),
     ])
 
     return { houseDetail, occupancyReports }
@@ -48,20 +55,27 @@ export class HousesController {
 
   @Post()
   @Auth()
-  async create(@Body() dto: CreateHouseDto): Promise<HouseWithRelationsDto> {
-    return await this.housesService.create(dto)
+  async create(
+    @Body() dto: CreateHouseDto,
+    @Req() req: AuthenticatedRequest<JwtPayload>
+  ): Promise<HouseWithRelationsDto> {
+    return await this.housesService.create(dto, req.user.sub)
   }
 
   @Patch(HOUSES_ROUTES.BY_ID)
   @Auth()
-  async update(@Body() dto: UpdateHouseDto, @Param('id') id: string): Promise<HouseWithRelationsDto> {
-    return await this.housesService.update(dto, id)
+  async update(
+    @Body() dto: UpdateHouseDto,
+    @Param('id') id: string,
+    @Req() req: AuthenticatedRequest<JwtPayload>
+  ): Promise<HouseWithRelationsDto> {
+    return await this.housesService.update(dto, id, req.user.sub)
   }
 
   @Delete(HOUSES_ROUTES.BY_ID)
   @Auth()
-  async remove(@Param('id') id: string): Promise<DeleteHouseDto> {
-    await this.housesService.remove(id)
+  async remove(@Param('id') id: string, @Req() req: AuthenticatedRequest<JwtPayload>): Promise<DeleteHouseDto> {
+    await this.housesService.remove(id, req.user.sub)
     return { message: 'House successfully deleted' }
   }
 }

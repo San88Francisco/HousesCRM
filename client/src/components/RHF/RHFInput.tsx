@@ -1,18 +1,18 @@
 'use client';
 
+import { useHotkeyForRef } from '@/hooks';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { cn } from '@/shared/utils/cn';
 import {
   forwardRef,
   HTMLInputTypeAttribute,
   InputHTMLAttributes,
-  useRef,
   ReactNode,
+  useRef,
   useState,
 } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
-import { cn } from '@/shared/utils/cn';
-import { useHotkeyForRef } from '@/hooks/use-hotkey-for-ref';
+import { Controller, get, useFormContext } from 'react-hook-form';
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   name: string;
@@ -29,7 +29,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   className?: string;
 }
 
-const RHFInput = forwardRef<HTMLInputElement, Props>(
+export const RHFInput = forwardRef<HTMLInputElement, Props>(
   (
     {
       name,
@@ -56,7 +56,8 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
     } = useFormContext();
 
     const [isFocused, setIsFocused] = useState(false);
-    const error = errors[name];
+
+    const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
 
     const internalRef = useRef<HTMLInputElement | null>(null);
@@ -87,7 +88,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
         render={({ field }) => (
           <div className={cn('flex flex-col gap-2', className)}>
             {label && (
-              <Label htmlFor={name}>
+              <Label htmlFor={name} className="text-text font-medium">
                 {label}
                 {required && <span className="text-red ml-1">*</span>}
               </Label>
@@ -117,7 +118,7 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
                 }}
               />
               {hotkeyHint && !isFocused && (
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-bg-button dark:text-drop-down-hover pointer-events-none">
                   {hotkeyHint}
                 </div>
               )}
@@ -135,5 +136,3 @@ const RHFInput = forwardRef<HTMLInputElement, Props>(
 );
 
 RHFInput.displayName = 'RHFInput';
-
-export { RHFInput };

@@ -1,7 +1,17 @@
 import { Contract } from 'src/contracts/entities/contract.entity'
-import { Check, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
-import type { Relation } from 'typeorm'
 import { HousePrice } from 'src/house-prices/entities/house-price.entity'
+import { User } from 'src/users/entities/user.entity'
+import type { Relation } from 'typeorm'
+import {
+  Check,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm'
 
 export enum ApartmentType {
   NEW_BUILD = 'new_build',
@@ -13,7 +23,7 @@ export class House {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column({ name: 'apartment_name', length: 30 })
+  @Column({ name: 'apartment_name', length: 45 })
   apartmentName: string
 
   @Column({ name: 'rooms_count' })
@@ -28,7 +38,7 @@ export class House {
   @Column()
   floor: number
 
-  @Column()
+  @Column({ length: 45 })
   street: string
 
   @Column({ type: 'enum', enum: ApartmentType, default: ApartmentType.NEW_BUILD })
@@ -39,6 +49,12 @@ export class House {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date
+
+  @Column({ name: 'userId', nullable: false })
+  userId: string
+
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  user: Relation<User>
 
   @OneToMany(() => HousePrice, (price) => price.house, { cascade: true })
   prices: Relation<HousePrice>[]

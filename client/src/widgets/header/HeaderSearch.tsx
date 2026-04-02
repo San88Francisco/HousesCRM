@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { Search } from 'lucide-react';
+import { type KeyboardEvent, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { SearchRequest } from '@/types/services/search';
-import { searchDefaultValues, searchSchema } from '@/shared/validation/search/search';
-import { RHFForm } from '@/components/RHF/RHForm';
 import { RHFInput } from '@/components/RHF/RHFInput';
-import { useLazyGetAllSearchQuery } from '@/store/search-api';
-import { useDebounce } from '@/hooks/use-debounce';
+import { RHFForm } from '@/components/RHF/RHForm';
+import { useDebounce } from '@/hooks';
+import { searchDefaultValues, searchSchema } from '@/shared/validation/search';
+import { useLazyGetAllSearchQuery } from '@/store/api/search-api';
+import { SearchRequest } from '@/types/services/search';
 import { SearchDropdown } from './SearchDropdown';
 
 const DEBOUNCE = 400;
@@ -41,6 +41,20 @@ const HeaderSearch = () => {
       .catch(() => setOpen(false));
   }, [debouncedQuery, triggerSearch]);
 
+  const handleQueryKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const term = form.getValues('query')?.trim();
+    if (!term) {
+      setOpen(false);
+      return;
+    }
+    triggerSearch({ query: term })
+      .unwrap()
+      .then(() => setOpen(true))
+      .catch(() => setOpen(false));
+  };
+
   return (
     <div className="relative w-full max-w-md">
       <RHFForm form={form} onSubmit={() => undefined}>
@@ -51,20 +65,7 @@ const HeaderSearch = () => {
           hotkey="k"
           hotkeyCtrl
           icon={<Search />}
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              const term = form.getValues('query')?.trim();
-              if (!term) {
-                setOpen(false);
-                return;
-              }
-              triggerSearch({ query: term })
-                .unwrap()
-                .then(() => setOpen(true))
-                .catch(() => setOpen(false));
-            }
-          }}
+          onKeyDown={handleQueryKeyDown}
         />
       </RHFForm>
 

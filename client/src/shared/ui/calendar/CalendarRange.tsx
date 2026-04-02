@@ -40,7 +40,7 @@ const CalendarRange: FC<ICalendarRangeProps> = ({
   };
 
   return (
-    <div className="bg-background dark:bg-foreground rounded-lg shadow-lg p-4">
+    <div className="bg-foreground rounded-lg shadow-lg p-2">
       <div className="flex gap-8">
         <CalendarDisplay
           firstWeekDayNumber={firstWeekDayNumber}
@@ -61,11 +61,11 @@ const CalendarRange: FC<ICalendarRangeProps> = ({
       </div>
 
       <div className="flex gap-2">
-        <Button type="submit" variant="default" className="w-full">
-          Ok
-        </Button>
         <Button onClick={handleCancel} variant="outline" className="w-full">
-          Cancel
+          Відмінити
+        </Button>
+        <Button type="submit" variant="default" className="w-full">
+          Зберегти
         </Button>
       </div>
     </div>

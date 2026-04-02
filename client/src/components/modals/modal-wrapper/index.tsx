@@ -1,11 +1,11 @@
 'use client';
 
-import { ComponentProps, ReactNode, useCallback } from 'react';
-import { clsx } from 'clsx';
 import { Dialog, DialogContent } from '@/shared/ui/dialog';
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { closeModal } from '@/store/modal-slice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { closeModal } from '@/store/slice/modal-slice';
 import { ModalTriggers } from '@/types/model/modals';
+import { clsx } from 'clsx';
+import { ComponentProps, ReactNode, useCallback } from 'react';
 
 interface ModalProps extends ComponentProps<typeof DialogContent> {
   children: ReactNode[] | ReactNode;
@@ -13,7 +13,7 @@ interface ModalProps extends ComponentProps<typeof DialogContent> {
   onClose?: () => void;
 }
 
-export default function Modal({ children, triggers, className, onClose, ...props }: ModalProps) {
+export const Modal = ({ children, triggers, className, onClose, ...props }: ModalProps) => {
   const dispatch = useAppDispatch();
 
   const isOpen = useAppSelector(state => state.modal.isOpen);
@@ -36,7 +36,21 @@ export default function Modal({ children, triggers, className, onClose, ...props
       <DialogContent
         onOpenAutoFocus={e => e.preventDefault()}
         className={clsx(
-          'max-w-full bottom-0 top-auto sm:bottom-auto sm:top-[50%] translate-y-0 sm:translate-y-[-50%] rounded-b-none sm:rounded-lg border-0 outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 focus-visible:ring-0',
+          `
+  max-w-full
+  bottom-0 top-auto
+  sm:bottom-auto sm:top-[50%]
+  translate-y-0 sm:translate-y-[-50%]
+
+  rounded-t-lg rounded-b-none
+  sm:rounded-lg
+
+  border-0 outline-none
+  focus:outline-none focus-visible:outline-none
+  ring-0 focus:ring-0 focus-visible:ring-0
+
+  p-2 sm:p-5
+  `,
           className,
         )}
         {...props}
@@ -45,4 +59,4 @@ export default function Modal({ children, triggers, className, onClose, ...props
       </DialogContent>
     </Dialog>
   );
-}
+};

@@ -1,55 +1,37 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
 
-import { ROUTES } from '@/shared/routes';
+import { useBreadcrumbTrail } from '@/hooks/header/use-breadcrumb-trail';
 import {
   Breadcrumb,
-  BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbSeparator,
+  BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from '@/shared/ui/breadcrumb';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const HeaderNavigation = () => {
-  const searchParams = useSearchParams();
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const breadcrumbItems = useBreadcrumbTrail(pathname);
 
-  const breadcrumbItems = (() => {
-    const pathSegments = pathname.split('/').filter(Boolean);
-    const items = [{ label: 'Home', href: ROUTES.ROOT }];
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-    pathSegments.forEach((segment, index) => {
-      const href = ROUTES.ROOT + pathSegments.slice(0, index + 1).join('/');
-      const label = segment
-        .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-      items.push({ label, href });
-    });
-
-    const params = Array.from(searchParams.entries());
-    if (params.length > 0) {
-      params.forEach(([key, value]) => {
-        items.push({
-          label: `${key}: ${value}`,
-          href: `${pathname}?${searchParams.toString()}`,
-        });
-      });
-    }
-
-    return items;
-  })();
+  if (!mounted) return '/';
 
   return (
     <div className="flex ml-2 items-end gap-3">
       <Breadcrumb>
         <BreadcrumbList>
           {breadcrumbItems.map((item, index) => (
-            <div key={item.href} className="contents">
-              <BreadcrumbItem>
+            <span key={index} className="contents">
+              <BreadcrumbItem key={index}>
                 {index === breadcrumbItems.length - 1 ? (
                   <BreadcrumbPage>{item.label}</BreadcrumbPage>
                 ) : (
@@ -59,7 +41,7 @@ const HeaderNavigation = () => {
                 )}
               </BreadcrumbItem>
               {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
-            </div>
+            </span>
           ))}
         </BreadcrumbList>
       </Breadcrumb>

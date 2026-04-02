@@ -15,7 +15,6 @@ import {
 } from 'date-fns';
 import { FC, Fragment } from 'react';
 import CalendarCell from './CalendarCell';
-/* eslint-disable */
 
 interface ICalendarDaysLevelProps {
   date: Date;

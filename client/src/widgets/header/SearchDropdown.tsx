@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { formatDate } from '@/shared/utils/format/format-date';
+import { formatDate } from '@/shared/utils/format';
 import { navigateToItem } from '@/shared/utils/search/navigate-to-item';
 import { SearchResponse } from '@/types/services/search';
 import { useRouter } from 'next/navigation';
@@ -83,7 +83,7 @@ export const SearchDropdown = ({ open, onOpenChange, data, isFetching, isError }
                     <DropdownMenuItem
                       key={house.id}
                       onClick={() => {
-                        navigateToItem(router, 'APARTMENT', house.id);
+                        navigateToItem(router, 'HOUSE', house.id);
                         onOpenChange(false);
                       }}
                     >

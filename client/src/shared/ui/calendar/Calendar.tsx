@@ -1,6 +1,6 @@
 import { CalendarMode } from '@/types/core/calendar';
 import { Day, Locale, startOfToday } from 'date-fns';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { Button } from '../button';
 import CalendarDisplay from './CalendarDisplay';
 
@@ -24,16 +24,13 @@ const Calendar: FC<ICalendarProps> = ({
   maxDate,
 }) => {
   const today = startOfToday();
-  useEffect(() => {
-    setDate(today);
-  }, []);
 
   const handleCancel = () => {
     setDate(today);
   };
 
   return (
-    <div className="bg-background dark:bg-foreground rounded-lg shadow-lg p-4">
+    <div className="bg-foreground rounded-lg shadow-lg p-2">
       <CalendarDisplay
         firstWeekDayNumber={firstWeekDayNumber}
         date={date}
@@ -44,11 +41,11 @@ const Calendar: FC<ICalendarProps> = ({
         maxDate={maxDate}
       />
       <div className="flex gap-2">
-        <Button type="submit" variant="default" className="w-full">
-          Ok
-        </Button>
         <Button onClick={handleCancel} variant="outline" className="w-full">
-          Cancel
+          Відмінити
+        </Button>
+        <Button type="submit" variant="default" className="w-full">
+          Зберегти
         </Button>
       </div>
     </div>

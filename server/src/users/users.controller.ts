@@ -4,6 +4,7 @@ import { UsersService } from './users.service'
 import { USER_ROUTES } from './constants/users.routes'
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard'
 import { ProfileResponseDto } from './dto/req/profile-response.dto'
+import { JwtPayload } from 'types/jwt/jwt.types'
 
 @Controller(USER_ROUTES.ROOT)
 export class UsersController {
@@ -12,8 +13,8 @@ export class UsersController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  async getProfile(@Request() req: { user: { email: string } }): Promise<ProfileResponseDto> {
-    const user = await this.usersService.findOne(req.user.email)
+  async getProfile(@Request() req: { user: JwtPayload }): Promise<ProfileResponseDto> {
+    const user = await this.usersService.findById(req.user.sub)
     if (!user) {
       throw new NotFoundException('User not found')
     }

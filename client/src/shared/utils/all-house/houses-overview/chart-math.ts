@@ -1,11 +1,11 @@
-import {
-  CHART_WIDTH_THRESHOLD,
-  DESKTOP_TICKS,
-  MOBILE_TABLET_TICKS,
-  ONE_YEAR_MS,
-  SMALL_MOBILE_TICKS,
-} from '@/constants/line-chart/line-chart';
-import { ChartDataPoint, TimeRangeEnum } from '@/types/core/houses-overview/types';
+import { TimeRangeEnum } from '@/types/core/time-range';
+import { DataPointChart } from '@/types/model/houses-overview';
+
+const CHART_WIDTH_THRESHOLD = 50;
+const SMALL_MOBILE_TICKS = 4;
+const MOBILE_TABLET_TICKS = 7;
+const DESKTOP_TICKS = 13;
+const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
 export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: number) => {
   let timeoutId: ReturnType<typeof setTimeout>;
@@ -15,20 +15,20 @@ export const debounce = <T extends (...args: unknown[]) => void>(fn: T, ms: numb
   };
 };
 
-export const getDataRange = (hasData: boolean, chartData: ChartDataPoint[]) => {
+export const getDataRange = (hasData: boolean, chartData: DataPointChart[]) => {
   if (!hasData || chartData.length === 0) {
-    return { min: Date.now() - ONE_YEAR_MS, max: Date.now() };
+    return { dataMin: Date.now() - ONE_YEAR_MS, dataMax: Date.now() };
   }
   const dates = chartData.map(d => d.date);
-  const min = dates.reduce((a, b) => Math.min(a, b), dates[0]);
-  const max = dates.reduce((a, b) => Math.max(a, b), dates[0]);
+  const dataMin = dates.reduce((a, b) => Math.min(a, b), dates[0]);
+  const dataMax = dates.reduce((a, b) => Math.max(a, b), dates[0]);
 
-  return { min, max };
+  return { dataMin, dataMax };
 };
 
 export const getOptimalTicks = (
   chartWidth: number,
-  chartData: ChartDataPoint[],
+  chartData: DataPointChart[],
   dataMin: number,
   dataMax: number,
   timeRange: TimeRangeEnum,
@@ -63,11 +63,11 @@ export const getOptimalTicks = (
     (endDate.getFullYear() - startDate.getFullYear()) * 12 +
     (endDate.getMonth() - startDate.getMonth());
 
-  if (count <= 1) {
-    return [dataMin];
+  if (count <= 1 || totalMonths <= 0) {
+    return Array.from(new Set([dataMin, dataMax]));
   }
 
-  const stepMonths = Math.ceil(totalMonths / (count - 1));
+  const stepMonths = Math.max(1, Math.ceil(totalMonths / (count - 1)));
 
   const ticks = Array.from({ length: count }).map((_, i) => {
     const tickDate = new Date(endDate);
@@ -81,5 +81,14 @@ export const getOptimalTicks = (
     ticks[0] = dataMin;
   }
 
-  return ticks;
+  if (ticks.length > 1) {
+    const diff = ticks[1] - ticks[0];
+    const HALF_MONTH_MS = 15 * 24 * 60 * 60 * 1000;
+    const threshold = stepMonths * HALF_MONTH_MS;
+    if (diff < threshold) {
+      ticks.splice(1, 1);
+    }
+  }
+
+  return Array.from(new Set(ticks)).sort((a, b) => a - b);
 };

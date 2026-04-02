@@ -1,9 +1,8 @@
 'use client';
 
-import { ComponentProps, forwardRef } from 'react';
-import { useAutoResizeTextarea } from '@/hooks/use-auto-resize-textarea';
-import { useTextareaCounter } from '@/hooks/use-textarea-counter';
+import { useAutoResizeTextarea, useTextareaCounter } from '@/hooks';
 import { CircleAlert } from 'lucide-react';
+import { ComponentProps, forwardRef } from 'react';
 import { cn } from '../utils/cn';
 /* eslint-disable */
 

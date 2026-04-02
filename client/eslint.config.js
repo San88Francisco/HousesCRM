@@ -142,7 +142,7 @@ export default [
 
       curly: ['error', 'all'],
 
-      complexity: ['error', 10],
+      complexity: ['error', 15],
 
       'max-lines': ['error', { max: 200, skipBlankLines: true, skipComments: true }],
 

@@ -7,7 +7,6 @@ import {
   useLayoutEffect,
   useRef,
 } from 'react';
-/* eslint-disable */
 
 type ChangeHandler = ChangeEventHandler<HTMLTextAreaElement> | undefined;
 
@@ -17,11 +16,11 @@ type Props = {
   handleInput: FormEventHandler<HTMLTextAreaElement>;
 };
 
-export function useAutoResizeTextarea(
+export const useAutoResizeTextarea = (
   forwardedRef: Ref<HTMLTextAreaElement> | undefined,
   onChange: ChangeHandler,
   value: string | number | readonly string[] | undefined,
-): Props {
+): Props => {
   const innerRef = useRef<HTMLTextAreaElement | null>(null);
   const rafIdRef = useRef<number | null>(null);
   const manualResizingRef = useRef<boolean>(false);
@@ -71,14 +70,14 @@ export function useAutoResizeTextarea(
 
     const onPointerDown = () => {
       manualResizingRef.current = true;
-      if (rafIdRef.current == null) {
+      if (rafIdRef.current === null) {
         rafIdRef.current = requestAnimationFrame(tick);
       }
     };
 
     const onPointerUp = () => {
       manualResizingRef.current = false;
-      if (rafIdRef.current != null) {
+      if (rafIdRef.current !== null) {
         cancelAnimationFrame(rafIdRef.current);
         rafIdRef.current = null;
       }
@@ -98,21 +97,21 @@ export function useAutoResizeTextarea(
       window.removeEventListener('mouseup', onPointerUp);
       el.removeEventListener('touchstart', onPointerDown);
       window.removeEventListener('touchend', onPointerUp);
-      if (rafIdRef.current != null) {
+      if (rafIdRef.current !== null) {
         cancelAnimationFrame(rafIdRef.current);
         rafIdRef.current = null;
       }
     };
   }, []);
 
-  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
+  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = e => {
     onChange?.(e);
     resize();
   };
 
-  const handleInput: React.FormEventHandler<HTMLTextAreaElement> = () => {
+  const handleInput: FormEventHandler<HTMLTextAreaElement> = () => {
     resize();
   };
 
   return { setRef, handleChange, handleInput };
-}
+};

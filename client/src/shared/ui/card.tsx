@@ -1,16 +1,34 @@
 import * as React from 'react';
-import {
-  CardProps,
-  CardTitleProps,
-  CardDescriptionProps,
-  CardContentProps,
-  CardFooterProps,
-} from '../../types/core/card';
 import { cn } from '../utils/cn';
+
+export type CardVariant = 'default' | 'sky' | 'purple';
+
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: CardVariant;
+}
+
+export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  variant?: CardVariant;
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div';
+}
+
+export interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  variant?: CardVariant;
+}
+
+export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: CardVariant;
+}
+
+export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: CardVariant;
+}
 
 const cardVariants = {
   default: {
-    base: 'bg-foreground ',
+    base: 'bg-[color-mix(in_srgb,var(--foreground)_50%,transparent)]',
     title: 'text-text',
     description: 'text-muted',
     content: 'text-text',
@@ -24,7 +42,7 @@ const cardVariants = {
     footer: 'text-dark',
   },
   purple: {
-    base: 'bg-purple-lightest',
+    base: 'bg-[color-mix(in_srgb,var(--purple-lightest)_50%,transparent)]',
     title: 'text-dark',
     description: 'text-muted',
     content: 'text-dark',
@@ -43,12 +61,12 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 );
 Card.displayName = 'Card';
 
-const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        'flex sm:flex-row flex-col sm:gap-5 gap-3  justify-between space-y-1.5 sm:p-6 p-3 ',
+        'flex sm:flex-row flex-col sm:gap-5 gap-3  justify-between space-y-1.5 sm:p-6 p-3',
         className,
       )}
       {...props}
@@ -87,7 +105,7 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, CardDescriptionPr
 );
 CardDescription.displayName = 'CardDescription';
 
-function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
+const CardAction = ({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
       data-slot="card-action"
@@ -95,13 +113,13 @@ function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
       {...props}
     />
   );
-}
+};
 
 const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ className, variant = 'default', ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('sm:p-6 p-3 pt-0', cardVariants[variant].content, className)}
+      className={cn('sm:p-6 p-3 pt-0 flex-1', cardVariants[variant].content, className)}
       {...props}
     />
   ),
@@ -119,4 +137,4 @@ const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
 );
 CardFooter.displayName = 'CardFooter';
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, CardAction };
+export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle };

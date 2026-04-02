@@ -1,13 +1,12 @@
 'use client';
 
+import { Modal } from '@/components/modals/modal-wrapper';
 import { RHFForm } from '@/components/RHF/RHForm';
-import { useHouseForm } from '@/hooks/modals/house-create-update-modal/use-house-form';
-import { useHouseModal } from '@/hooks/modals/house-create-update-modal/use-house-modal';
+import { useHouseForm, useHouseModal } from '@/hooks/modals/house-create-update-modal';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { ModalTriggers } from '@/types/model/modals';
-import { HouseFormFields } from '@/widgets/house-create-update-modal/HouseFormFields';
-import Modal from '../modal-wrapper';
+import { HouseFormFields } from '@/widgets/modals/house-create-update-modal';
 
 export const HouseCreateUpdateModal = () => {
   const { isEditMode, houseToEdit, handleClose: getHandleClose, modalContent } = useHouseModal();
@@ -20,10 +19,15 @@ export const HouseCreateUpdateModal = () => {
 
   const handleClose = () => getHandleClose(reset);
 
+  const {
+    formState: { isDirty },
+  } = methods;
+
   return (
     <Modal
       triggers={isEditMode ? ModalTriggers.EDIT_HOUSE : ModalTriggers.ADD_HOUSE}
       className="max-w-2xl max-h-[90vh] overflow-y-auto"
+      onClose={handleClose}
     >
       <DialogHeader>
         <DialogTitle className="text-lg font-semibold">{modalContent.title}</DialogTitle>
@@ -33,11 +37,11 @@ export const HouseCreateUpdateModal = () => {
       <RHFForm form={methods} onSubmit={onSubmit}>
         <HouseFormFields isLoading={isLoading} />
 
-        <DialogFooter className="mt-6 px-6 pb-6">
+        <DialogFooter className="!mt-10 gap-2">
           <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
-            Скасувати
+            {modalContent.cancelText}
           </Button>
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading || (isEditMode && !isDirty)}>
             {modalContent.submitText}
           </Button>
         </DialogFooter>

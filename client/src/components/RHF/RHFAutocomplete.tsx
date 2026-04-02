@@ -1,9 +1,5 @@
 'use client';
 
-import { forwardRef, useState, useEffect } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { Label } from '@/shared/ui/label';
 import { Button } from '@/shared/ui/button';
 import {
   Command,
@@ -13,13 +9,14 @@ import {
   CommandItem,
   CommandList,
 } from '@/shared/ui/command';
+import { Label } from '@/shared/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { cn } from '@/shared/utils/cn';
+import { Check, ChevronsUpDown, CircleAlert } from 'lucide-react';
+import { forwardRef, ReactNode, RefObject, useState } from 'react';
+import { Controller, get, useFormContext } from 'react-hook-form';
 
-export interface AutocompleteOption {
-  value: string;
-  label: string;
-}
+import type { AutocompleteOption } from '@/types/model/ui';
 
 type Props = {
   name: string;
@@ -29,14 +26,19 @@ type Props = {
   searchPlaceholder?: string;
   emptyMessage?: string;
   className?: string;
+  icon?: ReactNode;
+  iconWithError?: boolean;
   options: AutocompleteOption[];
   onSearch?: (searchTerm: string) => void;
   onValueChange?: (value: string) => void;
+  onOpenChange?: (open: boolean) => void;
   loading?: boolean;
   disabled?: boolean;
+  hasMore?: boolean;
+  loadMoreRef?: RefObject<HTMLDivElement | null>;
 };
 
-const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
+export const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
   (
     {
       name,
@@ -46,11 +48,16 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
       searchPlaceholder = 'Search...',
       emptyMessage = 'No options found.',
       className,
+      icon,
+      iconWithError = false,
       options = [],
       onSearch,
       onValueChange,
+      onOpenChange,
       loading = false,
       disabled = false,
+      hasMore = false,
+      loadMoreRef,
     },
     ref,
   ) => {
@@ -60,33 +67,21 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
     } = useFormContext();
 
     const [open, setOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
 
-    const error = errors[name];
+    const error = get(errors, name);
     const errorMessage = error?.message as string | undefined;
 
-    useEffect(() => {
-      if (onSearch && searchTerm.length >= 2) {
-        const timeoutId = setTimeout(() => {
-          onSearch(searchTerm);
-        }, 300);
-
-        return () => clearTimeout(timeoutId);
-      }
-    }, [searchTerm, onSearch]);
-
-    useEffect(() => {
-      if (!open) {
-        setSearchTerm('');
-      }
-    }, [open]);
+    const handleOpenChange = (newOpen: boolean) => {
+      setOpen(newOpen);
+      onOpenChange?.(newOpen);
+    };
 
     return (
       <div className="space-y-2">
         {label && (
-          <Label htmlFor={name} className="flex items-center gap-1">
+          <Label htmlFor={name} className="flex items-center gap-1 text-text font-medium">
             {label}
-            {required && <span className="text-destructive">*</span>}
+            {required && <span className="text-red ml-1">*</span>}
           </Label>
         )}
 
@@ -97,7 +92,7 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
             const selectedOption = options.find(option => option.value === field.value);
 
             return (
-              <Popover open={open} onOpenChange={setOpen}>
+              <Popover open={open} onOpenChange={handleOpenChange}>
                 <PopoverTrigger asChild>
                   <Button
                     ref={ref}
@@ -110,41 +105,75 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
                     aria-describedby={errorMessage ? `${name}-error` : undefined}
                     disabled={disabled}
                     className={cn(
-                      'w-full justify-between text-text border rounded-md font-normal bg-bg-input',
+                      'w-full justify-between text-text border rounded-lg font-normal bg-bg-input h-10 px-2 transition-all duration-200 ease-in-out',
+                      'hover:bg-bg-input active:!bg-bg-input focus:!bg-bg-input focus-visible:!bg-bg-input',
+                      'focus-visible:outline-none focus-visible:ring-0',
                       !field.value && 'text-muted',
+                      !open &&
+                        'border-border active:!border-border focus:!border-border focus-visible:!border-border',
+                      open &&
+                        'border-active-border active:!border-active-border focus:!border-active-border focus-visible:!border-active-border',
                       errorMessage && 'border-red',
                       className,
                     )}
                   >
-                    {selectedOption ? selectedOption.label : placeholder}
-                    <ChevronsUpDown
-                      className={cn('h-4 w-4 shrink-0 ', errorMessage && 'text-red')}
-                    />
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      {icon && (
+                        <span
+                          className={cn(
+                            'transition-all duration-200 ease-in-out text-muted shrink-0 pointer-events-none',
+                            open && 'text-active-border',
+                            errorMessage && 'text-red',
+                          )}
+                        >
+                          {icon}
+                        </span>
+                      )}
+                      <span
+                        className={cn(
+                          'flex-1 text-left truncate',
+                          !selectedOption && 'text-muted-text',
+                        )}
+                      >
+                        {selectedOption ? selectedOption.label : placeholder}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {errorMessage && iconWithError && (
+                        <CircleAlert className="h-4 w-4 text-red shrink-0 pointer-events-none" />
+                      )}
+                      <ChevronsUpDown
+                        className={cn(
+                          'h-4 w-4 shrink-0 pointer-events-none',
+                          errorMessage && 'text-red',
+                        )}
+                      />
+                    </div>
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
                   <Command shouldFilter={!onSearch}>
-                    <CommandInput
-                      placeholder={searchPlaceholder}
-                      value={searchTerm}
-                      onValueChange={setSearchTerm}
-                    />
+                    <CommandInput placeholder={searchPlaceholder} onValueChange={onSearch} />
                     <CommandList>
-                      {loading && (
+                      {loading && options.length === 0 && (
                         <div className="py-6 text-center text-sm text-muted-foreground">
                           Завантаження...
                         </div>
                       )}
-                      {!loading && (
+                      {!loading && options.length === 0 && (
+                        <CommandEmpty>{emptyMessage}</CommandEmpty>
+                      )}
+                      {options.length > 0 && (
                         <>
-                          <CommandEmpty>{emptyMessage}</CommandEmpty>
                           <CommandGroup>
                             {options.map(option => (
                               <CommandItem
                                 key={option.value}
                                 value={option.label}
                                 keywords={[option.value]}
+                                disabled={option.disabled}
                                 onSelect={() => {
+                                  if (option.disabled) return;
                                   const newValue = option.value === field.value ? '' : option.value;
                                   field.onChange(newValue);
                                   onValueChange?.(newValue);
@@ -161,6 +190,22 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
                               </CommandItem>
                             ))}
                           </CommandGroup>
+
+                          {onSearch && loading && (
+                            <div className="py-2 text-center text-sm text-muted-foreground">
+                              Завантаження...
+                            </div>
+                          )}
+
+                          {onSearch && hasMore && loadMoreRef && (
+                            <div ref={loadMoreRef} className="h-px" aria-hidden="true" />
+                          )}
+
+                          {onSearch && !hasMore && !loading && options.length > 0 && (
+                            <div className="py-2 text-center text-xs text-muted-text">
+                              Всі результати завантажені
+                            </div>
+                          )}
                         </>
                       )}
                     </CommandList>
@@ -182,5 +227,3 @@ const RHFAutocomplete = forwardRef<HTMLButtonElement, Props>(
 );
 
 RHFAutocomplete.displayName = 'RHFAutocomplete';
-
-export { RHFAutocomplete };

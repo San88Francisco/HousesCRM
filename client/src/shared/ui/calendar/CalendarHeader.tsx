@@ -1,4 +1,4 @@
-import { CalendarMode, levelType } from '@/types/core/calendar';
+import { CalendarMode, LevelType } from '@/types/core/calendar';
 import { format, getYear, Locale } from 'date-fns';
 import { MoveLeft, MoveRight } from 'lucide-react';
 import { FC, Fragment } from 'react';
@@ -10,8 +10,8 @@ interface ICalendarHeaderProps {
   currentYear: Date;
   firstDayCurrentMonth: Date;
   mode: CalendarMode;
-  level: levelType;
-  setLevel: (level: levelType) => void;
+  level: LevelType;
+  setLevel: (level: LevelType) => void;
   lang: Locale;
 }
 
@@ -31,12 +31,12 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
       <button
         type="button"
         onClick={handlePrevPage}
-        className="p-1 hover:bg-dark-lightest rounded dark:hover:text-dark"
+        className="p-1 hover:bg-dark-lightest rounded hover:text-dark"
       >
         <MoveLeft className="w-5 h-5 text-gray-600" />
       </button>
 
-      <h2 className="text-lg font-bold font-medium text-gray-900 flex gap-2">
+      <h2 className="text-lg font-medium text-gray-900 flex gap-2">
         {level === 'days' && (
           <Fragment>
             <button type="button" onClick={() => setLevel('months')}>
@@ -72,7 +72,7 @@ const CalendarHeader: FC<ICalendarHeaderProps> = ({
       <button
         type="button"
         onClick={handleNextPage}
-        className="p-1 hover:bg-dark-lightest rounded dark:hover:text-dark"
+        className="p-1 hover:bg-dark-lightest rounded hover:text-dark"
       >
         <MoveRight className="w-5 h-5 text-gray-600" />
       </button>

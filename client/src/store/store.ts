@@ -1,8 +1,8 @@
 import { rootApi } from '@/shared/api';
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import userReducer from './user-slice';
-import modalReducer from './modal-slice';
+import modalReducer from './slice/modal-slice';
+import userReducer from './slice/user-slice';
 
 const store = configureStore({
   reducer: {

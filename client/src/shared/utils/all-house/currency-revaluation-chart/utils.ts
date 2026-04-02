@@ -1,11 +1,8 @@
-import { ChartDataItem, CurrencyRevaluation } from '@/types/core/currency-revaluation-chart/types';
+import { truncateText } from '@/shared/utils/text';
+import { ChartDataItem, CurrencyRevaluation } from '@/types/core/currency-revaluation-chart';
 
 const MILLION = 1_000_000;
-const THOUSAND = 1_000;
-const DECIMAL_PLACES_MILLION = 1;
-const DECIMAL_PLACES_THOUSAND = 0;
 const DECIMAL_PLACES_RATE = 2;
-const DEFAULT_MAX_LENGTH = 15;
 
 export const BAR_RADIUS = 4;
 export const BAR_SIZE = 10;
@@ -15,11 +12,21 @@ export const OPACITY_LIGHT = 0.7;
 export const TOOLTIP_Z_INDEX = 9999;
 
 export const MAX_TEXT_LENGTH_YAXIS = 10;
+export const TOOLTIP_NAME_MAX_LENGTH = 25;
+export const TOOLTIP_WIDTH = 220;
+export const TOOLTIP_MAX_HEIGHT = 140;
+export const TOOLTIP_OFFSET_X = 10;
+export const TOOLTIP_OFFSET_Y = 10;
+export const TOOLTIP_PADDING = 8;
 export const Y_AXIS_PADDING = 0.15;
 export const ROW_HEIGHT = 30;
 export const CHART_PADDING = 30;
 export const MIN_VISIBLE_ROWS = 4;
 export const MAX_VISIBLE_ROWS = 7;
+
+const ANIMATION_DURATION_MS = 600;
+export const PURCHASE_ANIMATION_DURATION = ANIMATION_DURATION_MS;
+export const GROWTH_ANIMATION_DURATION = ANIMATION_DURATION_MS;
 
 export const getBarColors = (isDark: boolean) => ({
   purchase: isDark ? 'var(--dark-purple)' : 'var(--dark)',
@@ -38,27 +45,11 @@ export const transformCurrencyData = (data: CurrencyRevaluation[]): ChartDataIte
 };
 
 export const formatCurrency = (value: number): string => {
-  if (value >= MILLION) {
-    return `${(value / MILLION).toFixed(DECIMAL_PLACES_MILLION)}M ₴`;
-  }
-  if (value >= THOUSAND) {
-    return `${(value / THOUSAND).toFixed(DECIMAL_PLACES_THOUSAND)}k ₴`;
-  }
-  return `${value} ₴`;
+  return `${Math.round(value).toLocaleString('uk-UA')} ₴`;
 };
 
 export const formatRate = (rate: number): string => {
   return `${rate.toFixed(DECIMAL_PLACES_RATE)} ₴/$`;
-};
-
-export const truncateText = (text: string, maxLength: number = DEFAULT_MAX_LENGTH): string => {
-  const shouldTruncate = text.length > maxLength;
-
-  if (shouldTruncate) {
-    return `${text.substring(0, maxLength)}...`;
-  }
-
-  return text;
 };
 
 export const formatYAxisTick = (value: string) => {

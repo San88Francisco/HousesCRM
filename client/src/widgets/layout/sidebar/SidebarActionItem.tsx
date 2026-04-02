@@ -1,10 +1,11 @@
 'use client';
 
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { openModal } from '@/store/modal-slice';
+import { useAnimatedIcon } from '@/hooks';
+import { getSidebarMenuItemClasses } from '@/shared/constants/styles/sidebar';
 import { SidebarMenuButton, SidebarMenuItem } from '@/shared/ui/sidebar';
-import { getSidebarMenuItemClasses } from '@/shared/constants/styles';
-import { ActionItem } from '@/types/model/sidebar-action-item';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { openModal } from '@/store/slice/modal-slice';
+import { ActionItem } from '@/types/model/sidebar';
 import { MouseEvent } from 'react';
 
 type Props = {
@@ -16,6 +17,8 @@ export const SidebarActionItem = ({ item }: Props) => {
   const trigger = useAppSelector(s => s.modal.trigger);
 
   const isActive = trigger === item.modalTrigger;
+
+  const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(item.icon);
 
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     e.currentTarget.blur();
@@ -35,10 +38,12 @@ export const SidebarActionItem = ({ item }: Props) => {
         onClick={handleClick}
         tooltip={{
           children: item.description || item.title,
-          className: 'bg-text text-background',
+          className: 'bg-background text-text border-border shadow-lg',
         }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
-        {item.icon}
+        {animatedIcon}
         <span>{item.title}</span>
       </SidebarMenuButton>
     </SidebarMenuItem>

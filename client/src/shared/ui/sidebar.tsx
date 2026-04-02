@@ -1,14 +1,14 @@
 'use client';
 
-import { Slot } from '@radix-ui/react-slot';
-import { VariantProps, cva } from 'class-variance-authority';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useAnimatedIcon, useIsMobile } from '@/hooks';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Separator } from '@/shared/ui/separator';
 import { Sheet, SheetContent } from '@/shared/ui/sheet';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
+import { Slot } from '@radix-ui/react-slot';
+import { cva, VariantProps } from 'class-variance-authority';
 import {
   ComponentProps,
   createContext,
@@ -21,8 +21,8 @@ import {
   useMemo,
   useState,
 } from 'react';
+
 import { cn } from '../utils/cn';
-import { useAnimatedIcon } from '@/hooks';
 import { ChevronLeftIcon } from './chevron-left';
 import { ChevronRightIcon } from './chevron-right';
 /* eslint-disable */
@@ -46,14 +46,14 @@ type SidebarContext = {
 
 const SidebarContext = createContext<SidebarContext | null>(null);
 
-function useSidebar() {
+const useSidebar = () => {
   const context = useContext(SidebarContext);
   if (!context) {
     throw new Error('useSidebar must be used within a SidebarProvider.');
   }
 
   return context;
-}
+};
 
 const SidebarProvider = forwardRef<
   HTMLDivElement,
@@ -370,7 +370,11 @@ const SidebarFooter = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
       <div
         ref={ref}
         data-sidebar="footer"
-        className={cn('flex flex-col gap-2 p-2', className)}
+        className={cn(
+          'flex flex-col gap-2 p-2',
+          'group-data-[collapsible=icon]:items-center',
+          className,
+        )}
         {...props}
       />
     );
@@ -496,7 +500,7 @@ const SidebarMenuItem = forwardRef<HTMLLIElement, ComponentProps<'li'>>(
       ref={ref}
       data-sidebar="menu-item"
       className={cn(
-        'group/menu-item relative transition-colors duration-200 flex items-center rounded-[12px] text-text',
+        'group/menu-item relative transition-colors duration-200 flex items-center rounded-[12px] text-text !p-0',
         className,
       )}
       {...props}

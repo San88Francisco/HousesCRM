@@ -1,13 +1,8 @@
 'use client';
 
 import { itemsNav } from '@/shared/constants/sidebar/sidebar-nav-items';
-import { SIDEBAR_STYLES } from '@/shared/constants/styles';
-import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-} from '@/shared/ui/sidebar';
+import { SIDEBAR_STYLES } from '@/shared/constants/styles/sidebar';
+import { SidebarGroup, SidebarGroupContent, SidebarMenu } from '@/shared/ui/sidebar';
 import { SidebarMenuItem } from './SidebarMenuItem';
 
 export const SidebarPagesGroup = () => {
@@ -15,7 +10,6 @@ export const SidebarPagesGroup = () => {
 
   return (
     <SidebarGroup className={SIDEBAR_STYLES.sidebarGroup.base}>
-      <SidebarGroupLabel>Сторінки</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu className={SIDEBAR_STYLES.sidebarGroup.menu}>
           {pagesItems.map(item => (
