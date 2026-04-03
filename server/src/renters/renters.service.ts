@@ -17,6 +17,9 @@ import { Renter } from './entities/renter.entity'
 export class RentersService {
   private readonly validSortableFields: string[] = ['id', 'firstName', 'lastName', 'occupied', 'vacated']
 
+  private readonly renterVisibilityWhere =
+    '(r.created_by_user_id = :userId OR EXISTS (SELECT 1 FROM contract c INNER JOIN house h ON h.id = c."houseId" WHERE c."renterId" = r.id AND h."userId" = :userId))'
+
   constructor(
     @InjectRepository(Renter)
     private readonly rentersRepository: Repository<Renter>,
@@ -33,6 +36,21 @@ export class RentersService {
     }
   }
 
+  /** Load renter for API response; contracts limited to the given user's houses (may be empty right after create). */
+  private async mapRenterToDtoWithUserContracts(renterId: string, userId: string): Promise<RenterWithContractDto> {
+    const renter = await this.rentersRepository.findOne({
+      where: { id: renterId },
+      relations: { contracts: { house: true } },
+    })
+    if (!renter) {
+      throw new NotFoundException('Renter not found')
+    }
+    renter.contracts = (renter.contracts ?? []).filter((c) => c.house?.userId === userId)
+    return plainToInstance(RenterWithContractDto, renter, {
+      excludeExtraneousValues: true,
+    })
+  }
+
   async findAll(dto: RenterQueryDto, userId: string): Promise<RenterResponseDto> {
     const {
       page = QUERY_DEFAULTS.PAGE,
@@ -45,10 +63,8 @@ export class RentersService {
 
     const countRow = await this.rentersRepository
       .createQueryBuilder('r')
-      .select('COUNT(DISTINCT r.id)', 'cnt')
-      .innerJoin('r.contracts', 'c')
-      .innerJoin('c.house', 'h')
-      .where('h.userId = :userId', { userId })
+      .select('COUNT(r.id)', 'cnt')
+      .where(this.renterVisibilityWhere, { userId })
       .getRawOne<{ cnt: string }>()
 
     const total = Number(countRow?.cnt ?? 0)
@@ -61,17 +77,16 @@ export class RentersService {
       )
     }
 
-    const idRows = await this.rentersRepository
+    const idQb = this.rentersRepository
       .createQueryBuilder('r')
       .select('r.id', 'id')
-      .innerJoin('r.contracts', 'c')
-      .innerJoin('c.house', 'h')
-      .where('h.userId = :userId', { userId })
-      .groupBy('r.id')
-      .orderBy(`r.${orderField}`, order)
+      .where(this.renterVisibilityWhere, { userId })
+      .orderBy(`r.${orderField}`, order, 'NULLS LAST')
+      .addOrderBy('r.id', 'ASC')
       .offset((page - 1) * limit)
       .limit(limit)
-      .getRawMany()
+
+    const idRows = await idQb.getRawMany()
 
     const ids = idRows.map((row: { id: string }) => row.id)
     if (ids.length === 0) {
@@ -84,19 +99,22 @@ export class RentersService {
 
     const rentersWithContracts = await this.rentersRepository
       .createQueryBuilder('renter')
-      .innerJoinAndSelect('renter.contracts', 'contracts')
-      .innerJoin('contracts.house', 'house')
+      .leftJoinAndSelect('renter.contracts', 'contracts')
+      .leftJoinAndSelect('contracts.house', 'house')
       .where('renter.id IN (:...ids)', { ids })
-      .andWhere('house.userId = :userId', { userId })
       .getMany()
 
     const orderIndex = new Map(ids.map((rid, i) => [rid, i]))
-    rentersWithContracts.sort((a, b) => (orderIndex.get(a.id) ?? 0) - (orderIndex.get(b.id) ?? 0))
+    rentersWithContracts.sort((a, b) => {
+      const posA = typeof a.id === 'string' ? (orderIndex.get(a.id) ?? 0) : 0
+      const posB = typeof b.id === 'string' ? (orderIndex.get(b.id) ?? 0) : 0
+      return posA - posB
+    })
 
     const rentersDto = plainToInstance(
       RenterDto,
       rentersWithContracts.map((renter) => {
-        const contracts = renter.contracts ?? []
+        const contracts = (renter.contracts ?? []).filter((c) => c.house?.userId === userId)
         const totalIncome = contracts.reduce((sum, c) => sum + calculateContractRevenue(c), 0)
 
         return {
@@ -129,17 +147,19 @@ export class RentersService {
   }
 
   async findById(id: string, userId: string): Promise<RenterWithContractDto> {
-    const hasAccess = await this.contractsRepository.exists({
-      where: { renter: { id }, house: { userId } },
-    })
-    if (!hasAccess) {
-      throw new NotFoundException('Renter not found')
-    }
-
-    const renter = await this.rentersRepository.findOneOrFail({
+    const renter = await this.rentersRepository.findOne({
       where: { id },
       relations: { contracts: { house: true } },
     })
+    if (!renter) {
+      throw new NotFoundException('Renter not found')
+    }
+
+    const ownsViaContract = (renter.contracts ?? []).some((c) => c.house?.userId === userId)
+    const isCreator = renter.createdByUserId === userId
+    if (!ownsViaContract && !isCreator) {
+      throw new NotFoundException('Renter not found')
+    }
 
     renter.contracts = (renter.contracts ?? []).filter((c) => c.house?.userId === userId)
 
@@ -153,20 +173,22 @@ export class RentersService {
       await this.assertContractIdsOwnedByUser(dto.contractIds, userId)
     }
 
+    const { contractIds, ...fields } = dto
     const renterToSave = this.rentersRepository.create({
-      ...dto,
-      contracts: dto.contractIds?.map((cid) => ({ id: cid })),
+      ...fields,
+      createdByUserId: userId,
+      contracts: contractIds?.map((cid) => ({ id: cid })),
     })
 
     const savedRenter = await this.rentersRepository.save(renterToSave)
+    const persistedId = savedRenter.id
+    if (!persistedId) {
+      throw new Error('Renter id missing after save')
+    }
 
-    await this.updateRenterDates(savedRenter.id)
+    await this.updateRenterDates(persistedId)
 
-    const renterWithContracts = await this.findById(savedRenter.id, userId)
-
-    return plainToInstance(RenterWithContractDto, renterWithContracts, {
-      excludeExtraneousValues: true,
-    })
+    return this.mapRenterToDtoWithUserContracts(persistedId, userId)
   }
 
   async update(dto: UpdateRenterDto, id: string, userId: string): Promise<RenterWithContractDto> {
@@ -176,10 +198,11 @@ export class RentersService {
       await this.assertContractIdsOwnedByUser(dto.contractIds, userId)
     }
 
+    const { contractIds, ...renterFields } = dto
     const renterToUpdate = await this.rentersRepository.preload({
       id,
-      ...dto,
-      contracts: dto.contractIds?.map((cid) => ({ id: cid })),
+      ...renterFields,
+      contracts: contractIds?.map((cid) => ({ id: cid })),
     })
 
     if (!renterToUpdate) {
@@ -187,17 +210,22 @@ export class RentersService {
     }
 
     const savedRenter = await this.rentersRepository.save(renterToUpdate)
+    const persistedId = savedRenter.id
+    if (!persistedId) {
+      throw new Error('Renter id missing after save')
+    }
 
-    await this.updateRenterDates(savedRenter.id)
+    await this.updateRenterDates(persistedId)
 
-    const renterWithContracts = await this.findById(savedRenter.id, userId)
-
-    return plainToInstance(RenterWithContractDto, renterWithContracts, {
-      excludeExtraneousValues: true,
-    })
+    return this.mapRenterToDtoWithUserContracts(persistedId, userId)
   }
 
   async remove(id: string, userId: string): Promise<void> {
+    const renter = await this.rentersRepository.findOne({ where: { id } })
+    if (!renter) {
+      throw new EntityNotFoundError(Renter, id)
+    }
+
     const contracts = await this.contractsRepository.find({
       where: { renter: { id } },
       relations: { house: true },
@@ -205,6 +233,12 @@ export class RentersService {
 
     if (contracts.some((c) => c.house.userId !== userId)) {
       throw new ForbiddenException('Cannot delete renter that is linked to another account')
+    }
+
+    const hasOwnContract = contracts.some((c) => c.house.userId === userId)
+    const isCreator = renter.createdByUserId === userId
+    if (!hasOwnContract && !isCreator) {
+      throw new NotFoundException('Renter not found')
     }
 
     const res = await this.rentersRepository.delete(id)

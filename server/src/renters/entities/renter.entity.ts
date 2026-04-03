@@ -5,29 +5,32 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Up
 @Entity()
 export class Renter {
   @PrimaryGeneratedColumn('uuid')
-  id: string
+  id?: string
 
   @Column({ name: 'first_name', length: 15 })
-  firstName: string
+  firstName?: string
 
   @Column({ name: 'last_name', length: 20 })
-  lastName: string
+  lastName?: string
 
   @Column({ type: 'int', default: 25 })
-  age: number
+  age?: number
 
   @Column({ type: 'timestamp', nullable: true })
-  occupied: Date | null
+  occupied?: Date | null
 
   @Column({ type: 'timestamp', nullable: true })
-  vacated: Date | null
+  vacated?: Date | null
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date
+  createdAt?: Date
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date
+  updatedAt?: Date
+
+  @Column({ name: 'created_by_user_id', type: 'uuid', nullable: true })
+  createdByUserId?: string | null
 
   @OneToMany(() => Contract, (contract) => contract.renter, { onDelete: 'CASCADE' })
-  contracts: Relation<Contract[]>
+  contracts?: Relation<Contract[]>
 }

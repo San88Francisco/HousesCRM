@@ -97,13 +97,13 @@ export class HouseDetailAnalyticsService {
 
     const rentersData = aggregateOccupancyReports(contracts)
 
-    const orderedIds = contracts.map((c) => c.renter.id)
+    const orderedIds = contracts.map((c) => c.renterId)
     const seen = new Set<string>()
-    const uniqueOrderedIds = orderedIds.filter((id) => {
-      if (seen.has(id)) {
+    const uniqueOrderedIds = orderedIds.filter((renterId) => {
+      if (seen.has(renterId)) {
         return false
       }
-      seen.add(id)
+      seen.add(renterId)
       return true
     })
 

@@ -1,3 +1,4 @@
+import { getClientApiBaseUrl } from '@/shared/constants/api-base-url';
 import { clearUser } from '@/store/slice/user-slice';
 import type { RefreshResponse } from '@/types/services/auth';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -7,8 +8,7 @@ import { tokenStorage } from '../utils/auth';
 
 import { Mutex } from 'async-mutex';
 
-const rawBaseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '');
-const baseUrl = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl}/api`;
+const baseUrl = getClientApiBaseUrl();
 
 const baseQuery = fetchBaseQuery({
   baseUrl,
@@ -20,6 +20,11 @@ const baseQuery = fetchBaseQuery({
     }
     return headers;
   },
+});
+
+const baseQueryWithCredentialsOnly = fetchBaseQuery({
+  baseUrl,
+  credentials: 'include',
 });
 
 const handleAuthError = (dispatch: Dispatch) => {
@@ -38,6 +43,19 @@ function isAuthLoginRequest(args: string | FetchArgs): boolean {
   return url === '/auth/login' || url.endsWith('/auth/login');
 }
 
+function isRefreshRequest(args: string | FetchArgs): boolean {
+  const url = typeof args === 'string' ? args : args.url;
+  return url === '/auth/refresh' || url.endsWith('/auth/refresh');
+}
+
+function isUnauthorized(error: FetchBaseQueryError | undefined): boolean {
+  if (!error || !('status' in error)) {
+    return false;
+  }
+  const { status } = error;
+  return status === 401;
+}
+
 const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
   args,
   api,
@@ -46,15 +64,20 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401 && isAuthLoginRequest(args)) {
+  if (isUnauthorized(result.error) && isAuthLoginRequest(args)) {
     return result;
   }
 
-  if (result.error && result.error.status === 401) {
+  if (isUnauthorized(result.error) && isRefreshRequest(args)) {
+    handleAuthError(api.dispatch);
+    return result;
+  }
+
+  if (isUnauthorized(result.error)) {
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
-        const refreshResult = await baseQuery(
+        const refreshResult = await baseQueryWithCredentialsOnly(
           { url: '/auth/refresh', method: 'POST' },
           api,
           extraOptions,
