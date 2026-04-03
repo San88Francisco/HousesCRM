@@ -84,10 +84,11 @@ export class AuthController {
 
   private setRefreshCookie(res: Response, token: string): void {
     const name = this.config.getOrThrow<string>('jwt.refreshCookie')
+    const isProduction = this.config.get<string>('NODE_ENV') === 'production'
 
     res.cookie(name, token, {
       httpOnly: true,
-      secure: true,
+      secure: isProduction,
       sameSite: 'none',
       path: '/',
       maxAge: 30 * 24 * 60 * 60 * 1000,

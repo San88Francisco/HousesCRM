@@ -2,8 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import { QUERY_DEFAULTS } from 'src/common/constants/query.constant'
-import { Contract } from 'src/contracts/entities/contract.entity'
+import { Contract, ContractStatus } from 'src/contracts/entities/contract.entity'
 import { RenterDto } from 'src/renters/dto/renter.dto'
+import { Renter } from 'src/renters/entities/renter.entity'
 import { Repository } from 'typeorm'
 import { aggregateOccupancyReports } from '../helpers/aggregate-occupancy-reports.helper'
 import { calculateContractRevenue } from '../helpers/revenue.helpers'
@@ -17,7 +18,9 @@ export class RenterDetailAnalyticsService {
 
   constructor(
     @InjectRepository(Contract)
-    private readonly contractRepository: Repository<Contract>
+    private readonly contractRepository: Repository<Contract>,
+    @InjectRepository(Renter)
+    private readonly renterRepository: Repository<Renter>
   ) {}
 
   async getAllRenterAnalytic(id: string, userId: string, dto?: ContractQueryDto): Promise<AllRenterAnalyticDto> {
@@ -40,12 +43,30 @@ export class RenterDetailAnalyticsService {
       relations: { renter: true },
     })
 
-    if (contractsByRenterId.length === 0) {
+    if (contractsByRenterId.length > 0) {
+      const reports = aggregateOccupancyReports(contractsByRenterId)
+      return plainToInstance(RenterDto, reports[0], { excludeExtraneousValues: true })
+    }
+
+    const renter = await this.renterRepository.findOne({ where: { id } })
+    if (!renter || renter.createdByUserId !== userId) {
       throw new NotFoundException(`Renter with id ${id} not found`)
     }
 
-    const reports = aggregateOccupancyReports(contractsByRenterId)
-    return plainToInstance(RenterDto, reports[0], { excludeExtraneousValues: true })
+    return plainToInstance(
+      RenterDto,
+      {
+        id: renter.id,
+        firstName: renter.firstName,
+        lastName: renter.lastName,
+        age: renter.age,
+        occupied: renter.occupied,
+        vacated: renter.vacated,
+        totalIncome: 0,
+        status: ContractStatus.INACTIVE,
+      },
+      { excludeExtraneousValues: true }
+    )
   }
 
   async getAllContractsByRenterId(
