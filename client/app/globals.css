@@ -242,6 +242,22 @@ html.dark {
       background-image: none;
     }
   }
+  .maplibregl-popup {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .maplibregl-popup-content {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .maplibregl-popup-tip {
+    display: none !important;
+  }
 }
 
 @layer components {

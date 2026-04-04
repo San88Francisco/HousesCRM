@@ -33,7 +33,7 @@ export const ContractModalTrigger = ({ id }: Props) => {
   return (
     <Button
       variant="icon"
-      className="p-0 text-text rounded-md [&_svg]:size-6 w-[24px]"
+      className="p-0 text-text rounded-md [&_svg]:size-5 w-[24px]"
       aria-label="Відкрити договір"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

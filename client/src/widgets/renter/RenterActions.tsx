@@ -3,7 +3,7 @@ import { UpdateRenter } from './UpdateRenter';
 
 export const RenterActions = () => {
   return (
-    <div className="flex gap-2 justify-between w-full p-4">
+    <div className="flex gap-2 justify-between w-full py-4 px-0">
       <DeleteRenter />
       <UpdateRenter />
     </div>

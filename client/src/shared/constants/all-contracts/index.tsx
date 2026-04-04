@@ -3,6 +3,8 @@ import { formatDate } from '@/shared/utils/format';
 import { contractDuration } from '@/shared/utils/table/contract-duration';
 import { formatCurrency } from '@/shared/utils/table/formatters';
 import { Contract } from '@/types/core/contract';
+import { ContractDeleteButton } from '@/widgets/modals/contract-modal/ContractDeleteButton';
+import { ContractEditButton } from '@/widgets/modals/contract-modal/ContractEditButton';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrencyOptions } from '../currency';
@@ -41,5 +43,15 @@ export const AllContractsTableColumns: ColumnDef<Contract>[] = [
     accessorKey: 'status',
     header: 'Статус',
     cell: ctx => <ContractStatusLabel status={ctx.row.original.status} />,
+  },
+  {
+    id: 'actions',
+    header: 'Дії',
+    cell: ctx => (
+      <div className="flex items-center justify-center gap-0.5">
+        <ContractEditButton contractId={ctx.row.original.id} />
+        <ContractDeleteButton contractId={ctx.row.original.id} />
+      </div>
+    ),
   },
 ];

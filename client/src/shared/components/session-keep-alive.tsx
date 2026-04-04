@@ -27,7 +27,7 @@ async function tryRefreshAccessToken(): Promise<void> {
 function shouldRefreshSoon(): boolean {
   const token = tokenStorage.getAccessToken();
   if (!token) {
-    return false;
+    return true;
   }
   const exp = getJwtExpSeconds(token);
   if (exp === null) {
@@ -37,10 +37,6 @@ function shouldRefreshSoon(): boolean {
   return secondsLeft < REFRESH_THRESHOLD_SEC;
 }
 
-/**
- * Refreshes the access token before it expires (idle tabs) and when the user returns to the tab,
- * so API calls are less likely to hit 401 + reactive refresh.
- */
 export function SessionKeepAlive(): null {
   useEffect(() => {
     const run = () => {

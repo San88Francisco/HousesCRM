@@ -26,6 +26,7 @@ export const contractsApi = rootApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, { id }) => [
         { type: 'Contracts', id },
+        'Contracts',
         'Analytics',
         'Houses',
         'Renters',
@@ -38,6 +39,19 @@ export const contractsApi = rootApi.injectEndpoints({
         body,
       }),
       invalidatesTags: ['Contracts', 'Analytics', 'Houses', 'Renters'],
+    }),
+    deleteContract: build.mutation<void, string>({
+      query: id => ({
+        url: `/contracts/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_result, _error, id) => [
+        { type: 'Contracts', id },
+        'Contracts',
+        'Analytics',
+        'Houses',
+        'Renters',
+      ],
     }),
     getContracts: build.query<ContractsResponse, ContractsRequest>({
       query: ({ page, limit, sortBy, order }) => ({
@@ -58,8 +72,10 @@ export const contractsApi = rootApi.injectEndpoints({
 
 export const {
   useLazyGetContractPdfQuery,
+  useLazyGetContractByIdQuery,
   useGetContractByIdQuery,
   useUpdateContractMutation,
   useCreateContractMutation,
+  useDeleteContractMutation,
   useGetContractsQuery,
 } = contractsApi;
