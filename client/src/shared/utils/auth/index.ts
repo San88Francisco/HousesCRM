@@ -6,6 +6,7 @@ export const tokenStorage = {
       sameSite: 'strict',
       secure: process.env.NODE_ENV === 'production',
       path: '/',
+      expires: new Date(Date.now() + 15 * 60 * 1000),
     });
   },
 
