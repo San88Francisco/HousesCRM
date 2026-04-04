@@ -1,4 +1,5 @@
 import { DELETE_ACTION_CONFIG, DeleteAction } from '@/shared/constants/delete-actions';
+import { useDeleteContractMutation } from '@/store/api/contracts-api';
 import { useDeleteHouseMutation } from '@/store/api/houses-api';
 import { useDeleteRenterMutation } from '@/store/api/renters-api';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -19,19 +20,15 @@ export const useConfirmDelete = () => {
 
   const [deleteHouse, { isLoading: isDeleteHouseLoading }] = useDeleteHouseMutation();
   const [deleteRenter, { isLoading: isDeleteRenterLoading }] = useDeleteRenterMutation();
+  const [deleteContract, { isLoading: isDeleteContractLoading }] = useDeleteContractMutation();
 
   const deleteMutations: Record<DeleteAction, DeleteMutationFn> = {
     [DeleteAction.HOUSE]: deleteHouse,
     [DeleteAction.RENTER]: deleteRenter,
-    [DeleteAction.CONTRACT]: () => ({
-      unwrap: async () => {
-        toast.warning('Видалення контракту ще не реалізовано');
-        throw new Error('Not implemented');
-      },
-    }),
+    [DeleteAction.CONTRACT]: deleteContract,
   };
 
-  const isLoading = isDeleteHouseLoading || isDeleteRenterLoading;
+  const isLoading = isDeleteHouseLoading || isDeleteRenterLoading || isDeleteContractLoading;
 
   const handleConfirm = async () => {
     if (!deleteAction || !entityId) return;
@@ -46,7 +43,6 @@ export const useConfirmDelete = () => {
         router.replace(config.redirectUrl as string);
       }
     } catch (error) {
-      if (error instanceof Error && error.message === 'Not implemented') return;
       toast.error('Помилка при видаленні', {
         description: error instanceof Error ? error.message : 'Невідома помилка',
       });

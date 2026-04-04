@@ -1,7 +1,5 @@
 'use client';
 
-import { KeyboardEvent, useState } from 'react';
-
 import { Badge } from '@/shared/ui/badge';
 import { getStatusLabel } from '@/shared/utils/create-update-contract-form/status-labels';
 import { formatDate } from '@/shared/utils/format';
@@ -10,7 +8,10 @@ import { openModal } from '@/store/slice/modal-slice';
 import { Contract } from '@/types/core/contract';
 import { ContractStatus } from '@/types/core/status';
 import { ModalTriggers } from '@/types/model/modals';
+import { ContractDeleteButton } from '@/widgets/modals/contract-modal/ContractDeleteButton';
+import { ContractEditButton } from '@/widgets/modals/contract-modal/ContractEditButton';
 import { PdfContractTrigger } from '@/widgets/modals/pdf-contract-content-modal/PdfContractTrigger';
+import { KeyboardEvent, useState } from 'react';
 
 type Props = {
   contract: Contract;
@@ -38,7 +39,7 @@ export const ContractItem = ({ contract }: Props) => {
 
   return (
     <li
-      className="mb-4 flex gap-4 rounded-md border p-4 cursor-pointer hover:bg-muted-foreground transition-colors duration-300 relative"
+      className="flex gap-4 items-center rounded-md border py-7 px-3 cursor-pointer hover:bg-muted-foreground transition-colors duration-300 relative"
       role="button"
       tabIndex={0}
       onMouseEnter={() => setHovered(true)}
@@ -48,11 +49,15 @@ export const ContractItem = ({ contract }: Props) => {
     >
       <PdfContractTrigger id={contract.id} isHovered={hovered} />
 
-      <div className="flex flex-col gap-1">
+      <div className="flex min-w-0 flex-1 flex-col gap-1 pr-[4.5rem]">
         <span>
           з {formatDate(contract.commencement)} до {formatDate(contract.termination)}
         </span>
         <span className="text-muted">Місячна оплата: {contract.monthlyPayment} грн.</span>
+      </div>
+      <div className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-0.5">
+        <ContractEditButton contractId={contract.id} />
+        <ContractDeleteButton contractId={contract.id} />
       </div>
       <Badge
         className="absolute right-2 top-2"
