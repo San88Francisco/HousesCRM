@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { cn } from '../utils/cn';
 
-export type CardVariant = 'default' | 'sky' | 'purple';
+export type CardVariant = 'default' | 'sky' | 'purple' | 'green' | 'yellow';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: CardVariant;
@@ -35,18 +35,32 @@ const cardVariants = {
     footer: 'text-text',
   },
   sky: {
-    base: 'bg-blue-light',
-    title: 'text-dark',
-    description: 'text-muted',
-    content: 'text-dark',
-    footer: 'text-dark',
+    base: 'bg-[color-mix(in_srgb,var(--blue-light)_45%,transparent)]',
+    title: 'text-text',
+    description: 'text-text',
+    content: 'text-text',
+    footer: 'text-text',
   },
   purple: {
-    base: 'bg-[color-mix(in_srgb,var(--purple-lightest)_50%,transparent)]',
-    title: 'text-dark',
-    description: 'text-muted',
-    content: 'text-dark',
-    footer: 'text-dark',
+    base: 'bg-[color-mix(in_srgb,var(--purple)_25%,transparent)]',
+    title: 'text-text',
+    description: 'text-text',
+    content: 'text-text',
+    footer: 'text-text',
+  },
+  green: {
+    base: 'bg-[color-mix(in_srgb,var(--green-light)_25%,transparent)]',
+    title: 'text-text',
+    description: 'text-text',
+    content: 'text-text',
+    footer: 'text-text',
+  },
+  yellow: {
+    base: 'bg-[color-mix(in_srgb,var(--yellow)_25%,transparent)]',
+    title: 'text-text',
+    description: 'text-text',
+    content: 'text-text',
+    footer: 'text-text',
   },
 };
 
@@ -66,7 +80,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
     <div
       ref={ref}
       className={cn(
-        'flex sm:flex-row flex-col sm:gap-5 gap-3  justify-between space-y-1.5 sm:p-6 p-3',
+        'flex sm:flex-row flex-col sm:gap-5 gap-3 justify-between space-y-1.5 sm:p-6 p-3',
         className,
       )}
       {...props}
