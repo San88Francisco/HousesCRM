@@ -11,7 +11,9 @@ export const resolveBreadcrumbLabel = async (
   triggerHouse: ReturnType<typeof useLazyGetHouseByIdQuery>[0],
   triggerRenter: ReturnType<typeof useLazyGetRenterByIdQuery>[0],
 ) => {
-  let label = STATIC_LABELS[`/${segments[0]}`] || segments[segments.length - 1];
+  const fullPath = `/${segments.join('/')}`;
+  let label =
+    STATIC_LABELS[fullPath] ?? STATIC_LABELS[`/${segments[0]}`] ?? segments[segments.length - 1];
 
   if (segments[0] === HOUSE_SEGMENT && segments[1]) {
     try {

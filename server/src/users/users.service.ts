@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import * as argon2 from 'argon2'
@@ -7,6 +13,7 @@ import { CreateUserRequestDto } from './dto/req/create-user-req.dto'
 import { UserWithPasswordDto } from './dto/user-with-password.dto'
 import { plainToInstance } from 'class-transformer'
 import { UserWithGoogleDto } from './dto/req/user-with-google.req.dto'
+import { UpdateUserProfileDto } from './dto/req/update-user-profile.dto'
 
 @Injectable()
 export class UsersService {
@@ -54,5 +61,48 @@ export class UsersService {
     })
 
     return await this.usersRepository.save(entity)
+  }
+
+  async updateProfile(userId: string, dto: UpdateUserProfileDto): Promise<User> {
+    if (dto.email === undefined && dto.username === undefined) {
+      throw new BadRequestException('Немає даних для оновлення')
+    }
+
+    const user = await this.findById(userId)
+    if (!user) {
+      throw new NotFoundException('Користувача не знайдено')
+    }
+
+    if (dto.email !== undefined) {
+      const existing = await this.usersRepository.findOne({ where: { email: dto.email } })
+      if (existing && existing.id !== userId) {
+        throw new ConflictException('Ця електронна пошта вже використовується')
+      }
+      user.email = dto.email
+    }
+
+    if (dto.username !== undefined) {
+      user.username = dto.username
+    }
+
+    return this.usersRepository.save(user)
+  }
+
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
+    const user = await this.usersRepository.findOne({ where: { id: userId } })
+    if (!user) {
+      throw new NotFoundException('Користувача не знайдено')
+    }
+    if (!user.password) {
+      throw new BadRequestException('Зміна пароля недоступна для акаунту через Google')
+    }
+
+    const valid = await argon2.verify(user.password, currentPassword)
+    if (!valid) {
+      throw new UnauthorizedException('Невірний поточний пароль')
+    }
+
+    user.password = await argon2.hash(newPassword)
+    await this.usersRepository.save(user)
   }
 }

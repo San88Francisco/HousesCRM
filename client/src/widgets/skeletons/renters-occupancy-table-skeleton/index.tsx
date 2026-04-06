@@ -43,8 +43,14 @@ export const RentersOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
                 <TableHead className="text-center">
                   <Skeleton className="h-4 w-24" />
                 </TableHead>
+                <TableHead className="text-center">
+                  <Skeleton className="h-4 w-14" />
+                </TableHead>
+                <TableHead className="text-center">
+                  <Skeleton className="h-4 w-14" />
+                </TableHead>
                 <TableHead className="justify-end">
-                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-14" />
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -70,8 +76,14 @@ export const RentersOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
                   <TableCell className="text-center">
                     <Skeleton className="h-4 w-16" />
                   </TableCell>
+                  <TableCell className="text-center">
+                    <Skeleton className="h-4 w-10" />
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Skeleton className="h-4 w-14" />
+                  </TableCell>
                   <TableCell className="justify-end">
-                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-4 w-14" />
                   </TableCell>
                 </TableRow>
               ))}

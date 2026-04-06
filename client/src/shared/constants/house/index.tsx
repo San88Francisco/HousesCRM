@@ -7,6 +7,8 @@ import { formatCurrency } from '@/shared/utils/table/formatters';
 
 import { ContractStatus } from '@/types/core/status';
 import { HouseOccupancyItem } from '@/types/model/houses-occupancy';
+import { ContractDeleteButton } from '@/widgets/modals/contract-modal/ContractDeleteButton';
+import { ContractEditButton } from '@/widgets/modals/contract-modal/ContractEditButton';
 import { ContractModalTrigger } from '@/widgets/modals/contract-modal/ContractModalTrigger';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrencyOptions } from '../currency';
@@ -109,6 +111,29 @@ export const HouseOccupancyTableColumns: ColumnDef<OccupancyWithVacancy<HouseOcc
       }
 
       return <ContractStatusLabel status={ctx.row.original.status} />;
+    },
+  },
+  {
+    id: 'actions',
+    header: 'Дії',
+    cell: ctx => {
+      const isVacancy = ctx.row.original.isVacancy;
+      const contractId = ctx.row.original.contractId;
+
+      if (isVacancy || !contractId) {
+        return <div className="flex items-center justify-center text-muted">—</div>;
+      }
+
+      return (
+        <div
+          className="flex items-center justify-center gap-0.5"
+          onClick={e => e.stopPropagation()}
+          role="presentation"
+        >
+          <ContractEditButton contractId={contractId} />
+          <ContractDeleteButton contractId={contractId} />
+        </div>
+      );
     },
   },
 ];

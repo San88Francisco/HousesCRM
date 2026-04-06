@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import FavoriteStar from './FavoriteStar';
 import HeaderNavigation from './HeaderNavigation';
 import HeaderSearch from './HeaderSearch';
+import { HeaderSettingsMenu } from './HeaderSettingsMenu';
 
 const Header = () => {
   const pathname = usePathname();
@@ -25,6 +26,7 @@ const Header = () => {
       <div className="flex items-center gap-3">
         <HeaderSearch />
         <ThemeSwitch />
+        <HeaderSettingsMenu />
       </div>
     </header>
   );

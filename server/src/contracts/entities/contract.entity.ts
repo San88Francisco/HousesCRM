@@ -16,8 +16,8 @@ export class Contract {
   @Column()
   commencement: Date
 
-  @Column()
-  termination: Date
+  @Column({ type: 'timestamp', nullable: true })
+  termination: Date | null
 
   @Column({ type: 'enum', enum: ContractStatus, default: ContractStatus.ACTIVE })
   status: ContractStatus

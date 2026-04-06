@@ -42,7 +42,6 @@ export class AuthController {
 
   @Public()
   @Post(AUTH_ROUTES.REGISTRATION)
-  // @Auth()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto> {
     const user = await this.authService.registration(dto)
@@ -119,8 +118,6 @@ export class AuthController {
 
     this.setRefreshCookie(res, refreshToken)
 
-    // Access JWT must land on the frontend origin (Vercel). Set-Cookie from this API host is not visible to
-    // Next.js middleware on another domain, so pass token in URL hash (not sent to server).
     const base = clientURL.replace(/\/$/, '')
     const redirectUrl = `${base}/login#accessToken=${encodeURIComponent(accessToken)}`
 

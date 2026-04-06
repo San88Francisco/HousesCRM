@@ -3,6 +3,13 @@
 import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { AllContractsTableColumns } from '@/shared/constants/all-contracts';
+import { ALL_CONTRACTS_PAGE } from '@/shared/constants/all-contracts/copy';
+import {
+  allContractsCardClassName,
+  allContractsCardContentClassName,
+  allContractsHeaderStackClassName,
+  fullWidthClassName,
+} from '@/shared/constants/styles/contracts-table';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { useGetContractsQuery } from '@/store/api/contracts-api';
@@ -60,22 +67,20 @@ export const AllContracts = () => {
 
   if (isLoading) return <RentersOccupancyTableSkeleton rows={limit} />;
 
-  if (isError) return <ErrorState className="w-full" error={error} />;
+  if (isError) return <ErrorState className={fullWidthClassName} error={error} />;
 
-  if (isEmpty) return <EmptyState className="w-full" />;
+  if (isEmpty) return <EmptyState className={fullWidthClassName} />;
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className={allContractsCardClassName}>
       <CardHeader>
-        <div className="flex flex-col gap-3">
-          <CardTitle>Всі Договори</CardTitle>
-          <CardDescription>
-            Хронологія орендних договорів та їх фінансових результатів.
-          </CardDescription>
+        <div className={allContractsHeaderStackClassName}>
+          <CardTitle>{ALL_CONTRACTS_PAGE.title}</CardTitle>
+          <CardDescription>{ALL_CONTRACTS_PAGE.description}</CardDescription>
         </div>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className={allContractsCardContentClassName}>
         <ContractsTable table={table} limit={limit} onLimitChange={onLimitChange} />
       </CardContent>
     </Card>

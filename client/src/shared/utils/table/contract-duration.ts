@@ -1,6 +1,6 @@
 import { intervalToDuration } from 'date-fns';
 
-export const contractDuration = (occupied: string, vacated: string) => {
+export const contractDuration = (occupied: string, vacated: string | null | undefined) => {
   if (!occupied) {
     return '0 дн.';
   }

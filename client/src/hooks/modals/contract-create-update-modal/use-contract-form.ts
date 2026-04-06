@@ -40,7 +40,7 @@ export const useContractForm = ({ isEditMode, contractToEdit, onSuccess }: Props
         if (!contractToEdit?.id) throw new Error('ID контракту не знайдено');
 
         const changedData = extractDirtyFormValues(data, methods.formState.dirtyFields);
-        await update(contractToEdit.id, changedData);
+        await update(contractToEdit.id, changedData, data);
       } else {
         await create(data);
       }

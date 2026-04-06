@@ -25,6 +25,7 @@ export type OccupancyBase = {
   vacated: string | null;
   totalIncome: number;
   status: ContractStatus;
+  contractId?: string;
 };
 
 export type CreateHouseResponse = House;

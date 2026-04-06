@@ -9,4 +9,5 @@ export type RentersOccupancyItem = {
   vacated: string;
   totalIncome: number;
   status: ContractStatus;
+  contractsCount: number;
 };

@@ -103,7 +103,11 @@ export const rentersApi = rootApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Renters', id }, 'Analytics'],
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Renters', id },
+        'Renters',
+        'Analytics',
+      ],
     }),
     createRenter: build.mutation<CreateRenterResponse, CreateRenterRequest>({
       query: body => ({

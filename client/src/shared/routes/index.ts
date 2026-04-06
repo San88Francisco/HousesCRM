@@ -10,6 +10,10 @@ export const ROUTES = {
   UIKIT: '/uikit',
   ALL_CONTRACTS: '/all-contracts',
   MAP: '/map',
+  PROFILE: '/profile',
+  PROFILE_PERSONAL: '/profile/personal',
+  PROFILE_CONTRACTS: '/profile/contracts',
+  PROFILE_PASSWORD: '/profile/password',
 };
 
 export type RouteKey = keyof typeof ROUTES;
@@ -25,4 +29,5 @@ export const SIDEBAR_PATTERNS = [
   /^\/contract/,
   /^\/all-contracts/,
   /^\/map/,
+  /^\/profile/,
 ] as const;

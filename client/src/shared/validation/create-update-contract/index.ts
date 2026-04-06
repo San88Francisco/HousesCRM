@@ -6,9 +6,16 @@ export const contractSchema = yup.object({
 
   termination: yup
     .date()
-    .required("Дата завершення обов'язкова")
-    .typeError('Невірний формат дати')
-    .min(yup.ref('commencement'), 'Дата завершення не може бути раніше дати початку'),
+    .nullable()
+    .when('status', {
+      is: ContractStatus.INACTIVE,
+      then: schema =>
+        schema
+          .required("Дата завершення обов'язкова")
+          .typeError('Невірний формат дати')
+          .min(yup.ref('commencement'), 'Дата завершення не може бути раніше дати початку'),
+      otherwise: schema => schema.nullable(),
+    }),
 
   status: yup
     .mixed<ContractStatus>()

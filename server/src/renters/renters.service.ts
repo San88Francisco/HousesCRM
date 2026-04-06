@@ -36,7 +36,6 @@ export class RentersService {
     }
   }
 
-  /** Load renter for API response; contracts limited to the given user's houses (may be empty right after create). */
   private async mapRenterToDtoWithUserContracts(renterId: string, userId: string): Promise<RenterWithContractDto> {
     const renter = await this.rentersRepository.findOne({
       where: { id: renterId },
@@ -121,12 +120,14 @@ export class RentersService {
           id: renter.id,
           firstName: renter.firstName,
           lastName: renter.lastName,
+          age: renter.age ?? 25,
           occupied: renter.occupied,
           vacated: renter.vacated,
           totalIncome,
           status: contracts.some((c) => c.status === ContractStatus.ACTIVE)
             ? ContractStatus.ACTIVE
             : ContractStatus.INACTIVE,
+          contractsCount: contracts.length,
         }
       }),
       { excludeExtraneousValues: true }
@@ -248,11 +249,6 @@ export class RentersService {
     }
   }
 
-  /**
-   * Оновлює дати occupied і vacated для рентаря на основі його контрактів
-   * occupied = найменша дата commencement
-   * vacated = найбільша дата termination (може бути null)
-   */
   async updateRenterDates(renterId: string): Promise<void> {
     const renter = await this.rentersRepository.findOne({
       where: { id: renterId },

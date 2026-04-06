@@ -1,7 +1,17 @@
 'use client';
 
 import { TablePagination } from '@/components/table-pagination/TablePagination';
-import { contractsTableGrid } from '@/shared/constants/styles/contracts-table';
+import { ALL_CONTRACTS_TABLE } from '@/shared/constants/all-contracts/copy';
+import {
+  contractsTableClassName,
+  contractsTableRootClassName,
+  contractsTableScrollAreaClassName,
+  contractsTableHeadCellClassName,
+  contractsTableBodyCellClassName,
+  contractsTableEmptyRowClassName,
+  contractsTableEmptyTextClassName,
+  contractsTablePaginationRowClassName,
+} from '@/shared/constants/styles/contracts-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { Contract } from '@/types/core/contract';
 import { flexRender, Table as TableType } from '@tanstack/react-table';
@@ -14,13 +24,13 @@ type Props = {
 
 export const ContractsTable = ({ table, limit, onLimitChange }: Props) => {
   return (
-    <div className="flex flex-col justify-between h-full">
-      <div className="w-full overflow-x-auto">
-        <Table>
+    <div className={contractsTableRootClassName}>
+      <div className={contractsTableScrollAreaClassName}>
+        <Table className={contractsTableClassName}>
           <TableHeader>
-            <TableRow className={contractsTableGrid}>
+            <TableRow>
               {table.getFlatHeaders().map(header => (
-                <TableHead key={header.id}>
+                <TableHead key={header.id} className={contractsTableHeadCellClassName}>
                   {flexRender(header.column.columnDef.header, header.getContext())}
                 </TableHead>
               ))}
@@ -30,15 +40,20 @@ export const ContractsTable = ({ table, limit, onLimitChange }: Props) => {
           <TableBody>
             {table.getRowModel().rows.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
-                  <p className="text-muted-foreground">Немає договорів для відображення</p>
+                <TableCell
+                  colSpan={table.getAllColumns().length}
+                  className={contractsTableEmptyRowClassName}
+                >
+                  <p className={contractsTableEmptyTextClassName}>
+                    {ALL_CONTRACTS_TABLE.emptyMessage}
+                  </p>
                 </TableCell>
               </TableRow>
             ) : (
               table.getRowModel().rows.map(row => (
-                <TableRow key={row.original.id} className={contractsTableGrid}>
+                <TableRow key={row.original.id}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className={contractsTableBodyCellClassName}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -48,7 +63,7 @@ export const ContractsTable = ({ table, limit, onLimitChange }: Props) => {
           </TableBody>
         </Table>
       </div>
-      <div className="mt-4 flex justify-end">
+      <div className={contractsTablePaginationRowClassName}>
         <TablePagination table={table} limit={limit} onLimitChange={onLimitChange} />
       </div>
     </div>

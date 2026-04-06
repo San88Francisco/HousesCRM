@@ -15,6 +15,7 @@ type Props = {
   startPlaceholder?: string;
   endPlaceholder?: string;
   disabled?: boolean;
+  endDisabled?: boolean;
   className?: string;
   calendarMode?: CalendarMode;
   ariaRequired?: boolean;
@@ -30,6 +31,7 @@ export const RHFDateRangePicker = forwardRef<HTMLDivElement, Props>(
       startPlaceholder = 'Дата початку',
       endPlaceholder = 'Дата завершення',
       disabled,
+      endDisabled = false,
       className,
       calendarMode = CalendarMode.YearsMonthsDays,
       ariaRequired = false,
@@ -53,7 +55,6 @@ export const RHFDateRangePicker = forwardRef<HTMLDivElement, Props>(
     return (
       <div ref={ref} className={cn('space-y-4', className)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Start Date */}
           <Controller
             name={startName}
             control={control}
@@ -89,7 +90,6 @@ export const RHFDateRangePicker = forwardRef<HTMLDivElement, Props>(
             )}
           />
 
-          {/* End Date */}
           <Controller
             name={endName}
             control={control}
@@ -109,10 +109,10 @@ export const RHFDateRangePicker = forwardRef<HTMLDivElement, Props>(
                     field.onChange(date);
                   }}
                   placeholder={endPlaceholder}
-                  disabled={disabled}
+                  disabled={disabled || endDisabled}
                   error={endErrorMessage}
                   calendarMode={calendarMode}
-                  ariaRequired={ariaRequired}
+                  ariaRequired={ariaRequired && !endDisabled}
                   minDate={startDate}
                 />
 

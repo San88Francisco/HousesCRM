@@ -11,7 +11,7 @@ export type LazyLoadingAutocomplete<T> = {
   meta: Metadata;
 };
 
-export type ApiTagTypes = 'Auth' | 'Houses' | 'Analytics' | 'Renters' | 'Contracts';
+export type ApiTagTypes = 'Auth' | 'Houses' | 'Analytics' | 'Renters' | 'Contracts' | 'User';
 
 export type ApiBaseQuery = BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>;
 

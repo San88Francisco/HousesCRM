@@ -1,4 +1,4 @@
-import { rentersOccupancyTableGrid } from '@/shared/constants/styles/renters-occupancy-table';
+import { houseOccupancyTableGrid } from '@/shared/constants/styles/renters-occupancy-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
@@ -24,7 +24,7 @@ export const HouseOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
         <div className="w-full overflow-x-auto">
           <Table className="min-w-[900px]">
             <TableHeader>
-              <TableRow className={cn(rentersOccupancyTableGrid)}>
+              <TableRow className={cn(houseOccupancyTableGrid)}>
                 <TableHead className="text-center">
                   <Skeleton className="h-4 w-40" />
                 </TableHead>
@@ -43,15 +43,18 @@ export const HouseOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
                 <TableHead className="text-center">
                   <Skeleton className="h-4 w-24" />
                 </TableHead>
+                <TableHead className="text-center">
+                  <Skeleton className="h-4 w-16" />
+                </TableHead>
                 <TableHead className="justify-end">
-                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-14" />
                 </TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody>
               {Array.from({ length: rows }).map((_, index) => (
-                <TableRow key={index} className={rentersOccupancyTableGrid}>
+                <TableRow key={index} className={houseOccupancyTableGrid}>
                   <TableCell className="text-center">
                     <Skeleton className="h-6 w-6" />
                   </TableCell>
@@ -70,8 +73,11 @@ export const HouseOccupancyTableSkeleton = ({ rows = 10 }: Props) => {
                   <TableCell className="text-center">
                     <Skeleton className="h-4 w-16" />
                   </TableCell>
+                  <TableCell className="text-center">
+                    <Skeleton className="h-4 w-14" />
+                  </TableCell>
                   <TableCell className="justify-end">
-                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-4 w-14" />
                   </TableCell>
                 </TableRow>
               ))}

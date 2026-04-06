@@ -5,7 +5,8 @@ import { HousePaybackStatsDto } from '../houses-analytics/dto/house-payback-stat
 import { CurrencyCode } from 'src/house-prices/entities/house-price.entity'
 
 const calculateContractTotalIncomeUSD = (contract: Contract): number => {
-  const months = calculateMonthsBetween(contract.commencement, contract.termination)
+  const end = contract.termination ?? new Date()
+  const months = calculateMonthsBetween(contract.commencement, end)
   return months * contract.monthlyPayment
 }
 

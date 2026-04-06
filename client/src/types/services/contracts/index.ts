@@ -1,3 +1,4 @@
+import type { ContractTerminationPayload } from '@/shared/constants/contract-termination';
 import { ContractFormData } from '@/shared/validation/create-update-contract';
 import { ContractCreateUpdate } from '@/types/core/contract';
 
@@ -54,9 +55,14 @@ export type PdfContractModel = {
 };
 
 export type CreateContractResponse = ContractCreateUpdate;
-export type CreateContractRequest = ContractFormData;
+export type CreateContractRequest = Omit<ContractFormData, 'termination'> & {
+  termination: ContractTerminationPayload;
+};
 
 export type UpdateContractResponse = ContractCreateUpdate;
-export type UpdateContractRequest = Partial<ContractFormData> & { id: string };
+export type UpdateContractRequest = Partial<Omit<ContractFormData, 'termination'>> & {
+  id: string;
+  termination?: ContractTerminationPayload;
+};
 
 export type ContractByIdResponse = ContractCreateUpdate;

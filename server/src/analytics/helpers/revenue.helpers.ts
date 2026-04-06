@@ -17,7 +17,8 @@ export const calculateMonthsBetween = (start: Date, end: Date): number => {
 }
 
 export const calculateContractRevenue = (contract: Contract): number => {
-  const months = calculateMonthsBetween(contract.commencement, contract.termination)
+  const end = contract.termination ?? new Date()
+  const months = calculateMonthsBetween(contract.commencement, end)
   return months * contract.monthlyPayment
 }
 

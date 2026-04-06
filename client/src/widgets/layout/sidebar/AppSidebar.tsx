@@ -8,7 +8,6 @@ import { SidebarPagesGroup } from './SidebarPagesGroup';
 import { shouldShowSidebar } from '@/shared/utils/sidebar/should-show-sidebar';
 import { LogoSidebar } from './LogoSidebar';
 import { LogoutButton } from './LogoutButton';
-import { MapSidebarButton } from './MapSidebarButton';
 import { SidebarActionsGroup } from './SidebarActionsGroup';
 import { SidebarFavoritesGroup } from './SidebarFavoritesGroup';
 import { SidebarTablesGroup } from './SidebarTablesGroup';
@@ -28,7 +27,6 @@ export const AppSidebar = () => {
         <SidebarFavoritesGroup />
       </SidebarContent>
       <SidebarFooter>
-        <MapSidebarButton />
         <LogoutButton />
         <LogoSidebar />
       </SidebarFooter>
