@@ -10,10 +10,6 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'sonner';
 
-/**
- * After Google OAuth the API redirects to /login#accessToken=… so the token is stored on the frontend
- * domain (required when API and Next.js are on different hosts).
- */
 export const GoogleOAuthHashHandler = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -49,9 +45,9 @@ export const GoogleOAuthHashHandler = () => {
           throw new Error('Profile request failed');
         }
 
-        const profile = (await res.json()) as { email: string };
-        tokenStorage.setUserData({ email: profile.email });
-        dispatch(setUser({ email: profile.email }));
+        const profile = (await res.json()) as { email: string; username: string };
+        tokenStorage.setUserData({ email: profile.email, username: profile.username });
+        dispatch(setUser({ email: profile.email, username: profile.username }));
 
         toast.success('Увійшли успішно');
         router.replace(ROUTES.ALL_HOUSES);

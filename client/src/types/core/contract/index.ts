@@ -4,12 +4,17 @@ import { PaginationSortBy, PaginationSortOrder } from '../pagination';
 import { Renter } from '../renter';
 import { ContractStatus } from '../status';
 
+export type ContractListRenter = Pick<Renter, 'id' | 'firstName' | 'lastName'>;
+export type ContractListHouse = Pick<House, 'id' | 'apartmentName' | 'street'>;
+
 export interface Contract {
   id: string;
   commencement: string;
-  termination: string;
+  termination: string | null;
   monthlyPayment: number;
   status: ContractStatus;
+  renter?: ContractListRenter | null;
+  house?: ContractListHouse | null;
 }
 
 export interface ContractWithRevenue extends Contract {

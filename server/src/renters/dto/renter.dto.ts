@@ -25,4 +25,10 @@ export class RenterDto {
 
   @Expose()
   status: ContractStatus
+
+  @Expose()
+  contractsCount?: number
+
+  @Expose()
+  contractId?: string
 }

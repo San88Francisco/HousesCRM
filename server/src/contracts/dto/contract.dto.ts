@@ -9,7 +9,7 @@ export class ContractDto {
   commencement: Date
 
   @Expose()
-  termination: Date
+  termination: Date | null
 
   @Expose()
   monthlyPayment: number

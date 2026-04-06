@@ -1,7 +1,7 @@
 'use client';
 
 import { TablePagination } from '@/components/table-pagination/TablePagination';
-import { rentersOccupancyTableGrid } from '@/shared/constants/styles/renters-occupancy-table';
+import { houseOccupancyTableGrid } from '@/shared/constants/styles/renters-occupancy-table';
 import { ROUTES } from '@/shared/routes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
@@ -29,7 +29,7 @@ export const HouseOccupancyTable = ({ table, limit, onLimitChange }: Props) => {
       <div className="w-full overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className={cn(rentersOccupancyTableGrid)}>
+            <TableRow className={cn(houseOccupancyTableGrid)}>
               {table.getFlatHeaders().map(header => (
                 <TableHead key={header.id}>
                   {flexRender(header.column.columnDef.header, header.getContext())}
@@ -46,7 +46,7 @@ export const HouseOccupancyTable = ({ table, limit, onLimitChange }: Props) => {
                 <TableRow
                   key={row.original.id}
                   className={cn(
-                    rentersOccupancyTableGrid,
+                    houseOccupancyTableGrid,
                     isVacancy
                       ? ''
                       : 'cursor-pointer transition-colors duration-300 ease-out hover:bg-muted-foreground text-text',

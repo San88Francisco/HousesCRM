@@ -9,7 +9,11 @@ import { useToastOnError } from '@/hooks';
 import { useHouseOccupancy } from '@/hooks/house/house-occupancy';
 import { HouseOccupancyTableColumns } from '@/shared/constants/house';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
-import { breakBetweenContracts } from '@/shared/utils/house/break-between-contracts';
+import { HouseOccupancyItem } from '@/types/model/houses-occupancy';
+import {
+  breakBetweenContracts,
+  type OccupancyWithVacancy,
+} from '@/shared/utils/house/break-between-contracts';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -36,7 +40,9 @@ export const HouseOccupancyCard = () => {
     });
   };
 
-  const dataWithBreaks = breakBetweenContracts(data);
+  const dataWithBreaks = breakBetweenContracts(
+    data as HouseOccupancyItem[],
+  ) as OccupancyWithVacancy<HouseOccupancyItem>[];
 
   const table = useReactTable({
     data: dataWithBreaks,

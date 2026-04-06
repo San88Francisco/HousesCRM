@@ -33,6 +33,9 @@ export const HousesPerformanceTableSkeleton = ({ rows = 10 }: Props) => {
               <TableHead>
                 <Skeleton className="h-4 w-28" />
               </TableHead>
+              <TableHead>
+                <Skeleton className="h-4 w-16" />
+              </TableHead>
             </TableRow>
           </TableHeader>
 
@@ -50,6 +53,9 @@ export const HousesPerformanceTableSkeleton = ({ rows = 10 }: Props) => {
                 </TableCell>
                 <TableCell>
                   <Skeleton className="h-4 w-20" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-4 w-14" />
                 </TableCell>
               </TableRow>
             ))}

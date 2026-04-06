@@ -6,6 +6,8 @@ export type HouseOccupancyItem = {
   id: string;
   firstName: string;
   lastName: string;
+  age: number;
   occupied: string;
   vacated: string;
+  contractId?: string;
 };

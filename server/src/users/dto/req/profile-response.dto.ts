@@ -10,4 +10,8 @@ export class ProfileResponseDto {
   @ApiProperty()
   @IsEmail()
   email: string
+
+  @ApiProperty()
+  @IsString()
+  username: string
 }

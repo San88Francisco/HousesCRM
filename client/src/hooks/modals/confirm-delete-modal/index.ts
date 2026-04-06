@@ -39,7 +39,12 @@ export const useConfirmDelete = () => {
 
       dispatch(closeModal());
       toast.success(config?.successMessage ?? 'Успішно видалено!');
-      if (config && 'redirectUrl' in config) {
+      const skipRedirect =
+        payload &&
+        typeof payload === 'object' &&
+        'skipRedirect' in payload &&
+        Boolean((payload as { skipRedirect?: boolean }).skipRedirect);
+      if (!skipRedirect && config && 'redirectUrl' in config && config.redirectUrl) {
         router.replace(config.redirectUrl as string);
       }
     } catch (error) {

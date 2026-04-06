@@ -6,7 +6,6 @@ import { Contract } from '@/types/core/contract';
 import { ModalTriggers } from '@/types/model/modals';
 import { MouseEvent } from 'react';
 
-// TODO: Це тестовий компонент - замініть ID на реальний
 const contractId = '2698c2ff-05f5-4a5c-9b24-a13a828528b5';
 
 const UpdateContract = () => {
@@ -23,7 +22,7 @@ const UpdateContract = () => {
     );
   };
 
-  const { data /* error, isLoading*/ } = useGetContractByIdQuery(contractId);
+  const { data } = useGetContractByIdQuery(contractId);
 
   return (
     <div className="w-[150px] mb-5">

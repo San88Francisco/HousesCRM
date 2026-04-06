@@ -8,7 +8,6 @@ import { EntityNotFoundError, Repository } from 'typeorm'
 import { ContractPdfFileDto } from './dto/contract-pdf-file.dto'
 import { ContractResponseDto } from './dto/contract-response.dto'
 import { ContractWithRelationsDto } from './dto/contract-with-relations.dto'
-import { ContractDto } from './dto/contract.dto'
 import { CreateContractDto } from './dto/create-contract.dto'
 import { UpdateContractDto } from './dto/update-contract-dto'
 import { Contract } from './entities/contract.entity'
@@ -35,7 +34,8 @@ export class ContractsService {
 
     const qb = this.contractsRepository
       .createQueryBuilder('contract')
-      .innerJoin('contract.house', 'house')
+      .innerJoinAndSelect('contract.house', 'house')
+      .leftJoinAndSelect('contract.renter', 'renter')
       .where('house.userId = :userId', { userId })
       .orderBy('contract.commencement', 'DESC')
 
@@ -45,7 +45,7 @@ export class ContractsService {
       .take(limit)
       .getMany()
 
-    const contractsDto = plainToInstance(ContractDto, contracts, {
+    const contractsDto = plainToInstance(ContractWithRelationsDto, contracts, {
       excludeExtraneousValues: true,
     })
 
