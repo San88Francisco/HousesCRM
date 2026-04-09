@@ -64,7 +64,7 @@ export class UsersService {
   }
 
   async updateProfile(userId: string, dto: UpdateUserProfileDto): Promise<User> {
-    if (dto.email === undefined && dto.username === undefined) {
+    if (dto.email === undefined && dto.username === undefined && dto.contractPdfProfile === undefined) {
       throw new BadRequestException('Немає даних для оновлення')
     }
 
@@ -83,6 +83,10 @@ export class UsersService {
 
     if (dto.username !== undefined) {
       user.username = dto.username
+    }
+
+    if (dto.contractPdfProfile !== undefined) {
+      user.contractPdfProfile = dto.contractPdfProfile
     }
 
     return this.usersRepository.save(user)

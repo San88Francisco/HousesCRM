@@ -1,5 +1,10 @@
 import { FC } from 'react';
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
+import {
+  PDF_PLACEHOLDER,
+  combinePipLine,
+  combinePropertyAddressLine,
+} from '@/shared/utils/pdf-contract-display';
 import { PdfContractModel } from '@/types/services/contracts';
 
 Font.register({
@@ -20,7 +25,27 @@ const styles = StyleSheet.create({
   list: { marginLeft: 12, marginBottom: 6 },
   listItem: { marginBottom: 4 },
   subList: { marginLeft: 12 },
+  /**
+   * Нижня межа замість textDecoration: у PDFKit підкреслення часто ламається на пробілах/кирилиці;
+   * borderBottom дає одну суцільну лінію під усім рядком.
+   */
+  fieldFilled: {
+    fontFamily: 'RobotoLight',
+    fontSize: 12,
+    lineHeight: 1.4,
+    color: '#000000',
+    borderBottomWidth: 0.75,
+    borderBottomColor: '#000000',
+    paddingBottom: 1,
+  },
 });
+
+const PdfVal = ({ v }: { v: string }) => {
+  if (!v || v === PDF_PLACEHOLDER) {
+    return <Text>{PDF_PLACEHOLDER}</Text>;
+  }
+  return <Text style={styles.fieldFilled}>{v}</Text>;
+};
 
 interface Props {
   data: PdfContractModel;
@@ -37,23 +62,30 @@ export const PdfContractFile: FC<Props> = ({ data }) => {
         <Text style={styles.paragraph}>м. Рівне</Text>
 
         <Text style={styles.paragraph}>
-          Ми, що нижче підписались П.І.П. {landlord.firstName} {landlord.lastName}, паспорт: серія{' '}
-          {landlord.passportSeries}, № {landlord.passportNumber}, виданий {landlord.passportIssued},
-          зареєстрований(а): {landlord.address}, що іменується надалі "ОРЕНДОДАВЕЦЬ", з однієї
-          сторони, та П.І.П. {tenant.firstName} {tenant.lastName}, паспорт: серія{' '}
-          {tenant.passportSeries}, №{tenant.passportNumber}, виданий {tenant.passportIssued},
-          зареєстрований(а): {tenant.address}, що іменується надалі "ОРЕНДАР", з іншої сторони,
-          уклали цей Договір про таке:
+          Ми, що нижче підписались П.І.П.{' '}
+          <PdfVal v={combinePipLine(landlord.firstName, landlord.lastName)} />
+          , паспорт: серія <PdfVal v={landlord.passportSeries} />, №{' '}
+          <PdfVal v={landlord.passportNumber} />, виданий <PdfVal v={landlord.passportIssued} />,
+          зареєстрований(а): <PdfVal v={landlord.address} />, що іменується надалі
+          &quot;ОРЕНДОДАВЕЦЬ&quot;, з однієї сторони, та П.І.П.{' '}
+          <PdfVal v={combinePipLine(tenant.firstName, tenant.lastName)} />, паспорт: серія{' '}
+          <PdfVal v={tenant.passportSeries} />, № <PdfVal v={tenant.passportNumber} />, виданий{' '}
+          <PdfVal v={tenant.passportIssued} />, зареєстрований(а): <PdfVal v={tenant.address} />, що
+          іменується надалі &quot;ОРЕНДАР&quot;, з іншої сторони, уклали цей Договір про таке:
         </Text>
 
         <Text style={styles.heading}>1. ПРЕДМЕТ ДОГОВОРУ</Text>
         <View style={styles.list}>
           <Text style={styles.listItem}>
             1.1. Орендодавець передає Орендарю в тимчасове користування квартиру (офіс), будинок, що
-            іменується надалі "ОРЕНДОВАНЕ ПРИМІЩЕННЯ", яке належить йому на підставі{' '}
-            {property.ownershipDocument}, що складається з {property.roomCount} кімнат, загальною
-            площею {property.area} кв.м., та знаходиться за адресою: м. Рівне, вул.{' '}
-            {property.street}, буд. {property.building}, кв. {property.apartment}.
+            іменується надалі &quot;ОРЕНДОВАНЕ ПРИМІЩЕННЯ&quot;, яке належить йому на підставі{' '}
+            <PdfVal v={property.ownershipDocument} />, що складається з{' '}
+            <PdfVal v={property.roomCount} /> кімнат, загальною площею <PdfVal v={property.area} />{' '}
+            кв.м., та знаходиться за адресою:{' '}
+            <PdfVal
+              v={combinePropertyAddressLine(property.street, property.building, property.apartment)}
+            />
+            .
           </Text>
         </View>
 
@@ -126,22 +158,22 @@ export const PdfContractFile: FC<Props> = ({ data }) => {
           </Text>
 
           <Text style={styles.listItem}>
-            3.4. Допускати орендодавця на огляд приміщення не частіше ніж {terms.inspectionCount}{' '}
-            раз на місяць.
+            3.4. Допускати орендодавця на огляд приміщення не частіше ніж{' '}
+            <PdfVal v={terms.inspectionCount} /> раз на місяць.
           </Text>
         </View>
 
         <Text style={styles.heading}>4. ПОРЯДОК РОЗРАХУНКІВ</Text>
         <View style={styles.list}>
           <Text style={styles.listItem}>
-            4.1. Місячна ставка орендної плати складає {terms.rentPriceUah} грн, що становить{' '}
-            {terms.rentPriceUsd} доларів США за курсом НБУ.
+            4.1. Місячна ставка орендної плати складає <PdfVal v={terms.rentPriceUah} /> грн.
           </Text>
           <Text style={styles.listItem}>
-            4.2. В день підписання договору Орендар передає Орендодавцю {terms.initialPayment} грн.
+            4.2. В день підписання договору Орендар передає Орендодавцю{' '}
+            <PdfVal v={terms.initialPayment} /> грн.
           </Text>
           <Text style={styles.listItem}>
-            4.3. Залишена сума на майно — {terms.depositAmount} грн.
+            4.3. Залишена сума на майно — <PdfVal v={terms.depositAmount} /> грн.
           </Text>
           <Text style={styles.listItem}>
             4.4. При пошкодженні майна витрати покриваються із заставної суми.
@@ -155,14 +187,23 @@ export const PdfContractFile: FC<Props> = ({ data }) => {
           <Text style={styles.listItem}>4.7. Показники лічильників:</Text>
 
           <View style={styles.subList}>
-            <Text style={styles.listItem}>електроенергія: {meters.electricity}</Text>
-            <Text style={styles.listItem}>газ: {meters.gas}</Text>
-            <Text style={styles.listItem}>холодна вода: {meters.coldWater}</Text>
-            <Text style={styles.listItem}>гаряча вода: {meters.hotWater}</Text>
+            <Text style={styles.listItem}>
+              електроенергія: <PdfVal v={meters.electricity} />
+            </Text>
+            <Text style={styles.listItem}>
+              газ: <PdfVal v={meters.gas} />
+            </Text>
+            <Text style={styles.listItem}>
+              холодна вода: <PdfVal v={meters.coldWater} />
+            </Text>
+            <Text style={styles.listItem}>
+              гаряча вода: <PdfVal v={meters.hotWater} />
+            </Text>
           </View>
 
           <Text style={styles.listItem}>
-            4.8. Орендна плата проводиться до {terms.paymentDeadlineDay} числа кожного місяця.
+            4.8. Орендна плата проводиться до <PdfVal v={terms.paymentDeadlineDay} /> числа кожного
+            місяця.
           </Text>
         </View>
 

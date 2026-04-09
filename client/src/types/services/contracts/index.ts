@@ -6,7 +6,9 @@ export type PdfContractRaw = {
   renterFirstName: string;
   renterLastName: string;
   roomsCount: number;
+  totalArea: number;
   street: string;
+  apartmentName: string;
   commencement: string;
   monthlyPayment: number;
 };
@@ -41,7 +43,6 @@ export type PdfContractModel = {
   terms: {
     inspectionCount: string;
     rentPriceUah: string;
-    rentPriceUsd: string;
     initialPayment: string;
     depositAmount: string;
     paymentDeadlineDay: string;

@@ -1,5 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator'
+import { Type } from 'class-transformer'
+import { IsEmail, IsOptional, IsString, MinLength, ValidateNested } from 'class-validator'
+import { ContractPdfProfileDto } from './contract-pdf-profile.dto'
 
 export class UpdateUserProfileDto {
   @ApiPropertyOptional()
@@ -12,4 +14,10 @@ export class UpdateUserProfileDto {
   @IsString()
   @MinLength(3, { message: "Ім'я користувача має містити щонайменше 3 символи" })
   username?: string
+
+  @ApiPropertyOptional({ type: () => ContractPdfProfileDto })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ContractPdfProfileDto)
+  contractPdfProfile?: ContractPdfProfileDto | null
 }

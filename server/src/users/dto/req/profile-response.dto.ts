@@ -1,5 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { IsString, IsEmail, IsNotEmpty } from 'class-validator'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { IsString, IsEmail, IsNotEmpty, IsOptional } from 'class-validator'
+import { ContractPdfProfileDto } from './contract-pdf-profile.dto'
 
 export class ProfileResponseDto {
   @ApiProperty()
@@ -14,4 +15,8 @@ export class ProfileResponseDto {
   @ApiProperty()
   @IsString()
   username: string
+
+  @ApiPropertyOptional({ type: () => ContractPdfProfileDto })
+  @IsOptional()
+  contractPdfProfile?: ContractPdfProfileDto | null
 }

@@ -20,7 +20,12 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException('User not found')
     }
-    return { id: user.id, email: user.email, username: user.username }
+    return {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      contractPdfProfile: user.contractPdfProfile ?? null,
+    }
   }
 
   @Patch()
@@ -31,7 +36,12 @@ export class UsersController {
     @Body() dto: UpdateUserProfileDto
   ): Promise<ProfileResponseDto> {
     const user = await this.usersService.updateProfile(req.user.sub, dto)
-    return { id: user.id, email: user.email, username: user.username }
+    return {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      contractPdfProfile: user.contractPdfProfile ?? null,
+    }
   }
 
   @Patch('password')

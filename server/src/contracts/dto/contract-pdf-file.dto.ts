@@ -11,7 +11,13 @@ export class ContractPdfFileDto {
   roomsCount: number
 
   @Expose()
+  totalArea: number
+
+  @Expose()
   street: string
+
+  @Expose()
+  apartmentName: string
 
   @Expose()
   commencement: Date

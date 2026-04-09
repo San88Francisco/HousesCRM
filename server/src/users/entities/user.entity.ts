@@ -1,4 +1,5 @@
 import { Check, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import type { ContractPdfProfilePayload } from '../types/contract-pdf-profile.types'
 @Entity()
 @Check(`"password" IS NOT NULL OR "google_id" IS NOT NULL`)
 export class User {
@@ -22,4 +23,7 @@ export class User {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date
+
+  @Column({ type: 'jsonb', nullable: true, name: 'contract_pdf_profile' })
+  contractPdfProfile?: ContractPdfProfilePayload | null
 }
