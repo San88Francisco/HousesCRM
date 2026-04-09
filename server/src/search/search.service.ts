@@ -1,17 +1,20 @@
-import { Injectable } from '@nestjs/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import type { Cache } from 'cache-manager'
+import { plainToInstance } from 'class-transformer'
+import { calculateContractRevenue } from 'src/analytics/helpers/revenue.helpers'
+import { ContractDto } from 'src/contracts/dto/contract.dto'
+import { Contract, ContractStatus } from 'src/contracts/entities/contract.entity'
+import { HouseDto } from 'src/houses/dto/house.dto'
 import { House } from 'src/houses/entities/house.entity'
-import { Contract } from 'src/contracts/entities/contract.entity'
+import { RenterDto } from 'src/renters/dto/renter.dto'
 import { Renter } from 'src/renters/entities/renter.entity'
+import { Repository } from 'typeorm'
 import { SearchQueryDto } from './dto/search-query.dto'
 import { SearchResponseDto } from './dto/search-response.dto'
-import { plainToInstance } from 'class-transformer'
-import { HouseDto } from 'src/houses/dto/house.dto'
-import { ContractDto } from 'src/contracts/dto/contract.dto'
-import { RenterDto } from 'src/renters/dto/renter.dto'
-import { calculateContractRevenue } from 'src/analytics/helpers/revenue.helpers'
-import { ContractStatus } from 'src/contracts/entities/contract.entity'
+
+const SEARCH_CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000 // 1 month
 
 @Injectable()
 export class SearchService {
@@ -21,7 +24,9 @@ export class SearchService {
     @InjectRepository(Contract)
     private readonly contractsRepository: Repository<Contract>,
     @InjectRepository(Renter)
-    private readonly rentersRepository: Repository<Renter>
+    private readonly rentersRepository: Repository<Renter>,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache
   ) {}
 
   async search({ term }: SearchQueryDto, userId: string): Promise<SearchResponseDto> {
@@ -35,6 +40,12 @@ export class SearchService {
       )
     }
 
+    const cacheKey = `search:${userId}:${normalized.toLowerCase()}`
+    const cached = await this.cacheManager.get<SearchResponseDto>(cacheKey)
+    if (cached) {
+      return cached
+    }
+
     const likeTerm = this.toLikeParam(normalized)
     const lowerTerm = normalized.toLowerCase()
 
@@ -44,15 +55,11 @@ export class SearchService {
       this.searchRenters(lowerTerm, userId),
     ])
 
-    return plainToInstance(
-      SearchResponseDto,
-      {
-        houses,
-        contracts,
-        renters,
-      },
-      { excludeExtraneousValues: true }
-    )
+    const result = plainToInstance(SearchResponseDto, { houses, contracts, renters }, { excludeExtraneousValues: true })
+
+    await this.cacheManager.set(cacheKey, result, SEARCH_CACHE_TTL_MS)
+
+    return result
   }
 
   private async searchHouses(term: string, userId: string): Promise<HouseDto[]> {

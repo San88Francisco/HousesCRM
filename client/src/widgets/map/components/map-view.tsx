@@ -1,6 +1,7 @@
 'use client';
 
 import type { RefObject } from 'react';
+import { Building2, Loader2 } from 'lucide-react';
 import {
   Map,
   MapControls,
@@ -9,12 +10,13 @@ import {
   MarkerTooltip,
   type MapRef,
 } from '@/components/ui/map';
-import { Button } from '@/shared/ui/button';
-import { AlertCircle, Building2, Home, Layers, Loader2, RefreshCw } from 'lucide-react';
+import { cn } from '@/shared/utils/cn';
 import { MAP_TOOLTIP_CLASS, RIVNE_CENTER } from '../constants';
-import type { GeocodedHouse, InfraScope, POI, SearchResult } from '../types';
+import type { GeocodedHouse, GeocodeResult, InfraScope, POI } from '../types';
+import { HouseTooltipContent } from './house-tooltip-content';
 import { PoiMarkerDot } from './poi-marker-dot';
 import { PoiTooltipBody } from './poi-tooltip-body';
+import { SearchTooltipContent } from './search-tooltip-content';
 
 type MapViewProps = {
   mapRef: RefObject<MapRef | null>;
@@ -22,7 +24,7 @@ type MapViewProps = {
   geocoded: GeocodedHouse[];
   infraScope: InfraScope;
   singleHouseId: string | null;
-  searchResult: SearchResult | null;
+  searchResult: GeocodeResult | null;
   pois: POI[];
   poisLoading: boolean;
   onShowOnlyHouse: (house: GeocodedHouse) => void;
@@ -62,66 +64,24 @@ export function MapView({
           <MapMarker key={house.id} longitude={house.lng} latitude={house.lat}>
             <MarkerContent>
               <div
-                className={[
+                className={cn(
                   'flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border-2 border-white shadow-md transition-transform hover:scale-110',
-                  singleHouseId === house.id && infraScope === 'single-house'
-                    ? 'scale-125 ring-2 ring-amber-400 ring-offset-1'
-                    : '',
                   house.geocodeStatus === 'error' ? 'bg-red' : 'bg-active-bg',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
+                  singleHouseId === house.id &&
+                    infraScope === 'single-house' &&
+                    'scale-125 ring-2 ring-amber-400 ring-offset-1',
+                )}
               >
                 <Building2 size={10} className="text-white dark:text-dark" />
               </div>
             </MarkerContent>
             <MarkerTooltip anchor="bottom" offset={12} className={MAP_TOOLTIP_CLASS}>
-              <div className="min-w-[200px] max-w-[280px] space-y-2 text-left">
-                <p className="text-sm font-semibold text-text">{house.apartmentName}</p>
-                <p className="text-xs text-muted">{house.street}</p>
-                {house.geocodeStatus === 'pending' ? (
-                  <p className="flex items-center gap-1 text-xs text-muted">
-                    <Loader2 size={10} className="animate-spin" /> Геокодування…
-                  </p>
-                ) : null}
-                {house.geocodeStatus === 'error' ? (
-                  <p className="flex items-center gap-1 text-xs text-red">
-                    <AlertCircle size={10} /> Адресу не знайдено
-                  </p>
-                ) : null}
-                {house.geocodeStatus === 'success' ? (
-                  <div className="flex flex-col gap-1.5 pt-1">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="default"
-                      className="h-7 w-full text-xs"
-                      disabled={poisLoading}
-                      onClick={e => {
-                        e.stopPropagation();
-                        onShowOnlyHouse(house);
-                      }}
-                    >
-                      <Layers size={10} className="mr-1 shrink-0" />
-                      Лише ця квартира
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      className="h-7 w-full text-xs"
-                      disabled={poisLoading}
-                      onClick={e => {
-                        e.stopPropagation();
-                        onRefreshHouseInfra(house);
-                      }}
-                    >
-                      <RefreshCw size={10} className="mr-1 shrink-0" />
-                      Оновити дані
-                    </Button>
-                  </div>
-                ) : null}
-              </div>
+              <HouseTooltipContent
+                house={house}
+                poisLoading={poisLoading}
+                onShowOnlyHouse={onShowOnlyHouse}
+                onRefreshHouseInfra={onRefreshHouseInfra}
+              />
             </MarkerTooltip>
           </MapMarker>
         ))}
@@ -135,40 +95,12 @@ export function MapView({
               </div>
             </MarkerContent>
             <MarkerTooltip anchor="bottom" offset={12} className={MAP_TOOLTIP_CLASS}>
-              <div className="max-w-[260px] space-y-2 text-left">
-                <p className="text-sm font-medium text-text">Результат пошуку</p>
-                <p className="text-xs text-muted">{searchResult.displayName}</p>
-                <div className="flex flex-col gap-1.5">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    className="h-7 w-full text-xs"
-                    disabled={poisLoading}
-                    onClick={e => {
-                      e.stopPropagation();
-                      onRefreshSearchInfra();
-                    }}
-                  >
-                    <RefreshCw size={10} className="mr-1 shrink-0" />
-                    Оновити інфраструктуру
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="secondary"
-                    className="h-7 w-full text-xs"
-                    disabled={poisLoading}
-                    onClick={e => {
-                      e.stopPropagation();
-                      onGoMergedAll();
-                    }}
-                  >
-                    <Home size={10} className="mr-1 shrink-0" />
-                    Усі квартири
-                  </Button>
-                </div>
-              </div>
+              <SearchTooltipContent
+                searchResult={searchResult}
+                poisLoading={poisLoading}
+                onRefreshSearchInfra={onRefreshSearchInfra}
+                onGoMergedAll={onGoMergedAll}
+              />
             </MarkerTooltip>
           </MapMarker>
         ) : null}

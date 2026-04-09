@@ -28,29 +28,10 @@ export interface POI {
   tags: Record<string, string>;
 }
 
-export interface SearchResult {
+export interface GeocodeResult {
   lat: number;
   lng: number;
   displayName: string;
-}
-
-export interface NominatimResult {
-  lat: string;
-  lon: string;
-  display_name: string;
-}
-
-export interface OverpassElement {
-  id: number;
-  type: 'node' | 'way' | 'relation';
-  lat?: number;
-  lon?: number;
-  center?: { lat: number; lon: number };
-  tags?: Record<string, string>;
-}
-
-export interface OverpassResponse {
-  elements: OverpassElement[];
 }
 
 export type InfraScope = 'merged-all' | 'single-house' | 'search';

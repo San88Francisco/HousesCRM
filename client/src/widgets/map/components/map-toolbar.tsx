@@ -1,10 +1,16 @@
 'use client';
 
+import { yupResolver } from '@hookform/resolvers/yup';
 import { AlertCircle, Building2, Home, Layers, Loader2, Search, X } from 'lucide-react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { RHFForm } from '@/components/RHF/RHForm';
+import { RHFInput } from '@/components/RHF/RHFInput';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import { Input } from '@/shared/ui/input';
-import type { GeocodedHouse, InfraScope, POICategory, SearchResult } from '../types';
+import { searchDefaultValues, searchSchema } from '@/shared/validation/search';
+import type { SearchRequest } from '@/types/services/search';
+import type { GeocodeResult, GeocodedHouse, InfraScope, POICategory } from '../types';
 import { PoiLegend } from './poi-legend';
 
 type MapToolbarProps = {
@@ -14,7 +20,7 @@ type MapToolbarProps = {
   infraStatusLabel: string;
   searchQuery: string;
   onSearchQueryChange: (v: string) => void;
-  searchResult: SearchResult | null;
+  searchResult: GeocodeResult | null;
   searchError: string | null;
   isSearching: boolean;
   poisLoading: boolean;
@@ -25,6 +31,25 @@ type MapToolbarProps = {
   onClearSearch: () => void;
   onGoMergedAll: () => void;
 };
+
+function useMapSearchForm(searchQuery: string, onSearchQueryChange: (v: string) => void) {
+  const form = useForm<SearchRequest>({
+    resolver: yupResolver(searchSchema),
+    defaultValues: searchDefaultValues,
+  });
+
+  const inputValue = form.watch('query');
+
+  useEffect(() => {
+    onSearchQueryChange(inputValue ?? '');
+  }, [inputValue, onSearchQueryChange]);
+
+  useEffect(() => {
+    if (!searchQuery) form.reset();
+  }, [searchQuery, form]);
+
+  return form;
+}
 
 export function MapToolbar({
   geocoded,
@@ -44,27 +69,29 @@ export function MapToolbar({
   onClearSearch,
   onGoMergedAll,
 }: MapToolbarProps) {
+  const form = useMapSearchForm(searchQuery, onSearchQueryChange);
+
   return (
     <div className="flex flex-col gap-3 px-1">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-xl font-semibold text-text">Карта квартир — Рівне</h1>
         <div className="flex flex-wrap items-center gap-2">
           {pendingCount > 0 && (
-            <Badge variant="secondary" className="gap-1 text-xs text-text">
-              <Loader2 size={10} className="animate-spin" />
+            <Badge variant="secondary" className="gap-1 text-sm text-text">
+              <Loader2 size={12} className="animate-spin" />
               Геокодування {geocoded.length - pendingCount}/{geocoded.length}
             </Badge>
           )}
-          <Badge variant="outline" className="gap-1 text-xs text-text">
-            <Building2 size={11} />
+          <Badge variant="outline" className="gap-1 text-sm text-text">
+            <Building2 size={12} />
             {geocoded.length} квартир
           </Badge>
           <Badge
             variant="outline"
-            className="max-w-[200px] gap-1 truncate text-xs text-text"
+            className="max-w-[200px] gap-1 truncate text-sm text-text"
             title={infraStatusLabel}
           >
-            <Layers size={11} />
+            <Layers size={12} />
             {infraStatusLabel}
           </Badge>
         </div>
@@ -72,14 +99,13 @@ export function MapToolbar({
 
       <div className="flex flex-wrap gap-2">
         <div className="relative min-w-[200px] flex-1">
-          <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted" />
-          <Input
-            placeholder="Пошук вулиці або будинку в Рівному..."
-            value={searchQuery}
-            onChange={e => onSearchQueryChange(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && onSearch()}
-            className="pl-8 pr-8"
-          />
+          <RHFForm form={form} onSubmit={() => onSearch()} className="">
+            <RHFInput
+              name="query"
+              placeholder="Пошук вулиці або будинку в Рівному..."
+              icon={<Search size={14} />}
+            />
+          </RHFForm>
           {searchQuery ? (
             <button
               type="button"
@@ -97,41 +123,41 @@ export function MapToolbar({
           <Button
             variant="outline"
             size="sm"
-            className="gap-1 text-xs"
+            className="gap-1 text-sm"
             onClick={onGoMergedAll}
             disabled={poisLoading}
           >
-            <Home size={12} />
+            <Home size={14} />
             Усі квартири
           </Button>
         )}
       </div>
 
       {searchError ? (
-        <p className="flex items-center gap-1.5 text-xs text-red">
-          <AlertCircle size={12} /> {searchError}
+        <p className="flex items-center gap-1.5 text-sm text-red">
+          <AlertCircle size={14} /> {searchError}
         </p>
       ) : null}
 
       {searchResult ? (
-        <p className="truncate text-xs text-muted">
+        <p className="truncate text-sm text-muted">
           <span className="font-medium text-amber-500">●</span> {searchResult.displayName}
         </p>
       ) : null}
 
       <div className="flex flex-wrap items-center gap-2">
         {poisLoading ? (
-          <span className="flex items-center gap-1 text-xs text-muted">
-            <Loader2 size={12} className="animate-spin" />
+          <span className="flex items-center gap-1 text-sm text-muted">
+            <Loader2 size={14} className="animate-spin" />
             Завантаження інфраструктури…
           </span>
         ) : null}
-        {poisError ? <span className="text-xs text-red">{poisError}</span> : null}
+        {poisError ? <span className="text-sm text-red">{poisError}</span> : null}
       </div>
 
       {poisCount > 0 ? (
-        <div className="rounded-md border px-3 py-2" style={{ backgroundColor: 'var(--bg-input)' }}>
-          <p className="mb-1.5 text-xs font-medium text-text">
+        <div className="rounded-md border bg-bg-input px-3 py-2">
+          <p className="mb-1.5 text-sm font-medium text-text">
             Об&apos;єктів на карті: {poisCount}
           </p>
           <PoiLegend categories={poiCategories} />

@@ -15,6 +15,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard'
 import { AnalyticsModule } from './analytics/analytics.module'
 import { SearchModule } from './search/search.module'
+import { MapModule } from './map/map.module'
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { SearchModule } from './search/search.module'
     RentersModule,
     AnalyticsModule,
     SearchModule,
+    MapModule,
     AuthModule,
   ],
   providers: [
