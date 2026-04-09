@@ -99,6 +99,11 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1",
+      "^types$": "<rootDir>/common/types/index.ts",
+      "^types/(.*)$": "<rootDir>/common/types/$1"
+    },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],

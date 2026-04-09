@@ -242,22 +242,6 @@ html.dark {
       background-image: none;
     }
   }
-  .maplibregl-popup {
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-
-  .maplibregl-popup-content {
-    background: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-  }
-
-  .maplibregl-popup-tip {
-    display: none !important;
-  }
 }
 
 @layer components {
@@ -352,4 +336,25 @@ input:-webkit-autofill:active {
 
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+
+.maplibregl-popup,
+.maplibregl-popup-anchor-top,
+.maplibregl-popup-anchor-bottom,
+.maplibregl-popup-anchor-left,
+.maplibregl-popup-anchor-right {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.maplibregl-popup-content {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.maplibregl-popup-tip {
+  display: none !important;
 }

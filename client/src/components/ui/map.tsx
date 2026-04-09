@@ -654,7 +654,7 @@ function MarkerTooltip({ children, className, ...popupOptions }: MarkerTooltipPr
   return createPortal(
     <div
       className={cn(
-        'animate-in fade-in-0 zoom-in-95 bg-transparent p-0 text-xs shadow-none',
+        'animate-in fade-in-0 zoom-in-95 bg-transparent p-0 text-sm shadow-none',
         className,
       )}
     >

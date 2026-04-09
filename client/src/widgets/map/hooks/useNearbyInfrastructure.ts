@@ -2,18 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 import type { POI } from '../types';
-import {
-  buildInfrastructureChunkQuery,
-  buildInfrastructureQuery,
-  overpassElementsToPois,
-  OVERPASS_BETWEEN_CHUNK_MS,
-  OVERPASS_MERGE_CHUNK,
-  runOverpassQuery,
-} from '../lib/overpass-poi';
-
-function sleep(ms: number) {
-  return new Promise<void>(r => setTimeout(r, ms));
-}
+import { fetchPoi, fetchPoiBulk } from '../lib/map-api-client';
 
 export function useNearbyInfrastructure() {
   const [pois, setPois] = useState<POI[]>([]);
@@ -27,13 +16,11 @@ export function useNearbyInfrastructure() {
     setError(null);
 
     try {
-      const elements = await runOverpassQuery(buildInfrastructureQuery(lat, lng));
+      const data = await fetchPoi(lat, lng);
       if (requestGen.current !== gen) return;
 
       const byId = new Map<number, POI>();
-      for (const poi of overpassElementsToPois(elements)) {
-        byId.set(poi.id, poi);
-      }
+      for (const poi of data) byId.set(poi.id, poi);
       setPois([...byId.values()]);
     } catch (err) {
       if (requestGen.current !== gen) return;
@@ -57,21 +44,12 @@ export function useNearbyInfrastructure() {
     setError(null);
 
     try {
-      const globalById = new Map<number, POI>();
-
-      for (let i = 0; i < points.length; i += OVERPASS_MERGE_CHUNK) {
-        if (requestGen.current !== gen) return;
-        if (i > 0) await sleep(OVERPASS_BETWEEN_CHUNK_MS);
-
-        const chunk = points.slice(i, i + OVERPASS_MERGE_CHUNK);
-        const elements = await runOverpassQuery(buildInfrastructureChunkQuery(chunk));
-        for (const poi of overpassElementsToPois(elements)) {
-          globalById.set(poi.id, poi);
-        }
-      }
-
+      const data = await fetchPoiBulk(points);
       if (requestGen.current !== gen) return;
-      setPois([...globalById.values()]);
+
+      const byId = new Map<number, POI>();
+      for (const poi of data) byId.set(poi.id, poi);
+      setPois([...byId.values()]);
     } catch (err) {
       if (requestGen.current !== gen) return;
       setError(err instanceof Error ? err.message : 'Помилка завантаження');

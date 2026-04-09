@@ -1,13 +1,24 @@
 import type { LucideIcon } from 'lucide-react';
-import { MapPin, Store, BusFront, Pill, UtensilsCrossed, Landmark, Coffee } from 'lucide-react';
+import { BusFront, Coffee, Landmark, MapPin, Pill, Store, UtensilsCrossed } from 'lucide-react';
 import type { POICategory } from './types';
-
-export const NOMINATIM_API = 'https://nominatim.openstreetmap.org/search';
 
 export const RIVNE_CENTER = { lat: 50.6199, lng: 26.2516 } as const;
 
 export const MAP_TOOLTIP_CLASS =
-  '!rounded-md border border-border bg-background !px-2.5 !py-2 !text-text shadow-lg pointer-events-auto';
+  '!rounded-md border border-border bg-dropdown !px-2.5 !py-2 !text-text shadow-lg pointer-events-auto';
+
+export const CATEGORY_PRIORITY: POICategory[] = [
+  'bus_stop',
+  'supermarket',
+  'pharmacy',
+  'hospital',
+  'bank',
+  'atm',
+  'restaurant',
+  'cafe',
+  'shop',
+  'other',
+];
 
 export const POI_VISUAL: Record<POICategory, { label: string; color: string; Icon: LucideIcon }> = {
   bus_stop: { label: 'Зупинка', color: '#3b82f6', Icon: BusFront },

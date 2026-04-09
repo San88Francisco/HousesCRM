@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { MapRef } from '@/components/ui/map';
 import { useGetHousesQuery } from '@/store/api/houses-api';
-import type { GeocodedHouse, InfraScope, SearchResult } from '../types';
-import { geocodeStreetRivne } from '../lib/nominatim-rivne';
+import type { GeocodedHouse, GeocodeResult, InfraScope } from '../types';
+import { fetchGeocode } from '../lib/map-api-client';
 import { geocodedSuccessPoints } from '../utils/success-coords';
 import { useGeocodeHouses } from './useGeocodeHouses';
 import { useNearbyInfrastructure } from './useNearbyInfrastructure';
@@ -27,7 +27,7 @@ export function useMapPageController() {
   const [infraScope, setInfraScope] = useState<InfraScope>('merged-all');
   const [singleHouseId, setSingleHouseId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
+  const [searchResult, setSearchResult] = useState<GeocodeResult | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
 
@@ -67,7 +67,7 @@ export function useMapPageController() {
     setSingleHouseId(null);
 
     try {
-      const found = await geocodeStreetRivne(q);
+      const found = await fetchGeocode(q);
       if (!found) {
         setSearchError('Адресу не знайдено');
         return;
