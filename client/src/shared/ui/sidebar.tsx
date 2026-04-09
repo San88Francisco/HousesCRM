@@ -19,13 +19,14 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
+  type ReactNode,
 } from 'react';
 
 import { cn } from '../utils/cn';
 import { ChevronLeftIcon } from './chevron-left';
 import { ChevronRightIcon } from './chevron-right';
-/* eslint-disable */
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -33,6 +34,9 @@ const SIDEBAR_WIDTH = '16rem';
 const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '4rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
+
+const MOBILE_SWIPE_THRESHOLD_PX = 56;
+const MOBILE_EDGE_OPEN_ZONE_PX = 36;
 
 type SidebarContext = {
   state: 'expanded' | 'collapsed';
@@ -55,6 +59,76 @@ const useSidebar = () => {
   return context;
 };
 
+const MobileSidebarEdgeOpenListener = () => {
+  const { openMobile, setOpenMobile } = useSidebar();
+
+  useEffect(() => {
+    if (openMobile) return;
+
+    let startX = 0;
+    let fromEdge = false;
+
+    const onTouchStart = (e: TouchEvent) => {
+      const x = e.touches[0].clientX;
+      fromEdge = x <= MOBILE_EDGE_OPEN_ZONE_PX;
+      startX = x;
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (!fromEdge) return;
+      fromEdge = false;
+      const dx = e.changedTouches[0].clientX - startX;
+      if (dx >= MOBILE_SWIPE_THRESHOLD_PX) setOpenMobile(true);
+    };
+
+    const onTouchCancel = () => {
+      fromEdge = false;
+    };
+
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+    document.addEventListener('touchcancel', onTouchCancel, { passive: true });
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchend', onTouchEnd);
+      document.removeEventListener('touchcancel', onTouchCancel);
+    };
+  }, [openMobile, setOpenMobile]);
+
+  return null;
+};
+
+const MobileSidebarSheetSwipeLayer = ({ children }: { children: ReactNode }) => {
+  const { setOpenMobile } = useSidebar();
+  const startX = useRef(0);
+  const startY = useRef(0);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    startX.current = e.touches[0].clientX;
+    startY.current = e.touches[0].clientY;
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const x = e.changedTouches[0].clientX;
+    const y = e.changedTouches[0].clientY;
+    const dx = x - startX.current;
+    const dy = y - startY.current;
+    if (Math.abs(dx) < MOBILE_SWIPE_THRESHOLD_PX) return;
+    if (Math.abs(dy) > Math.abs(dx) * 1.2) return;
+    if (dx < -MOBILE_SWIPE_THRESHOLD_PX) setOpenMobile(false);
+  };
+
+  return (
+    <div
+      className="flex h-full w-full min-h-0 flex-col touch-pan-y"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {children}
+    </div>
+  );
+};
+
 const SidebarProvider = forwardRef<
   HTMLDivElement,
   ComponentProps<'div'> & {
@@ -72,26 +146,17 @@ const SidebarProvider = forwardRef<
     },
     ref,
   ) => {
-    const [openProp, setOpenProp] = useState(false);
-
     const { isMobile } = useIsMobile();
     const [openMobile, setOpenMobile] = useState(false);
 
-    const [_open, _setOpen] = useState(defaultOpen);
-    const open = openProp ?? _open;
-    const setOpen = useCallback(
-      (value: boolean | ((value: boolean) => boolean)) => {
-        const openState = typeof value === 'function' ? value(open) : value;
-        if (setOpenProp) {
-          setOpenProp(openState);
-        } else {
-          _setOpen(openState);
-        }
-
-        document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
-      },
-      [setOpenProp, open],
-    );
+    const [open, setOpenState] = useState(defaultOpen);
+    const setOpen = useCallback((value: boolean | ((value: boolean) => boolean)) => {
+      setOpenState(prev => {
+        const next = typeof value === 'function' ? value(prev) : value;
+        document.cookie = `${SIDEBAR_COOKIE_NAME}=${next}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+        return next;
+      });
+    }, []);
 
     const toggleSidebar = useCallback(() => {
       return isMobile ? setOpenMobile(open => !open) : setOpen(open => !open);
@@ -135,10 +200,7 @@ const SidebarProvider = forwardRef<
                 ...style,
               } as CSSProperties
             }
-            className={cn(
-              'group/sidebar-wrapper flex min-h-svh w-full overflow-y-auto has-[[data-variant=inset]]:bg-sidebar',
-              className,
-            )}
+            className={cn('group/sidebar-wrapper flex min-h-svh w-full overflow-y-auto', className)}
             ref={ref}
             {...props}
           >
@@ -175,7 +237,7 @@ const Sidebar = forwardRef<
     if (collapsible === 'none') {
       return (
         <div
-          className={cn('flex h-full w-[--sidebar-width] flex-col bg-sidebar', className)}
+          className={cn('flex h-full w-[--sidebar-width] flex-col bg-transparent', className)}
           ref={ref}
           {...props}
         >
@@ -186,21 +248,26 @@ const Sidebar = forwardRef<
 
     if (isMobile) {
       return (
-        <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-          <SheetContent
-            data-sidebar="sidebar"
-            data-mobile="true"
-            className="w-[--sidebar-width] bg-sidebar p-0 [&>button]:hidden"
-            style={
-              {
-                '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
-              } as CSSProperties
-            }
-            side={side}
-          >
-            <div className="flex h-full w-full flex-col">{children}</div>
-          </SheetContent>
-        </Sheet>
+        <>
+          <MobileSidebarEdgeOpenListener />
+          <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
+            <SheetContent
+              data-sidebar="sidebar"
+              data-mobile="true"
+              className="w-[--sidebar-width] bg-sidebar p-0 [&>button]:hidden"
+              style={
+                {
+                  '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
+                } as CSSProperties
+              }
+              side={side}
+            >
+              <MobileSidebarSheetSwipeLayer>
+                <div className="flex h-full w-full min-h-0 flex-col">{children}</div>
+              </MobileSidebarSheetSwipeLayer>
+            </SheetContent>
+          </Sheet>
+        </>
       );
     }
 
@@ -239,7 +306,7 @@ const Sidebar = forwardRef<
         >
           <div
             data-sidebar="sidebar"
-            className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+            className="flex h-full w-full flex-col bg-transparent group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
           >
             {children}
           </div>
@@ -516,7 +583,7 @@ const sidebarMenuButtonVariants = cva(
       variant: {
         default: 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
         outline:
-          'bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]',
+          'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
       },
       size: {
         default: 'h-8 text-sm',

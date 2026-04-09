@@ -74,6 +74,13 @@
   --chart-pie-15: #c8a045;
   --bg-logo: url('/logo/light-logo.png');
   --dot-grid-color: rgb(28 28 28 / 0.08);
+
+  --sidebar: var(--white);
+  --sidebar-foreground: var(--text);
+  --sidebar-accent: var(--bg-input);
+  --sidebar-accent-foreground: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--active-border);
 }
 
 .dark {
@@ -142,6 +149,13 @@
   --chart-pie-15: #e2bd6b;
   --bg-logo: url('/logo/dark-logo.png');
   --dot-grid-color: rgb(255 255 255 / 0.05);
+
+  --sidebar: var(--bg-button);
+  --sidebar-foreground: var(--text);
+  --sidebar-accent: var(--bg-input);
+  --sidebar-accent-foreground: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--active-border);
 }
 
 html,

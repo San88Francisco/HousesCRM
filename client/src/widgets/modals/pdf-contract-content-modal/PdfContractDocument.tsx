@@ -1,6 +1,18 @@
-import { DialogTitle } from '@/shared/ui/dialog';
+import {
+  PDF_PLACEHOLDER,
+  combinePipLine,
+  combinePropertyAddressLine,
+} from '@/shared/utils/pdf-contract-display';
 import { PdfContractModel } from '@/types/services/contracts';
 import { FC } from 'react';
+
+/** Підкреслення заповнених полів (як у PDF). Порожнє / плейсхолдер — без підкреслення. */
+const WebVal = ({ v }: { v: string }) => {
+  if (!v || v === PDF_PLACEHOLDER) {
+    return <>{PDF_PLACEHOLDER}</>;
+  }
+  return <span className="border-b border-black border-solid pb-0.5">{v}</span>;
+};
 
 interface Props {
   data: PdfContractModel;
@@ -11,17 +23,21 @@ export const PdfContractDocument: FC<Props> = ({ data }) => {
 
   return (
     <div className="text-text">
-      <DialogTitle>ДОГОВІР ОРЕНДИ ПРИМІЩЕННЯ (КВАРТИРИ)</DialogTitle>
+      <h2 className="text-lg font-semibold leading-none tracking-tight">
+        ДОГОВІР ОРЕНДИ ПРИМІЩЕННЯ (КВАРТИРИ)
+      </h2>
       <p className="text-[15px]">м. Рівне</p>
       <p className="text-[15px]">
-        Ми, що нижче підписались П.І.П. {landlord.firstName} {landlord.lastName}, паспорт: серія
-        {landlord.passportSeries}, № {landlord.passportNumber}, виданий {landlord.passportIssued},
-        зареєстрований(а): {landlord.address}, що іменується надалі "ОРЕНДОДАВЕЦЬ", з однієї
-        сторони, та П.І.П. {tenant.firstName} {tenant.lastName}, паспорт: серія{' '}
-        {tenant.passportSeries}, №{tenant.passportNumber}, виданий {tenant.passportIssued},
-        зареєстрований(а):
-        {tenant.address}, що іменується надалі "ОРЕНДАР", з іншої сторони, уклали цей Договір про
-        таке:
+        Ми, що нижче підписались П.І.П.{' '}
+        <WebVal v={combinePipLine(landlord.firstName, landlord.lastName)} />
+        , паспорт: серія <WebVal v={landlord.passportSeries} />, №{' '}
+        <WebVal v={landlord.passportNumber} />, виданий <WebVal v={landlord.passportIssued} />,
+        зареєстрований(а): <WebVal v={landlord.address} />, що іменується надалі "ОРЕНДОДАВЕЦЬ", з
+        однієї сторони, та П.І.П. <WebVal v={combinePipLine(tenant.firstName, tenant.lastName)} />,
+        паспорт: серія <WebVal v={tenant.passportSeries} />, № <WebVal v={tenant.passportNumber} />,
+        виданий <WebVal v={tenant.passportIssued} />, зареєстрований(а):
+        <WebVal v={tenant.address} />, що іменується надалі "ОРЕНДАР", з іншої сторони, уклали цей
+        Договір про таке:
       </p>
 
       <h4 className="font-semibold mt-6 mb-2">1. ПРЕДМЕТ ДОГОВОРУ</h4>
@@ -29,9 +45,13 @@ export const PdfContractDocument: FC<Props> = ({ data }) => {
         <li>
           1.1. Орендодавець передає Орендарю в тимчасове користування квартиру (офіс), будинок, що
           іменується надалі "ОРЕНДОВАНЕ ПРИМІЩЕННЯ", яке належить йому на підставі
-          {property.ownershipDocument}, що складається з {property.roomCount} кімнат, загальною
-          площею {property.area} кв.м., та знаходиться за адресою: м. Рівне, вул. {property.street},
-          буд. {property.building}, кв. {property.apartment}.
+          <WebVal v={property.ownershipDocument} />, що складається з{' '}
+          <WebVal v={property.roomCount} /> кімнат, загальною площею <WebVal v={property.area} />{' '}
+          кв.м., та знаходиться за адресою:{' '}
+          <WebVal
+            v={combinePropertyAddressLine(property.street, property.building, property.apartment)}
+          />
+          .
         </li>
       </ul>
 
@@ -104,22 +124,23 @@ export const PdfContractDocument: FC<Props> = ({ data }) => {
         </li>
         <li>
           3.4. Допускати орендодавця на огляд приміщення в ті часи, що належать до нього, не частіше
-          ніж {terms.inspectionCount} раз на місяць.
+          ніж <WebVal v={terms.inspectionCount} /> раз на місяць.
         </li>
       </ul>
 
       <h4 className="font-semibold mt-6 mb-2">4. ПОРЯДОК РОЗРАХУНКІВ</h4>
       <ul className=" ml-3 space-y-1">
         <li>
-          4.1. Місячна ставка орендної плати складає {terms.rentPriceUah} грн, що в еквіваленті
-          становить {terms.rentPriceUsd}
-          доларів США за Курсом Національного банку України на день укладання цього Договору.
-          Підставою для оплати послуг при оренді Орендодавця є даний Договір.
+          4.1. Місячна ставка орендної плати складає <WebVal v={terms.rentPriceUah} /> грн.
         </li>
         <li>
-          4.2. В день підписання договору Орендар передає Орендодавцю {terms.initialPayment} грн.
+          4.2. В день підписання договору Орендар передає Орендодавцю{' '}
+          <WebVal v={terms.initialPayment} /> грн.
         </li>
-        <li>4.3. Залишена сума на майно, що знаходиться у квартирі — {terms.depositAmount} грн.</li>
+        <li>
+          4.3. Залишена сума на майно, що знаходиться у квартирі —{' '}
+          <WebVal v={terms.depositAmount} /> грн.
+        </li>
         <li>
           4.4. У разі нанесення шкоди орендованому приміщенню (та його майну: меблям та побутовим
           приладам) за рахунок заставної суми та суми останнього місяця покриваються витрати, які
@@ -137,15 +158,23 @@ export const PdfContractDocument: FC<Props> = ({ data }) => {
         <li>
           4.7. Дані показників лічильників на момент підписання договору:
           <ul className=" ml-4 space-y-1">
-            <li>електроенергія: {meters.electricity}</li>
-            <li>газ: {meters.gas}</li>
-            <li>холодна вода: {meters.coldWater}</li>
-            <li>гаряча вода: {meters.hotWater}</li>
+            <li>
+              електроенергія: <WebVal v={meters.electricity} />
+            </li>
+            <li>
+              газ: <WebVal v={meters.gas} />
+            </li>
+            <li>
+              холодна вода: <WebVal v={meters.coldWater} />
+            </li>
+            <li>
+              гаряча вода: <WebVal v={meters.hotWater} />
+            </li>
           </ul>
         </li>
         <li>
           4.8. Орендна плата проводиться (за домовленістю сторін, та визначеною датою) поточного
-          місяця до {terms.paymentDeadlineDay} числа кожного місяця календарного року.
+          місяця до <WebVal v={terms.paymentDeadlineDay} /> числа кожного місяця календарного року.
         </li>
       </ul>
 

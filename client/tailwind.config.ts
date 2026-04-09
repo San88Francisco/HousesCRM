@@ -87,6 +87,13 @@ export default {
         'chart-pie-13': 'var(--chart-pie-13)',
         'chart-pie-14': 'var(--chart-pie-14)',
         'chart-pie-15': 'var(--chart-pie-15)',
+
+        sidebar: 'var(--sidebar)',
+        'sidebar-foreground': 'var(--sidebar-foreground)',
+        'sidebar-accent': 'var(--sidebar-accent)',
+        'sidebar-accent-foreground': 'var(--sidebar-accent-foreground)',
+        'sidebar-border': 'var(--sidebar-border)',
+        'sidebar-ring': 'var(--sidebar-ring)',
       },
 
       fontSize: {

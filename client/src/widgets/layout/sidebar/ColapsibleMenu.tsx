@@ -6,6 +6,7 @@ import {
   SIDEBAR_STYLES,
 } from '@/shared/constants/styles/sidebar';
 import { Button } from '@/shared/ui/button';
+import { useSidebar } from '@/shared/ui/sidebar';
 import { cn } from '@/shared/utils/cn';
 import { SubNavItem } from '@/types/model/navigation';
 import { motion } from 'framer-motion';
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export const CollapsibleMenu = ({ title, items }: Props) => {
+  const { isMobile, setOpenMobile } = useSidebar();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const toggleOpen = () => setIsOpen(prev => !prev);
 
@@ -63,6 +65,7 @@ export const CollapsibleMenu = ({ title, items }: Props) => {
                 key={`${item.title}-${index}`}
                 href={item.url}
                 className={cn(SIDEBAR_STYLES.collapsible.link, 'flex items-center gap-2')}
+                onClick={() => isMobile && setOpenMobile(false)}
               >
                 {Icon && <Icon className="h-4 w-4" />}
                 <span>{item.title}</span>

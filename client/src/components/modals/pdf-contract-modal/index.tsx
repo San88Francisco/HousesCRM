@@ -1,10 +1,12 @@
 import { Button } from '@/shared/ui/button';
-import { DialogDescription } from '@/shared/ui/dialog';
+import { DialogDescription, DialogTitle } from '@/shared/ui/dialog';
 import { PdfContractAdapter } from '@/shared/utils/pdf-contract';
 import { useLazyGetContractPdfQuery } from '@/store/api/contracts-api';
+import { useGetProfileQuery } from '@/store/api/users-api';
 import { useAppSelector } from '@/store/hooks';
 import { ModalTriggers } from '@/types/model/modals';
 import { PdfContractModel } from '@/types/services/contracts';
+import type { PdfContractRaw } from '@/types/services/contracts';
 import { PdfContractDocument } from '@/widgets/modals/pdf-contract-content-modal/PdfContractDocument';
 import { PdfContractFile } from '@/widgets/modals/pdf-contract-content-modal/PdfContractFile';
 import { PdfContractSkeleton } from '@/widgets/skeletons/pdf-contract-modal-skeleton';
@@ -16,6 +18,8 @@ export const PdfContractModal = () => {
   const { isOpen, trigger, payload } = useAppSelector(s => s.modal);
 
   const [fetchTrigger, { isLoading }] = useLazyGetContractPdfQuery();
+  const { data: profile } = useGetProfileQuery();
+  const [contractRaw, setContractRaw] = useState<PdfContractRaw | null>(null);
   const [contractData, setContractData] = useState<PdfContractModel | null>(null);
 
   const handleOpen = useCallback(async () => {
@@ -24,7 +28,7 @@ export const PdfContractModal = () => {
     const res = await fetchTrigger(payload.id as string);
 
     if (res.data) {
-      setContractData(PdfContractAdapter(res.data));
+      setContractRaw(res.data);
     } else if (res.error) {
       console.error('Failed to fetch contract:', res.error);
     }
@@ -36,15 +40,22 @@ export const PdfContractModal = () => {
     }
 
     if (!isOpen) {
+      setContractRaw(null);
       setContractData(null);
     }
   }, [isOpen, trigger, handleOpen]);
+
+  useEffect(() => {
+    if (!contractRaw) return;
+    setContractData(PdfContractAdapter(contractRaw, profile?.contractPdfProfile ?? null));
+  }, [contractRaw, profile?.contractPdfProfile]);
 
   return (
     <Modal
       triggers={ModalTriggers.PDF_CONTRACT}
       className="max-w-[800px] w-[100%] py-[3px] px-[2px] text-text"
     >
+      <DialogTitle className="sr-only">Договір оренди</DialogTitle>
       <DialogDescription className="sr-only">
         Тут відображається PDF договору та можливість його завантажити.
       </DialogDescription>

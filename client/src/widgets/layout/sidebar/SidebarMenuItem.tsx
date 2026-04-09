@@ -2,7 +2,11 @@
 
 import { useAnimatedIcon } from '@/hooks';
 import { getSidebarMenuItemClasses } from '@/shared/constants/styles/sidebar';
-import { SidebarMenuItem as ShadcnSidebarMenuItem, SidebarMenuButton } from '@/shared/ui/sidebar';
+import {
+  SidebarMenuItem as ShadcnSidebarMenuItem,
+  SidebarMenuButton,
+  useSidebar,
+} from '@/shared/ui/sidebar';
 import { isActiveItem } from '@/shared/utils/sidebar/navigation';
 import { NavItem } from '@/types/model/navigation';
 import Link from 'next/link';
@@ -15,6 +19,7 @@ type Props = {
 
 export const SidebarMenuItem = ({ item, hideTitle = false }: Props) => {
   const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
   const isActive = isActiveItem(pathname, item.url);
   const { animatedIcon, handleMouseEnter, handleMouseLeave } = useAnimatedIcon(item.icon);
 
@@ -29,7 +34,12 @@ export const SidebarMenuItem = ({ item, hideTitle = false }: Props) => {
           className: 'bg-background text-text border-border shadow-lg',
         }}
       >
-        <Link href={item.url} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <Link
+          href={item.url}
+          onClick={() => isMobile && setOpenMobile(false)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           {animatedIcon}
           {!hideTitle && <span>{item.title}</span>}
         </Link>

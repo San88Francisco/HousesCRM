@@ -2,7 +2,7 @@
 
 import { useAnimatedIcon } from '@/hooks';
 import { getSidebarMenuItemClasses } from '@/shared/constants/styles/sidebar';
-import { SidebarMenuButton, SidebarMenuItem } from '@/shared/ui/sidebar';
+import { SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/shared/ui/sidebar';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { openModal } from '@/store/slice/modal-slice';
 import { ActionItem } from '@/types/model/sidebar';
@@ -13,6 +13,7 @@ type Props = {
 };
 
 export const SidebarActionItem = ({ item }: Props) => {
+  const { isMobile, setOpenMobile } = useSidebar();
   const dispatch = useAppDispatch();
   const trigger = useAppSelector(s => s.modal.trigger);
 
@@ -30,6 +31,7 @@ export const SidebarActionItem = ({ item }: Props) => {
         trigger: item.modalTrigger,
       }),
     );
+    if (isMobile) setOpenMobile(false);
   };
 
   return (
