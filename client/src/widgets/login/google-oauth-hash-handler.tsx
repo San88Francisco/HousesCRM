@@ -55,7 +55,8 @@ export const GoogleOAuthHashHandler = () => {
         toast.error('Не вдалося завершити вхід через Google');
       }
     })();
-  }, [dispatch, router]);
+    // Hash fragment is consumed once on mount; avoid re-running when `router` identity changes (can cause effect thrashing).
+  }, [dispatch]);
 
   return null;
 };

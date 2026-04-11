@@ -1,8 +1,10 @@
 'use client';
 
 import { getClientApiBaseUrl } from '@/shared/constants/api-base-url';
+import { isPublicAuthPath } from '@/shared/routes';
 import { tokenStorage } from '@/shared/utils/auth';
 import { getJwtExpSeconds } from '@/shared/utils/auth/jwt';
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 const REFRESH_THRESHOLD_SEC = 120;
@@ -38,8 +40,11 @@ function shouldRefreshSoon(): boolean {
 }
 
 export function SessionKeepAlive(): null {
+  const pathname = usePathname();
+
   useEffect(() => {
     const run = () => {
+      if (isPublicAuthPath(pathname)) return;
       if (!shouldRefreshSoon()) {
         return;
       }
@@ -58,7 +63,7 @@ export function SessionKeepAlive(): null {
       window.clearInterval(interval);
       document.removeEventListener('visibilitychange', onVisibility);
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }

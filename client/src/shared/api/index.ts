@@ -1,4 +1,5 @@
 import { getClientApiBaseUrl } from '@/shared/constants/api-base-url';
+import { isPublicAuthPath, ROUTES } from '@/shared/routes';
 import { clearUser } from '@/store/slice/user-slice';
 import type { RefreshResponse } from '@/types/services/auth';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -31,8 +32,8 @@ const handleAuthError = (dispatch: Dispatch) => {
   tokenStorage.clearTokens();
   dispatch(clearUser());
 
-  if (typeof window !== 'undefined') {
-    window.location.href = '/login';
+  if (typeof window !== 'undefined' && !isPublicAuthPath(window.location.pathname)) {
+    window.location.href = ROUTES.LOGIN;
   }
 };
 
