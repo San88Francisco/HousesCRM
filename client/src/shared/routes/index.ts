@@ -19,7 +19,7 @@ export const ROUTES = {
 export type RouteKey = keyof typeof ROUTES;
 export type RoutePath = (typeof ROUTES)[RouteKey];
 
-export const isPublicAuthPath = (p: string) => p === ROUTES.LOGIN || p === ROUTES.REGISTER;
+export const isPublicAuthPath = (p: string) => p === ROUTES.LOGIN;
 
 export const SIDEBAR_PATTERNS = [
   /^\/$/,

@@ -1,9 +1,9 @@
 'use client';
 
 import { rootApi } from '@/shared/api';
-import { getBackendApiRoot } from '@/shared/utils/backend-url';
-import { tokenStorage } from '@/shared/utils/auth';
 import { ROUTES } from '@/shared/routes';
+import { tokenStorage } from '@/shared/utils/auth';
+import { getBackendApiRoot } from '@/shared/utils/backend-url';
 import { setUser } from '@/store/slice/user-slice';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -55,7 +55,6 @@ export const GoogleOAuthHashHandler = () => {
         toast.error('Не вдалося завершити вхід через Google');
       }
     })();
-    // Hash fragment is consumed once on mount; avoid re-running when `router` identity changes (can cause effect thrashing).
   }, [dispatch]);
 
   return null;
