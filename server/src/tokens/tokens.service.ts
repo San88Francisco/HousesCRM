@@ -1,13 +1,13 @@
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Inject, Injectable } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
+import { JwtService } from '@nestjs/jwt'
 import * as argon2 from 'argon2'
 import ms, { StringValue } from 'ms'
 import { JwtPayload } from 'types/jwt/jwt.types'
-import { TokensDto } from './dto/tokens.dto'
 import { CreateRefreshTokenDto } from './dto/create-refresh-token.dto'
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
 import { RefreshTokenDto } from './dto/refresh-token.dto'
+import { TokensDto } from './dto/tokens.dto'
 
 @Injectable()
 export class TokensService {
@@ -62,7 +62,7 @@ export class TokensService {
       }),
     ])
 
-    this.create({ payload, token: refreshToken }).catch((err) =>
+    await this.create({ payload, token: refreshToken }).catch((err) =>
       // eslint-disable-next-line no-console
       console.error('Failed to store refresh token in Redis', err)
     )

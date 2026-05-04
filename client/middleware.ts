@@ -3,20 +3,15 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('access_token')?.value ?? null;
+  const accessToken = request.cookies.get('access_token')?.value ?? null;
+  const refreshToken = request.cookies.get('refresh_token')?.value ?? null;
   const pathname = request.nextUrl.pathname;
 
-  const PUBLIC_PATHS: string[] = [];
-
-  if (PUBLIC_PATHS.includes(pathname)) {
-    return NextResponse.next();
-  }
-
-  if (token && (pathname === ROUTES.LOGIN || pathname === ROUTES.ROOT)) {
+  if (accessToken && (pathname === ROUTES.LOGIN || pathname === ROUTES.ROOT)) {
     return NextResponse.redirect(new URL(ROUTES.ALL_HOUSES, request.url));
   }
 
-  if (!token && pathname !== ROUTES.LOGIN) {
+  if (!accessToken && !refreshToken && pathname !== ROUTES.LOGIN) {
     return NextResponse.redirect(new URL(ROUTES.LOGIN, request.url));
   }
 
