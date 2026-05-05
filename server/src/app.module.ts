@@ -1,26 +1,28 @@
+import KeyvRedis from '@keyv/redis'
+import { CacheModule } from '@nestjs/cache-manager'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { createDbConfig } from './common/config/db.config'
-import { UsersModule } from './users/users.module'
-import { HousesModule } from './houses/houses.module'
-import { ContractsModule } from './contracts/contracts.module'
-import { RentersModule } from './renters/renters.module'
-import { AuthModule } from './auth/auth.module'
-import { TokensModule } from './tokens/tokens.module'
-import KeyvRedis from '@keyv/redis'
-import { Keyv } from 'keyv'
-import { CacheModule } from '@nestjs/cache-manager'
 import { APP_GUARD } from '@nestjs/core'
-import { JwtAuthGuard } from './auth/guard/jwt-auth.guard'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { Keyv } from 'keyv'
 import { AnalyticsModule } from './analytics/analytics.module'
-import { SearchModule } from './search/search.module'
+import { AuthModule } from './auth/auth.module'
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard'
+import { createDbConfig } from './common/config/db.config'
+import jwtConfig from './common/config/jwt.config'
+import { ContractsModule } from './contracts/contracts.module'
+import { HousesModule } from './houses/houses.module'
 import { MapModule } from './map/map.module'
+import { RentersModule } from './renters/renters.module'
+import { SearchModule } from './search/search.module'
+import { TokensModule } from './tokens/tokens.module'
+import { UsersModule } from './users/users.module'
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [jwtConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

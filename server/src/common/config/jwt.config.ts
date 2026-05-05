@@ -11,8 +11,8 @@ const req = (k: string): string => {
 
 export default registerAs('jwt', () => ({
   accessSecret: req('JWT_SECRET'),
-  accessExp: (process.env.JWT_EXPIRES ?? '1d') as StringValue | number,
+  accessExp: (process.env.JWT_ACCESS_EXP ?? '15m') as StringValue | number,
   refreshSecret: req('JWT_REFRESH_SECRET'),
-  refreshExp: (process.env.JWT_REFRESH_EXPIRES ?? '30d') as StringValue | number,
+  refreshExp: (process.env.JWT_REFRESH_EXP ?? '30d') as StringValue | number,
   refreshCookie: process.env.JWT_REFRESH_COOKIE ?? 'refresh_token',
 }))

@@ -17,24 +17,23 @@ async function tryRefreshAccessToken(): Promise<void> {
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
   });
-  if (!res.ok) {
-    return;
-  }
+  if (!res.ok) return;
   const data = (await res.json()) as { accessToken?: string };
   if (data.accessToken) {
     tokenStorage.setAccessToken(data.accessToken);
   }
 }
 
-function shouldRefreshSoon(): boolean {
+function shouldRefreshSoon(pathname: string): boolean {
   const token = tokenStorage.getAccessToken();
+
   if (!token) {
-    return true;
+    return !isPublicAuthPath(pathname);
   }
+
   const exp = getJwtExpSeconds(token);
-  if (exp === null) {
-    return false;
-  }
+  if (exp === null) return false;
+
   const secondsLeft = exp - Date.now() / 1000;
   return secondsLeft < REFRESH_THRESHOLD_SEC;
 }
@@ -45,18 +44,14 @@ export function SessionKeepAlive(): null {
   useEffect(() => {
     const run = () => {
       if (isPublicAuthPath(pathname)) return;
-      if (!shouldRefreshSoon()) {
-        return;
-      }
+      if (!shouldRefreshSoon(pathname)) return;
       void tryRefreshAccessToken();
     };
 
     run();
     const interval = window.setInterval(run, TICK_MS);
     const onVisibility = () => {
-      if (document.visibilityState === 'visible') {
-        run();
-      }
+      if (document.visibilityState === 'visible') run();
     };
     document.addEventListener('visibilitychange', onVisibility);
     return () => {
