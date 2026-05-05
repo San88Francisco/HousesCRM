@@ -1,5 +1,5 @@
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import * as argon2 from 'argon2'
@@ -62,10 +62,11 @@ export class TokensService {
       }),
     ])
 
-    await this.create({ payload, token: refreshToken }).catch((err) =>
-      // eslint-disable-next-line no-console
-      console.error('Failed to store refresh token in Redis', err)
-    )
+    try {
+      await this.create({ payload, token: refreshToken })
+    } catch {
+      throw new InternalServerErrorException('Could not persist session')
+    }
 
     return { accessToken, refreshToken }
   }

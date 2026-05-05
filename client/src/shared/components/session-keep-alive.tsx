@@ -24,10 +24,12 @@ async function tryRefreshAccessToken(): Promise<void> {
   }
 }
 
-function shouldRefreshSoon(): boolean {
+function shouldRefreshSoon(pathname: string): boolean {
   const token = tokenStorage.getAccessToken();
 
-  if (!token) return false;
+  if (!token) {
+    return !isPublicAuthPath(pathname);
+  }
 
   const exp = getJwtExpSeconds(token);
   if (exp === null) return false;
@@ -42,7 +44,7 @@ export function SessionKeepAlive(): null {
   useEffect(() => {
     const run = () => {
       if (isPublicAuthPath(pathname)) return;
-      if (!shouldRefreshSoon()) return;
+      if (!shouldRefreshSoon(pathname)) return;
       void tryRefreshAccessToken();
     };
 
