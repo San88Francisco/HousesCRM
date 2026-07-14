@@ -1,6 +1,6 @@
 'use client';
 
-import { getClientApiBaseUrl } from '@/shared/constants/api-base-url';
+import { refreshSession } from '@/shared/api/refresh-session';
 import { isPublicAuthPath } from '@/shared/routes';
 import { tokenStorage } from '@/shared/utils/auth';
 import { getJwtExpSeconds } from '@/shared/utils/auth/jwt';
@@ -9,20 +9,6 @@ import { useEffect } from 'react';
 
 const REFRESH_THRESHOLD_SEC = 120;
 const TICK_MS = 45_000;
-
-async function tryRefreshAccessToken(): Promise<void> {
-  const baseUrl = getClientApiBaseUrl();
-  const res = await fetch(`${baseUrl}/auth/refresh`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  if (!res.ok) return;
-  const data = (await res.json()) as { accessToken?: string };
-  if (data.accessToken) {
-    tokenStorage.setAccessToken(data.accessToken);
-  }
-}
 
 function shouldRefreshSoon(pathname: string): boolean {
   const token = tokenStorage.getAccessToken();
@@ -45,7 +31,7 @@ export function SessionKeepAlive(): null {
     const run = () => {
       if (isPublicAuthPath(pathname)) return;
       if (!shouldRefreshSoon(pathname)) return;
-      void tryRefreshAccessToken();
+      void refreshSession();
     };
 
     run();

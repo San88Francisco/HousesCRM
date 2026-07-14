@@ -1,5 +1,6 @@
 import { HouseActions } from '@/widgets/house/HouseActions';
 import { HouseHeader } from '@/widgets/house/HouseHeader';
+import { HouseUtilitiesCard } from '@/widgets/house/HouseUtilitiesCard';
 import { HouseOccupancyCard } from '@/widgets/house/HouseOccupancyCard';
 import { HouseStatsCards } from '@/widgets/house/HouseStatsCards';
 
@@ -10,6 +11,7 @@ const Page = () => {
         <HouseHeader />
         <HouseStatsCards />
         <HouseOccupancyCard />
+        <HouseUtilitiesCard />
       </div>
       <HouseActions />
     </section>

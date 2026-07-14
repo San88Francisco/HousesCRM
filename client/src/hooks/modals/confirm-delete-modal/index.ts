@@ -1,9 +1,11 @@
 import { DELETE_ACTION_CONFIG, DeleteAction } from '@/shared/constants/delete-actions';
 import { useDeleteContractMutation } from '@/store/api/contracts-api';
 import { useDeleteHouseMutation } from '@/store/api/houses-api';
+import { useDeleteMeterReadingMutation } from '@/store/api/meters-api';
 import { useDeleteRenterMutation } from '@/store/api/renters-api';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeModal } from '@/store/slice/modal-slice';
+import { UtilityType } from '@/types/services/meters';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -21,14 +23,26 @@ export const useConfirmDelete = () => {
   const [deleteHouse, { isLoading: isDeleteHouseLoading }] = useDeleteHouseMutation();
   const [deleteRenter, { isLoading: isDeleteRenterLoading }] = useDeleteRenterMutation();
   const [deleteContract, { isLoading: isDeleteContractLoading }] = useDeleteContractMutation();
+  const [deleteMeterReading, { isLoading: isDeleteMeterReadingLoading }] =
+    useDeleteMeterReadingMutation();
 
   const deleteMutations: Record<DeleteAction, DeleteMutationFn> = {
     [DeleteAction.HOUSE]: deleteHouse,
     [DeleteAction.RENTER]: deleteRenter,
     [DeleteAction.CONTRACT]: deleteContract,
+    [DeleteAction.METER_READING]: (id: string) =>
+      deleteMeterReading({
+        houseId: payload?.houseId as string,
+        utilityType: payload?.utilityType as UtilityType,
+        id,
+      }),
   };
 
-  const isLoading = isDeleteHouseLoading || isDeleteRenterLoading || isDeleteContractLoading;
+  const isLoading =
+    isDeleteHouseLoading ||
+    isDeleteRenterLoading ||
+    isDeleteContractLoading ||
+    isDeleteMeterReadingLoading;
 
   const handleConfirm = async () => {
     if (!deleteAction || !entityId) return;

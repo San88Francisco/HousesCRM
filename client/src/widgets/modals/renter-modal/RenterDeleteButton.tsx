@@ -2,6 +2,7 @@
 
 import { useAnimatedIcon } from '@/hooks';
 import { DeleteAction } from '@/shared/constants/delete-actions';
+import { deleteIconButtonClass } from '@/shared/constants/styles/delete-icon-button';
 import { Button } from '@/shared/ui/button';
 import { DeleteIcon } from '@/shared/ui/delete';
 import { cn } from '@/shared/utils/cn';
@@ -41,10 +42,7 @@ export const RenterDeleteButton = ({ renterId, className }: Props) => {
     <Button
       type="button"
       variant="icon"
-      className={cn(
-        'p-0 text-text hover:text-red rounded-md w-[24px] [&_svg]:size-5 [&_svg]:pointer-events-none',
-        className,
-      )}
+      className={cn(deleteIconButtonClass, className)}
       aria-label="Видалити орендаря"
       onMouseEnter={handleDeleteIconMouseEnter}
       onMouseLeave={handleDeleteIconMouseLeave}

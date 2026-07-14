@@ -131,7 +131,14 @@ export default [
         },
       ],
 
-      'react-refresh/only-export-components': ['error', { allowConstantExport: true }],
+      'react-refresh/only-export-components': [
+        'error',
+        {
+          allowConstantExport: true,
+          // Службові експорти Next.js App Router (layout/page)
+          allowExportNames: ['metadata', 'viewport', 'generateMetadata', 'generateViewport'],
+        },
+      ],
 
       '@typescript-eslint/no-explicit-any': 'error',
 

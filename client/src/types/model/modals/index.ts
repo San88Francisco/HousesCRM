@@ -8,4 +8,6 @@ export enum ModalTriggers {
   EDIT_RENTER,
   ADD_CONTRACT,
   EDIT_CONTRACT,
+  ADD_METER_READING,
+  MANAGE_TARIFF,
 }

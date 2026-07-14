@@ -13,6 +13,7 @@ import jwtConfig from './common/config/jwt.config'
 import { ContractsModule } from './contracts/contracts.module'
 import { HousesModule } from './houses/houses.module'
 import { MapModule } from './map/map.module'
+import { MetersModule } from './meters/meters.module'
 import { RentersModule } from './renters/renters.module'
 import { SearchModule } from './search/search.module'
 import { TokensModule } from './tokens/tokens.module'
@@ -51,6 +52,7 @@ import { UsersModule } from './users/users.module'
     AnalyticsModule,
     SearchModule,
     MapModule,
+    MetersModule,
     AuthModule,
   ],
   providers: [

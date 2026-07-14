@@ -1,13 +1,11 @@
 import { getClientApiBaseUrl } from '@/shared/constants/api-base-url';
 import { isPublicAuthPath, ROUTES } from '@/shared/routes';
 import { clearUser } from '@/store/slice/user-slice';
-import type { RefreshResponse } from '@/types/services/auth';
 import type { Dispatch } from '@reduxjs/toolkit';
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { tokenStorage } from '../utils/auth';
-
-import { Mutex } from 'async-mutex';
+import { refreshSession } from './refresh-session';
 
 const baseUrl = getClientApiBaseUrl();
 
@@ -23,11 +21,6 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithCredentialsOnly = fetchBaseQuery({
-  baseUrl,
-  credentials: 'include',
-});
-
 const handleAuthError = (dispatch: Dispatch) => {
   tokenStorage.clearTokens();
   dispatch(clearUser());
@@ -37,16 +30,9 @@ const handleAuthError = (dispatch: Dispatch) => {
   }
 };
 
-const mutex = new Mutex();
-
-function isAuthLoginRequest(args: string | FetchArgs): boolean {
+function isAuthRoute(args: string | FetchArgs): boolean {
   const url = typeof args === 'string' ? args : args.url;
-  return url === '/auth/login' || url.endsWith('/auth/login');
-}
-
-function isRefreshRequest(args: string | FetchArgs): boolean {
-  const url = typeof args === 'string' ? args : args.url;
-  return url === '/auth/refresh' || url.endsWith('/auth/refresh');
+  return ['/auth/login', '/auth/refresh'].some(route => url === route || url.endsWith(route));
 }
 
 function isUnauthorized(error: FetchBaseQueryError | undefined): boolean {
@@ -62,42 +48,21 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   api,
   extraOptions,
 ) => {
-  await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
-  if (isUnauthorized(result.error) && isAuthLoginRequest(args)) {
+  if (!isUnauthorized(result.error) || isAuthRoute(args)) {
     return result;
   }
 
-  if (isUnauthorized(result.error) && isRefreshRequest(args)) {
+  const outcome = await refreshSession();
+
+  if (outcome === 'refreshed') {
+    result = await baseQuery(args, api, extraOptions);
+    return result;
+  }
+
+  if (outcome === 'unauthorized') {
     handleAuthError(api.dispatch);
-    return result;
-  }
-
-  if (isUnauthorized(result.error)) {
-    if (!mutex.isLocked()) {
-      const release = await mutex.acquire();
-      try {
-        const refreshResult = await baseQueryWithCredentialsOnly(
-          { url: '/auth/refresh', method: 'POST' },
-          api,
-          extraOptions,
-        );
-
-        if (refreshResult.data) {
-          const { accessToken } = refreshResult.data as RefreshResponse;
-          tokenStorage.setAccessToken(accessToken);
-          result = await baseQuery(args, api, extraOptions);
-        } else {
-          handleAuthError(api.dispatch);
-        }
-      } finally {
-        release();
-      }
-    } else {
-      await mutex.waitForUnlock();
-      result = await baseQuery(args, api, extraOptions);
-    }
   }
 
   return result;
@@ -106,6 +71,6 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const rootApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Auth', 'Houses', 'Analytics', 'Renters', 'Contracts', 'User'],
+  tagTypes: ['Auth', 'Houses', 'Analytics', 'Renters', 'Contracts', 'User', 'Meters', 'Tariffs'],
   endpoints: () => ({}),
 });

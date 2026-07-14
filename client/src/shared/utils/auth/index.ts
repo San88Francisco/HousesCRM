@@ -3,10 +3,10 @@ import Cookies from 'js-cookie';
 export const tokenStorage = {
   setAccessToken: (token: string) => {
     Cookies.set('access_token', token, {
-      sameSite: 'strict',
+      sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
       path: '/',
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      expires: 30,
     });
   },
 
@@ -21,9 +21,10 @@ export const tokenStorage = {
 
   setUserData: (user: { email: string; username?: string }) => {
     Cookies.set('user_data', JSON.stringify(user), {
-      sameSite: 'strict',
+      sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
       path: '/',
+      expires: 30,
     });
   },
 
