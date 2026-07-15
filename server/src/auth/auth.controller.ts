@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation } from '@nestjs/swagger'
 import type { Response } from 'express'
+import ms, { type StringValue } from 'ms'
 import { Public } from 'src/common/decorators/public.decorator'
 import { CreateUserRequestDto } from 'src/users/dto/req/create-user-req.dto'
 import { CreateUserResponseDto } from 'src/users/dto/res/create-user-response.dto'
@@ -88,9 +89,9 @@ export class AuthController {
     res.cookie(name, token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'none',
+      sameSite: isProduction ? 'none' : 'lax',
       path: '/',
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      maxAge: ms(this.config.getOrThrow<StringValue>('jwt.refreshExp')),
     })
   }
 
