@@ -1,7 +1,8 @@
 'use client';
 
 import { TablePagination } from '@/components/table-pagination/TablePagination';
-import { fixedFeeTableGrid, metersTableGrid } from '@/shared/constants/styles/meters-table';
+import { tableGridByMode } from '@/shared/constants/styles/meters-table';
+import { getUtilityMode, UtilityConfig } from '@/shared/constants/utilities';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { cn } from '@/shared/utils/cn';
 import { MeterReading } from '@/types/services/meters';
@@ -9,18 +10,19 @@ import { Table as TableType, flexRender } from '@tanstack/react-table';
 
 type Props = {
   table: TableType<MeterReading>;
-  metered: boolean;
+  config: UtilityConfig;
   limit: number;
   onLimitChange: (limit: number) => void;
 };
 
-export const UtilityMetersTable = ({ table, metered, limit, onLimitChange }: Props) => {
-  const grid = metered ? metersTableGrid : fixedFeeTableGrid;
+export const UtilityMetersTable = ({ table, config, limit, onLimitChange }: Props) => {
+  const mode = getUtilityMode(config);
+  const grid = tableGridByMode[mode];
 
   return (
     <div className="flex flex-col justify-between h-full">
       <div className="w-full overflow-x-auto">
-        <Table className={cn(metered ? 'min-w-[900px]' : 'min-w-[500px]')}>
+        <Table className={cn(mode === 'metered' ? 'min-w-[900px]' : 'min-w-[400px]')}>
           <TableHeader>
             <TableRow className={cn(grid)}>
               {table.getFlatHeaders().map(header => (

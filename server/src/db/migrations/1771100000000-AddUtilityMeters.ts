@@ -5,10 +5,10 @@ export class AddUtilityMeters1771100000000 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `DO $$ BEGIN CREATE TYPE "public"."utility_tariff_utility_type_enum" AS ENUM('electricity', 'water_cold', 'water_hot', 'gas', 'gas_delivery', 'heating', 'garbage'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+      `DO $$ BEGIN CREATE TYPE "public"."utility_tariff_utility_type_enum" AS ENUM('electricity', 'water_cold', 'water_hot', 'water_subscription', 'gas', 'gas_delivery', 'heating', 'garbage'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
     );
     await queryRunner.query(
-      `DO $$ BEGIN CREATE TYPE "public"."meter_reading_utility_type_enum" AS ENUM('electricity', 'water_cold', 'water_hot', 'gas', 'gas_delivery', 'heating', 'garbage'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+      `DO $$ BEGIN CREATE TYPE "public"."meter_reading_utility_type_enum" AS ENUM('electricity', 'water_cold', 'water_hot', 'water_subscription', 'gas', 'gas_delivery', 'heating', 'garbage'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
     );
 
     await queryRunner.query(

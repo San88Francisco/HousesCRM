@@ -23,6 +23,7 @@ const makeReading = (overrides: Partial<MeterReading>): MeterReading =>
     id: 'reading-1',
     utilityType: UtilityType.ELECTRICITY,
     value: 0,
+    amount: null,
     readingDate: '2026-01-01',
     createdAt: new Date('2026-01-01T10:00:00Z'),
     houseId: 'house-1',
@@ -254,6 +255,51 @@ describe('MeterReadingsService', () => {
 
       expect(result.data[0]).toMatchObject({ cost: 120 })
       expect(result.data[1]).toMatchObject({ cost: 120 })
+    })
+  })
+
+  describe('manual records (без лічильника)', () => {
+    it('saves date + amount without any calculation', async () => {
+      const result = await service.create(
+        'house-1',
+        { amount: 850, readingDate: new Date('2026-06-10'), utilityType: UtilityType.GAS },
+        'user-1'
+      )
+
+      expect(result).toMatchObject({
+        isManual: true,
+        value: null,
+        previousValue: null,
+        consumption: null,
+        tariffPrice: null,
+        cost: 850,
+      })
+    })
+
+    it('manual records do not break the metered chain', async () => {
+      readingRepo.find.mockResolvedValue([
+        makeReading({ id: 'r1', utilityType: UtilityType.GAS, value: 900, readingDate: '2026-05-05' }),
+        makeReading({ id: 'm1', utilityType: UtilityType.GAS, value: 0, amount: 850, readingDate: '2026-06-10' }),
+        makeReading({ id: 'r2', utilityType: UtilityType.GAS, value: 1000, readingDate: '2026-07-05' }),
+      ])
+      tariffEntities = [makeTariff({ utilityType: UtilityType.GAS, pricePerUnit: 7.96, validFrom: '2026-01-01' })]
+
+      const result = await service.findAll('house-1', 'user-1', UtilityType.GAS)
+
+      expect(result.data[0]).toMatchObject({ id: 'r2', previousValue: 900, consumption: 100, cost: 796 })
+      expect(result.data[1]).toMatchObject({ id: 'm1', isManual: true, cost: 850, consumption: null })
+    })
+
+    it('manual amounts are included in the monthly summary', async () => {
+      readingRepo.find.mockResolvedValue([
+        makeReading({ id: 'm1', utilityType: UtilityType.GAS, value: 0, amount: 850, readingDate: '2026-06-10' }),
+      ])
+      tariffEntities = []
+
+      const result = await service.getSummary('house-1', 'user-1')
+
+      expect(result.data).toHaveLength(1)
+      expect(result.data[0]).toMatchObject({ month: '2026-06', total: 850, costs: { gas: 850 } })
     })
   })
 

@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import { HousesService } from 'src/houses/houses.service'
-import { EntityNotFoundError, Repository } from 'typeorm'
+import { EntityNotFoundError, IsNull, Not, Repository } from 'typeorm'
 import { CreateMeterReadingDto } from './dto/create-meter-reading.dto'
 import { MeterReadingDto } from './dto/meter-reading.dto'
 import { MeterReadingsResponseDto } from './dto/meter-readings-response.dto'
@@ -14,6 +14,8 @@ import { toDateOnly } from './utils/date-only'
 import { UtilityTariffsService } from './utility-tariffs.service'
 
 const round2 = (value: number): number => Math.round(value * 100) / 100
+
+const hasAmount = (input: { amount?: number | null }): boolean => input.amount !== null && input.amount !== undefined
 
 @Injectable()
 export class MeterReadingsService {
@@ -43,9 +45,7 @@ export class MeterReadingsService {
       this.utilityTariffsService.findAllEntities(userId, utilityType),
     ])
 
-    const computedReadings = readings.map((reading, index) =>
-      this.computeReading(reading, index > 0 ? readings[index - 1] : null, tariffs)
-    )
+    const computedReadings = this.computeChain(readings, tariffs)
 
     return plainToInstance(
       MeterReadingsResponseDto,
@@ -59,10 +59,11 @@ export class MeterReadingsService {
 
     const utilityType = dto.utilityType ?? UtilityType.ELECTRICITY
     const isMetered = isMeteredUtility(utilityType)
+    const isManual = hasAmount(dto)
     const readingDate = toDateOnly(dto.readingDate)
 
-    if (isMetered && (dto.value === undefined || dto.value === null)) {
-      throw new BadRequestException('Для цієї послуги показник лічильника обов’язковий')
+    if (isMetered && !isManual && (dto.value === undefined || dto.value === null)) {
+      throw new BadRequestException('Вкажіть показник лічильника або суму без лічильника')
     }
 
     const latest = await this.readingRepository.findOne({
@@ -74,22 +75,28 @@ export class MeterReadingsService {
       throw new BadRequestException(`Дата має бути пізнішою за дату попереднього запису (${latest.readingDate})`)
     }
 
-    if (isMetered && latest && (dto.value as number) < latest.value) {
-      throw new BadRequestException(`Новий показник не може бути меншим за попередній (${latest.value})`)
+    if (isMetered && !isManual) {
+      const latestMetered = await this.findLatestMetered(houseId, utilityType)
+
+      if (latestMetered && (dto.value as number) < latestMetered.value) {
+        throw new BadRequestException(`Новий показник не може бути меншим за попередній (${latestMetered.value})`)
+      }
     }
 
     const reading = this.readingRepository.create({
       houseId,
       utilityType,
-      value: isMetered ? (dto.value as number) : 0,
+      value: isMetered && !isManual ? (dto.value as number) : 0,
+      amount: isManual ? (dto.amount as number) : null,
       readingDate,
     })
 
     const savedReading = await this.readingRepository.save(reading)
 
     const tariffs = await this.utilityTariffsService.findAllEntities(userId, utilityType)
+    const previousMetered = isManual ? null : await this.findLatestMetered(houseId, utilityType, savedReading.id)
 
-    return this.computeReading(savedReading, latest, tariffs)
+    return this.computeReading(savedReading, previousMetered, tariffs)
   }
 
   async getSummary(houseId: string, userId: string): Promise<UtilitySummaryResponseDto> {
@@ -109,14 +116,12 @@ export class MeterReadingsService {
       const typeReadings = readings.filter((reading) => reading.utilityType === utilityType)
       const typeTariffs = allTariffs.filter((tariff) => tariff.utilityType === utilityType)
 
-      typeReadings.forEach((reading, index) => {
-        const computed = this.computeReading(reading, index > 0 ? typeReadings[index - 1] : null, typeTariffs)
-
+      this.computeChain(typeReadings, typeTariffs).forEach((computed, index) => {
         if (computed.cost === null) {
           return
         }
 
-        const month = reading.readingDate.slice(0, 7)
+        const month = typeReadings[index].readingDate.slice(0, 7)
         const entry = monthMap.get(month) ?? { total: 0, costs: {} }
 
         entry.costs[utilityType] = round2((entry.costs[utilityType] ?? 0) + computed.cost)
@@ -146,11 +151,75 @@ export class MeterReadingsService {
     await this.readingRepository.remove(reading)
   }
 
+  private async findLatestMetered(
+    houseId: string,
+    utilityType: UtilityType,
+    excludeId?: string
+  ): Promise<MeterReading | null> {
+    return this.readingRepository.findOne({
+      where: {
+        houseId,
+        utilityType,
+        amount: IsNull(),
+        ...(excludeId ? { id: Not(excludeId) } : {}),
+      },
+      order: { readingDate: 'DESC', createdAt: 'DESC' },
+    })
+  }
+
+  private computeChain(readings: MeterReading[], tariffs: UtilityTariff[]): MeterReadingDto[] {
+    let previousMetered: MeterReading | null = null
+
+    return readings.map((reading) => {
+      if (hasAmount(reading)) {
+        return this.computeManualReading(reading)
+      }
+
+      const computed = this.computeReading(reading, previousMetered, tariffs)
+      previousMetered = reading
+
+      return computed
+    })
+  }
+
+  private toReadingDto(
+    reading: MeterReading,
+    computed: Pick<MeterReadingDto, 'value' | 'isManual' | 'previousValue' | 'consumption' | 'tariffPrice' | 'cost'>
+  ): MeterReadingDto {
+    return plainToInstance(
+      MeterReadingDto,
+      {
+        id: reading.id,
+        utilityType: reading.utilityType,
+        readingDate: reading.readingDate,
+        unit: UTILITY_UNITS[reading.utilityType],
+        createdAt: reading.createdAt,
+        ...computed,
+      },
+      { excludeExtraneousValues: true }
+    )
+  }
+
+  private computeManualReading(reading: MeterReading): MeterReadingDto {
+    return this.toReadingDto(reading, {
+      value: null,
+      isManual: true,
+      previousValue: null,
+      consumption: null,
+      tariffPrice: null,
+      cost: round2(reading.amount as number),
+    })
+  }
+
   private computeReading(
     reading: MeterReading,
     previous: MeterReading | null,
     tariffs: UtilityTariff[]
   ): MeterReadingDto {
+    if (hasAmount(reading)) {
+      return this.computeManualReading(reading)
+    }
+
     const tariff = this.utilityTariffsService.resolveTariffForDate(tariffs, reading.readingDate)
     const isMetered = isMeteredUtility(reading.utilityType)
 
@@ -160,21 +229,13 @@ export class MeterReadingsService {
       ? round2((isMetered ? (consumption as number) : 1) * (tariff as UtilityTariff).pricePerUnit)
       : null
 
-    return plainToInstance(
-      MeterReadingDto,
-      {
-        id: reading.id,
-        utilityType: reading.utilityType,
-        value: reading.value,
-        readingDate: reading.readingDate,
-        previousValue: isMetered && previous ? previous.value : null,
-        consumption,
-        tariffPrice: hasCost ? (tariff as UtilityTariff).pricePerUnit : null,
-        cost,
-        unit: UTILITY_UNITS[reading.utilityType],
-        createdAt: reading.createdAt,
-      },
-      { excludeExtraneousValues: true }
-    )
+    return this.toReadingDto(reading, {
+      value: reading.value,
+      isManual: false,
+      previousValue: isMetered && previous ? previous.value : null,
+      consumption,
+      tariffPrice: hasCost ? (tariff as UtilityTariff).pricePerUnit : null,
+      cost,
+    })
   }
 }

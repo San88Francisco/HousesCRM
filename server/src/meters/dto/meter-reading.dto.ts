@@ -9,7 +9,10 @@ export class MeterReadingDto {
   utilityType: UtilityType
 
   @Expose()
-  value: number
+  value: number | null
+
+  @Expose()
+  isManual: boolean
 
   @Expose()
   readingDate: string

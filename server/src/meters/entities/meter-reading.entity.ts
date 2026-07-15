@@ -18,6 +18,9 @@ export class MeterReading {
   @Column({ type: 'decimal', precision: 12, scale: 2, nullable: false, transformer: decimalTransformer })
   value: number
 
+  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true, transformer: decimalTransformer })
+  amount: number | null
+
   @Column({ name: 'reading_date', type: 'date' })
   readingDate: string
 

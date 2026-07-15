@@ -2,6 +2,7 @@ export enum UtilityType {
   ELECTRICITY = 'electricity',
   WATER_COLD = 'water_cold',
   WATER_HOT = 'water_hot',
+  WATER_SUBSCRIPTION = 'water_subscription',
   GAS = 'gas',
   GAS_DELIVERY = 'gas_delivery',
   HEATING = 'heating',
@@ -11,7 +12,8 @@ export enum UtilityType {
 export type MeterReading = {
   id: string;
   utilityType: UtilityType;
-  value: number;
+  value: number | null;
+  isManual: boolean;
   readingDate: string;
   previousValue: number | null;
   consumption: number | null;
@@ -35,6 +37,7 @@ export type CreateMeterReadingRequest = {
   utilityType: UtilityType;
   readingDate: string;
   value?: number;
+  amount?: number;
 };
 
 export type DeleteMeterReadingRequest = {

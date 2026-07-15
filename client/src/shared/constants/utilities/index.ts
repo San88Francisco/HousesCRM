@@ -3,6 +3,7 @@ import {
   Droplets,
   Flame,
   LucideIcon,
+  ReceiptText,
   Recycle,
   ShowerHead,
   Thermometer,
@@ -23,7 +24,19 @@ export type UtilityConfig = {
   pillBgClass: string;
   /** Колір сегмента на графіках (CSS-змінна, theme-aware) */
   chartColor: string;
+  allowManual?: boolean;
+  manualOnly?: boolean;
 };
+
+export type UtilityMode = 'metered' | 'fixed-fee' | 'manual';
+
+export const resolveUtilityMode = (metered: boolean, manual: boolean): UtilityMode => {
+  if (manual) return 'manual';
+  return metered ? 'metered' : 'fixed-fee';
+};
+
+export const getUtilityMode = (config: UtilityConfig): UtilityMode =>
+  resolveUtilityMode(config.metered, config.manualOnly ?? false);
 
 export const UTILITY_CONFIG: Record<UtilityType, UtilityConfig> = {
   [UtilityType.ELECTRICITY]: {
@@ -65,6 +78,20 @@ export const UTILITY_CONFIG: Record<UtilityType, UtilityConfig> = {
     pillBgClass: 'bg-red/25',
     chartColor: 'var(--chart-pie-6)',
   },
+  [UtilityType.WATER_SUBSCRIPTION]: {
+    type: UtilityType.WATER_SUBSCRIPTION,
+    label: 'Абонплата за воду',
+    unit: 'міс',
+    tariffUnitLabel: 'грн/міс',
+    metered: false,
+    manualOnly: true,
+    icon: ReceiptText,
+    description: 'Абонентська плата водоканалу — у кожної квартири своя: дата і сума з платіжки.',
+    colorClass: 'text-chart-pie-2',
+    softBgClass: 'bg-blue-medium/30',
+    pillBgClass: 'bg-blue-medium/40',
+    chartColor: 'var(--chart-pie-2)',
+  },
   [UtilityType.GAS]: {
     type: UtilityType.GAS,
     label: 'Газ',
@@ -77,6 +104,7 @@ export const UTILITY_CONFIG: Record<UtilityType, UtilityConfig> = {
     softBgClass: 'bg-info/15',
     pillBgClass: 'bg-info/25',
     chartColor: 'var(--chart-pie-10)',
+    allowManual: true,
   },
   [UtilityType.GAS_DELIVERY]: {
     type: UtilityType.GAS_DELIVERY,
@@ -84,9 +112,9 @@ export const UTILITY_CONFIG: Record<UtilityType, UtilityConfig> = {
     unit: 'міс',
     tariffUnitLabel: 'грн/міс',
     metered: false,
+    manualOnly: true,
     icon: Truck,
-    description:
-      'Фіксована плата оператору ГРМ: споживання за минулий газовий рік × тариф розподілу ÷ 12. Діє з жовтня по вересень — з нового газового року додайте новий тариф.',
+    description: 'Плата оператору ГРМ — у кожної квартири своя: записуйте дату і суму з платіжки.',
     colorClass: 'text-chart-pie-5',
     softBgClass: 'bg-purple-medium/30',
     pillBgClass: 'bg-purple-medium/40',
@@ -95,11 +123,12 @@ export const UTILITY_CONFIG: Record<UtilityType, UtilityConfig> = {
   [UtilityType.HEATING]: {
     type: UtilityType.HEATING,
     label: 'Тепло',
-    unit: 'Гкал',
-    tariffUnitLabel: 'грн/Гкал',
-    metered: true,
+    unit: 'міс',
+    tariffUnitLabel: 'грн/міс',
+    metered: false,
+    manualOnly: true,
     icon: Thermometer,
-    description: 'Показники теплолічильника, споживання та вартість.',
+    description: 'Опалення — записуйте дату і суму з платіжки, без розрахунків.',
     colorClass: 'text-chart-pie-4',
     softBgClass: 'bg-red/15',
     pillBgClass: 'bg-red/25',
@@ -146,7 +175,7 @@ export const UTILITY_TABS: UtilityTab[] = [
     icon: Droplets,
     colorClass: 'text-chart-pie-1',
     softBgClass: 'bg-blue/30',
-    types: [UtilityType.WATER_COLD, UtilityType.WATER_HOT],
+    types: [UtilityType.WATER_COLD, UtilityType.WATER_HOT, UtilityType.WATER_SUBSCRIPTION],
   },
   {
     key: 'gas',

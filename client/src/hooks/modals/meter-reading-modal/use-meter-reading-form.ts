@@ -1,3 +1,4 @@
+import { UtilityMode } from '@/shared/constants/utilities';
 import { getApiErrorMessage } from '@/shared/utils/api-error-message';
 import {
   buildMeterReadingSchema,
@@ -14,25 +15,33 @@ import { toast } from 'sonner';
 type Props = {
   houseId?: string;
   utilityType: UtilityType;
-  metered: boolean;
+  mode: UtilityMode;
   lastReading: LastMeterReading | null;
+  lastRecordDate: string | null;
   onSuccess: () => void;
 };
 
-const defaultValues: MeterReadingFormData = { value: null, readingDate: '' };
+const defaultValues: MeterReadingFormData = { value: null, amount: null, readingDate: '' };
+
+const loadingTextByMode: Record<UtilityMode, string> = {
+  metered: 'Додаємо показник...',
+  'fixed-fee': 'Додаємо нарахування...',
+  manual: 'Записуємо суму...',
+};
 
 export const useMeterReadingForm = ({
   houseId,
   utilityType,
-  metered,
+  mode,
   lastReading,
+  lastRecordDate,
   onSuccess,
 }: Props) => {
   const [createMeterReading, { isLoading }] = useCreateMeterReadingMutation();
 
   const schema = useMemo(
-    () => buildMeterReadingSchema(lastReading, metered),
-    [lastReading, metered],
+    () => buildMeterReadingSchema({ lastReading, lastRecordDate, mode }),
+    [lastReading, lastRecordDate, mode],
   );
 
   const methods = useForm<MeterReadingFormData>({
@@ -44,25 +53,25 @@ export const useMeterReadingForm = ({
 
   const onSubmit = async (data: MeterReadingFormData) => {
     if (!houseId) return;
-    if (metered && (data.value === null || data.value === undefined)) return;
+    if (mode === 'manual' && (data.amount === null || data.amount === undefined)) return;
+    if (mode === 'metered' && (data.value === null || data.value === undefined)) return;
 
-    const toastId = toast.loading(metered ? 'Додаємо показник...' : 'Додаємо нарахування...');
+    const toastId = toast.loading(loadingTextByMode[mode]);
 
     try {
       await createMeterReading({
         houseId,
         utilityType,
         readingDate: data.readingDate,
-        ...(metered ? { value: data.value as number } : {}),
+        ...(mode === 'manual' && { amount: data.amount as number }),
+        ...(mode === 'metered' && { value: data.value as number }),
       }).unwrap();
 
-      toast.success(metered ? 'Показник успішно додано!' : 'Нарахування успішно додано!', {
-        id: toastId,
-      });
+      toast.success('Запис успішно додано!', { id: toastId });
       reset();
       onSuccess();
     } catch (e) {
-      toast.error(metered ? 'Не вдалося додати показник' : 'Не вдалося додати нарахування', {
+      toast.error('Не вдалося додати запис', {
         id: toastId,
         description: getApiErrorMessage(e),
       });

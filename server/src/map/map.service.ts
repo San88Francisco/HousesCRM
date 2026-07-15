@@ -4,6 +4,7 @@ import type { Cache } from 'cache-manager'
 import {
   BULK_POI_CHUNK,
   BULK_POI_DELAY_MS,
+  MAP_USER_AGENT,
   NOMINATIM_API,
   OVERPASS_INSTANCES,
   OVERPASS_RETRY_BASE_MS,
@@ -31,7 +32,10 @@ export class MapService {
       try {
         const response = await fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': MAP_USER_AGENT,
+          },
           body: `data=${encodeURIComponent(query)}`,
         })
 
@@ -143,7 +147,7 @@ export class MapService {
 
     const url = `${NOMINATIM_API}?q=${encodeURIComponent(buildGeocodeQuery(street))}&format=json&limit=1&countrycodes=ua`
     const response = await fetch(url, {
-      headers: { 'Accept-Language': 'uk,en', 'User-Agent': 'HousesCRM/1.0' },
+      headers: { 'Accept-Language': 'uk,en', 'User-Agent': MAP_USER_AGENT },
     })
 
     if (!response.ok) {
