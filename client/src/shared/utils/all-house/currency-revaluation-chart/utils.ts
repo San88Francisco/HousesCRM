@@ -6,7 +6,8 @@ const DECIMAL_PLACES_RATE = 2;
 
 export const BAR_RADIUS = 4;
 export const BAR_SIZE = 10;
-export const OPACITY_DEFAULT = 0.85;
+export const OPACITY_PURCHASE = 0.3;
+export const OPACITY_PURCHASE_HOVER = 0.45;
 export const OPACITY_DARK = 0.6;
 export const OPACITY_LIGHT = 0.7;
 export const TOOLTIP_Z_INDEX = 9999;
@@ -27,11 +28,6 @@ export const MAX_VISIBLE_ROWS = 7;
 const ANIMATION_DURATION_MS = 600;
 export const PURCHASE_ANIMATION_DURATION = ANIMATION_DURATION_MS;
 export const GROWTH_ANIMATION_DURATION = ANIMATION_DURATION_MS;
-
-export const getBarColors = (isDark: boolean) => ({
-  purchase: isDark ? 'var(--dark-purple)' : 'var(--dark)',
-  growth: isDark ? 'var(--purple-medium)' : 'var(--dark-light)',
-});
 
 export const transformCurrencyData = (data: CurrencyRevaluation[]): ChartDataItem[] => {
   return data.map(item => ({

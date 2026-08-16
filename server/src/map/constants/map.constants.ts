@@ -5,6 +5,7 @@ export const OVERPASS_INSTANCES = [
 ] as const
 
 export const NOMINATIM_API = 'https://nominatim.openstreetmap.org/search'
+export const MAP_USER_AGENT = 'HousesCRM/1.0'
 export const RADIUS_METERS = 500
 export const COORD_PRECISION = 3
 export const BULK_POI_CHUNK = 2

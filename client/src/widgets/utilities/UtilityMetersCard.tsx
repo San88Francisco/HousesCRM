@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { useToastOnError } from '@/hooks';
 import { getMeterReadingsColumns } from '@/shared/constants/meters';
 import { DEFAULT_PAGE_SIZE, DEFAULT_START_PAGE } from '@/shared/constants/table';
-import { UtilityConfig } from '@/shared/constants/utilities';
+import { getUtilityMode, UtilityConfig, UtilityMode } from '@/shared/constants/utilities';
 import { getCurrentTariff } from '@/shared/utils/meters/current-tariff';
 import { useGetMeterReadingsQuery, useGetUtilityTariffsQuery } from '@/store/api/meters-api';
 import { useAppDispatch } from '@/store/hooks';
@@ -26,8 +26,32 @@ type Props = {
   config: UtilityConfig;
 };
 
+const addButtonTextByMode: Record<UtilityMode, string> = {
+  metered: 'Додати показник',
+  'fixed-fee': 'Нарахувати місяць',
+  manual: 'Записати суму',
+};
+
+const emptyStateByMode: Record<UtilityMode, { title: string; hint: string }> = {
+  metered: {
+    title: 'Ще немає показників.',
+    hint: 'Додайте перший — він стане базовим для розрахунку споживання.',
+  },
+  'fixed-fee': {
+    title: 'Ще немає нарахувань.',
+    hint: 'Додайте перше нарахування — сума розрахується за чинним тарифом.',
+  },
+  manual: {
+    title: 'Ще немає записів.',
+    hint: 'Додайте перший запис — дата і сума з платіжки.',
+  },
+};
+
 export const UtilityMetersCard = ({ houseId, config }: Props) => {
   const dispatch = useAppDispatch();
+
+  const mode = getUtilityMode(config);
+  const manualOnly = mode === 'manual';
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_START_PAGE);
   const [limit, setLimit] = useState(DEFAULT_PAGE_SIZE);
@@ -40,13 +64,16 @@ export const UtilityMetersCard = ({ houseId, config }: Props) => {
   } = useGetMeterReadingsQuery({ houseId, utilityType: config.type });
   const { data: tariffs = [], isLoading: isTariffsLoading } = useGetUtilityTariffsQuery(
     config.type,
+    { skip: manualOnly },
   );
 
   useToastOnError(isError, `Не вдалось завантажити дані: ${config.label}`, 'UtilityMetersCard');
 
   const readings = useMemo(() => readingsData?.data ?? [], [readingsData]);
   const currentTariff = getCurrentTariff(tariffs);
-  const lastReading = readings[0] ?? null;
+  const lastMeterReading =
+    readings.find(reading => !reading.isManual && reading.value !== null) ?? null;
+  const lastRecordDate = readings[0]?.readingDate ?? null;
 
   const columns = useMemo(() => getMeterReadingsColumns(houseId, config), [houseId, config]);
 
@@ -85,11 +112,15 @@ export const UtilityMetersCard = ({ houseId, config }: Props) => {
           houseId,
           utilityType: config.type,
           metered: config.metered,
+          allowManual: config.allowManual ?? false,
+          manualOnly,
           unit: config.unit,
           label: config.label,
-          lastReading: lastReading
-            ? { value: lastReading.value, readingDate: lastReading.readingDate }
+          lastReading: lastMeterReading
+            ? { value: lastMeterReading.value, readingDate: lastMeterReading.readingDate }
             : null,
+          lastRecordDate,
+          lastAmount: readings[0]?.cost ?? null,
           tariffPrice: currentTariff?.pricePerUnit ?? null,
         },
       }),
@@ -109,7 +140,8 @@ export const UtilityMetersCard = ({ houseId, config }: Props) => {
     );
   };
 
-  const addButtonText = config.metered ? 'Додати показник' : 'Нарахувати місяць';
+  const addButtonText = addButtonTextByMode[mode];
+  const emptyState = emptyStateByMode[mode];
   const Icon = config.icon;
 
   if (isReadingsLoading || isTariffsLoading) return <HouseMetersTableSkeleton rows={5} />;
@@ -130,7 +162,7 @@ export const UtilityMetersCard = ({ houseId, config }: Props) => {
           </div>
 
           <div className="flex shrink-0 flex-wrap items-center gap-2">
-            {currentTariff && (
+            {!manualOnly && currentTariff && (
               <>
                 <span
                   className={cn('rounded-full px-3 py-1 text-sm text-text', config.softBgClass)}
@@ -151,7 +183,7 @@ export const UtilityMetersCard = ({ houseId, config }: Props) => {
           </div>
         </div>
 
-        {!currentTariff && (
+        {!manualOnly && !currentTariff && (
           <div className="flex flex-col gap-2 rounded-md border border-info/40 bg-info/10 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2 text-sm text-info">
               <TriangleAlert size={16} className="shrink-0" />
@@ -177,19 +209,13 @@ export const UtilityMetersCard = ({ houseId, config }: Props) => {
             <span className={cn('rounded-full p-3', config.softBgClass)}>
               <Icon size={28} className={config.colorClass} />
             </span>
-            <p className="font-medium">
-              {config.metered ? 'Ще немає показників.' : 'Ще немає нарахувань.'}
-            </p>
-            <p className="text-sm text-muted-text">
-              {config.metered
-                ? 'Додайте перший — він стане базовим для розрахунку споживання.'
-                : 'Додайте перше нарахування — сума розрахується за чинним тарифом.'}
-            </p>
+            <p className="font-medium">{emptyState.title}</p>
+            <p className="text-sm text-muted-text">{emptyState.hint}</p>
           </div>
         ) : (
           <UtilityMetersTable
             table={table}
-            metered={config.metered}
+            config={config}
             limit={limit}
             onLimitChange={onLimitChange}
           />

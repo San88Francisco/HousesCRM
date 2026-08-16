@@ -2,7 +2,6 @@ import {
   computeChartHeight,
   computeContainerHeight,
   computeXAxisMax,
-  getBarColors,
   MIN_VISIBLE_ROWS,
   transformCurrencyData,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
@@ -41,15 +40,12 @@ export const useChartConfig = (chartData: ChartDataItem[]) => {
 
     const currentTheme = theme === 'system' ? systemTheme : theme;
     const isDark = currentTheme === 'dark';
-    const { purchase: purchaseBarFill, growth: growthBarFill } = getBarColors(isDark);
 
     return {
       xAxisMax,
       containerHeight,
       chartHeight,
       isDark,
-      purchaseBarFill,
-      growthBarFill,
     };
   }, [chartData, theme, systemTheme]);
 };

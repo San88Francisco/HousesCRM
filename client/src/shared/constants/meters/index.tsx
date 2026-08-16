@@ -1,11 +1,11 @@
-import { UtilityConfig } from '@/shared/constants/utilities';
+import { getUtilityMode, UtilityConfig, UtilityMode } from '@/shared/constants/utilities';
 import { cn } from '@/shared/utils/cn';
 import { formatDate } from '@/shared/utils/format';
 import { MeterReading } from '@/types/services/meters';
 import { MeterReadingDeleteButton } from '@/widgets/utilities/MeterReadingDeleteButton';
 import { ColumnDef } from '@tanstack/react-table';
 
-const isBaseline = (reading: MeterReading) => reading.previousValue === null;
+const isBaseline = (reading: MeterReading) => !reading.isManual && reading.previousValue === null;
 
 const dash = <span className="text-text opacity-40">—</span>;
 
@@ -67,13 +67,29 @@ const meteredColumns = (houseId: string, config: UtilityConfig): ColumnDef<Meter
   {
     accessorKey: 'value',
     header: 'Новий показник',
-    cell: ctx => <span className="text-base font-semibold">{ctx.getValue<number>()}</span>,
+    cell: ctx => {
+      const value = ctx.getValue<number | null>();
+      return value === null ? dash : <span className="text-base font-semibold">{value}</span>;
+    },
   },
   {
     id: 'consumption',
     header: 'Спожито',
     cell: ctx => {
       const reading = ctx.row.original;
+
+      if (reading.isManual) {
+        return (
+          <span
+            className={cn(
+              'rounded-full px-2.5 py-0.5 text-xs font-medium text-text',
+              config.pillBgClass,
+            )}
+          >
+            Без лічильника
+          </span>
+        );
+      }
 
       if (isBaseline(reading)) {
         return (
@@ -149,8 +165,22 @@ const fixedFeeColumns = (houseId: string, config: UtilityConfig): ColumnDef<Mete
   actionsColumn(houseId, config),
 ];
 
+const manualColumns = (houseId: string, config: UtilityConfig): ColumnDef<MeterReading>[] => [
+  dateColumn,
+  costColumn,
+  actionsColumn(houseId, config),
+];
+
+const columnsByMode: Record<
+  UtilityMode,
+  (houseId: string, config: UtilityConfig) => ColumnDef<MeterReading>[]
+> = {
+  metered: meteredColumns,
+  'fixed-fee': fixedFeeColumns,
+  manual: manualColumns,
+};
+
 export const getMeterReadingsColumns = (
   houseId: string,
   config: UtilityConfig,
-): ColumnDef<MeterReading>[] =>
-  config.metered ? meteredColumns(houseId, config) : fixedFeeColumns(houseId, config);
+): ColumnDef<MeterReading>[] => columnsByMode[getUtilityMode(config)](houseId, config);

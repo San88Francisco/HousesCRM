@@ -69,7 +69,9 @@ export const findMinMaxRentWithFivePercent = (
 ) => {
   const matchingPayments = apartments
     .flatMap(apt => apt.contract)
-    .filter(c => c.termination >= periodStart && c.commencement <= periodEnd)
+    .filter(
+      c => (c.termination === null || c.termination >= periodStart) && c.commencement <= periodEnd,
+    )
     .map(c => c.monthlyPayment);
 
   if (matchingPayments.length === 0) return null;
@@ -110,8 +112,8 @@ export const generateChartData = (
     apartments.forEach(apt => {
       const activeContract = apt.contract.find(c => {
         const start = new Date(c.commencement);
-        const end = new Date(c.termination);
-        return currentDate >= start && currentDate <= end;
+        const end = c.termination ? new Date(c.termination) : null;
+        return currentDate >= start && (end === null || currentDate <= end);
       });
 
       if (activeContract) {
@@ -188,7 +190,7 @@ export const isContract = (value: unknown): value is HousesOverviewContract => {
     'commencement' in value &&
     'termination' in value &&
     typeof value.commencement === 'string' &&
-    typeof value.termination === 'string' &&
+    (value.termination === null || typeof value.termination === 'string') &&
     'monthlyPayment' in value &&
     typeof value.monthlyPayment === 'number'
   );
