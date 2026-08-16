@@ -1,5 +1,6 @@
 import { formatCurrency } from '@/shared/utils/table/formatters';
 import { HousePerformanceItem } from '@/types/core/houses-performance';
+import { HouseNameCell } from '@/widgets/all-houses/houses-performance-analytic/HouseNameCell';
 import { HouseDeleteButton } from '@/widgets/modals/house-modal/HouseDeleteButton';
 import { HouseEditButton } from '@/widgets/modals/house-modal/HouseEditButton';
 import { ColumnDef } from '@tanstack/react-table';
@@ -9,7 +10,9 @@ export const HousesPerformanceTableColumns: ColumnDef<HousePerformanceItem>[] = 
   {
     accessorKey: 'apartmentName',
     header: 'Квартира',
-    cell: ctx => <span className="font-semibold">{ctx.getValue<string>()}</span>,
+    cell: ctx => (
+      <HouseNameCell houseId={ctx.row.original.id} apartmentName={ctx.getValue<string>()} />
+    ),
   },
   {
     accessorKey: 'rentersCount',

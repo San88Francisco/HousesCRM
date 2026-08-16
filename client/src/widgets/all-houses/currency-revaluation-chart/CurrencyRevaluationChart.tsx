@@ -8,16 +8,19 @@ import { EmptyState } from '@/components/chart-states/EmptyState';
 import { ErrorState } from '@/components/chart-states/ErrorState';
 import { useToastOnError } from '@/hooks';
 import { useChartConfig, useChartData } from '@/hooks/all-house/currency-revaluation-chart';
+import { useHouseColors } from '@/hooks/all-house/house-colors';
 import {
   BAR_RADIUS,
   BAR_SIZE,
   GROWTH_ANIMATION_DURATION,
   OPACITY_DARK,
-  OPACITY_DEFAULT,
   OPACITY_LIGHT,
+  OPACITY_PURCHASE,
+  OPACITY_PURCHASE_HOVER,
   PURCHASE_ANIMATION_DURATION,
   formatYAxisTick,
 } from '@/shared/utils/all-house/currency-revaluation-chart/utils';
+import { getHouseColor } from '@/shared/utils/all-house/house-color';
 import { useGetHousesAnalyticsQuery } from '@/store/api/houses-api';
 import { CurrencyRevaluationChartSkeleton } from '@/widgets/skeletons/currency-revaluation-chart-skeleton';
 import { CurrencyRevaluationTooltip } from './CurrencyRevaluationTooltip';
@@ -29,8 +32,8 @@ export const CurrencyRevaluationChart = () => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
 
   const chartData = useChartData(data?.currencyRevaluation || []);
-  const { xAxisMax, containerHeight, chartHeight, isDark, purchaseBarFill, growthBarFill } =
-    useChartConfig(chartData);
+  const { xAxisMax, containerHeight, chartHeight, isDark } = useChartConfig(chartData);
+  const houseColors = useHouseColors();
 
   useEffect(() => setMounted(true), []);
 
@@ -40,15 +43,18 @@ export const CurrencyRevaluationChart = () => {
   if (isError) return <ErrorState error={error} />;
   if (chartData.length === 0) return <EmptyState />;
 
-  const renderCells = (fill: string, customOpacity?: (index: number) => number) =>
-    chartData.map((_, index) => (
+  const renderCells = (segment: string, getOpacity: (index: number) => number) =>
+    chartData.map((item, index) => (
       <Cell
-        key={`${fill}-${index}`}
-        fill={fill}
-        opacity={customOpacity ? customOpacity(index) : 1}
+        key={`${segment}-${item.id}`}
+        fill={getHouseColor(houseColors, item.id)}
+        opacity={getOpacity(index)}
         className="transition-opacity duration-200 ease-in-out"
       />
     ));
+
+  const getPurchaseOpacity = (index: number) =>
+    hoveredIndex === index ? OPACITY_PURCHASE_HOVER : OPACITY_PURCHASE;
 
   const getGrowthOpacity = (index: number) =>
     hoveredIndex === index ? 1 : isDark ? OPACITY_DARK : OPACITY_LIGHT;
@@ -104,14 +110,11 @@ export const CurrencyRevaluationChart = () => {
                 stackId="a"
                 radius={[BAR_RADIUS, 0, 0, BAR_RADIUS]}
                 barSize={BAR_SIZE}
-                fill={purchaseBarFill}
                 isAnimationActive
                 animationDuration={PURCHASE_ANIMATION_DURATION}
                 animationBegin={0}
               >
-                {renderCells(purchaseBarFill, index =>
-                  hoveredIndex === index ? 1 : OPACITY_DEFAULT,
-                )}
+                {renderCells('purchase', getPurchaseOpacity)}
               </Bar>
 
               <Bar
@@ -119,12 +122,11 @@ export const CurrencyRevaluationChart = () => {
                 stackId="a"
                 radius={[0, BAR_RADIUS, BAR_RADIUS, 0]}
                 barSize={BAR_SIZE}
-                fill={growthBarFill}
                 isAnimationActive
                 animationDuration={GROWTH_ANIMATION_DURATION}
                 animationBegin={PURCHASE_ANIMATION_DURATION}
               >
-                {renderCells(growthBarFill, getGrowthOpacity)}
+                {renderCells('growth', getGrowthOpacity)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>

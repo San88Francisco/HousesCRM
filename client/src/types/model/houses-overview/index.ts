@@ -7,7 +7,7 @@ export type HousesOverviewRenter = {
 export type HousesOverviewContract = {
   id: string;
   commencement: string;
-  termination: string;
+  termination: string | null;
   monthlyPayment: number;
   renter: HousesOverviewRenter;
 };

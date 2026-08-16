@@ -5,15 +5,25 @@ export const truncate = (text: string, maxLen: number): string => {
   return text.length > maxLen ? text.slice(0, maxLen - 3) + '...' : text;
 };
 
-export const formatDateRange = (start: string, end: string): string => {
+export const formatDateRange = (start: string, end: string | null): string => {
   const startDate = new Date(start);
-  const endDate = new Date(end);
 
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+  if (isNaN(startDate.getTime())) {
     return '—';
   }
 
   const startStr = truncate(startDate.toLocaleDateString('uk-UA'), 15);
+
+  if (end === null) {
+    return `${startStr} – Наразі орендує`;
+  }
+
+  const endDate = new Date(end);
+
+  if (isNaN(endDate.getTime())) {
+    return '—';
+  }
+
   const endStr = truncate(endDate.toLocaleDateString('uk-UA'), 15);
   return `${startStr} – ${endStr}`;
 };
@@ -49,7 +59,9 @@ export const findGapBetweenContracts = (
     if (i === 0) return false;
 
     const prevContract = sortedContracts[i - 1];
-    const prevEnd = new Date(prevContract.termination).getTime();
+    const prevEnd = prevContract.termination
+      ? new Date(prevContract.termination).getTime()
+      : Infinity;
     const currStart = new Date(currentContract.commencement).getTime();
 
     return isCursorInGap(cursorTimestamp, prevEnd, currStart);
@@ -57,8 +69,11 @@ export const findGapBetweenContracts = (
 
   if (gapIndex === -1) return null;
 
+  const gapStart = sortedContracts[gapIndex - 1].termination;
+  if (gapStart === null) return null;
+
   return {
-    start: sortedContracts[gapIndex - 1].termination,
+    start: gapStart,
     end: sortedContracts[gapIndex].commencement,
   };
 };
